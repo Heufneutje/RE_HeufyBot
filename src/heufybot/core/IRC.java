@@ -42,10 +42,8 @@ public class IRC
 			this.socket = new Socket(server, port);
 			this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), Charset.defaultCharset()));
 			this.outputWriter = new OutputStreamWriter(socket.getOutputStream(), Charset.defaultCharset());
-	        
-	        Logger.log("*** Connected to the server.");
-	        
-	        return true;
+			Logger.log("*** Connected to the server.");
+			return true;
 		}
 		catch (UnknownHostException e)
 		{
