@@ -135,7 +135,12 @@ public class IRC
 	
 	public void cmdPING(String ping)
 	{
-		sendRaw("PING"  + ping);
+		sendRaw("PING "  + ping);
+	}
+	
+	public void cmdPONG(String response)
+	{
+		sendRaw("PONG "  + response);
 	}
 	
 	public void cmdQUIT(String message)
