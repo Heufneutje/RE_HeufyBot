@@ -5,7 +5,7 @@ public class Config
 	private String nickname, username, realname, server, password;
 	private int port;
 	
-	private static final Config config = new Config();
+	private static final Config instance = new Config();
 	
 	private Config()
 	{
@@ -19,7 +19,7 @@ public class Config
 	
 	public static Config getInstance()
 	{
-		return config;
+		return instance;
 	}
 	
 	public String getNickname()

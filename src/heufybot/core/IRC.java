@@ -11,12 +11,29 @@ import java.nio.charset.Charset;
 
 public class IRC 
 {
+	private static final IRC instance = new IRC();
+	
 	private Socket socket;
 	private BufferedReader inputReader;
 	private OutputStreamWriter outputWriter;
 	
+	private IRC()
+	{
+		this.socket = new Socket();
+	}
+	
+	public static IRC getInstance()
+	{
+		return instance;
+	}
+	
 	public boolean connect(String server, int port)
 	{
+		if(socket.isConnected())
+		{
+			Logger.error("IRC Connect", "Already connected to a server. Connection failed.");
+			return false;
+		}
 		Logger.log(String.format("*** Trying to connect to %s on port %d", server , port));
 		
 		try
@@ -24,17 +41,35 @@ public class IRC
 			this.socket = new Socket(server, port);
 			this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), Charset.defaultCharset()));
 	        this.outputWriter = new OutputStreamWriter(socket.getOutputStream(), Charset.defaultCharset());
+	        
+	        Logger.log("*** Connected to the server.");
+	        
 	        return true;
 		}
 		catch (UnknownHostException e)
 		{
-			Logger.error("IRC", "Host could not be resolved. Connection failed.");
+			Logger.error("IRC Connect", "Host could not be resolved. Connection failed.");
 			return false;
 		}
 		catch (IOException e)
 		{
-			Logger.error("IRC", "Unkown connection error. Connection failed.");
+			Logger.error("IRC Connect", "Unkown connection error. Connection failed.");
 			return false;
+		}
+	}
+	
+	public void disconnect()
+	{
+		try 
+		{
+			this.inputReader.close();
+			this.outputWriter.flush();
+			this.outputWriter.close();
+			this.socket.close();
+		} 
+		catch (IOException e) 
+		{
+			Logger.error("IRC Disconnect", "Error closing connection");
 		}
 	}
 	
@@ -62,6 +97,7 @@ public class IRC
                      break;
 
              Logger.log(line);
+             
              if (Thread.interrupted())
                      return;
 
@@ -77,7 +113,7 @@ public class IRC
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			Logger.error("IRC Output", "Error sending line");
 		}
 	}
 	

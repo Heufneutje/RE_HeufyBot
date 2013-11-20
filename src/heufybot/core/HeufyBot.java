@@ -9,7 +9,7 @@ public class HeufyBot
 	public HeufyBot(Config config)
 	{
 		this.config = config;
-		this.irc = new IRC();
+		this.irc = IRC.getInstance();
 	}
 	
 	public void start()
@@ -18,13 +18,13 @@ public class HeufyBot
 		{
 			irc.cmdNICK(config.getNickname());
 			irc.cmdUSER(config.getUsername(), config.getRealname());
-		
 			irc.startProcessing();
 		}
 	}
 	
 	public void stop()
 	{
-		
+		irc.cmdQUIT("RE_HeufyBot " + VERSION);
+		irc.disconnect();
 	}
 }
