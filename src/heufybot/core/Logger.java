@@ -6,4 +6,9 @@ public class Logger
 	{
 		System.out.println(line);
 	}
+	
+	public static void error(String errorSource, String line)
+	{
+		System.err.println(errorSource + " - ERROR: " + line);
+	}
 }
