@@ -16,6 +16,7 @@ public class IRC
 	private Socket socket;
 	private BufferedReader inputReader;
 	private OutputStreamWriter outputWriter;
+	private Thread inputThread;
 	
 	private IRC()
 	{
@@ -75,33 +76,40 @@ public class IRC
 	
 	public void startProcessing()
 	{
-		while(true)
+		inputThread = new Thread(new Runnable()
 		{
-			 String line;
-             try
-             {
-            	 line = inputReader.readLine();
-             }
-             catch (InterruptedIOException iioe) 
-             {
-            	 cmdPING("" + System.currentTimeMillis() / 1000);
-            	 continue;
-             }
-             catch (Exception e)
-             {
-            	 e.printStackTrace();
-            	 line = null;
-             }
-
-             if (line == null)
-                     break;
-
-             Logger.log(line);
-             
-             if (Thread.interrupted())
-                     return;
-
-		}
+			public void run()
+			{
+				while(true)
+				{
+					 String line;
+		             try
+		             {
+		            	 line = inputReader.readLine();
+		             }
+		             catch (InterruptedIOException iioe) 
+		             {
+		            	 cmdPING("" + System.currentTimeMillis() / 1000);
+		            	 continue;
+		             }
+		             catch (Exception e)
+		             {
+		            	 e.printStackTrace();
+		            	 line = null;
+		             }
+	
+		             if (line == null)
+		                     break;
+	
+		             Logger.log(line);
+		             
+		             if (Thread.interrupted())
+		                     return;
+	
+				}
+			}
+		});
+		inputThread.start();
 	}
 	
 	public void sendRaw(String line)
