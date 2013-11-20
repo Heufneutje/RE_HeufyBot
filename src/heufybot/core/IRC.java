@@ -92,4 +92,14 @@ public class IRC
 	{
 		sendRaw("PING"  + ping);
 	}
+	
+	public void cmdQUIT(String message)
+	{
+		sendRaw("QUIT: " + message);
+	}
+	
+	public void cmdPRIVMSG(String target, String message)
+	{
+		sendRaw("PRIVMSG " + target + ": " + message);
+	}
 }
