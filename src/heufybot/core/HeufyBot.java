@@ -14,11 +14,13 @@ public class HeufyBot
 	
 	public void start()
 	{
-		irc.connect(config.getServer(), config.getPort());
-		irc.cmdNICK(config.getNickname());
-		irc.cmdUSER(config.getUsername(), config.getRealname());
+		if(irc.connect(config.getServer(), config.getPort()))
+		{
+			irc.cmdNICK(config.getNickname());
+			irc.cmdUSER(config.getUsername(), config.getRealname());
 		
-		irc.startProcessing();
+			irc.startProcessing();
+		}
 	}
 	
 	public void stop()

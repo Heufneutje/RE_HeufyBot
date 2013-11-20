@@ -15,7 +15,7 @@ public class IRC
 	private BufferedReader inputReader;
 	private OutputStreamWriter outputWriter;
 	
-	public void connect(String server, int port)
+	public boolean connect(String server, int port)
 	{
 		Logger.log(String.format("*** Trying to connect to %s on port %d", server , port));
 		
@@ -24,14 +24,17 @@ public class IRC
 			this.socket = new Socket(server, port);
 			this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), Charset.defaultCharset()));
 	        this.outputWriter = new OutputStreamWriter(socket.getOutputStream(), Charset.defaultCharset());
+	        return true;
 		}
 		catch (UnknownHostException e)
 		{
-			e.printStackTrace();
+			Logger.error("IRC", "Host could not be resolved. Connection failed.");
+			return false;
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			Logger.error("IRC", "Unkown connection error. Connection failed.");
+			return false;
 		}
 	}
 	
