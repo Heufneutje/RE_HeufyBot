@@ -141,4 +141,14 @@ public class IRC
 	{
 		sendRaw("PRIVMSG " + target + ": " + message);
 	}
+	
+	public void cmdJOIN(String channel, String key)
+	{
+		sendRaw("JOIN " + channel + " " + key);
+	}
+	
+	public void cmdPART(String channel, String message)
+	{
+		sendRaw("PART " + channel + ": " + message);
+	}
 }
