@@ -7,7 +7,7 @@ public class HeufyBotInit
 {
 	public static void main(String[] args)
 	{
-		HeufyBot bot = new HeufyBot(new Config());
+		HeufyBot bot = new HeufyBot(Config.getInstance());
 		bot.start();
 	}
 }

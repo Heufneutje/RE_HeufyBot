@@ -20,4 +20,9 @@ public class HeufyBot
 		
 		irc.startProcessing();
 	}
+	
+	public void stop()
+	{
+		
+	}
 }

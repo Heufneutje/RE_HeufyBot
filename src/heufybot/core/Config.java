@@ -5,7 +5,9 @@ public class Config
 	private String nickname, username, realname, server, password;
 	private int port;
 	
-	public Config()
+	private static final Config config = new Config();
+	
+	private Config()
 	{
 		this.nickname = "RE_HeufyBot";
 		this.username = "RE_HeufyBot";
@@ -13,6 +15,11 @@ public class Config
 		this.server = "irc.applejack.me";
 		this.password = "";
 		this.port = 6667;
+	}
+	
+	public static Config getInstance()
+	{
+		return config;
 	}
 	
 	public String getNickname()
