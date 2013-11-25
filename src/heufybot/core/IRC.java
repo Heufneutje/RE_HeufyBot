@@ -17,10 +17,12 @@ public class IRC
 	private BufferedReader inputReader;
 	private OutputStreamWriter outputWriter;
 	private Thread inputThread;
+	private InputParser inputParser;
 	
 	private IRC()
 	{
 		this.socket = new Socket();
+		this.inputParser = new InputParser(this);
 	}
 	
 	public static IRC getInstance()
@@ -98,8 +100,8 @@ public class IRC
 	
 		             if (line == null)
 		                     break;
-	
-		             Logger.log(line);
+		             
+		             inputParser.parseLine(line);
 		             
 		             if (Thread.interrupted())
 		                     return;

@@ -12,7 +12,7 @@ public class Config
 		this.nickname = "RE_HeufyBot";
 		this.username = "RE_HeufyBot";
 		this.realname = "HeufyBot Dev Build";
-		this.server = "irc.applejack.me";
+		this.server = "irc.desertbus.org";
 		this.password = "";
 		this.port = 6667;
 	}
