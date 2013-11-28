@@ -8,6 +8,9 @@ public class Channel
 	private String name;
 	private String modes;
 	private HashMap<User, String> usersInChannel;
+	private String topic;
+	private String topicSetter;
+	private long topicSetTimestamp;
 	
 	public Channel(String name)
 	{
@@ -22,6 +25,11 @@ public class Channel
 	public String getModes()
 	{
 		return modes;
+	}
+	
+	public void setModes(String modes)
+	{
+		this.modes = modes;
 	}
 	
 	public void parseModeChange(String modeChange)
@@ -92,5 +100,35 @@ public class Channel
 			}
 		}
 		return null;
+	}
+
+	public String getTopic()
+	{
+		return topic;
+	}
+
+	public void setTopic(String topic) 
+	{
+		this.topic = topic;
+	}
+
+	public String getTopicSetter() 
+	{
+		return topicSetter;
+	}
+
+	public void setTopicSetter(String topicSetter) 
+	{
+		this.topicSetter = topicSetter;
+	}
+
+	public long getTopicSetTimestamp() 
+	{
+		return topicSetTimestamp;
+	}
+
+	public void setTopicSetTimestamp(long topicSetTimestamp) 
+	{
+		this.topicSetTimestamp = topicSetTimestamp;
 	}
 }
