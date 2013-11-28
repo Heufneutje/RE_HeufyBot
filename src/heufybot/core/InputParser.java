@@ -1,15 +1,21 @@
 package heufybot.core;
 
 import heufybot.utils.MessageUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class InputParser 
 {
 	private IRC irc;
+	private List<String> connectCodes;
 	
 	public InputParser(IRC irc)
 	{
 		this.irc = irc;
+		this.connectCodes = new ArrayList<String>(Arrays.asList("001", "002", "003", "004", "005",
+				"251", "252", "253", "254", "255", "375", "376"));
 	}
 	
 	public void parseLine(String line)
@@ -35,6 +41,10 @@ public class InputParser
         	//Connection closed by server
         	Logger.log(parsedLine.get(0));
         	irc.disconnect();
+        }
+        else
+        {
+        	
         }
 	}
 }

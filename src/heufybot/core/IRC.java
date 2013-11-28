@@ -1,5 +1,7 @@
 package heufybot.core;
 
+import heufybot.utils.enums.ConnectionState;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,11 +20,13 @@ public class IRC
 	private OutputStreamWriter outputWriter;
 	private Thread inputThread;
 	private InputParser inputParser;
+	private ConnectionState connectionState;
 	
 	private IRC()
 	{
 		this.socket = new Socket();
 		this.inputParser = new InputParser(this);
+		this.connectionState = ConnectionState.Initializing;
 	}
 	
 	public static IRC getInstance()
@@ -172,5 +176,15 @@ public class IRC
 	public void nickservIdentify(String password)
 	{
 		cmdPRIVMSG("NickServ", "IDENTIFY " + password);
+	}
+
+	public ConnectionState getConnectionState() 
+	{
+		return connectionState;
+	}
+
+	public void setConnectionState(ConnectionState connectionState) 
+	{
+		this.connectionState = connectionState;
 	}
 }
