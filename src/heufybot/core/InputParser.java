@@ -286,7 +286,7 @@ public class InputParser
 		{
 			//Someone quit the server
 			//TODO Remove this line when the channel list works properly
-			Logger.log("<< " + sourceNick + " (" + sourceLogin + "@" + sourceHostname + ") Quit (" + message + ")");
+			Logger.log("<< " + sourceNick + " (" + sourceLogin + "@" + sourceHostname + ") Quit (" + target + ")");
 			if(!sourceNick.equalsIgnoreCase(irc.getNickname()))
 			{
 				for(Channel channel2 : irc.getChannels())
