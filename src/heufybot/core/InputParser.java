@@ -24,9 +24,7 @@ public class InputParser
 	}
 	
 	public void parseLine(String line)
-	{
-		Logger.log(line);
-		
+	{		
 		List<String> parsedLine = MessageUtils.tokenizeLine(line);
 
         String senderInfo = "";
@@ -37,7 +35,7 @@ public class InputParser
         
         if (command.equals("PING"))
         {
-        	Logger.log("PONG " + parsedLine.get(0));
+        	Logger.log("PONG :" + parsedLine.get(0));
             irc.cmdPONG(parsedLine.get(0));
         	return;
         }
@@ -110,6 +108,7 @@ public class InputParser
 	
 	public void handleConnect(String line, List<String> parsedLine, String code)
 	{
+		Logger.log(line);
 		if(connectCodes.contains(code))
 		{
 			irc.setConnectionState(ConnectionState.Connected);
@@ -171,11 +170,36 @@ public class InputParser
 	
 	public void handleServerResponse(String line, List<String> parsedLine, int code)
 	{
-		
+		//TODO Server responses
+		Logger.log(line);
 	}
 	
 	public void handleCommand(String line, List<String> parsedLine, String sourceNick, String sourceLogin, String sourceHostname, String command, String target)
 	{
+		Logger.log(line);
 		
+		User source = irc.getUser(sourceNick);
+		Channel channel = (target.length() != 0 && irc.getConfig().getChannelPrefixes().indexOf(target.charAt(0)) > 0) ? irc.getChannel(target) : null;
+		String message = parsedLine.size() >= 2 ? parsedLine.get(1) : "";
+		
+		if (command.equals("PRIVMSG") && message.startsWith("\u0001") && message.endsWith("\u0001"))
+		{
+			//Message is a CTCP request
+			String request = message.substring(1, message.length() - 1);
+			if (request.startsWith("ACTION ")) 
+			{
+				// ACTION request
+				Logger.log(target + " - * " + sourceNick + " " + request.substring(7));
+			}
+			else
+			{
+				//TODO VERSION, TIME, FINGER, PING
+			}
+		}
+		else if(command.equals("PRIVMSG") && channel != null)
+		{
+			//Message to the channel
+			Logger.log("<" + sourceNick + "> " + message, target);
+		}
 	}
 }

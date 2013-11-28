@@ -9,6 +9,7 @@ public class Config
 	private PasswordType passwordType;
 	private boolean autoJoinEnabled, autoNickChange;
 	private String[] autoJoinChannels;
+	private String channelPrefixes;
 	
 	private static final Config instance = new Config();
 	
@@ -24,6 +25,7 @@ public class Config
 		this.autoJoinEnabled = true;
 		this.autoJoinChannels = new String[] { "#heufneutje" };
 		this.autoNickChange = true;
+		this.channelPrefixes = "#";
 	}
 	
 	public static Config getInstance()
@@ -79,5 +81,10 @@ public class Config
 	public String[] getAutoJoinChannels()
 	{
 		return autoJoinChannels;
+	}
+	
+	public String getChannelPrefixes()
+	{
+		return channelPrefixes;
 	}
 }
