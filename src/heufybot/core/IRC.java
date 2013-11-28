@@ -94,7 +94,6 @@ public class IRC
 		             }
 		             catch (Exception e)
 		             {
-		            	 e.printStackTrace();
 		            	 line = null;
 		             }
 	

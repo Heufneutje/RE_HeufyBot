@@ -30,5 +30,11 @@ public class InputParser
             irc.cmdPONG(parsedLine.get(0));
         	return;
         }
+        else if(command.startsWith("ERROR"))
+        {
+        	//Connection closed by server
+        	Logger.log(parsedLine.get(0));
+        	irc.disconnect();
+        }
 	}
 }
