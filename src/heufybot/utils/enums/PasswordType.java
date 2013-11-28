@@ -1,4 +1,4 @@
-package heufybot.utils;
+package heufybot.utils.enums;
 
 public enum PasswordType 
 {
