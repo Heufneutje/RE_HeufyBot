@@ -261,12 +261,43 @@ public class InputParser
 				//The bot's nick is changed
 				irc.setLoggedInNick(newNick);
 			}
-
+			
+			//TODO Remove this line when the channel list works properly
+			Logger.log(sourceNick + " is now known as " + newNick);
 			for(Channel channel2 : irc.getChannels())
 			{
 				if(channel2.getUser(sourceNick) != null)
 				{
 					Logger.log(sourceNick + " is now known as " + newNick, channel2.getName());
+				}
+			}
+		}
+		else if(command.equals("NOTICE"))
+		{
+			//Someone sent a notice
+			if (channel == null) 
+			{
+				Logger.log("[Notice] --" + sourceNick + "-- " + message);
+			}
+			else
+			{
+				Logger.log("[Notice] --" + sourceNick + "-- [" + channel.getName() + "] " + message, channel.getName());
+			}
+		}
+		else if(command.equals("QUIT"))
+		{
+			//Someone quit the server
+			//TODO Remove this line when the channel list works properly
+			Logger.log("<< " + sourceNick + " (" + sourceLogin + "@" + sourceHostname + ") Quit (" + message + ")");
+			if(!sourceNick.equalsIgnoreCase(irc.getNickname()))
+			{
+				for(Channel channel2 : irc.getChannels())
+				{
+					if(channel2.getUser(sourceNick) != null)
+					{
+						channel2.removeUser(source);
+						Logger.log("<< " + sourceNick + " (" + sourceLogin + "@" + sourceHostname + ") Quit (" + message + ")", channel2.getName());
+					}
 				}
 			}
 		}
