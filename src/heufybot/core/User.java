@@ -13,6 +13,11 @@ public class User
 		this.hostmask = hostmask;
 	}
 	
+	public User(String nickname)
+	{
+		this.nickname = nickname;
+	}
+	
 	public String getNickname()
 	{
 		return nickname;
@@ -26,5 +31,20 @@ public class User
 	public String getHostmask()
 	{
 		return hostmask;
+	}
+	
+	public void setNickname(String nickname)
+	{
+		this.nickname = nickname;
+	}
+	
+	public void setLogin(String login)
+	{
+		this.login = login;
+	}
+	
+	public void setHostmask(String hostmask)
+	{
+		this.hostmask = hostmask;
 	}
 }

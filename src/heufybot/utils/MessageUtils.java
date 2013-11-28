@@ -1,6 +1,7 @@
 package heufybot.utils;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class MessageUtils
@@ -30,5 +31,31 @@ public class MessageUtils
 		}
 
 		return retn;
+	}
+	
+	public static LinkedHashMap<String, String> getUserPrefixes(String prefixString)
+	{
+		LinkedHashMap<String, String> prefixes = new LinkedHashMap<String, String>();
+		char[] channelModes = prefixString.substring(1, prefixString.indexOf(")")).toCharArray();
+		char[] userLevels = prefixString.substring(prefixString.indexOf(")") + 1).toCharArray();
+		
+		for(int i = 0; i < channelModes.length; i++)
+		{
+			prefixes.put("" + channelModes[i], "" + userLevels[i]);
+		}
+		return prefixes;
+	}
+	
+	public static LinkedHashMap<String, String> getReverseUserPrefixes(String prefixString)
+	{
+		LinkedHashMap<String, String> prefixes = new LinkedHashMap<String, String>();
+		char[] channelModes = prefixString.substring(1, prefixString.indexOf(")")).toCharArray();
+		char[] userLevels = prefixString.substring(prefixString.indexOf(")") + 1).toCharArray();
+		
+		for(int i = 0; i < channelModes.length; i++)
+		{
+			prefixes.put("" + userLevels[i], "" + channelModes[i]);
+		}
+		return prefixes;
 	}
 }

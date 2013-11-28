@@ -5,17 +5,29 @@ import heufybot.utils.ParsingUtils;
 import heufybot.utils.enums.ConnectionState;
 import heufybot.utils.enums.PasswordType;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class InputParser 
 {
 	private IRC irc;
+	private LinkedHashMap<String, String>userPrefixes;
+	private LinkedHashMap<String, String>reverseUserPrefixes;
 	private int nickSuffix;
 	
 	public InputParser(IRC irc)
 	{
 		this.irc = irc;
 		this.nickSuffix = 1;
+		this.userPrefixes = new LinkedHashMap<String, String>();
+		this.reverseUserPrefixes = new LinkedHashMap<String, String>();
+		
+		//Initialize user prefixes with default values (@ for op (o) and + for voice (v))
+		userPrefixes.put("o", "@");
+		userPrefixes.put("v", "+");
+		
+		reverseUserPrefixes.put("@", "o");
+		reverseUserPrefixes.put("+", "v");
 	}
 	
 	public void parseLine(String line)
@@ -104,6 +116,7 @@ public class InputParser
 	{
 		if(code.equals("001"))
 		{
+			//001 RPL_WELCOME
 			irc.setConnectionState(ConnectionState.Connected);
 			irc.setLoggedInNick(irc.getConfig().getNickname() + (nickSuffix == 1 ? "" : nickSuffix));
 			
@@ -138,7 +151,7 @@ public class InputParser
 		}
 		else if(code.equals("433"))
 		{
-			//Nickname is already taken
+			//443 ERR_NICKNAMEINUSE
 			if(irc.getConfig().getAutoNickChange())
 			{
 				//Try a different nickname
@@ -156,6 +169,7 @@ public class InputParser
 		}
 		else if(code.startsWith("4") || code.startsWith("5") && !code.equals("439"))
 		{
+			//439 ERR_TARGETTOOFAST : No action required
 			//Couldn't login. Disconnect.
 			Logger.error("IRC Login", "Login failed.");
 			irc.disconnect();
@@ -167,12 +181,71 @@ public class InputParser
 		//TODO Server responses
 		if(code.equals("002") || code.equals("003"))
 		{
+			//002 RPL_YOURHOST
+			//003 RPL_CREATED
 			Logger.log(parsedLine.get(1));
 		}
-		else if(code.equals("004") || code.equals("005"))
+		else if(code.equals("004"))
 		{
+			//004 RPL_MYINFO
 			//Server information. Might do something with this later.
 			Logger.log(rawResponse.split(irc.getNickname() + " ")[1]);
+		}
+		else if (code.equals("005"))
+		{
+			//005 RPL_ISUPPORT			
+			//Server information. Might do something with this later.
+			if(rawResponse.contains("PREFIX="))
+			{
+				String prefixes = rawResponse.split("PREFIX=")[1];
+				prefixes = prefixes.substring(0, prefixes.indexOf(" "));
+				this.userPrefixes = MessageUtils.getUserPrefixes(prefixes);
+				this.reverseUserPrefixes = MessageUtils.getReverseUserPrefixes(prefixes);
+			}
+			
+			Logger.log(rawResponse.split(irc.getNickname() + " ")[1]);
+		}
+		else if(code.equals("353"))
+		{
+			//353 RPL_NAMREPLY
+			System.out.println(rawResponse);
+			
+			Channel channel = irc.getChannel(parsedLine.get(2));
+			String[] users = parsedLine.get(3).split(" ");
+			
+			for(int i = 0; i < users.length; i++)
+			{
+				String prefixes = "";
+				String nickname = users[i];
+				for(int j = 0; j < reverseUserPrefixes.size(); j++)
+				{
+					String firstCharString = "" + nickname.charAt(0);
+					if(reverseUserPrefixes.containsKey(firstCharString))
+					{
+						prefixes += reverseUserPrefixes.get(firstCharString);
+						nickname = nickname.replaceFirst(firstCharString, "");
+					}
+				}
+				
+				User user = irc.getUser(nickname);
+				if(user == null)
+				{
+					user = new User(nickname);
+				}
+				channel.addUser(user);
+				channel.parseModeChangeOnUser(user, "+" + prefixes);
+			}
+		}
+		else if(code.equals("366"))
+		{
+			for(Channel channel : irc.getChannels())
+			{
+				for(int i = 0; i < channel.getUsers().length; i++)
+				{
+					User user = channel.getUsers()[i];
+					System.out.println("NICK: " + user.getNickname() + " | MODES: " + channel.getModesOnUser(user));
+				}
+			}
 		}
 		else
 		{
