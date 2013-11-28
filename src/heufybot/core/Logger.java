@@ -8,7 +8,7 @@ import heufybot.utils.FileUtils;
 
 public class Logger 
 {
-	public static void log(String line)
+	public static void log(String line, String target)
 	{
 		//Timestamp line
 		DateFormat dateFormat = new SimpleDateFormat("[HH:mm]");
@@ -16,10 +16,22 @@ public class Logger
 		line = dateFormat.format(date) + " " + line;
 		
 		//Output to console
-		System.out.println(line);
+		if(target.equals(""))
+		{
+			System.out.println(line);
+		}
+		else
+		{
+			System.out.println(target + " - " + line);
+		}
 		
 		//Output to logfile
 		FileUtils.writeFileAppend("test.log", line + "\n");
+	}
+	
+	public static void log(String line)
+	{
+		log(line, "");
 	}
 	
 	public static void error(String errorSource, String line)
