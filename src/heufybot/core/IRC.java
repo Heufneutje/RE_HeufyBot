@@ -1,6 +1,7 @@
 package heufybot.core;
 
 import heufybot.utils.enums.ConnectionState;
+import heufybot.utils.enums.PasswordType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,12 +16,16 @@ public class IRC
 {
 	private static final IRC instance = new IRC();
 	
+	private Config config;
+	
 	private Socket socket;
 	private BufferedReader inputReader;
 	private OutputStreamWriter outputWriter;
 	private Thread inputThread;
 	private InputParser inputParser;
 	private ConnectionState connectionState;
+	
+	private String nickname;
 	
 	private IRC()
 	{
@@ -32,6 +37,11 @@ public class IRC
 	public static IRC getInstance()
 	{
 		return instance;
+	}
+	
+	public void setConfig(Config config)
+	{
+		this.config = config;
 	}
 	
 	public boolean connect(String server, int port)
@@ -61,6 +71,17 @@ public class IRC
 			Logger.error("IRC Connect", "Unkown connection error. Connection failed.");
 			return false;
 		}
+	}
+	
+	public void login()
+	{
+		if(config.getPasswordType() == PasswordType.ServerPass)
+		{
+			cmdPASS(config.getPassword());
+		}
+		
+		cmdNICK(config.getNickname());
+		cmdUSER(config.getUsername(), config.getRealname());
 	}
 	
 	public void disconnect()

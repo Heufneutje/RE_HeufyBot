@@ -1,7 +1,5 @@
 package heufybot.core;
 
-import heufybot.utils.enums.PasswordType;
-
 public class HeufyBot 
 {
 	public final static String VERSION = "0.0.1";
@@ -12,20 +10,14 @@ public class HeufyBot
 	{
 		this.config = config;
 		this.irc = IRC.getInstance();
+		irc.setConfig(config);
 	}
 	
 	public void start()
 	{
 		if(irc.connect(config.getServer(), config.getPort()))
 		{
-			if(config.getPasswordType() == PasswordType.ServerPass)
-			{
-				irc.cmdPASS(config.getPassword());
-			}
-			
-			irc.cmdNICK(config.getNickname());
-			irc.cmdUSER(config.getUsername(), config.getRealname());
-			
+			irc.login();
 			irc.startProcessing();
 		}
 	}
