@@ -1,12 +1,14 @@
 package heufybot.core;
 
-import heufybot.utils.PasswordType;
+import heufybot.utils.enums.PasswordType;
 
 public class Config 
 {
 	private String nickname, username, realname, server, password;
 	private int port;
 	private PasswordType passwordType;
+	private boolean autoJoinEnabled;
+	private String[] autoJoinChannels;
 	
 	private static final Config instance = new Config();
 	
@@ -19,6 +21,8 @@ public class Config
 		this.password = "";
 		this.passwordType = PasswordType.None;
 		this.port = 6667;
+		this.autoJoinEnabled = true;
+		this.autoJoinChannels = new String[] { "#heufneutje" };
 	}
 	
 	public static Config getInstance()
@@ -54,5 +58,20 @@ public class Config
 	public int getPort()
 	{
 		return port;
+	}
+	
+	public PasswordType getPasswordType()
+	{
+		return passwordType;
+	}
+	
+	public boolean getAutoJoinEnabled()
+	{
+		return autoJoinEnabled;
+	}
+	
+	public String[] getAutoJoinChannels()
+	{
+		return autoJoinChannels;
 	}
 }
