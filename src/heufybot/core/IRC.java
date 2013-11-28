@@ -11,6 +11,7 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 
 public class IRC 
 {
@@ -24,6 +25,7 @@ public class IRC
 	private Thread inputThread;
 	private InputParser inputParser;
 	private ConnectionState connectionState;
+	private ArrayList<Channel> channels;
 	
 	private String nickname;
 	
@@ -226,5 +228,35 @@ public class IRC
 	public void setLoggedInNick(String nickname)
 	{
 		this.nickname = nickname;
+	}
+	
+	public ArrayList<Channel> getChannels()
+	{
+		return channels;
+	}
+	
+	public Channel getChannel(String channelName)
+	{
+		for(Channel channel : channels)
+		{
+			if(channel.getName().equalsIgnoreCase(channelName))
+			{
+				return channel;
+			}
+		}
+		return null;
+	}
+	
+	public User getUser(String nickname)
+	{
+		for(Channel channel : channels)
+		{
+			User user = channel.getUser(nickname);
+			if(user != null)
+			{
+				return user;
+			}
+		}
+		return null;
 	}
 }

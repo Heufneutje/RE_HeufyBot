@@ -81,4 +81,16 @@ public class Channel
 		User[] userArray = new User[userSet.size()];
 		return userSet.toArray(userArray);
 	}
+	
+	public User getUser(String nickname)
+	{
+		for(User user : usersInChannel.keySet())
+		{
+			if(user.getNickname().equalsIgnoreCase(nickname))
+			{
+				return user;
+			}
+		}
+		return null;
+	}
 }
