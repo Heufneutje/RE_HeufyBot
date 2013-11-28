@@ -301,5 +301,50 @@ public class InputParser
 				}
 			}
 		}
+		else if(command.equals("KICK"))
+		{
+			//Someone is being kicked
+			User recipient = irc.getUser(message);
+			if(message.equalsIgnoreCase(irc.getNickname()))
+			{
+				//The bot just got kicked
+			}
+			else
+			{
+				//Someone else got kicked
+			}
+			//TODO Handle kicking
+			Logger.log(message + " was kicked from " + channel.getName() + " by " + sourceNick + " (" + parsedLine.get(2) + ")", target);
+		}
+		else if(command.equals("MODE"))
+		{
+			//A mode is being set
+			String mode = line.substring(line.indexOf(target, 2) + target.length() + 1);
+			if(mode.startsWith(":"))
+			{
+				mode = mode.substring(1);
+			}
+			if (target.equals(irc.getNickname()))
+			{
+				if(mode.startsWith(sourceHostname))
+				{
+					Logger.log(sourceNick + " sets mode: " + mode.substring(mode.indexOf(sourceNick + " ") + sourceNick.length() + 1));
+				}
+				else
+				{
+					Logger.log(sourceNick + " sets mode: " + mode);
+				}
+			}
+			else
+			{
+				Logger.log(sourceNick + " sets mode: " + mode, target);
+			}
+			handleMode(source, target, mode);
+		}
+	}
+	
+	public void handleMode(User source, String target, String mode)
+	{
+		//TODO
 	}
 }
