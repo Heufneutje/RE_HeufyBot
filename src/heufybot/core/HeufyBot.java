@@ -17,7 +17,7 @@ public class HeufyBot
 	{
 		if(irc.connect(config.getServer(), config.getPort()))
 		{
-			irc.login();
+			irc.login(config.getNickname());
 			irc.startProcessing();
 		}
 	}

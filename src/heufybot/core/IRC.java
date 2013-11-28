@@ -34,20 +34,11 @@ public class IRC
 		this.connectionState = ConnectionState.Initializing;
 	}
 	
+	
+	//Singleton stuff
 	public static IRC getInstance()
 	{
 		return instance;
-	}
-	
-	public Config getConfig()
-	{
-		return config;
-	}
-	
-	public void setConfig(Config config)
-	{
-		this.config = config;
-		this.nickname = config.getNickname();
 	}
 	
 	public boolean connect(String server, int port)
@@ -79,7 +70,7 @@ public class IRC
 		}
 	}
 	
-	public void login()
+	public void login(String nickname)
 	{
 		if(config.getPasswordType() == PasswordType.ServerPass)
 		{
@@ -204,7 +195,17 @@ public class IRC
 	{
 		cmdPRIVMSG("NickServ", "IDENTIFY " + password);
 	}
-
+	
+	public Config getConfig()
+	{
+		return config;
+	}
+	
+	public void setConfig(Config config)
+	{
+		this.config = config;
+	}
+	
 	public ConnectionState getConnectionState() 
 	{
 		return connectionState;
@@ -213,5 +214,15 @@ public class IRC
 	public void setConnectionState(ConnectionState connectionState) 
 	{
 		this.connectionState = connectionState;
+	}
+
+	public String getNickname() 
+	{
+		return nickname;
+	}
+	
+	public void setLoggedInNick(String nickname)
+	{
+		this.nickname = nickname;
 	}
 }

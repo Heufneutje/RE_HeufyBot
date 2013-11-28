@@ -7,7 +7,7 @@ public class Config
 	private String nickname, username, realname, server, password;
 	private int port;
 	private PasswordType passwordType;
-	private boolean autoJoinEnabled;
+	private boolean autoJoinEnabled, autoNickChange;
 	private String[] autoJoinChannels;
 	
 	private static final Config instance = new Config();
@@ -23,6 +23,7 @@ public class Config
 		this.port = 6667;
 		this.autoJoinEnabled = true;
 		this.autoJoinChannels = new String[] { "#heufneutje" };
+		this.autoNickChange = true;
 	}
 	
 	public static Config getInstance()
@@ -68,6 +69,11 @@ public class Config
 	public boolean getAutoJoinEnabled()
 	{
 		return autoJoinEnabled;
+	}
+	
+	public boolean getAutoNickChange()
+	{
+		return autoNickChange;
 	}
 	
 	public String[] getAutoJoinChannels()

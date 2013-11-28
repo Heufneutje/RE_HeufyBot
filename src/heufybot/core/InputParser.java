@@ -20,7 +20,7 @@ public class InputParser
 		this.irc = irc;
 		this.connectCodes = new ArrayList<String>(Arrays.asList("001", "002", "003", "004", "005",
 				"251", "252", "253", "254", "255", "375", "376"));
-		this.nickSuffix = 0;
+		this.nickSuffix = 1;
 	}
 	
 	public void parseLine(String line)
@@ -108,11 +108,15 @@ public class InputParser
         handleCommand(line, parsedLine, sourceNick, sourceLogin, sourceHostname, command, target);
 	}
 	
-	public void handleConnect(String line, List<String> parsedLine, String command)
+	public void handleConnect(String line, List<String> parsedLine, String code)
 	{
-		if(connectCodes.contains(command))
+		if(connectCodes.contains(code))
 		{
 			irc.setConnectionState(ConnectionState.Connected);
+			irc.setLoggedInNick(irc.getConfig().getNickname() + (nickSuffix == 1 ? "" : nickSuffix));
+			
+			nickSuffix = 1;
+			
 			Logger.log("*** Logged onto server");
 			
 			if(irc.getConfig().getPasswordType() == PasswordType.NickServPass)
@@ -138,6 +142,30 @@ public class InputParser
 					//TODO Process channel joins properly
 				}
 			}
+		}
+		else if(code.equals("433"))
+		{
+			//Nickname is already taken
+			if(irc.getConfig().getAutoNickChange())
+			{
+				//Try a different nickname
+				String usedNick = parsedLine.get(1);
+				nickSuffix++;
+				Logger.log("*** Nickname " + usedNick + " was already taken. Trying " + irc.getConfig().getNickname() + nickSuffix + "...");
+				irc.cmdNICK(irc.getConfig().getNickname() + nickSuffix);
+			}
+			else
+			{
+				//Give up
+				Logger.error("IRC Login", "Login failed. Nickname was already taken");
+				irc.disconnect();
+			}
+		}
+		else if(code.startsWith("4") || code.startsWith("5") && !code.equals("439"))
+		{
+			//Couldn't login. Disconnect.
+			Logger.error("IRC Login", "Login failed.");
+			irc.disconnect();
 		}
 	}
 	
