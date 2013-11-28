@@ -70,15 +70,17 @@ public class IRC
 		}
 	}
 	
-	public void login(String nickname)
+	public void login()
 	{
 		if(config.getPasswordType() == PasswordType.ServerPass)
 		{
 			cmdPASS(config.getPassword());
 		}
 		
-		cmdNICK(nickname);
+		cmdNICK(config.getNickname());
 		cmdUSER(config.getUsername(), config.getRealname());
+		
+		startProcessing();
 	}
 	
 	public void disconnect()
