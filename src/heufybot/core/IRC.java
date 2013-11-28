@@ -32,7 +32,6 @@ public class IRC
 		this.socket = new Socket();
 		this.inputParser = new InputParser(this);
 		this.connectionState = ConnectionState.Initializing;
-		this.nickname = config.getNickname();
 	}
 	
 	public static IRC getInstance()
@@ -40,9 +39,15 @@ public class IRC
 		return instance;
 	}
 	
+	public Config getConfig()
+	{
+		return config;
+	}
+	
 	public void setConfig(Config config)
 	{
 		this.config = config;
+		this.nickname = config.getNickname();
 	}
 	
 	public boolean connect(String server, int port)
