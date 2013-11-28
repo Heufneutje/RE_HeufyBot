@@ -13,16 +13,15 @@ public class Logger
 		//Timestamp line
 		DateFormat dateFormat = new SimpleDateFormat("[HH:mm]");
 		Date date = new Date();
-		line = dateFormat.format(date) + " " + line;
 		
 		//Output to console
 		if(target.equals(""))
 		{
-			System.out.println(line);
+			System.out.println(dateFormat.format(date) + " " + line);
 		}
 		else
 		{
-			System.out.println(target + " - " + line);
+			System.out.println(dateFormat.format(date) + " " + target + " - " + line);
 		}
 		
 		//Output to logfile
