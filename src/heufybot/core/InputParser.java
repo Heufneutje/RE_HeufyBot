@@ -294,7 +294,7 @@ public class InputParser
 					if(channel2.getUser(sourceNick) != null)
 					{
 						channel2.removeUser(source);
-						Logger.log("<< " + sourceNick + " (" + sourceLogin + "@" + sourceHostname + ") Quit (" + message + ")", channel2.getName());
+						Logger.log("<< " + sourceNick + " (" + sourceLogin + "@" + sourceHostname + ") Quit (" + target + ")", channel2.getName());
 					}
 				}
 			}
