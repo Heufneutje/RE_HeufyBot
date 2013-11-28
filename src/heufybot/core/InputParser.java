@@ -75,7 +75,7 @@ public class InputParser
 	        		}
 	        		else
 	        		{
-	        			handleServerResponse(line, parsedLine, code);
+	        			handleServerResponse(line, parsedLine, command);
 	        		}
 	        		return;
 	        	}
@@ -102,7 +102,6 @@ public class InputParser
 	
 	public void handleConnect(String line, List<String> parsedLine, String code)
 	{
-		Logger.log(line);
 		if(code.equals("001"))
 		{
 			irc.setConnectionState(ConnectionState.Connected);
@@ -111,6 +110,7 @@ public class InputParser
 			nickSuffix = 1;
 			
 			Logger.log("*** Logged onto server");
+			Logger.log(parsedLine.get(1));
 			
 			if(irc.getConfig().getPasswordType() == PasswordType.NickServPass)
 			{
@@ -162,10 +162,23 @@ public class InputParser
 		}
 	}
 	
-	public void handleServerResponse(String line, List<String> parsedLine, int code)
+	public void handleServerResponse(String rawResponse, List<String> parsedLine, String code)
 	{
 		//TODO Server responses
-		Logger.log(line);
+		if(code.equals("002") || code.equals("003"))
+		{
+			Logger.log(parsedLine.get(1));
+		}
+		else if(code.equals("004") || code.equals("005"))
+		{
+			//Server information. Might do something with this later.
+			Logger.log(rawResponse.split(irc.getNickname() + " ")[1]);
+		}
+		else
+		{
+			//Not parsed (yet)
+			Logger.log("(" + code + ") " + rawResponse.substring(rawResponse.indexOf(irc.getNickname() + " ") + irc.getNickname().length() + 1));
+		}
 	}
 	
 	public void handleCommand(String line, List<String> parsedLine, String sourceNick, String sourceLogin, String sourceHostname, String command, String target)
