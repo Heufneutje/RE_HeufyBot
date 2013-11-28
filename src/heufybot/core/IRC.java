@@ -196,6 +196,16 @@ public class IRC
 		sendRaw("PASS " + password);
 	}
 	
+	public void cmdWHO(String target)
+	{
+		sendRaw("WHO " + target);
+	}
+	
+	public void cmdMODE(String target, String mode)
+	{
+		sendRaw("MODE " + target + " " + mode);
+	}
+	
 	public void nickservIdentify(String password)
 	{
 		cmdPRIVMSG("NickServ", "IDENTIFY " + password);

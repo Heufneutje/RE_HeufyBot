@@ -201,5 +201,22 @@ public class InputParser
 			//Message to the channel
 			Logger.log("<" + sourceNick + "> " + message, target);
 		}
+		else if(command.equals("PRIVMSG"))
+		{
+			//Private message
+			Logger.log("<" + sourceNick + "> " + message, target);
+		}
+		else if(command.equals("JOIN"))
+		{
+			//Someone joins the channel
+			if(sourceNick.equalsIgnoreCase(irc.getNickname()))
+			{
+				//The bot is joining the channel
+				//TODO Setup channel				
+				channel = new Channel(target);
+				irc.getChannels().add(channel);
+			}
+			Logger.log(">> " + sourceNick + " (" + sourceLogin + "@" + sourceHostname + ") has joined " + channel.getName(), target);
+		}
 	}
 }
