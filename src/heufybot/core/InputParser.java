@@ -35,7 +35,6 @@ public class InputParser
         
         if (command.equals("PING"))
         {
-        	Logger.log("PONG :" + parsedLine.get(0));
             irc.cmdPONG(parsedLine.get(0));
         	return;
         }
@@ -176,8 +175,6 @@ public class InputParser
 	
 	public void handleCommand(String line, List<String> parsedLine, String sourceNick, String sourceLogin, String sourceHostname, String command, String target)
 	{
-		Logger.log(line);
-		
 		User source = irc.getUser(sourceNick);
 		Channel channel = irc.getChannel(target);
 		String message = parsedLine.size() >= 2 ? parsedLine.get(1) : "";
@@ -304,7 +301,7 @@ public class InputParser
 		else if(command.equals("KICK"))
 		{
 			//Someone is being kicked
-			User recipient = irc.getUser(message);
+			//User recipient = irc.getUser(message);
 			if(message.equalsIgnoreCase(irc.getNickname()))
 			{
 				//The bot just got kicked
@@ -340,6 +337,30 @@ public class InputParser
 				Logger.log(sourceNick + " sets mode: " + mode, target);
 			}
 			handleMode(source, target, mode);
+		}
+		else if(command.equals("TOPIC"))
+		{
+			//Someone is changing the topic
+			long currentTime = System.currentTimeMillis();
+			channel.setTopic(message);
+			channel.setTopicSetter(sourceNick);
+			channel.setTopicSetTimestamp(currentTime);
+			
+			Logger.log(sourceNick + " changes topic to \'" + message + "\'", target);
+		}
+		else if(command.equals("INVITE"))
+		{
+			//Someone is inviting someone into the channel
+			if(target.equalsIgnoreCase(irc.getNickname()))
+			{
+				//The bot is being invited. Join the channel.
+				irc.cmdJOIN(message, "");
+			}
+			Logger.log(sourceNick + " (" + sourceLogin + "@" + sourceHostname + ") invites " + target + " to join " + message, "server");
+		}
+		else
+		{
+			//Unknown command. Ignore it
 		}
 	}
 	
