@@ -15,6 +15,7 @@ public class Channel
 	public Channel(String name)
 	{
 		this.name = name;
+		this.usersInChannel = new HashMap<User, String>();
 	}
 	
 	public String getName()
@@ -68,9 +69,9 @@ public class Channel
 		usersInChannel.put(user, modesOnUser);
 	}
 	
-	public void addUser(User user, String modes)
+	public void addUser(User user)
 	{
-		usersInChannel.put(user, modes);
+		usersInChannel.put(user, "");
 	}
 	
 	public void removeUser(User user)

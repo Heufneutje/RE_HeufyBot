@@ -179,7 +179,7 @@ public class InputParser
 		Logger.log(line);
 		
 		User source = irc.getUser(sourceNick);
-		Channel channel = (target.length() != 0 && irc.getConfig().getChannelPrefixes().indexOf(target.charAt(0)) > 0) ? irc.getChannel(target) : null;
+		Channel channel = irc.getChannel(target);
 		String message = parsedLine.size() >= 2 ? parsedLine.get(1) : "";
 		
 		if (command.equals("PRIVMSG") && message.startsWith("\u0001") && message.endsWith("\u0001"))
@@ -216,7 +216,59 @@ public class InputParser
 				channel = new Channel(target);
 				irc.getChannels().add(channel);
 			}
+			else
+			{
+				//Someone else is joining the channel
+				if(source != null)
+				{
+					channel.addUser(source);
+				}
+				else
+				{
+					channel.addUser(new User(sourceNick, sourceLogin, sourceHostname));
+				}
+			}
 			Logger.log(">> " + sourceNick + " (" + sourceLogin + "@" + sourceHostname + ") has joined " + channel.getName(), target);
+		}
+		else if(command.equals("PART"))
+		{
+			if(sourceNick.equalsIgnoreCase(irc.getNickname()))
+			{
+				//The bot is leaving the channel		
+				//TODO Still broken since /NAMES is not parsed
+				//irc.getChannels().remove(channel);
+			}
+			else
+			{
+				//Someone else is joining the channel
+				//irc.getChannel(target).removeUser(source);
+			}
+			if(message.equals(""))
+			{
+				Logger.log("<< " + sourceNick + " (" + sourceLogin + "@" + sourceHostname + ") has left " + channel.getName(), target);
+			}
+			else
+			{
+				Logger.log("<< " + sourceNick + " (" + sourceLogin + "@" + sourceHostname + ") has left " + channel.getName() + " (" + message + ")", target);
+			}
+		}
+		else if(command.equals("NICK"))
+		{
+			//Someone is changing their nick
+			String newNick = target;
+			if(sourceNick.equalsIgnoreCase(irc.getNickname()))
+			{
+				//The bot's nick is changed
+				irc.setLoggedInNick(newNick);
+			}
+
+			for(Channel channel2 : irc.getChannels())
+			{
+				if(channel2.getUser(sourceNick) != null)
+				{
+					Logger.log(sourceNick + " is now known as " + newNick, channel2.getName());
+				}
+			}
 		}
 	}
 }
