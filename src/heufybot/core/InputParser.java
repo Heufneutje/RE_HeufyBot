@@ -186,7 +186,7 @@ public class InputParser
 			if (request.startsWith("ACTION ")) 
 			{
 				// ACTION request
-				Logger.log(target + " - * " + sourceNick + " " + request.substring(7));
+				Logger.log("* " + sourceNick + " " + request.substring(7), target);
 			}
 			else
 			{
