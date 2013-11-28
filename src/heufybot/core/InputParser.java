@@ -190,6 +190,7 @@ public class InputParser
 			}
 			else
 			{
+				Logger.log(line);
 				//TODO VERSION, TIME, FINGER, PING
 			}
 		}
