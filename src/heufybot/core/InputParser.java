@@ -324,14 +324,7 @@ public class InputParser
 			}
 			if (target.equals(irc.getNickname()))
 			{
-				if(mode.startsWith(sourceHostname))
-				{
-					Logger.log(sourceNick + " sets mode: " + mode.substring(mode.indexOf(sourceNick + " ") + sourceNick.length() + 1));
-				}
-				else
-				{
-					Logger.log(sourceNick + " sets mode: " + mode);
-				}
+				Logger.log(sourceNick + " sets mode: " + mode);
 			}
 			else
 			{
