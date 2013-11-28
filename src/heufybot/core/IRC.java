@@ -34,6 +34,7 @@ public class IRC
 		this.socket = new Socket();
 		this.inputParser = new InputParser(this);
 		this.connectionState = ConnectionState.Initializing;
+		this.channels = new ArrayList<Channel>();
 	}
 	
 	
