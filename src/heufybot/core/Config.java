@@ -9,8 +9,6 @@ public class Config
 	private PasswordType passwordType;
 	private boolean autoJoinEnabled, autoNickChange;
 	private String[] autoJoinChannels;
-	private String channelPrefixes;
-	
 	private static final Config instance = new Config();
 	
 	private Config()
