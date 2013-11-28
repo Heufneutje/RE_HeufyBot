@@ -163,4 +163,14 @@ public class IRC
 	{
 		sendRaw("PART " + channel + ": " + message);
 	}
+	
+	public void cmdPASS(String password)
+	{
+		sendRaw("PASS " + password);
+	}
+	
+	public void nickservIdentify(String password)
+	{
+		cmdPRIVMSG("NickServ", "IDENTIFY " + password);
+	}
 }
