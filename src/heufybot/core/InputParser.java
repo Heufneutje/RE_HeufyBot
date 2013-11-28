@@ -223,7 +223,7 @@ public class InputParser
 					if(reverseUserPrefixes.containsKey(firstCharString))
 					{
 						prefixes += reverseUserPrefixes.get(firstCharString);
-						nickname = nickname.replaceFirst(firstCharString, "");
+						nickname = nickname.replaceFirst("\\" + firstCharString, "");
 					}
 				}
 				
