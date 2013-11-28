@@ -17,12 +17,14 @@ public class Logger
 		//Output to console
 		if(target.equals(""))
 		{
-			System.out.println(dateFormat.format(date) + " " + line);
+			line = dateFormat.format(date) + " " + line;
 		}
 		else
 		{
-			System.out.println(dateFormat.format(date) + " " + target + " - " + line);
+			line = dateFormat.format(date) + " " + target + " - " + line;
 		}
+		
+		System.out.println(line);
 		
 		//Output to logfile
 		FileUtils.writeFileAppend("test.log", line + "\n");
