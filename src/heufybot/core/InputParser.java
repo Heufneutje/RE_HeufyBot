@@ -5,21 +5,16 @@ import heufybot.utils.ParsingUtils;
 import heufybot.utils.enums.ConnectionState;
 import heufybot.utils.enums.PasswordType;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class InputParser 
 {
 	private IRC irc;
-	private List<String> connectCodes;
 	private int nickSuffix;
 	
 	public InputParser(IRC irc)
 	{
 		this.irc = irc;
-		this.connectCodes = new ArrayList<String>(Arrays.asList("001", "002", "003", "004", "005",
-				"251", "252", "253", "254", "255", "375", "376"));
 		this.nickSuffix = 1;
 	}
 	
@@ -108,7 +103,7 @@ public class InputParser
 	public void handleConnect(String line, List<String> parsedLine, String code)
 	{
 		Logger.log(line);
-		if(connectCodes.contains(code))
+		if(code.equals("001"))
 		{
 			irc.setConnectionState(ConnectionState.Connected);
 			irc.setLoggedInNick(irc.getConfig().getNickname() + (nickSuffix == 1 ? "" : nickSuffix));
