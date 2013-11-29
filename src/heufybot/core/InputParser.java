@@ -145,7 +145,6 @@ public class InputParser
 						//This channel doesn't need a key
 						irc.cmdJOIN(channel[0], "");
 					}
-					//TODO Process channel joins properly
 				}
 			}
 		}
@@ -269,6 +268,11 @@ public class InputParser
 				// ACTION request
 				Logger.log("* " + sourceNick + " " + request.substring(7), target);
 			}
+			else if(request.startsWith("PING "))
+			{
+				Logger.log("[" + sourceNick + " PING]");
+				irc.cmdNOTICE(sourceNick, "\u0001PING " + request.substring(5) + "\u0001");
+			}
 			else
 			{
 				Logger.log(line);
@@ -290,8 +294,7 @@ public class InputParser
 			//Someone joins the channel
 			if(sourceNick.equalsIgnoreCase(irc.getNickname()))
 			{
-				//The bot is joining the channel
-				//TODO Setup channel				
+				//The bot is joining the channel			
 				channel = new Channel(target);
 				irc.getChannels().add(channel);
 			}
@@ -314,13 +317,12 @@ public class InputParser
 			if(sourceNick.equalsIgnoreCase(irc.getNickname()))
 			{
 				//The bot is leaving the channel		
-				//TODO Still broken since /NAMES is not parsed
-				//irc.getChannels().remove(channel);
+				irc.getChannels().remove(channel);
 			}
 			else
 			{
-				//Someone else is joining the channel
-				//irc.getChannel(target).removeUser(source);
+				//Someone else is leaving the channel
+				irc.getChannel(target).removeUser(source);
 			}
 			if(message.equals(""))
 			{

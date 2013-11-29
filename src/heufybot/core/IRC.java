@@ -206,6 +206,11 @@ public class IRC
 		sendRaw("MODE " + target + " " + mode);
 	}
 	
+	public void cmdNOTICE(String target, String notice)
+	{
+		sendRaw("NOTICE " + target + " :" + notice);
+	}
+	
 	public void nickservIdentify(String password)
 	{
 		cmdPRIVMSG("NickServ", "IDENTIFY " + password);
