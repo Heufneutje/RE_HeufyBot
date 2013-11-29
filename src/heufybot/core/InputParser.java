@@ -235,17 +235,6 @@ public class InputParser
 				channel.parseModeChangeOnUser(user, "+" + prefixes);
 			}
 		}
-		else if(code.equals("366"))
-		{
-			for(Channel channel : irc.getChannels())
-			{
-				for(int i = 0; i < channel.getUsers().length; i++)
-				{
-					User user = channel.getUsers()[i];
-					System.out.println("NICK: " + user.getNickname() + " | MODES: " + channel.getModesOnUser(user));
-				}
-			}
-		}
 		else
 		{
 			//Not parsed (yet)
