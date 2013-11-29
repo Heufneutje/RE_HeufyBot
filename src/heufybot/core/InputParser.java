@@ -265,7 +265,7 @@ public class InputParser
 			else if(request.equals("VERSION"))
 			{
 				Logger.log("[" + sourceNick + " VERSION]");
-				irc.cmdNOTICE(sourceNick, "\u0001VERSION HeufyBot V" + HeufyBot.VERSION + ", OS: " + System.getProperty("os.name") + " ("+ System.getProperty("os.version") + ")," + System.getProperty("os.arch") + "\u0001");
+				irc.cmdNOTICE(sourceNick, "\u0001VERSION RE_HeufyBot V" + HeufyBot.VERSION + ", OS: " + System.getProperty("os.name") + " ("+ System.getProperty("os.version") + ")," + System.getProperty("os.arch") + "\u0001");
 			}
 			else if(request.equals("TIME"))
 			{
