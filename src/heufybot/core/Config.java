@@ -16,7 +16,7 @@ public class Config
 		this.nickname = "RE_HeufyBot";
 		this.username = "RE_HeufyBot";
 		this.realname = "HeufyBot Dev Build";
-		this.server = "irc.desertbus.org";
+		this.server = "localhost";
 		this.password = "";
 		this.passwordType = PasswordType.None;
 		this.port = 6667;
