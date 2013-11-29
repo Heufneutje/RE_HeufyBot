@@ -346,21 +346,21 @@ public class InputParser
 		else if(command.equals("NICK"))
 		{
 			//Someone is changing their nick
-			String newNick = target;
+			String newNick = target;	
+			for(Channel channel2 : irc.getChannels())
+			{
+				User user = channel2.getUser(sourceNick);
+				if(user != null)
+				{
+					user.setNickname(newNick);
+					Logger.log(sourceNick + " is now known as " + newNick, channel2.getName());
+				}
+			}
+			
 			if(sourceNick.equalsIgnoreCase(irc.getNickname()))
 			{
 				//The bot's nick is changed
 				irc.setLoggedInNick(newNick);
-			}
-			
-			//TODO Remove this line when the channel list works properly
-			Logger.log(sourceNick + " is now known as " + newNick);
-			for(Channel channel2 : irc.getChannels())
-			{
-				if(channel2.getUser(sourceNick) != null)
-				{
-					Logger.log(sourceNick + " is now known as " + newNick, channel2.getName());
-				}
 			}
 		}
 		else if(command.equals("NOTICE"))
@@ -378,8 +378,6 @@ public class InputParser
 		else if(command.equals("QUIT"))
 		{
 			//Someone quit the server
-			//TODO Remove this line when the channel list works properly
-			Logger.log("<< " + sourceNick + " (" + sourceLogin + "@" + sourceHostname + ") Quit (" + target + ")");
 			if(!sourceNick.equalsIgnoreCase(irc.getNickname()))
 			{
 				for(Channel channel2 : irc.getChannels())
@@ -395,16 +393,17 @@ public class InputParser
 		else if(command.equals("KICK"))
 		{
 			//Someone is being kicked
-			//User recipient = irc.getUser(message);
+			User recipient = irc.getUser(message);
 			if(message.equalsIgnoreCase(irc.getNickname()))
 			{
 				//The bot just got kicked
+				irc.getChannels().remove(channel);
 			}
 			else
 			{
 				//Someone else got kicked
+				channel.removeUser(recipient);
 			}
-			//TODO Handle kicking
 			Logger.log(message + " was kicked from " + channel.getName() + " by " + sourceNick + " (" + parsedLine.get(2) + ")", target);
 		}
 		else if(command.equals("MODE"))
