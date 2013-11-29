@@ -94,7 +94,7 @@ public class InputParser
 		    	else
 		    	{
 		    		//Could be a nick without a login or host
-		        	sourceNick = senderInfo;
+		    		sourceNick = senderInfo;
 		    	}
 		    }
 		}
