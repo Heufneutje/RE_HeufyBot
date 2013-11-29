@@ -273,10 +273,20 @@ public class InputParser
 				Logger.log("[" + sourceNick + " PING]");
 				irc.cmdNOTICE(sourceNick, "\u0001PING " + request.substring(5) + "\u0001");
 			}
-			else
+			else if(request.equals("VERSION"))
 			{
-				Logger.log(line);
-				//TODO VERSION, TIME, FINGER, PING
+				Logger.log("[" + sourceNick + " VERSION]");
+				irc.cmdNOTICE(sourceNick, "\u0001VERSION HeufyBot V" + HeufyBot.VERSION + ", OS: " + System.getProperty("os.name") + " ("+ System.getProperty("os.version") + ")," + System.getProperty("os.arch") + "\u0001");
+			}
+			else if(request.equals("TIME"))
+			{
+				Logger.log("[" + sourceNick + " TIME]");
+				irc.cmdNOTICE(sourceNick, "\u0001TIME " + new java.util.Date().toString() + "\u0001");
+			}
+			else if(request.equals("FINGER"))
+			{
+				Logger.log("[" + sourceNick + " FINGER]");
+				irc.cmdNOTICE(sourceNick, "\u0001FINGER Why would you finger a bot?!\u0001");
 			}
 		}
 		else if(command.equals("PRIVMSG") && channel != null)
