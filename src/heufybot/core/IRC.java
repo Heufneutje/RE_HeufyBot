@@ -216,6 +216,11 @@ public class IRC
 		cmdPRIVMSG("NickServ", "IDENTIFY " + password);
 	}
 	
+	public void ctcpReply(String target, String replyType, String reply)
+	{
+		cmdNOTICE(target, "\u0001" + replyType + " " + reply + "\u0001");
+	}
+	
 	public Config getConfig()
 	{
 		return config;
