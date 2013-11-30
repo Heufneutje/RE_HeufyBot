@@ -12,23 +12,12 @@ import java.util.List;
 public class InputParser 
 {
 	private IRC irc;
-	private LinkedHashMap<String, String>userPrefixes;
-	private LinkedHashMap<String, String>reverseUserPrefixes;
 	private int nickSuffix;
 	
 	public InputParser(IRC irc)
 	{
 		this.irc = irc;
 		this.nickSuffix = 1;
-		this.userPrefixes = new LinkedHashMap<String, String>();
-		this.reverseUserPrefixes = new LinkedHashMap<String, String>();
-		
-		//Initialize user prefixes with default values (@ for op (o) and + for voice (v))
-		userPrefixes.put("o", "@");
-		userPrefixes.put("v", "+");
-		
-		reverseUserPrefixes.put("@", "o");
-		reverseUserPrefixes.put("+", "v");
 	}
 	
 	public void parseLine(String line)
@@ -199,8 +188,8 @@ public class InputParser
 			{
 				String prefixes = rawResponse.split("PREFIX=")[1];
 				prefixes = prefixes.substring(0, prefixes.indexOf(" "));
-				this.userPrefixes = MessageUtils.getUserPrefixes(prefixes);
-				this.reverseUserPrefixes = MessageUtils.getReverseUserPrefixes(prefixes);
+				irc.getServerInfo().setUserPrefixes(MessageUtils.getUserPrefixes(prefixes));
+				irc.getServerInfo().setReverseUserPrefixes(MessageUtils.getReverseUserPrefixes(prefixes));
 			}
 			
 			Logger.log(rawResponse.split(irc.getNickname() + " ")[1]);
@@ -266,6 +255,7 @@ public class InputParser
 			{
 				String prefixes = "";
 				String nickname = users[i];
+				LinkedHashMap<String, String> reverseUserPrefixes = irc.getServerInfo().getReverseUserPrefixes();
 				for(int j = 0; j < reverseUserPrefixes.size(); j++)
 				{
 					String firstCharString = "" + nickname.charAt(0);
@@ -353,7 +343,7 @@ public class InputParser
 		else if(command.equals("PRIVMSG") && channel != null)
 		{
 			//Message to the channel
-			Logger.log("<" + sourceNick + "> " + message, target);
+			Logger.log("<" + channel.getModesOnUser(source) + sourceNick + "> " + message, target);
 		}
 		else if(command.equals("PRIVMSG"))
 		{

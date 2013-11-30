@@ -262,7 +262,7 @@ public class IRC
 	{
 		return serverInfo;
 	}
-	
+
 	public Channel getChannel(String channelName)
 	{
 		for(Channel channel : channels)
