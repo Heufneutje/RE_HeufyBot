@@ -211,6 +211,21 @@ public class InputParser
 			//UUID, might do something with it later. Just log it for now.
 			Logger.log(parsedLine.get(1) + " " + parsedLine.get(2));
 		}
+		else if(code.equals("251") || code.equals("255") || code.equals("265") || code.equals("266"))
+		{
+			//251 RPL_LUSERCLIENT
+			//255 RPL_LUSERME
+			//265 RPL_LOCALUSERS
+			//266 RPL_GLOBALUSERS
+			Logger.log(parsedLine.get(1));
+		}
+		else if(code.equals("252") || code.equals("254") || code.equals("396"))
+		{
+			//252 RPL_LUSEROP
+			//254 RPL_LUSERCHANNELS 
+			//396 RPL_HOSTHIDDEN
+			Logger.log(parsedLine.get(1) + " " + parsedLine.get(2));
+		}
 		else if(code.equals("324"))
 		{
 			//324 RPL_CHANNELMODEIS 
@@ -229,6 +244,17 @@ public class InputParser
 			Channel channel = irc.getChannel(parsedLine.get(1));
 			channel.setTopic(parsedLine.get(2));
 			Logger.log("Topic is \'" + parsedLine.get(2) + "\'", parsedLine.get(1));
+		}
+		else if(code.equals("333"))
+		{
+			//333 RPL_TOPICWHOTIME
+			Channel channel = irc.getChannel(parsedLine.get(1));
+			channel.setTopicSetter(parsedLine.get(2));
+			
+			long topicTimestamp = ParsingUtils.tryParseLong(parsedLine.get(3));
+			
+			channel.setTopicSetTimestamp(topicTimestamp);
+			Logger.log("Set by " + parsedLine.get(2) + " on " + new Date(topicTimestamp * 1000), parsedLine.get(1));
 		}
 		else if(code.equals("353"))
 		{
@@ -263,6 +289,23 @@ public class InputParser
 		{
 			//366 RPL_ENDOFNAMES
 			//No action required
+		}
+		else if(code.equals("372"))
+		{
+			//372 RPL_MOTD
+			irc.getServerInfo().appendMotd(parsedLine.get(1) + "\n");
+			Logger.log(parsedLine.get(1));
+		}
+		else if(code.equals("375"))
+		{
+			//375 RPL_MOTDSTART 
+			irc.getServerInfo().setMotd("");
+			Logger.log(parsedLine.get(1));
+		}
+		else if(code.equals("376"))
+		{
+			//376 RPL_ENDOFMOTD
+			Logger.log(parsedLine.get(1));
 		}
 		else
 		{

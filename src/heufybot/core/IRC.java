@@ -26,6 +26,7 @@ public class IRC
 	private InputParser inputParser;
 	private ConnectionState connectionState;
 	private ArrayList<Channel> channels;
+	private ServerInfo serverInfo;
 	
 	private String nickname;
 	
@@ -35,6 +36,7 @@ public class IRC
 		this.inputParser = new InputParser(this);
 		this.connectionState = ConnectionState.Initializing;
 		this.channels = new ArrayList<Channel>();
+		this.serverInfo = ServerInfo.getInstance();
 	}
 	
 	
@@ -254,6 +256,11 @@ public class IRC
 	public ArrayList<Channel> getChannels()
 	{
 		return channels;
+	}
+	
+	public ServerInfo getServerInfo()
+	{
+		return serverInfo;
 	}
 	
 	public Channel getChannel(String channelName)
