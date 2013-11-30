@@ -3,9 +3,11 @@ package heufybot.core;
 public class User 
 {
 	private String nickname;
-	private String login;
-	private String hostmask;
-	private String realname;
+	private String login = "";
+	private String hostmask = "";
+	private String realname = "";
+	private String server = "";
+	private int hops;
 	private boolean isOper;
 	
 	public User(String nickname, String login, String hostmask)
@@ -68,5 +70,25 @@ public class User
 	public void setOper(boolean isOper)
 	{
 		this.isOper = isOper;
+	}
+
+	public int getHops()
+	{
+		return hops;
+	}
+
+	public void setHops(int hops) 
+	{
+		this.hops = hops;
+	}
+
+	public String getServer() 
+	{
+		return server;
+	}
+
+	public void setServer(String server)
+	{
+		this.server = server;
 	}
 }

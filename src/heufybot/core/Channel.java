@@ -49,7 +49,10 @@ public class Channel
 			}
 			else if (adding)
 			{
-				modes = modes + curChar;
+				if(!modes.contains(Character.toString(curChar)))
+				{
+					modes += curChar;
+				}
 			}
 			else
 			{
@@ -76,7 +79,10 @@ public class Channel
 			}
 			else if (adding)
 			{
-				modesOnUser += curChar;
+				if(!modesOnUser.contains(Character.toString(curChar)))
+				{
+					modesOnUser += curChar;
+				}
 			}
 			else
 			{

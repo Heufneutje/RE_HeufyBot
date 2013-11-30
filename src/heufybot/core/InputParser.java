@@ -215,6 +215,11 @@ public class InputParser
 			//396 RPL_HOSTHIDDEN
 			Logger.log(parsedLine.get(1) + " " + parsedLine.get(2));
 		}
+		else if(code.equals("315"))
+		{
+			//315 RPL_ENDOFWHO
+			//No action required
+		}
 		else if(code.equals("324"))
 		{
 			//324 RPL_CHANNELMODEIS 
@@ -244,6 +249,46 @@ public class InputParser
 			
 			channel.setTopicSetTimestamp(topicTimestamp);
 			Logger.log("Set by " + parsedLine.get(2) + " on " + new Date(topicTimestamp * 1000), parsedLine.get(1));
+		}
+		else if(code.equals("352"))
+		{
+			//352 RPL_WHOREPLY			
+			Channel channel = irc.getChannel(parsedLine.get(1));
+			User user = channel.getUser(parsedLine.get(5));
+			if(user == null)
+			{
+				user = irc.getUser(parsedLine.get(5));
+				if(user == null)
+				{
+					user = new User(parsedLine.get(5));
+				}
+			}
+			user.setLogin(parsedLine.get(2));
+			user.setHostmask(parsedLine.get(3));
+			user.setServer(parsedLine.get(4));
+			
+			channel.addUser(user);
+			
+			String modes = parsedLine.get(6);
+			if(modes.substring(1).contains("*"))
+			{
+				user.setOper(true);
+				modes = modes.substring(2);
+			}
+			else
+			{
+				modes = modes.substring(1);
+			}
+			
+			for(int i = 0; i < modes.length(); i++)
+			{
+				String mode = irc.getServerInfo().getReverseUserPrefixes().get(Character.toString(modes.charAt(i)));
+				channel.parseModeChangeOnUser(user, "+" + mode);
+			}
+			
+			String rawEnd = parsedLine.get(7);
+			user.setHops(ParsingUtils.tryParseInt(rawEnd.substring(0, rawEnd.indexOf(" "))));
+			user.setRealname(rawEnd.substring(rawEnd.indexOf(" ") + 1));
 		}
 		else if(code.equals("353"))
 		{
