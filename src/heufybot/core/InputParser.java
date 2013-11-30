@@ -5,6 +5,7 @@ import heufybot.utils.ParsingUtils;
 import heufybot.utils.enums.ConnectionState;
 import heufybot.utils.enums.PasswordType;
 
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -210,6 +211,25 @@ public class InputParser
 			//UUID, might do something with it later. Just log it for now.
 			Logger.log(parsedLine.get(1) + " " + parsedLine.get(2));
 		}
+		else if(code.equals("324"))
+		{
+			//324 RPL_CHANNELMODEIS 
+			Channel channel = irc.getChannel(parsedLine.get(1));
+			channel.parseModeChange(parsedLine.get(2));
+			Logger.log("Channel modes currently set: " + parsedLine.get(2), parsedLine.get(1));
+		}
+		else if(code.equals("329"))
+		{
+			//329 RPL_CREATIONTIME
+			Logger.log("Channel was created on " + new Date(ParsingUtils.tryParseLong(parsedLine.get(2)) * 1000), parsedLine.get(1));
+		}
+		else if(code.equals("332"))
+		{
+			//332 RPL_TOPIC
+			Channel channel = irc.getChannel(parsedLine.get(1));
+			channel.setTopic(parsedLine.get(2));
+			Logger.log("Topic is \'" + parsedLine.get(2) + "\'", parsedLine.get(1));
+		}
 		else if(code.equals("353"))
 		{
 			//353 RPL_NAMREPLY
@@ -238,6 +258,11 @@ public class InputParser
 				channel.addUser(user);
 				channel.parseModeChangeOnUser(user, "+" + prefixes);
 			}
+		}
+		else if(code.equals("366"))
+		{
+			//366 RPL_ENDOFNAMES
+			//No action required
 		}
 		else
 		{
@@ -274,7 +299,7 @@ public class InputParser
 			else if(request.equals("TIME"))
 			{
 				Logger.log("[" + sourceNick + " TIME]");
-				irc.ctcpReply(sourceNick, "TIME", new java.util.Date().toString());
+				irc.ctcpReply(sourceNick, "TIME", new Date().toString());
 			}
 			else if(request.equals("FINGER"))
 			{
@@ -439,10 +464,6 @@ public class InputParser
 				irc.cmdJOIN(message, "");
 			}
 			Logger.log(sourceNick + " (" + sourceLogin + "@" + sourceHostname + ") invites " + target + " to join " + message, "server");
-		}
-		else
-		{
-			//Unknown command. Ignore it
 		}
 	}
 	

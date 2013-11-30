@@ -13,4 +13,16 @@ public class ParsingUtils
 			return -1;
 		}
 	}
+	
+	public static long tryParseLong(String longString)
+	{
+		try
+		{
+			return Long.parseLong(longString);
+		}
+		catch(NumberFormatException e)
+		{
+			return -1;
+		}
+	}
 }
