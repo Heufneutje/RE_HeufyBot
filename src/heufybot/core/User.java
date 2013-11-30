@@ -5,6 +5,8 @@ public class User
 	private String nickname;
 	private String login;
 	private String hostmask;
+	private String realname;
+	private boolean isOper;
 	
 	public User(String nickname, String login, String hostmask)
 	{
@@ -46,5 +48,25 @@ public class User
 	public void setHostmask(String hostmask)
 	{
 		this.hostmask = hostmask;
+	}
+
+	public String getRealname()
+	{
+		return realname;
+	}
+
+	public void setRealname(String realname) 
+	{
+		this.realname = realname;
+	}
+
+	public boolean isOper() 
+	{
+		return isOper;
+	}
+
+	public void setOper(boolean isOper)
+	{
+		this.isOper = isOper;
 	}
 }
