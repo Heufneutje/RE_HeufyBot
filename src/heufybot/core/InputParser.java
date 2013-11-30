@@ -204,11 +204,15 @@ public class InputParser
 			
 			Logger.log(rawResponse.split(irc.getNickname() + " ")[1]);
 		}
+		else if(code.equals("042"))
+		{
+			//042 RPL_YOURID
+			//UUID, might do something with it later. Just log it for now.
+			Logger.log(parsedLine.get(1) + " " + parsedLine.get(2));
+		}
 		else if(code.equals("353"))
 		{
 			//353 RPL_NAMREPLY
-			System.out.println(rawResponse);
-			
 			Channel channel = irc.getChannel(parsedLine.get(2));
 			String[] users = parsedLine.get(3).split(" ");
 			
@@ -293,9 +297,12 @@ public class InputParser
 			//Someone joins the channel
 			if(sourceNick.equalsIgnoreCase(irc.getNickname()))
 			{
-				//The bot is joining the channel			
+				//The bot is joining the channel, do setup
 				channel = new Channel(target);
 				irc.getChannels().add(channel);
+				
+				irc.cmdWHO(channel.getName());
+				irc.cmdMODE(channel.getName(), "");
 			}
 			else
 			{
