@@ -102,7 +102,7 @@ public class InputParser
 		handleCommand(line, parsedLine, sourceNick, sourceLogin, sourceHostname, command, target);
 	}
 	
-	public void handleConnect(String line, List<String> parsedLine, String code)
+	private void handleConnect(String line, List<String> parsedLine, String code)
 	{
 		if(code.equals("001"))
 		{
@@ -165,7 +165,7 @@ public class InputParser
 		}
 	}
 	
-	public void handleServerResponse(String rawResponse, List<String> parsedLine, String code)
+	private void handleServerResponse(String rawResponse, List<String> parsedLine, String code)
 	{
 		//TODO Server responses
 		if(code.equals("002") || code.equals("003"))
@@ -304,7 +304,7 @@ public class InputParser
 		}
 	}
 	
-	public void handleCommand(String line, List<String> parsedLine, String sourceNick, String sourceLogin, String sourceHostname, String command, String target)
+	private void handleCommand(String line, List<String> parsedLine, String sourceNick, String sourceLogin, String sourceHostname, String command, String target)
 	{
 		User source = irc.getUser(sourceNick);
 		Channel channel = irc.getChannel(target);
@@ -346,7 +346,7 @@ public class InputParser
 			String modes = channel.getModesOnUser(source);
 			if(!modes.equals(""))
 			{
-				Logger.log("<" + irc.getServerInfo().getUserPrefixes().get(modes.substring(0, 1)) + sourceNick + "> " + message, target);
+				Logger.log("<" + irc.getServerInfo().getUserPrefixes().get(irc.getAccessLevelOnUser(channel, source)) + sourceNick + "> " + message, target);
 			}
 			else
 			{
@@ -484,7 +484,7 @@ public class InputParser
 			{
 				Logger.log(sourceNick + " sets mode: " + mode, target);
 			}
-			handleMode(source, target, mode);
+			handleMode(sourceNick, target, mode);
 		}
 		else if(command.equals("TOPIC"))
 		{
@@ -508,8 +508,76 @@ public class InputParser
 		}
 	}
 	
-	public void handleMode(User source, String target, String mode)
+	private void handleMode(String source, String target, String mode)
 	{
-		//TODO
+		if(source.equals(target))
+		{
+			//This is a user mode. Not important for now.
+			return;
+		}
+		else
+		{
+			Channel channel = irc.getChannel(target);
+			if(!mode.contains(" "))
+			{
+				//This mode change does not contain any arguments
+				channel.parseModeChange(mode);
+				return;
+			}
+			else
+			{
+				//This mode change contains arguments. Handle them one by one.
+				List<String> params = MessageUtils.parseStringtoList(mode, " ");
+				char modeOperator = '+';
+				int paramNumber = 1;
+
+				for (int i = 0; i < params.get(0).length(); i++) 
+				{
+					char atPosition = params.get(0).charAt(i);
+					if(atPosition == '+' || atPosition == '-')
+					{
+						modeOperator = atPosition;
+					}
+					else if(irc.getServerInfo().getUserPrefixes().containsKey(Character.toString(atPosition)))
+					{
+						User user = channel.getUser(params.get(paramNumber));
+						channel.parseModeChangeOnUser(user, "" + modeOperator + atPosition);
+						paramNumber++;
+					}
+					else if(atPosition == 'k')
+					{
+						if(modeOperator == '+')
+						{
+							channel.setKey(params.get(paramNumber));
+						}
+						else
+						{
+							channel.setKey("");
+						}
+						channel.parseModeChange("" + modeOperator + atPosition);
+						paramNumber++;
+						
+					}
+					else if(atPosition == 'l')
+					{
+						if(modeOperator == '+')
+						{
+							channel.setLimit(ParsingUtils.tryParseInt(params.get(paramNumber)));
+						}
+						else
+						{
+							channel.setLimit(0);
+						}
+						channel.parseModeChange("" + modeOperator + atPosition);
+						paramNumber++;
+					}
+					else if(atPosition == 'b' || atPosition == 'e')
+					{
+						//These do not need to be parsed by the mode parser
+						paramNumber++;
+					}
+				}
+			}
+		}
 	}
 }

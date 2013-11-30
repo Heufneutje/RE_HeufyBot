@@ -6,7 +6,8 @@ import java.util.List;
 
 public class MessageUtils
 {
-	public static List<String> tokenizeLine(String input) {
+	public static List<String> tokenizeLine(String input)
+	{
 		List<String> retn = new ArrayList<String>();
 
 		if (input == null || input.length() == 0)
@@ -14,8 +15,10 @@ public class MessageUtils
 
 		String temp = input;
 
-		while (true) {
-			if (temp.startsWith(":") && retn.size() > 0) {
+		while (true)
+		{
+			if (temp.startsWith(":") && retn.size() > 0) 
+			{
 				retn.add(temp.substring(1));
 
 				return retn;
@@ -31,6 +34,17 @@ public class MessageUtils
 		}
 
 		return retn;
+	}
+	
+	public static List<String> parseStringtoList(String input, String split)
+	{
+		List<String> list = new ArrayList<String>();
+		String[] splitted = input.split(split);
+		for(int i = 0; i < splitted.length; i++)
+		{
+			list.add(splitted[i]);
+		}
+		return list;
 	}
 	
 	public static LinkedHashMap<String, String> getUserPrefixes(String prefixString)

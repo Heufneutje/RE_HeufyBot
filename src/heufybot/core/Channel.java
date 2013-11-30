@@ -11,12 +11,17 @@ public class Channel
 	private String topic;
 	private String topicSetter;
 	private long topicSetTimestamp;
+	private String key;
+	private int limit;
 	
 	public Channel(String name)
 	{
 		this.name = name;
 		this.modes = "";
 		this.usersInChannel = new HashMap<User, String>();
+		this.topic = "";
+		this.topicSetter = "";
+		this.key = "";
 	}
 	
 	public String getName()
@@ -31,16 +36,25 @@ public class Channel
 	
 	public void parseModeChange(String modeChange)
 	{
-		if(modeChange.startsWith("+"))
+		boolean adding = true;
+		for (char curChar : modeChange.toCharArray())
 		{
-			modes += modeChange.substring(1);
-		}
-		else
-		{
-			char[] changedModes = modeChange.substring(1).toCharArray();
-			for(int i = 0; i < changedModes.length; i++)
+			if (curChar == '-')
 			{
-				modes.replaceFirst("" + changedModes[i], "");
+				adding = false;
+			}
+			else if (curChar == '+')
+			{
+				adding = true;
+			}
+			else if (adding)
+			{
+				modes = modes + curChar;
+			}
+			else
+			{
+				String parsedString = Character.toString(curChar);
+				modes = modes.replace(parsedString, "");
 			}
 		}
 	}
@@ -49,19 +63,27 @@ public class Channel
 	{
 		String modesOnUser = usersInChannel.get(user);
 		
-		if(modeChange.startsWith("+"))
+		boolean adding = true;
+		for (char curChar : modeChange.toCharArray())
 		{
-			modesOnUser += modeChange.substring(1);
-		}
-		else
-		{	
-			char[] changedModes = modeChange.substring(1).toCharArray();
-			for(int i = 0; i < changedModes.length; i++)
+			if (curChar == '-')
 			{
-				modesOnUser.replaceFirst("" + changedModes[i], "");
+				adding = false;
+			}
+			else if (curChar == '+')
+			{
+				adding = true;
+			}
+			else if (adding)
+			{
+				modesOnUser += curChar;
+			}
+			else
+			{
+				String parsedString = Character.toString(curChar);
+				modesOnUser = modesOnUser.replace(parsedString, "");
 			}
 		}
-		
 		usersInChannel.put(user, modesOnUser);
 	}
 	
@@ -127,5 +149,25 @@ public class Channel
 	public void setTopicSetTimestamp(long topicSetTimestamp) 
 	{
 		this.topicSetTimestamp = topicSetTimestamp;
+	}
+
+	public String getKey() 
+	{
+		return key;
+	}
+
+	public void setKey(String key)
+	{
+		this.key = key;
+	}
+
+	public int getLimit()
+	{
+		return limit;
+	}
+
+	public void setLimit(int limit)
+	{
+		this.limit = limit;
 	}
 }

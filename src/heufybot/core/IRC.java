@@ -223,6 +223,43 @@ public class IRC
 		cmdNOTICE(target, "\u0001" + replyType + " " + reply + "\u0001");
 	}
 	
+	public String getAccessLevelOnUser(Channel channel, User user)
+	{
+		for(String accessLevel : serverInfo.getUserPrefixes().keySet())
+		{
+			if(channel.getModesOnUser(user).contains(accessLevel))
+			{
+				return accessLevel;
+			}
+		}
+		return "";
+	}
+	
+	public Channel getChannel(String channelName)
+	{
+		for(Channel channel : channels)
+		{
+			if(channel.getName().equalsIgnoreCase(channelName))
+			{
+				return channel;
+			}
+		}
+		return null;
+	}
+	
+	public User getUser(String nickname)
+	{
+		for(Channel channel : channels)
+		{
+			User user = channel.getUser(nickname);
+			if(user != null)
+			{
+				return user;
+			}
+		}
+		return null;
+	}
+	
 	public Config getConfig()
 	{
 		return config;
@@ -261,30 +298,5 @@ public class IRC
 	public ServerInfo getServerInfo()
 	{
 		return serverInfo;
-	}
-
-	public Channel getChannel(String channelName)
-	{
-		for(Channel channel : channels)
-		{
-			if(channel.getName().equalsIgnoreCase(channelName))
-			{
-				return channel;
-			}
-		}
-		return null;
-	}
-	
-	public User getUser(String nickname)
-	{
-		for(Channel channel : channels)
-		{
-			User user = channel.getUser(nickname);
-			if(user != null)
-			{
-				return user;
-			}
-		}
-		return null;
 	}
 }
