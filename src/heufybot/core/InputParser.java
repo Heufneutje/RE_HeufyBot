@@ -343,7 +343,15 @@ public class InputParser
 		else if(command.equals("PRIVMSG") && channel != null)
 		{
 			//Message to the channel
-			Logger.log("<" + channel.getModesOnUser(source) + sourceNick + "> " + message, target);
+			String modes = channel.getModesOnUser(source);
+			if(!modes.equals(""))
+			{
+				Logger.log("<" + irc.getServerInfo().getUserPrefixes().get(modes.substring(0, 1)) + sourceNick + "> " + message, target);
+			}
+			else
+			{
+				Logger.log("<" + sourceNick + "> " + message, target);
+			}
 		}
 		else if(command.equals("PRIVMSG"))
 		{
