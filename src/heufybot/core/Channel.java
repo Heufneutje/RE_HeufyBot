@@ -15,6 +15,7 @@ public class Channel
 	public Channel(String name)
 	{
 		this.name = name;
+		this.modes = "";
 		this.usersInChannel = new HashMap<User, String>();
 	}
 	
@@ -26,11 +27,6 @@ public class Channel
 	public String getModes()
 	{
 		return modes;
-	}
-	
-	public void setModes(String modes)
-	{
-		this.modes = modes;
 	}
 	
 	public void parseModeChange(String modeChange)
