@@ -1,5 +1,6 @@
 package heufybot.core;
 
+import heufybot.core.cap.CAPException;
 import heufybot.core.cap.CapHandler;
 import heufybot.utils.MessageUtils;
 import heufybot.utils.ParsingUtils;
@@ -106,7 +107,7 @@ public class InputParser
 			sourceNick = sourceNick.substring(1);
 		}
 		
-		if(irc.getConnectionState() != ConnectionState.Connected)
+		if(irc.getConnectionState() != ConnectionState.Connected && command.equals("CAP"))
 		{
 			handleConnect(line, parsedLine, command);
 		}
@@ -190,7 +191,14 @@ public class InputParser
 			{
 				for(CapHandler currentCapHandler : irc.getConfig().getCapHandlers())
 				{
-					if(currentCapHandler.handleLS(irc, capParams))
+					try
+					{
+						if(currentCapHandler.handleLS(irc, capParams))
+						{
+							finishedHandlers.add(currentCapHandler);
+						}
+					}
+					catch(CAPException e)
 					{
 						finishedHandlers.add(currentCapHandler);
 					}

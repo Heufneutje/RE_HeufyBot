@@ -17,7 +17,7 @@ public class EnablingCapHandler implements CapHandler
 	}
 
 	@Override
-	public boolean handleLS(IRC irc, List<String> capabilities) 
+	public boolean handleLS(IRC irc, List<String> capabilities) throws CAPException
 	{
 		if(capabilities.contains(cap))
 		{
@@ -28,18 +28,19 @@ public class EnablingCapHandler implements CapHandler
 		else
 		{
 			Logger.error("CAP Enabling", cap + " is not supported by the server");
+			throw new CAPException(CAPException.Reason.UnsupportedCapability, cap);
 		}
 		return false;
 	}
 
 	@Override
-	public boolean handleACK(IRC irc, List<String> capabilities) 
+	public boolean handleACK(IRC irc, List<String> capabilities) throws CAPException
 	{
 		return capabilities.contains(cap);
 	}
 
 	@Override
-	public boolean handleNAK(IRC irc, List<String> capabilities) 
+	public boolean handleNAK(IRC irc, List<String> capabilities) throws CAPException
 	{
 		if(capabilities.contains(cap))
 		{
