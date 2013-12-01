@@ -9,6 +9,8 @@ public class Config
 	private PasswordType passwordType;
 	private boolean autoJoinEnabled, autoNickChange, autoReconnect;
 	private String[] autoJoinChannels;
+	private long messageDelay;
+	
 	private static final Config instance = new Config();
 	
 	private Config()
@@ -16,7 +18,7 @@ public class Config
 		this.nickname = "RE_HeufyBot";
 		this.username = "RE_HeufyBot";
 		this.realname = "HeufyBot Dev Build";
-		this.server = "localhost";
+		this.server = "192.168.2.7";
 		this.password = "";
 		this.passwordType = PasswordType.None;
 		this.port = 6667;
@@ -26,6 +28,7 @@ public class Config
 		this.autoReconnect = true;
 		this.reconnectAttempts = 99;
 		this.reconnectInterval = 10;
+		this.messageDelay = 1000;
 	}
 	
 	public static Config getInstance()
@@ -103,11 +106,23 @@ public class Config
 		this.autoReconnect = autoReconnect;
 	}
 
-	public int getReconnectInterval() {
+	public int getReconnectInterval()
+	{
 		return reconnectInterval;
 	}
 
-	public void setReconnectInterval(int reconnectInterval) {
+	public void setReconnectInterval(int reconnectInterval)
+	{
 		this.reconnectInterval = reconnectInterval;
+	}
+
+	public long getMessageDelay()
+	{
+		return messageDelay;
+	}
+
+	public void setMessageDelay(long messageDelay)
+	{
+		this.messageDelay = messageDelay;
 	}
 }

@@ -12,6 +12,9 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class IRC 
 {
@@ -27,6 +30,12 @@ public class IRC
 	private ConnectionState connectionState;
 	private ArrayList<Channel> channels;
 	private ServerInfo serverInfo;
+	
+	//Locking stuff for the output to server
+	private final ReentrantLock writeLock = new ReentrantLock(true);
+	private final Condition writeNowCondition = writeLock.newCondition();
+	private long lastSentLine = 0;
+
 	
 	private String nickname;
 	
@@ -185,14 +194,30 @@ public class IRC
 	
 	public void sendRaw(String line)
 	{
+		writeLock.lock();
 		try
 		{
+			long currentNanos = System.nanoTime();
+			while(lastSentLine + config.getMessageDelay() * 1000000 > currentNanos)
+			{
+				writeNowCondition.await(lastSentLine + config.getMessageDelay() * 1000000 - currentNanos, TimeUnit.NANOSECONDS);
+				currentNanos = System.nanoTime();
+			}
+			lastSentLine = System.nanoTime();
 			outputWriter.write(line + "\r\n");
 			outputWriter.flush();
 		}
 		catch (IOException e)
 		{
 			Logger.error("IRC Output", "Error sending line");
+		} 
+		catch (InterruptedException e)
+		{
+			Logger.error("IRC Output", "Error while waiting to send line");
+		}
+		finally
+		{
+			writeLock.unlock();
 		}
 	}
 	
