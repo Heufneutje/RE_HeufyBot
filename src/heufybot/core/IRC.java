@@ -247,17 +247,17 @@ public class IRC
 	
 	public void cmdUSER(String user, String realname)
 	{
-		sendRaw("USER " + user + " 8 * :" + realname);
+		sendRawNow("USER " + user + " 8 * :" + realname);
 	}
 	
 	public void cmdPING(String ping)
 	{
-		sendRaw("PING "  + ping);
+		sendRawNow("PING "  + ping);
 	}
 	
 	public void cmdPONG(String response)
 	{
-		sendRaw("PONG "  + response);
+		sendRawNow("PONG "  + response);
 	}
 	
 	public void cmdQUIT(String message)
