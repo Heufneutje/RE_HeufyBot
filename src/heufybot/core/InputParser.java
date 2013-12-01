@@ -167,7 +167,6 @@ public class InputParser
 	
 	private void handleServerResponse(String rawResponse, List<String> parsedLine, String code)
 	{
-		//TODO Server responses
 		if(code.equals("002") || code.equals("003"))
 		{
 			//002 RPL_YOURHOST
@@ -395,7 +394,7 @@ public class InputParser
 			}
 			else
 			{
-				Logger.log("<" + sourceNick + "> " + message, target);
+				Logger.log("<" + sourceNick + "> " + message, sourceNick);
 			}
 		}
 		else if(command.equals("PRIVMSG"))
