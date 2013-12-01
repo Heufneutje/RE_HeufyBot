@@ -1,5 +1,6 @@
 package heufybot.core;
 
+import heufybot.core.cap.CapHandler;
 import heufybot.utils.MessageUtils;
 import heufybot.utils.ParsingUtils;
 import heufybot.utils.enums.ConnectionState;
@@ -99,7 +100,14 @@ public class InputParser
 			sourceNick = sourceNick.substring(1);
 		}
 		
-		handleCommand(line, parsedLine, sourceNick, sourceLogin, sourceHostname, command, target);
+		if(irc.getConnectionState() != ConnectionState.Connected)
+		{
+			handleConnect(line, parsedLine, command);
+		}
+		else
+		{
+			handleCommand(line, parsedLine, sourceNick, sourceLogin, sourceHostname, command, target);
+		}
 	}
 	
 	private void handleConnect(String line, List<String> parsedLine, String code)
@@ -162,6 +170,27 @@ public class InputParser
 			//Couldn't login. Disconnect.
 			Logger.error("IRC Login", "Login failed.");
 			irc.disconnect(false);
+		}
+		else if(code.equals("451"))
+		{
+			//451 ERR_NOTREGISTERED
+			//The server does not support CAP. No action required
+		}
+		else if(code.equals("CAP"))
+		{
+			String capCommand = parsedLine.get(1);
+			String[] capParams = parsedLine.get(2).split(" ");
+			if(capCommand.equals("LS"))
+			{
+				for(CapHandler currentCapHandler : irc.getConfig().getCapHandlers())
+				{
+					
+				}
+			}
+		}
+		else
+		{
+			Logger.log(line);
 		}
 	}
 	

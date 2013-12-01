@@ -12,6 +12,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
@@ -30,6 +31,7 @@ public class IRC
 	private ConnectionState connectionState;
 	private ArrayList<Channel> channels;
 	private ServerInfo serverInfo;
+	private List<String> enabledCapabilities;
 	
 	//Locking stuff for the output to server
 	private final ReentrantLock writeLock = new ReentrantLock(true);
@@ -91,6 +93,8 @@ public class IRC
 		{
 			cmdPASS(config.getPassword());
 		}
+		
+		cmdCAP("LS", "");
 		
 		cmdNICK(config.getNickname());
 		cmdUSER(config.getUsername(), config.getRealname());
@@ -298,6 +302,11 @@ public class IRC
 	public void cmdNOTICE(String target, String notice)
 	{
 		sendRaw("NOTICE " + target + " :" + notice);
+	}
+	
+	public void cmdCAP(String capCommand, String arguments)
+	{
+		sendRawNow("CAP " + capCommand + arguments);
 	}
 	
 	public void nickservIdentify(String password)

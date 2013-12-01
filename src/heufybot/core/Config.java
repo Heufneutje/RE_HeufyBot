@@ -1,5 +1,10 @@
 package heufybot.core;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import heufybot.core.cap.CapHandler;
+import heufybot.core.cap.EnablingCapHandler;
 import heufybot.utils.enums.PasswordType;
 
 public class Config 
@@ -10,14 +15,15 @@ public class Config
 	private boolean autoJoinEnabled, autoNickChange, autoReconnect;
 	private String[] autoJoinChannels;
 	private long messageDelay;
+	private List<CapHandler> capHandlers;
 	
 	private static final Config instance = new Config();
 	
 	private Config()
 	{
 		this.nickname = "RE_HeufyBot";
-		this.username = "RE_HeufyBot";
-		this.realname = "HeufyBot Dev Build";
+		this.username = "HeufyButt";
+		this.realname = "RE_HeufyBot Dev Build";
 		this.server = "192.168.2.7";
 		this.password = "";
 		this.passwordType = PasswordType.None;
@@ -28,7 +34,10 @@ public class Config
 		this.autoReconnect = true;
 		this.reconnectAttempts = 99;
 		this.reconnectInterval = 10;
-		this.messageDelay = 1000;
+		this.messageDelay = 500;
+		
+		this.capHandlers = new ArrayList<CapHandler>();
+		this.capHandlers.add(new EnablingCapHandler("multi-prefix"));
 	}
 	
 	public static Config getInstance()
@@ -124,5 +133,10 @@ public class Config
 	public void setMessageDelay(long messageDelay)
 	{
 		this.messageDelay = messageDelay;
+	}
+	
+	public List<CapHandler> getCapHandlers()
+	{
+		return capHandlers;
 	}
 }
