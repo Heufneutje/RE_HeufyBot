@@ -3,9 +3,12 @@ package heufybot.core;
 import heufybot.core.cap.CapHandler;
 import heufybot.utils.MessageUtils;
 import heufybot.utils.ParsingUtils;
+import heufybot.utils.StringUtils;
 import heufybot.utils.enums.ConnectionState;
 import heufybot.utils.enums.PasswordType;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -14,11 +17,14 @@ public class InputParser
 {
 	private IRC irc;
 	private int nickSuffix;
+	private boolean capEndSent;
+	private List<CapHandler> finishedHandlers;
 	
 	public InputParser(IRC irc)
 	{
 		this.irc = irc;
 		this.nickSuffix = 1;
+		this.finishedHandlers = new ArrayList<CapHandler>();
 	}
 	
 	public void parseLine(String line)
@@ -179,18 +185,47 @@ public class InputParser
 		else if(code.equals("CAP"))
 		{
 			String capCommand = parsedLine.get(1);
-			String[] capParams = parsedLine.get(2).split(" ");
+			List<String> capParams = Arrays.asList(parsedLine.get(2).split(" "));
 			if(capCommand.equals("LS"))
 			{
 				for(CapHandler currentCapHandler : irc.getConfig().getCapHandlers())
 				{
-					
+					if(currentCapHandler.handleLS(irc, capParams))
+					{
+						finishedHandlers.add(currentCapHandler);
+					}
+				}
+			}
+			else if(capCommand.equals("ACK"))
+			{
+				for(CapHandler currentCapHandler : irc.getConfig().getCapHandlers())
+				{
+					if(currentCapHandler.handleACK(irc, capParams))
+					{
+						finishedHandlers.add(currentCapHandler);
+					}
+				}
+			}
+			else if(capCommand.equals("NAK"))
+			{
+				for(CapHandler currentCapHandler : irc.getConfig().getCapHandlers())
+				{
+					if(currentCapHandler.handleNAK(irc, capParams))
+					{
+						finishedHandlers.add(currentCapHandler);
+					}
 				}
 			}
 		}
 		else
 		{
 			Logger.log(line);
+		}
+		
+		if(!capEndSent && finishedHandlers.containsAll(irc.getConfig().getCapHandlers()))
+		{
+			capEndSent = true;
+			irc.cmdCAP("END", "");
 		}
 	}
 	
@@ -600,7 +635,7 @@ public class InputParser
 			else
 			{
 				//This mode change contains arguments. Handle them one by one.
-				List<String> params = MessageUtils.parseStringtoList(mode, " ");
+				List<String> params = StringUtils.parseStringtoList(mode, " ");
 				char modeOperator = '+';
 				int paramNumber = 1;
 

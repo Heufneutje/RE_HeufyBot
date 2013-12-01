@@ -1,7 +1,9 @@
 package heufybot.utils;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 public class StringUtils 
 {
@@ -18,5 +20,16 @@ public class StringUtils
 			}
 		}
 		return builder.toString();
+	}
+	
+	public static List<String> parseStringtoList(String input, String split)
+	{
+		List<String> list = new ArrayList<String>();
+		String[] splitted = input.split(split);
+		for(int i = 0; i < splitted.length; i++)
+		{
+			list.add(splitted[i]);
+		}
+		return list;
 	}
 }

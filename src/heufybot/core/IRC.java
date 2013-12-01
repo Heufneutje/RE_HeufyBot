@@ -48,6 +48,7 @@ public class IRC
 		this.connectionState = ConnectionState.Initializing;
 		this.channels = new ArrayList<Channel>();
 		this.serverInfo = ServerInfo.getInstance();
+		this.enabledCapabilities = new ArrayList<String>();
 		this.nickname = "";
 	}
 	
@@ -394,5 +395,10 @@ public class IRC
 	public ServerInfo getServerInfo()
 	{
 		return serverInfo;
+	}
+
+	public List<String> getEnabledCapabilities() 
+	{
+		return enabledCapabilities;
 	}
 }

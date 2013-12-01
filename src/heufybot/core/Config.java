@@ -38,6 +38,7 @@ public class Config
 		
 		this.capHandlers = new ArrayList<CapHandler>();
 		this.capHandlers.add(new EnablingCapHandler("multi-prefix"));
+		this.capHandlers.add(new EnablingCapHandler("userhost-in-names"));
 	}
 	
 	public static Config getInstance()

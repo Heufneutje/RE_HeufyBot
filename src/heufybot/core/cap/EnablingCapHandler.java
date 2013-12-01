@@ -22,6 +22,8 @@ public class EnablingCapHandler implements CapHandler
 		if(capabilities.contains(cap))
 		{
 			irc.cmdCAP("REQ :", StringUtils.join(Arrays.asList(cap), ""));
+			irc.getEnabledCapabilities().add(cap);
+			Logger.log("*** Capability \"" + cap + "\" is enabled");
 		}
 		else
 		{

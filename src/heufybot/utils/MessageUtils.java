@@ -36,17 +36,6 @@ public class MessageUtils
 		return retn;
 	}
 	
-	public static List<String> parseStringtoList(String input, String split)
-	{
-		List<String> list = new ArrayList<String>();
-		String[] splitted = input.split(split);
-		for(int i = 0; i < splitted.length; i++)
-		{
-			list.add(splitted[i]);
-		}
-		return list;
-	}
-	
 	public static LinkedHashMap<String, String> getUserPrefixes(String prefixString)
 	{
 		LinkedHashMap<String, String> prefixes = new LinkedHashMap<String, String>();
