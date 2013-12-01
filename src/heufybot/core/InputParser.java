@@ -663,12 +663,14 @@ public class InputParser
 					}
 					else if(irc.getServerInfo().getUserPrefixes().containsKey(Character.toString(atPosition)))
 					{
+						//This mode is changing a user's access level in the channel
 						User user = channel.getUser(params.get(paramNumber));
 						channel.parseModeChangeOnUser(user, "" + modeOperator + atPosition);
 						paramNumber++;
 					}
 					else if(atPosition == 'k')
 					{
+						//TODO THIS CODE IS BROKEN AND NEEDS TO GO
 						if(modeOperator == '+')
 						{
 							channel.setKey(params.get(paramNumber));
