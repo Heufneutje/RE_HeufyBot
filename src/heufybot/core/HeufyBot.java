@@ -1,6 +1,6 @@
 package heufybot.core;
 
-public class HeufyBot 
+public class HeufyBot
 {
 	public final static String VERSION = "0.0.1 ALPHA";
 	private Config config;

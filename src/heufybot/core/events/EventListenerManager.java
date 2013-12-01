@@ -6,7 +6,7 @@ import heufybot.core.events.types.BotEvent;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class EventListenerManager
+public class EventListenerManager
 {
 	protected Set<EventListener> listeners = new HashSet<EventListener>();
 	

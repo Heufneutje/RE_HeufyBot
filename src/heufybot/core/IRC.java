@@ -1,5 +1,6 @@
 package heufybot.core;
 
+import heufybot.core.events.EventListenerManager;
 import heufybot.utils.enums.ConnectionState;
 import heufybot.utils.enums.PasswordType;
 
@@ -32,6 +33,7 @@ public class IRC
 	private ArrayList<Channel> channels;
 	private ServerInfo serverInfo;
 	private List<String> enabledCapabilities;
+	private EventListenerManager eventListenerManager;
 	
 	//Locking stuff for the output to server
 	private final ReentrantLock writeLock = new ReentrantLock(true);
@@ -49,6 +51,8 @@ public class IRC
 		this.channels = new ArrayList<Channel>();
 		this.serverInfo = ServerInfo.getInstance();
 		this.enabledCapabilities = new ArrayList<String>();
+		this.eventListenerManager = new EventListenerManager();
+		
 		this.nickname = "";
 	}
 	
@@ -400,5 +404,10 @@ public class IRC
 	public List<String> getEnabledCapabilities() 
 	{
 		return enabledCapabilities;
+	}
+
+	public EventListenerManager getEventListenerManager() 
+	{
+		return eventListenerManager;
 	}
 }

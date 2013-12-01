@@ -2,6 +2,7 @@ package heufybot.core;
 
 import heufybot.core.cap.CAPException;
 import heufybot.core.cap.CapHandler;
+import heufybot.core.events.types.*;
 import heufybot.utils.MessageUtils;
 import heufybot.utils.ParsingUtils;
 import heufybot.utils.StringUtils;
@@ -468,6 +469,8 @@ public class InputParser
 			{
 				Logger.log("<" + sourceNick + "> " + message, sourceNick);
 			}
+			
+			irc.getEventListenerManager().dispatchEvent(new MessageEvent(source, channel, message));
 		}
 		else if(command.equals("PRIVMSG"))
 		{
