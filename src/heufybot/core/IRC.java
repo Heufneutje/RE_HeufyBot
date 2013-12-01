@@ -221,6 +221,25 @@ public class IRC
 		}
 	}
 	
+	public void sendRawNow(String line)
+	{
+		writeLock.lock();
+		try
+		{
+			lastSentLine = System.nanoTime();
+			outputWriter.write(line + "\r\n");
+			outputWriter.flush();
+		}
+		catch (IOException e)
+		{
+			Logger.error("IRC Output", "Error sending line");
+		} 
+		finally
+		{
+			writeLock.unlock();
+		}
+	}
+	
 	public void cmdNICK(String nick)
 	{
 		sendRaw("NICK " + nick);
