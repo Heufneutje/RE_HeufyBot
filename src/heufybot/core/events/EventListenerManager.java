@@ -31,6 +31,7 @@ public class EventListenerManager
 		}
 		catch (Exception e) 
 		{
+			e.printStackTrace();
 			Logger.error("Event Manager", "Could not dispatch event " + event);
 		}
 	}

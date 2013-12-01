@@ -12,9 +12,18 @@ public abstract class EventListenerAdapter implements EventListener
 		{
 			onMessage((MessageEvent) event);
 		}
+		else if(event instanceof JoinEvent)
+		{
+			onJoin((JoinEvent) event);
+		}
 	}
 	
 	public void onMessage(MessageEvent event)
+	{
+		
+	}
+	
+	public void onJoin(JoinEvent event)
 	{
 		
 	}

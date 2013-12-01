@@ -488,6 +488,8 @@ public class InputParser
 				
 				irc.cmdWHO(channel.getName());
 				irc.cmdMODE(channel.getName(), "");
+				
+				source = new User(sourceNick, sourceLogin, sourceHostname);
 			}
 			else
 			{
@@ -498,10 +500,12 @@ public class InputParser
 				}
 				else
 				{
-					channel.addUser(new User(sourceNick, sourceLogin, sourceHostname));
+					source = new User(sourceNick, sourceLogin, sourceHostname);
+					channel.addUser(source);
 				}
 			}
 			Logger.log(">> " + sourceNick + " (" + sourceLogin + "@" + sourceHostname + ") has joined " + channel.getName(), target);
+			irc.getEventListenerManager().dispatchEvent(new JoinEvent(source, channel));
 		}
 		else if(command.equals("PART"))
 		{

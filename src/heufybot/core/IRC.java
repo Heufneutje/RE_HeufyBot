@@ -276,7 +276,7 @@ public class IRC
 	
 	public void cmdPRIVMSG(String target, String message)
 	{
-		sendRaw("PRIVMSG " + target + ": " + message);
+		sendRaw("PRIVMSG " + target + " :" + message);
 	}
 	
 	public void cmdJOIN(String channel, String key)
