@@ -5,9 +5,9 @@ import heufybot.utils.enums.PasswordType;
 public class Config 
 {
 	private String nickname, username, realname, server, password;
-	private int port;
+	private int port, reconnectAttempts, reconnectInterval;
 	private PasswordType passwordType;
-	private boolean autoJoinEnabled, autoNickChange;
+	private boolean autoJoinEnabled, autoNickChange, autoReconnect;
 	private String[] autoJoinChannels;
 	private static final Config instance = new Config();
 	
@@ -16,13 +16,16 @@ public class Config
 		this.nickname = "RE_HeufyBot";
 		this.username = "RE_HeufyBot";
 		this.realname = "HeufyBot Dev Build";
-		this.server = "192.168.2.7";
+		this.server = "localhost";
 		this.password = "";
 		this.passwordType = PasswordType.None;
 		this.port = 6667;
 		this.autoJoinEnabled = true;
 		this.autoJoinChannels = new String[] { "#heufneutje" };
 		this.autoNickChange = true;
+		this.autoReconnect = true;
+		this.reconnectAttempts = 99;
+		this.reconnectInterval = 10;
 	}
 	
 	public static Config getInstance()
@@ -78,5 +81,33 @@ public class Config
 	public String[] getAutoJoinChannels()
 	{
 		return autoJoinChannels;
+	}
+
+	public int getReconnectAttempts() 
+	{
+		return reconnectAttempts;
+	}
+
+	public void setReconnectAttempts(int reconnectAttempts)
+	{
+		this.reconnectAttempts = reconnectAttempts;
+	}
+
+	public boolean autoReconnect() 
+	{
+		return autoReconnect;
+	}
+
+	public void setAutoReconnect(boolean autoReconnect) 
+	{
+		this.autoReconnect = autoReconnect;
+	}
+
+	public int getReconnectInterval() {
+		return reconnectInterval;
+	}
+
+	public void setReconnectInterval(int reconnectInterval) {
+		this.reconnectInterval = reconnectInterval;
 	}
 }

@@ -37,6 +37,7 @@ public class IRC
 		this.connectionState = ConnectionState.Initializing;
 		this.channels = new ArrayList<Channel>();
 		this.serverInfo = ServerInfo.getInstance();
+		this.nickname = "";
 	}
 	
 	
@@ -48,7 +49,7 @@ public class IRC
 	
 	public boolean connect(String server, int port)
 	{
-		if(socket.isConnected())
+		if(connectionState == ConnectionState.Connected)
 		{
 			Logger.error("IRC Connect", "Already connected to a server. Connection failed.");
 			return false;
@@ -88,8 +89,11 @@ public class IRC
 		startProcessing();
 	}
 	
-	public void disconnect()
+	public void disconnect(boolean reconnect)
 	{
+		connectionState = ConnectionState.Disconnected;
+		this.nickname = "";
+		
 		try 
 		{
 			this.inputReader.close();
@@ -101,6 +105,43 @@ public class IRC
 		{
 			Logger.error("IRC Disconnect", "Error closing connection");
 		}
+		
+		if(reconnect && config.autoReconnect())
+		{
+			reconnect();
+		}
+	}
+	
+	public void reconnect()
+	{
+		int reconnects = 0;
+		while(reconnects < config.getReconnectAttempts())
+		{
+			reconnects++;
+			Logger.log("*** Reconnection attempt #" + reconnects + "...");
+			boolean success = connect(config.getServer(), config.getPort());
+			if(success)
+			{
+				login();
+				return;
+			}
+			else
+			{
+				if(reconnects < config.getReconnectAttempts())
+				{
+					Logger.log("*** Connection failed. Trying again in " + config.getReconnectInterval() + " second(s)...");
+					try
+					{
+						Thread.sleep(config.getReconnectInterval() * 1000);
+					} 
+					catch (InterruptedException e) 
+					{
+						Logger.error("IRC - Reconnect", "Thread interrupted while trying to reconnect");
+					}
+				}
+			}
+		}
+		Logger.log("*** Connection failed. Giving up.");
 	}
 	
 	public void startProcessing()
@@ -124,6 +165,8 @@ public class IRC
 		             catch (Exception e)
 		             {
 		            	 line = null;
+		            	 Logger.log("*** Connection to the server was lost. Trying to reconnect...");
+		            	 disconnect(true);
 		             }
 	
 		             if (line == null)

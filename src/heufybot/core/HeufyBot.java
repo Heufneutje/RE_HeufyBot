@@ -2,7 +2,7 @@ package heufybot.core;
 
 public class HeufyBot 
 {
-	public final static String VERSION = "0.0.1";
+	public final static String VERSION = "0.0.1 ALPHA";
 	private Config config;
 	private IRC irc;
 	
@@ -24,6 +24,6 @@ public class HeufyBot
 	public void stop()
 	{
 		irc.cmdQUIT("RE_HeufyBot " + VERSION);
-		irc.disconnect();
+		irc.disconnect(false);
 	}
 }

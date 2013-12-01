@@ -39,7 +39,7 @@ public class InputParser
 		{
 			//Connection closed by server
 			Logger.log(parsedLine.get(0));
-			irc.disconnect();
+			irc.disconnect(false);
 			return;
 		}
 		
@@ -153,7 +153,7 @@ public class InputParser
 			{
 				//Give up
 				Logger.error("IRC Login", "Login failed. Nickname was already taken");
-				irc.disconnect();
+				irc.disconnect(false);
 			}
 		}
 		else if(code.startsWith("4") || code.startsWith("5") && !code.equals("439"))
@@ -161,7 +161,7 @@ public class InputParser
 			//439 ERR_TARGETTOOFAST : No action required
 			//Couldn't login. Disconnect.
 			Logger.error("IRC Login", "Login failed.");
-			irc.disconnect();
+			irc.disconnect(false);
 		}
 	}
 	
