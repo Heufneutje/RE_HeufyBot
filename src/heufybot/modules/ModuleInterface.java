@@ -68,8 +68,11 @@ public class ModuleInterface extends EventListenerAdapter
 	public void onMessage(MessageEvent event)
 	{
 		String message = event.getMessage();
-		for(Module module : modules)
+		Module[] listCopy = new Module[modules.size()];
+		listCopy = modules.toArray(listCopy);
+		for (int l = 0; l < listCopy.length; l++)
 		{
+			Module module = listCopy[l];
 			for(int i = 0; i < module.getTriggers().length; i++)
 			{
 				if(module.getTriggers().length > 0 && message.toLowerCase().split(" ")[0].matches("^" + module.getTriggers()[i] + "$"))
