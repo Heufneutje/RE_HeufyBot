@@ -4,9 +4,15 @@ import heufybot.core.HeufyBot;
 
 public abstract class Module 
 {
+	public enum AuthType
+	{
+		Anyone, OPs
+	}
+	
 	protected String name;
 	protected String[] triggers;
 	protected HeufyBot bot;
+	protected AuthType authType;
 	
 	public Module()
 	{
@@ -25,5 +31,14 @@ public abstract class Module
 		return this.triggers;
 	}
 	
+	public AuthType getAuthType()
+	{
+		return authType;
+	}
+	
 	public abstract String getHelp();
+	
+	public abstract void onLoad();
+	
+	public abstract void onUnload();
 }

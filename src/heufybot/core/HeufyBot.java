@@ -1,6 +1,7 @@
 package heufybot.core;
 
 import heufybot.modules.ModuleInterface;
+import heufybot.utils.FileUtils;
 
 public class HeufyBot
 {
@@ -20,6 +21,9 @@ public class HeufyBot
 	
 	public void start()
 	{
+		FileUtils.touchDir("data");
+		FileUtils.touchDir("logs");
+		
 		moduleInterface = new ModuleInterface();
 		irc.getEventListenerManager().addListener(moduleInterface);
 		moduleInterface.loadModule("Say");

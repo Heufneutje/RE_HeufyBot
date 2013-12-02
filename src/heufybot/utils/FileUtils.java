@@ -99,6 +99,15 @@ public class FileUtils
 		}
 	}
 	
+	public static void touchDir(String filePath)
+	{
+		File file = new File(filePath);
+		if(!file.exists())
+		{
+			file.mkdir();
+		}
+	}
+	
 	public static boolean deleteFile(String filePath)
 	{
 		File file = new File(filePath);
