@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import heufybot.core.events.EventListenerAdapter;
 import heufybot.core.events.types.*;
@@ -43,6 +44,7 @@ public class ModuleInterface extends EventListenerAdapter
 			Module module = (Module) moduleClass.newInstance();
 			
 			modules.add(module);
+			module.onLoad();
 			
 			return ModuleLoaderResponse.Success;
 		} 
@@ -50,6 +52,21 @@ public class ModuleInterface extends EventListenerAdapter
 		{
 			return ModuleLoaderResponse.DoesNotExist;
 		}
+	}
+	
+	public ModuleLoaderResponse unloadModule(String moduleName)
+	{
+		for(Iterator<Module> iter = modules.iterator(); iter.hasNext();)
+  		{
+  			Module module = iter.next();
+  			if(module.getName().equals(moduleName))
+  			{
+  				module.onUnload();
+  				iter.remove();
+  				return ModuleLoaderResponse.Success;
+  			}
+  		}
+		return ModuleLoaderResponse.DoesNotExist;
 	}
 	
 	public void onMessage(MessageEvent event)
