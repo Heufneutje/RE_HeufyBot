@@ -8,15 +8,11 @@ import java.util.Iterator;
 
 import heufybot.core.events.EventListenerAdapter;
 import heufybot.core.events.types.*;
+import heufybot.utils.enums.ModuleLoaderResponse;
 
 public class ModuleInterface extends EventListenerAdapter
 {
 	private ArrayList<Module> modules;
-	
-	public enum ModuleLoaderResponse
-	{
-		Success, DoesNotExist, AlreadyLoaded
-	}
 	
 	public ModuleInterface()
 	{

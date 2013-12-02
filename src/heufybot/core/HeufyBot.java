@@ -2,6 +2,7 @@ package heufybot.core;
 
 import heufybot.modules.ModuleInterface;
 import heufybot.utils.FileUtils;
+import heufybot.utils.enums.ModuleLoaderResponse;
 
 public class HeufyBot
 {
@@ -26,9 +27,23 @@ public class HeufyBot
 		
 		moduleInterface = new ModuleInterface();
 		irc.getEventListenerManager().addListener(moduleInterface);
-		moduleInterface.loadModule("Say");
-		moduleInterface.loadModule("Help");
-		
+
+		for(int i = 0; i < config.getModulesToLoad().length; i++)
+		{
+			ModuleLoaderResponse result = moduleInterface.loadModule(config.getModulesToLoad()[i]);
+			switch(result)
+			{
+			case Success: Logger.log("+++ Module " + config.getModulesToLoad()[i] + " was loaded");
+				break;
+			case AlreadyLoaded: Logger.error("Module Loader", "Module " + config.getModulesToLoad()[i] + " is already loaded");
+				break;
+			case DoesNotExist: Logger.error("Module Loader", "Module " + config.getModulesToLoad()[i] + " does not exist");
+				break;
+			default:
+				break;
+			}
+		}
+
 		if(irc.connect(config.getServer(), config.getPort()))
 		{
 			irc.login();
