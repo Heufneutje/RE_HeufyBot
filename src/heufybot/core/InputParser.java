@@ -505,7 +505,7 @@ public class InputParser
 			}
 			else
 			{
-				Logger.log("<" + sourceNick + "> " + message, sourceNick);
+				Logger.log("<" + sourceNick + "> " + message, target);
 			}
 			
 			irc.getEventListenerManager().dispatchEvent(new MessageEvent(source, channel, message));
@@ -513,7 +513,7 @@ public class InputParser
 		else if(command.equals("PRIVMSG"))
 		{
 			//Private message
-			Logger.log("<" + sourceNick + "> " + message, target);
+			Logger.log("<" + sourceNick + "> " + message, sourceNick);
 		}
 		else if(command.equals("JOIN"))
 		{
