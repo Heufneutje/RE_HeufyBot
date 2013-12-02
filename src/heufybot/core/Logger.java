@@ -37,6 +37,9 @@ public class Logger
 	
 	public static void error(String errorSource, String line)
 	{
-		System.err.println(errorSource + " - ERROR: " + line);
+		DateFormat dateFormat = new SimpleDateFormat("[HH:mm]");
+		Date date = new Date();
+		
+		System.err.println(dateFormat.format(date) + " " + errorSource + " - ERROR: " + line);
 	}
 }
