@@ -706,38 +706,41 @@ public class InputParser
 						channel.parseModeChangeOnUser(user, "" + modeOperator + atPosition);
 						paramNumber++;
 					}
-					else if(atPosition == 'k')
+					else if(irc.getServerInfo().getChannelSetArgsModes().contains(Character.toString(atPosition)))
 					{
-						//TODO THIS CODE IS BROKEN AND NEEDS TO GO
+						//This mode is a list mode. It's not important to us. Skip to the next argument.
+						paramNumber++;
+					}
+					else if(irc.getServerInfo().getChannelSetArgsModes().contains(Character.toString(atPosition)))
+					{
+						//This mode needs an argument to be set. Handle it in the channel.
 						if(modeOperator == '+')
 						{
-							channel.setKey(params.get(paramNumber));
+							channel.getModesWithArgs().put(Character.toString(atPosition), params.get(paramNumber));
 						}
 						else
 						{
-							channel.setKey("");
+							channel.getModesWithArgs().remove(Character.toString(atPosition));
 						}
-						channel.parseModeChange("" + modeOperator + atPosition);
 						paramNumber++;
-						
 					}
-					else if(atPosition == 'l')
+					else if(irc.getServerInfo().getChannelSetUnsetArgsModes().contains(Character.toString(atPosition)))
 					{
+						//This mode needs an argument to be set AND to be unset. Handle it in the channel.
 						if(modeOperator == '+')
 						{
-							channel.setLimit(ParsingUtils.tryParseInt(params.get(paramNumber)));
+							channel.getModesWithArgs().put(Character.toString(atPosition), params.get(paramNumber));
 						}
 						else
 						{
-							channel.setLimit(0);
+							channel.getModesWithArgs().remove(Character.toString(atPosition));
 						}
-						channel.parseModeChange("" + modeOperator + atPosition);
 						paramNumber++;
 					}
-					else if(atPosition == 'b' || atPosition == 'e')
+					else if(irc.getServerInfo().getChannelNoArgsModes().contains(Character.toString(atPosition)))
 					{
-						//These do not need to be parsed by the mode parser
-						paramNumber++;
+						//This mode doesn't take arguments. Parse it normally.
+						channel.parseModeChange("" + modeOperator + atPosition);
 					}
 				}
 			}

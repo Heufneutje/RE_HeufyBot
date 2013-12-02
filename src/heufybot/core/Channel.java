@@ -11,8 +11,7 @@ public class Channel
 	private String topic;
 	private String topicSetter;
 	private long topicSetTimestamp;
-	private String key;
-	private int limit;
+	private HashMap<String, String> modesWithArgs;
 	
 	public Channel(String name)
 	{
@@ -21,7 +20,7 @@ public class Channel
 		this.usersInChannel = new HashMap<User, String>();
 		this.topic = "";
 		this.topicSetter = "";
-		this.key = "";
+		this.modesWithArgs = new HashMap<String, String>();
 	}
 	
 	public String getName()
@@ -157,23 +156,8 @@ public class Channel
 		this.topicSetTimestamp = topicSetTimestamp;
 	}
 
-	public String getKey() 
+	public HashMap<String, String> getModesWithArgs() 
 	{
-		return key;
-	}
-
-	public void setKey(String key)
-	{
-		this.key = key;
-	}
-
-	public int getLimit()
-	{
-		return limit;
-	}
-
-	public void setLimit(int limit)
-	{
-		this.limit = limit;
+		return modesWithArgs;
 	}
 }
