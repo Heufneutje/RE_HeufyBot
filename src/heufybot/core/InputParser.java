@@ -263,6 +263,44 @@ public class InputParser
 				irc.getServerInfo().setUserPrefixes(MessageUtils.getUserPrefixes(prefixes));
 				irc.getServerInfo().setReverseUserPrefixes(MessageUtils.getReverseUserPrefixes(prefixes));
 			}
+			if(rawResponse.contains("CHANTYPES="))
+			{
+				String chantypes = rawResponse.split("CHANTYPES=")[1];
+				chantypes = chantypes.substring(0, chantypes.indexOf(" "));
+				irc.getServerInfo().setChantypes(chantypes);
+			}
+			if(rawResponse.contains("CHANMODES="))
+			{
+				String rawChanmodes = rawResponse.split("CHANMODES=")[1];
+				rawChanmodes = rawChanmodes.substring(0, rawChanmodes.indexOf(" "));
+				String[] chanmodes = rawChanmodes.split(",");
+				
+				for(int i = 0; i < chanmodes[0].length(); i++)
+				{
+					irc.getServerInfo().getChannelListModes().add(Character.toString(chanmodes[0].charAt(i)));
+				}
+				
+				for(int i = 0; i < chanmodes[1].length(); i++)
+				{
+					irc.getServerInfo().getChannelSetUnsetArgsModes().add(Character.toString(chanmodes[1].charAt(i)));
+				}
+				
+				for(int i = 0; i < chanmodes[2].length(); i++)
+				{
+					irc.getServerInfo().getChannelSetArgsModes().add(Character.toString(chanmodes[2].charAt(i)));
+				}
+				
+				for(int i = 0; i < chanmodes[3].length(); i++)
+				{
+					irc.getServerInfo().getChannelNoArgsModes().add(Character.toString(chanmodes[3].charAt(i)));
+				}
+			}
+			if(rawResponse.contains("NETWORK="))
+			{
+				String network = rawResponse.split("NETWORK=")[1];
+				network = network.substring(0, network.indexOf(" "));
+				irc.getServerInfo().setNetwork(network);
+			}
 			
 			Logger.log(rawResponse.split(irc.getNickname() + " ")[1]);
 		}
