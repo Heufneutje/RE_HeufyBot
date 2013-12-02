@@ -147,12 +147,12 @@ public class Config
 		return commandPrefix;
 	}
 
-	public String[] getFeaturesToLoad()
+	public String[] getModulesToLoad()
 	{
 		return modulesToLoad;
 	}
 
-	public void setFeaturesToLoad(String[] featuresToLoad)
+	public void setModulesToLoad(String[] featuresToLoad)
 	{
 		this.modulesToLoad = featuresToLoad;
 	}
