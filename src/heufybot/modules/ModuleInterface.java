@@ -53,7 +53,7 @@ public class ModuleInterface extends EventListenerAdapter
 	public ModuleLoaderResponse unloadModule(String moduleName)
 	{
 		for(Iterator<Module> iter = modules.iterator(); iter.hasNext();)
-  		{
+		{
   			Module module = iter.next();
   			if(module.getName().equals(moduleName))
   			{
@@ -61,7 +61,7 @@ public class ModuleInterface extends EventListenerAdapter
   				iter.remove();
   				return ModuleLoaderResponse.Success;
   			}
-  		}
+		}
 		return ModuleLoaderResponse.DoesNotExist;
 	}
 	
