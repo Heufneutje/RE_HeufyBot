@@ -8,6 +8,7 @@ public class Help extends Module
 	public Help()
 	{
 		this.name = "Help";
+		this.authType = Module.AuthType.Anyone;
 		
 		this.triggers = new String[1];
 		this.triggers[0] = bot.getConfig().getCommandPrefix() + "help";
@@ -54,5 +55,15 @@ public class Help extends Module
 	public String getHelp()
 	{
 		return "Commands: " + bot.getConfig().getCommandPrefix() + "help, " + bot.getConfig().getCommandPrefix() + "help <module> | Shows all modules that are currently loaded or shows help for a given module.";
+	}
+
+	@Override
+	public void onLoad() 
+	{
+	}
+
+	@Override
+	public void onUnload()
+	{
 	}
 }

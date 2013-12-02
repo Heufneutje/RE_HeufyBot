@@ -5,6 +5,7 @@ public class Say extends Module
 	public Say()
 	{
 		this.name = "Say";
+		this.authType = Module.AuthType.Anyone;
 		
 		this.triggers = new String[1];
 		this.triggers[0] = bot.getConfig().getCommandPrefix() + "say";
@@ -26,5 +27,15 @@ public class Say extends Module
 	public String getHelp()
 	{
 		return "Commands: " + bot.getConfig().getCommandPrefix() + "say <message> | Makes the bot say the given line.";
+	}
+
+	@Override
+	public void onLoad() 
+	{
+	}
+
+	@Override
+	public void onUnload()
+	{
 	}
 }
