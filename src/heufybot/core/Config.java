@@ -9,7 +9,7 @@ import heufybot.utils.enums.PasswordType;
 
 public class Config 
 {
-	private String nickname, username, realname, server, password;
+	private String nickname, username, realname, server, password, commandPrefix;
 	private int port, reconnectAttempts, reconnectInterval;
 	private PasswordType passwordType;
 	private boolean autoJoinEnabled, autoNickChange, autoReconnect;
@@ -24,7 +24,7 @@ public class Config
 		this.nickname = "RE_HeufyBot";
 		this.username = "HeufyButt";
 		this.realname = "RE_HeufyBot Dev Build";
-		this.server = "192.168.2.7";
+		this.server = "irc.desertbus.org";
 		this.password = "";
 		this.passwordType = PasswordType.None;
 		this.port = 6667;
@@ -35,6 +35,7 @@ public class Config
 		this.reconnectAttempts = 99;
 		this.reconnectInterval = 10;
 		this.messageDelay = 500;
+		this.commandPrefix = "~";
 		
 		this.capHandlers = new ArrayList<CapHandler>();
 		this.capHandlers.add(new EnablingCapHandler("multi-prefix"));
@@ -138,5 +139,10 @@ public class Config
 	public List<CapHandler> getCapHandlers()
 	{
 		return capHandlers;
+	}
+	
+	public String getCommandPrefix()
+	{
+		return commandPrefix;
 	}
 }

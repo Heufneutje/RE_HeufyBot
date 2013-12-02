@@ -1,24 +1,30 @@
 package heufybot.core;
 
-import heufybot.core.events.EventListenerAdapter;
-import heufybot.core.events.types.*;
+import heufybot.modules.ModuleInterface;
 
-public class HeufyBot extends EventListenerAdapter
+public class HeufyBot
 {
 	public final static String VERSION = "0.0.1 ALPHA";
 	private Config config;
 	private IRC irc;
+	private ModuleInterface moduleInterface;
 	
-	public HeufyBot(Config config)
+	private static final HeufyBot instance = new HeufyBot();
+	
+	private HeufyBot()
 	{
-		this.config = config;
+		this.config = Config.getInstance();
 		this.irc = IRC.getInstance();
 		irc.setConfig(config);
-		irc.getEventListenerManager().addListener(this);
 	}
 	
 	public void start()
 	{
+		moduleInterface = new ModuleInterface();
+		irc.getEventListenerManager().addListener(moduleInterface);
+		moduleInterface.loadModule("Say");
+		moduleInterface.loadModule("Help");
+		
 		if(irc.connect(config.getServer(), config.getPort()))
 		{
 			irc.login();
@@ -31,19 +37,23 @@ public class HeufyBot extends EventListenerAdapter
 		irc.disconnect(false);
 	}
 	
-	public void onMessage(MessageEvent event)
+	public IRC getIRC()
 	{
-		if(event.getMessage().contains(irc.getNickname()))
-		{
-			irc.cmdPRIVMSG(event.getChannel().getName(), "Are you talking about me?");
-		}
+		return irc;
 	}
 	
-	public void onJoin(JoinEvent event)
+	public ModuleInterface getModuleInterface()
 	{
-		if(!event.getUser().getNickname().equals(irc.getNickname()))
-		{
-			irc.cmdPRIVMSG(event.getChannel().getName(), "Welcome to the channel!");
-		}
+		return moduleInterface;
+	}
+	
+	public static HeufyBot getInstance()
+	{
+		return instance;
+	}
+	
+	public Config getConfig()
+	{
+		return config;
 	}
 }
