@@ -13,7 +13,7 @@ public class Config
 	private int port, reconnectAttempts, reconnectInterval;
 	private PasswordType passwordType;
 	private boolean autoJoinEnabled, autoNickChange, autoReconnect;
-	private String[] autoJoinChannels, featuresToLoad;
+	private String[] autoJoinChannels, modulesToLoad;
 	private long messageDelay;
 	private List<CapHandler> capHandlers;
 	
@@ -36,7 +36,7 @@ public class Config
 		this.reconnectInterval = 10;
 		this.messageDelay = 500;
 		this.commandPrefix = "~";
-		this.featuresToLoad = new String[] { "Say", "Help" } ;
+		this.modulesToLoad = new String[] { "Moduleloader", "Say", "Help" } ;
 		
 		this.capHandlers = new ArrayList<CapHandler>();
 		this.capHandlers.add(new EnablingCapHandler("multi-prefix"));
@@ -149,11 +149,11 @@ public class Config
 
 	public String[] getFeaturesToLoad()
 	{
-		return featuresToLoad;
+		return modulesToLoad;
 	}
 
 	public void setFeaturesToLoad(String[] featuresToLoad)
 	{
-		this.featuresToLoad = featuresToLoad;
+		this.modulesToLoad = featuresToLoad;
 	}
 }
