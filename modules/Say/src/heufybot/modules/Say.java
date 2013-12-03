@@ -17,7 +17,7 @@ public class Say extends Module
 	{
 		if (params.size() == 1)
 		{
-			bot.getIRC().cmdPRIVMSG(source, "[Say] Say what?");
+			bot.getIRC().cmdPRIVMSG(source, "Say what?");
 		}
 		else
 		{
