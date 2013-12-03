@@ -286,7 +286,7 @@ public class IRC
 	
 	public void cmdPART(String channel, String message)
 	{
-		sendRaw("PART " + channel + ": " + message);
+		sendRaw("PART " + channel + " :" + message);
 	}
 	
 	public void cmdPASS(String password)
