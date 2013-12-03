@@ -45,7 +45,7 @@ public class Help extends Module
 	@Override
 	public String getHelp()
 	{
-		return "Commands: " + commandPrefix + "help, " + commandPrefix + "help <module> | Shows all modules that are currently loaded or shows help for a given module. Command syntax will be as such: command <parameter>. Parameters in brackets are optional.";
+		return "Commands: " + commandPrefix + "help (<module>) | Shows all modules that are currently loaded or shows help for a given module. Command syntax will be as such: command <parameter>. Parameters in brackets are optional.";
 	}
 
 	@Override
