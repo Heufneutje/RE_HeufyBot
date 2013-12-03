@@ -1,10 +1,14 @@
 package heufybot.modules;
 
-public class Moduleloader extends Module
+import heufybot.utils.enums.ModuleLoaderResponse;
+
+import java.util.AbstractMap.SimpleEntry;
+
+public class ModuleLoader extends Module
 {
-	public Moduleloader()
+	public ModuleLoader()
 	{
-		this.name = "Moduleloader";
+		this.name = "ModuleKoader";
 		this.authType = Module.AuthType.OPs;
 		
 		this.triggers = new String[3];
@@ -26,18 +30,18 @@ public class Moduleloader extends Module
 				String[] modules = metadata.substring(1).split(" ");
 				for(int i = 0; i < modules.length; i++)
 				{
-					String moduleName = Character.toUpperCase(modules[i].toLowerCase().charAt(0)) + modules[i].toLowerCase().substring(1);
+					SimpleEntry<ModuleLoaderResponse, String> result = bot.getModuleInterface().loadModule(modules[i]);
 					
-					switch (bot.getModuleInterface().loadModule(moduleName)) 
+					switch (result.getKey()) 
 					{
 					case Success:
-						bot.getIRC().cmdPRIVMSG(source, "Module \"" + moduleName + "\" was successfully loaded!");
+						bot.getIRC().cmdPRIVMSG(source, "Module \"" + result.getValue() + "\" was successfully loaded!");
 						break;
 					case AlreadyLoaded:
-						bot.getIRC().cmdPRIVMSG(source, "Module \"" + moduleName + "\" is already loaded!");
+						bot.getIRC().cmdPRIVMSG(source, "Module \"" + modules[i] + "\" is already loaded!");
 						break;
 					case DoesNotExist:
-						bot.getIRC().cmdPRIVMSG(source, "Module \"" + moduleName + "\" does not exist!");
+						bot.getIRC().cmdPRIVMSG(source, "Module \"" + modules[i] + "\" does not exist!");
 					default:
 						break;
 					}
@@ -55,15 +59,15 @@ public class Moduleloader extends Module
 				String[] modules = metadata.substring(1).split(" ");
 				for(int i = 0; i < modules.length; i++)
 				{
-					String moduleName = Character.toUpperCase(modules[i].toLowerCase().charAt(0)) + modules[i].toLowerCase().substring(1);
+					SimpleEntry<ModuleLoaderResponse, String> result = bot.getModuleInterface().loadModule(modules[i]);
 	
-					switch (bot.getModuleInterface().unloadModule(moduleName)) 
+					switch (result.getKey()) 
 					{
 					case Success:
-						bot.getIRC().cmdPRIVMSG(source, "Module \"" + moduleName + "\" was successfully unloaded!");
+						bot.getIRC().cmdPRIVMSG(source, "Module \"" + result.getValue() + "\" was successfully unloaded!");
 						break;
 					case DoesNotExist:
-						bot.getIRC().cmdPRIVMSG(source, "Module \"" + moduleName + "\" is not loaded or does not exist!");
+						bot.getIRC().cmdPRIVMSG(source, "Module \"" + modules[i] + "\" is not loaded or does not exist!");
 						break;
 					default:
 						break;
@@ -82,16 +86,16 @@ public class Moduleloader extends Module
 				String[] modules = metadata.substring(1).split(" ");
 				for(int i = 0; i < modules.length; i++)
 				{
-					String moduleName = Character.toUpperCase(modules[i].toLowerCase().charAt(0)) + modules[i].toLowerCase().substring(1);
+					SimpleEntry<ModuleLoaderResponse, String> result = bot.getModuleInterface().loadModule(modules[i]);
 					
-					switch (bot.getModuleInterface().unloadModule(moduleName)) 
+					switch (result.getKey()) 
 					{
 					case Success:
-						bot.getModuleInterface().loadModule(moduleName);
-						bot.getIRC().cmdPRIVMSG(source, "Module \"" + moduleName + "\" was successfully reloaded!");
+						bot.getModuleInterface().loadModule(modules[i]);
+						bot.getIRC().cmdPRIVMSG(source, "Module \"" + result.getValue() + "\" was successfully reloaded!");
 						break;
 					case DoesNotExist:
-						bot.getIRC().cmdPRIVMSG(source, "Module \"" + moduleName + "\" is not loaded or does not exist!");
+						bot.getIRC().cmdPRIVMSG(source, "Module \"" + modules[i] + "\" is not loaded or does not exist!");
 						break;
 					default:
 						break;

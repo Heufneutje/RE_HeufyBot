@@ -3,10 +3,10 @@ package heufybot.modules;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import heufybot.core.Logger;
 import heufybot.core.events.EventListenerAdapter;
 import heufybot.core.events.types.*;
 import heufybot.utils.enums.ModuleLoaderResponse;
@@ -20,7 +20,7 @@ public class ModuleInterface extends EventListenerAdapter
 		this.modules = new ArrayList<Module>();
 	}
 	
-	public ModuleLoaderResponse loadModule(String moduleName)
+	public SimpleEntry<ModuleLoaderResponse, String> loadModule(String moduleName)
 	{
 		try
 		{
@@ -28,14 +28,13 @@ public class ModuleInterface extends EventListenerAdapter
 			{
 				if(module.getClass().getName().equals("heufybot.modules." + moduleName))
 				{
-					return ModuleLoaderResponse.AlreadyLoaded;
+					return new SimpleEntry<ModuleLoaderResponse, String>(ModuleLoaderResponse.AlreadyLoaded, "");
 				}
 			}
 			
 			File[] folder = new File("modules").listFiles();
 			for(int i = 0; i < folder.length; i++)
 			{
-				Logger.log(folder[i].getName());
 				if(folder[i].getName().equalsIgnoreCase(moduleName + ".jar"))
 				{
 					String foundFileName = folder[i].getName();
@@ -50,30 +49,30 @@ public class ModuleInterface extends EventListenerAdapter
 					modules.add(module);
 					module.onLoad();
 					
-					return ModuleLoaderResponse.Success;
+					return new SimpleEntry<ModuleLoaderResponse, String>(ModuleLoaderResponse.Success, moduleName);
 				}
 			}
-			return ModuleLoaderResponse.DoesNotExist;
+			return new SimpleEntry<ModuleLoaderResponse, String>(ModuleLoaderResponse.DoesNotExist, "");
 		} 
 		catch (Exception e)
 		{
-			return ModuleLoaderResponse.DoesNotExist;
+			return new SimpleEntry<ModuleLoaderResponse, String>(ModuleLoaderResponse.DoesNotExist, "");
 		}
 	}
 	
-	public ModuleLoaderResponse unloadModule(String moduleName)
+	public SimpleEntry<ModuleLoaderResponse, String> unloadModule(String moduleName)
 	{
 		for(Iterator<Module> iter = modules.iterator(); iter.hasNext();)
 		{
   			Module module = iter.next();
-  			if(module.getName().equals(moduleName))
+  			if(module.getName().equalsIgnoreCase(moduleName))
   			{
   				module.onUnload();
   				iter.remove();
-  				return ModuleLoaderResponse.Success;
+  				return new SimpleEntry<ModuleLoaderResponse, String>(ModuleLoaderResponse.Success, module.getName());
   			}
 		}
-		return ModuleLoaderResponse.DoesNotExist;
+		return new SimpleEntry<ModuleLoaderResponse, String>(ModuleLoaderResponse.DoesNotExist, "");
 	}
 	
 	public void onMessage(MessageEvent event)
@@ -86,7 +85,7 @@ public class ModuleInterface extends EventListenerAdapter
 			Module module = listCopy[l];
 			for(int i = 0; i < module.getTriggers().length; i++)
 			{
-				if(module.getTriggers().length > 0 && message.toLowerCase().split(" ")[0].matches("^" + module.getTriggers()[i] + "$"))
+				if(module.getTriggers().length > 0 && message.toLowerCase().split(" ")[0].matches(module.getTriggers()[i]))
 				{
 					module.processEvent(event.getChannel().getName(), message.substring(module.getTriggers()[i].length()), event.getUser().getNickname(), module.getTriggers()[i]);
 				}
@@ -103,7 +102,7 @@ public class ModuleInterface extends EventListenerAdapter
 	{
 		for(Module module : modules)
 		{
-			if(module.getName().equals(moduleName))
+			if(module.getName().equalsIgnoreCase(moduleName))
 			{
 				return module.getHelp();
 			}

@@ -1,5 +1,7 @@
 package heufybot.core;
 
+import java.util.AbstractMap.SimpleEntry;
+
 import heufybot.modules.ModuleInterface;
 import heufybot.utils.FileUtils;
 import heufybot.utils.enums.ModuleLoaderResponse;
@@ -31,10 +33,11 @@ public class HeufyBot
 
 		for(int i = 0; i < config.getModulesToLoad().length; i++)
 		{
-			ModuleLoaderResponse result = moduleInterface.loadModule(config.getModulesToLoad()[i]);
-			switch(result)
+			SimpleEntry<ModuleLoaderResponse, String> result = moduleInterface.loadModule(config.getModulesToLoad()[i]);
+			
+			switch(result.getKey())
 			{
-			case Success: Logger.log("+++ Module " + config.getModulesToLoad()[i] + " was loaded");
+			case Success: Logger.log("+++ Module " + result.getValue() + " was loaded");
 				break;
 			case AlreadyLoaded: Logger.error("Module Loader", "Module " + config.getModulesToLoad()[i] + " is already loaded");
 				break;
@@ -45,10 +48,10 @@ public class HeufyBot
 			}
 		}
 
-//		if(irc.connect(config.getServer(), config.getPort()))
-//		{
-//			irc.login();
-//		}
+		if(irc.connect(config.getServer(), config.getPort()))
+		{
+			irc.login();
+		}
 	}
 	
 	public void stop()
