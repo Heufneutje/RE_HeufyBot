@@ -31,7 +31,7 @@ public class ModuleInterface extends EventListenerAdapter
 				}
 			}
 			
-			File moduleJar = new File(moduleName + ".jar");
+			File moduleJar = new File("modules/" + moduleName + ".jar");
 			URL[] urls = { moduleJar.toURI().toURL() };
 			
 			ClassLoader loader = URLClassLoader.newInstance(urls, getClass().getClassLoader());
