@@ -32,7 +32,7 @@ public class Join extends Module
 
 	public String getHelp()
 	{
-		return "Commands: " + commandPrefix + "join <channel> | Makes the bot join a channel.";
+		return "Commands: " + commandPrefix + "join <channel> (<password>) | Makes the bot join a channel.";
 	}
 
 	@Override
