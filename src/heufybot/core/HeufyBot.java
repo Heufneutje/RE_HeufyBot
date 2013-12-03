@@ -45,10 +45,10 @@ public class HeufyBot
 			}
 		}
 
-		if(irc.connect(config.getServer(), config.getPort()))
-		{
-			irc.login();
-		}
+//		if(irc.connect(config.getServer(), config.getPort()))
+//		{
+//			irc.login();
+//		}
 	}
 	
 	public void stop()

@@ -6,6 +6,7 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import heufybot.core.Logger;
 import heufybot.core.events.EventListenerAdapter;
 import heufybot.core.events.types.*;
 import heufybot.utils.enums.ModuleLoaderResponse;
@@ -31,18 +32,28 @@ public class ModuleInterface extends EventListenerAdapter
 				}
 			}
 			
-			File moduleJar = new File("modules/" + moduleName + ".jar");
-			URL[] urls = { moduleJar.toURI().toURL() };
-			
-			ClassLoader loader = URLClassLoader.newInstance(urls, getClass().getClassLoader());
-			
-			Class<?> moduleClass = Class.forName("heufybot.modules." + moduleName, true, loader);
-			Module module = (Module) moduleClass.newInstance();
-			
-			modules.add(module);
-			module.onLoad();
-			
-			return ModuleLoaderResponse.Success;
+			File[] folder = new File("modules").listFiles();
+			for(int i = 0; i < folder.length; i++)
+			{
+				Logger.log(folder[i].getName());
+				if(folder[i].getName().equalsIgnoreCase(moduleName + ".jar"))
+				{
+					String foundFileName = folder[i].getName();
+					moduleName = foundFileName.substring(0, foundFileName.indexOf(".jar"));
+					URL[] urls = { folder[i].toURI().toURL() };
+					
+					ClassLoader loader = URLClassLoader.newInstance(urls, getClass().getClassLoader());
+					
+					Class<?> moduleClass = Class.forName("heufybot.modules." + moduleName, true, loader);
+					Module module = (Module) moduleClass.newInstance();
+					
+					modules.add(module);
+					module.onLoad();
+					
+					return ModuleLoaderResponse.Success;
+				}
+			}
+			return ModuleLoaderResponse.DoesNotExist;
 		} 
 		catch (Exception e)
 		{
