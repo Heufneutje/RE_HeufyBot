@@ -51,9 +51,9 @@ public class ModuleLoader extends Module
 			}
 			else
 			{
-				for(int i = 0; i < params.size(); i++)
+				for(int i = 1; i < params.size(); i++)
 				{
-					SimpleEntry<ModuleLoaderResponse, String> result = bot.getModuleInterface().loadModule(params.get(i));
+					SimpleEntry<ModuleLoaderResponse, String> result = bot.getModuleInterface().unloadModule(params.get(i));
 	
 					switch (result.getKey()) 
 					{
@@ -79,7 +79,7 @@ public class ModuleLoader extends Module
 			{
 				for(int i = 1; i < params.size(); i++)
 				{
-					SimpleEntry<ModuleLoaderResponse, String> result = bot.getModuleInterface().loadModule(params.get(i));
+					SimpleEntry<ModuleLoaderResponse, String> result = bot.getModuleInterface().unloadModule(params.get(i));
 					
 					switch (result.getKey()) 
 					{
