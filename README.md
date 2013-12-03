@@ -7,5 +7,10 @@ Currently the following modules come with RE_HeufyBot:
 - ModuleLoader
 - Help
 - Say
+- Join
+- Part
+- Nick
+- Do
+- Source
 
 Detials about how to write your own module will be up later.
