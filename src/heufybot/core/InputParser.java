@@ -334,7 +334,7 @@ public class InputParser
 		{
 			//324 RPL_CHANNELMODEIS 
 			Channel channel = irc.getChannel(parsedLine.get(1));
-			channel.parseModeChange(parsedLine.get(2));
+			handleMode("", channel.getName(), parsedLine.get(2));
 			Logger.log("Channel modes currently set: " + parsedLine.get(2), parsedLine.get(1));
 		}
 		else if(code.equals("329"))
