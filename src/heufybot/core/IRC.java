@@ -314,9 +314,19 @@ public class IRC
 		sendRawNow("CAP " + capCommand + arguments);
 	}
 	
+	public void cmdACTION(String target, String action)
+	{
+		ctcpCommand(target, "ACTION " + action);
+	}
+	
 	public void nickservIdentify(String password)
 	{
 		cmdPRIVMSG("NickServ", "IDENTIFY " + password);
+	}
+	
+	public void ctcpCommand(String target, String command)
+	{
+		cmdPRIVMSG(target, "\u0001" + command + "\u0001");
 	}
 	
 	public void ctcpReply(String target, String replyType, String reply)
