@@ -9,6 +9,7 @@ import java.util.Iterator;
 
 import heufybot.core.events.EventListenerAdapter;
 import heufybot.core.events.types.*;
+import heufybot.utils.StringUtils;
 import heufybot.utils.enums.ModuleLoaderResponse;
 
 public class ModuleInterface extends EventListenerAdapter
@@ -65,11 +66,11 @@ public class ModuleInterface extends EventListenerAdapter
 		for(Iterator<Module> iter = modules.iterator(); iter.hasNext();)
 		{
   			Module module = iter.next();
-  			if(module.getName().equalsIgnoreCase(moduleName))
+  			if(module.getClass().getSimpleName().equalsIgnoreCase(moduleName))
   			{
   				module.onUnload();
   				iter.remove();
-  				return new SimpleEntry<ModuleLoaderResponse, String>(ModuleLoaderResponse.Success, module.getName());
+  				return new SimpleEntry<ModuleLoaderResponse, String>(ModuleLoaderResponse.Success, module.getClass().getSimpleName());
   			}
 		}
 		return new SimpleEntry<ModuleLoaderResponse, String>(ModuleLoaderResponse.DoesNotExist, "");
@@ -83,12 +84,9 @@ public class ModuleInterface extends EventListenerAdapter
 		for (int l = 0; l < listCopy.length; l++)
 		{
 			Module module = listCopy[l];
-			for(int i = 0; i < module.getTriggers().length; i++)
+			if(message.toLowerCase().matches(module.getTrigger()))
 			{
-				if(module.getTriggers().length > 0 && message.toLowerCase().split(" ")[0].matches(module.getTriggers()[i]))
-				{
-					module.processEvent(event.getChannel().getName(), message.substring(module.getTriggers()[i].length()), event.getUser().getNickname(), module.getTriggers()[i]);
-				}
+				module.processEvent(event.getChannel().getName(), message, event.getUser().getNickname(), StringUtils.parseStringtoList(message, " "));
 			}
 		}
 	}
@@ -102,7 +100,7 @@ public class ModuleInterface extends EventListenerAdapter
 	{
 		for(Module module : modules)
 		{
-			if(module.getName().equalsIgnoreCase(moduleName))
+			if(module.getClass().getSimpleName().equalsIgnoreCase(moduleName))
 			{
 				return module.getHelp();
 			}

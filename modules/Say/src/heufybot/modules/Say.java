@@ -1,32 +1,34 @@
 package heufybot.modules;
 
+import heufybot.utils.StringUtils;
+
+import java.util.List;
+
 public class Say extends Module
 {
 	public Say()
 	{
-		this.name = "Say";
 		this.authType = Module.AuthType.Anyone;
-		
-		this.triggers = new String[1];
-		this.triggers[0] = bot.getConfig().getCommandPrefix() + "say";
+		this.trigger = "^" + commandPrefix + "(say)($| .*)";
 	}
 	
 	@Override
-	public void processEvent(String source, String metadata, String triggerUsed, String triggerCommand) 
+	public void processEvent(String source, String message, String triggerUser, List<String> params) 
 	{
-		if ((metadata.equals("")) || (metadata.equals(" ")))
+		if (params.size() == 1)
 		{
 			bot.getIRC().cmdPRIVMSG(source, "[Say] Say what?");
 		}
-		else if (metadata.startsWith(" "))
+		else
 		{
-			bot.getIRC().cmdPRIVMSG(source, metadata.substring(1));
+			params.remove(0);
+			bot.getIRC().cmdPRIVMSG(source, StringUtils.join(params, " "));
 		}
 	}
 
 	public String getHelp()
 	{
-		return "Commands: " + bot.getConfig().getCommandPrefix() + "say <message> | Makes the bot say the given line.";
+		return "Commands: " + commandPrefix + "say <message> | Makes the bot say the given line.";
 	}
 
 	@Override

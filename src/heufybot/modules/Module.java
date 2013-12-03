@@ -1,5 +1,7 @@
 package heufybot.modules;
 
+import java.util.List;
+
 import heufybot.core.HeufyBot;
 
 public abstract class Module 
@@ -9,26 +11,22 @@ public abstract class Module
 		Anyone, OPs
 	}
 	
-	protected String name;
-	protected String[] triggers;
+	protected String trigger;
+	protected String commandPrefix;
 	protected HeufyBot bot;
 	protected AuthType authType;
 	
 	public Module()
 	{
 		bot = HeufyBot.getInstance();
+		commandPrefix = bot.getConfig().getCommandPrefix();
 	}
 	
-	public abstract void processEvent(String source, String metadata, String triggerUser, String triggerCommand);
+	public abstract void processEvent(String source, String message, String triggerUser, List<String> params);
 	
-	public String getName()
+	public String getTrigger()
 	{
-		return name;
-	}
-	
-	public String[] getTriggers()
-	{
-		return this.triggers;
+		return this.trigger;
 	}
 	
 	public AuthType getAuthType()
