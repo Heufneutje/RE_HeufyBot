@@ -8,7 +8,7 @@ public class ModuleLoader extends Module
 {
 	public ModuleLoader()
 	{
-		this.name = "ModuleKoader";
+		this.name = "ModuleLoader";
 		this.authType = Module.AuthType.OPs;
 		
 		this.triggers = new String[3];
