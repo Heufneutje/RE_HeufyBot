@@ -12,6 +12,9 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CodingErrorAction;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -75,7 +78,12 @@ public class IRC
 		try
 		{
 			this.socket = new Socket(server, port);
-			this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), Charset.forName("UTF-8")));
+			
+			CharsetDecoder decoder = StandardCharsets.UTF_8.newDecoder();
+			decoder.onMalformedInput(CodingErrorAction.REPORT);
+	        decoder.onUnmappableCharacter(CodingErrorAction.REPORT);
+			
+			this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), decoder));
 			this.outputWriter = new OutputStreamWriter(socket.getOutputStream(), Charset.forName("UTF-8"));
 			Logger.log("*** Connected to the server.");
 			return true;
@@ -205,9 +213,11 @@ public class IRC
 	
 		             if (line == null)
 		                     break;
-		             
-		             inputParser.parseLine(line);
-		             
+
+		             if(!line.equals(""))
+		             {
+		            	 inputParser.parseLine(line);
+		             }
 		             if (Thread.interrupted())
 		                     return;
 	
