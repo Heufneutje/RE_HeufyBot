@@ -32,4 +32,101 @@ public class StringUtils
 		}
 		return list;
 	}
+	
+	public static String removeColors(String line)
+	{
+		int length = line.length();
+		StringBuilder buffer = new StringBuilder();
+		int i = 0;
+		while (i < length) 
+		{
+			char ch = line.charAt(i);
+			if (ch == '\u0003')
+			{
+				i++;
+				if (i < length)
+				{
+					ch = line.charAt(i);
+					if (Character.isDigit(ch))
+					{
+						i++;
+						if (i < length) 
+						{
+							ch = line.charAt(i);
+							if (Character.isDigit(ch))
+							{
+								i++;
+							}
+						}
+						if (i < length)
+						{
+							ch = line.charAt(i);
+							if (ch == ',') 
+							{
+								i++;
+								if (i < length)
+								{
+									ch = line.charAt(i);
+									if (Character.isDigit(ch))
+									{
+										i++;
+										if (i < length)
+										{
+											ch = line.charAt(i);
+											if (Character.isDigit(ch))
+											{
+												i++;
+											}
+										}
+									} 
+									else
+									{
+										i--;
+									}
+								} 
+								else
+								{
+									i--;
+								}
+							}
+						}
+					}
+				}
+			} 
+			else if (ch == '\u000f')
+			{
+				i++;
+			}
+			else 
+			{
+				buffer.append(ch);
+				i++;
+			}
+		}
+		return buffer.toString();
+	}
+	
+	public static String removeFormatting(String line)
+	{
+		int length = line.length();
+		StringBuilder buffer = new StringBuilder();
+		for (int i = 0; i < length; i++)
+		{
+			char ch = line.charAt(i);
+			if (ch == '\u000f' || ch == '\u0002' || ch == '\u001f' || ch == '\u0016')
+			{
+				// Don't add this character.
+			} 
+			else
+			{
+				buffer.append(ch);
+			}
+		}
+		return buffer.toString();
+	}
+	
+	public static String removeFormattingAndColors(String line)
+	{
+		return removeFormatting(removeColors(line));
+	}
 }
