@@ -114,6 +114,8 @@ public class IRC
 		
 		try 
 		{
+			serverInfo.clear();
+			enabledCapabilities.clear();
 			this.inputReader.close();
 			this.outputWriter.flush();
 			this.outputWriter.close();
@@ -126,11 +128,21 @@ public class IRC
 		
 		if(reconnect && config.autoReconnect())
 		{
-			reconnect();
+			ArrayList<String> channelsToRejoin = new ArrayList<String>();
+			for(Channel channel : channels)
+			{
+				channelsToRejoin.add(channel.getName());
+			}
+			channels.clear();
+			reconnect(channelsToRejoin);
+		}
+		else
+		{
+			channels.clear();
 		}
 	}
 	
-	public void reconnect()
+	public void reconnect(ArrayList<String> channelsToRejoin)
 	{
 		int reconnects = 0;
 		while(reconnects < config.getReconnectAttempts())
@@ -141,6 +153,10 @@ public class IRC
 			if(success)
 			{
 				login();
+				for(String channel : channelsToRejoin)
+				{
+					cmdJOIN(channel, "");
+				}
 				return;
 			}
 			else

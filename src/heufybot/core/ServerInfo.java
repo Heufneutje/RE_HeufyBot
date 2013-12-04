@@ -17,6 +17,16 @@ public class ServerInfo
 	
 	private ServerInfo()
 	{
+		clear();
+	}
+	
+	public static ServerInfo getInstance()
+	{
+		return instance;
+	}
+	
+	public void clear()
+	{
 		this.userPrefixes = new LinkedHashMap<String, String>();
 		this.reverseUserPrefixes = new LinkedHashMap<String, String>();
 		
@@ -34,11 +44,6 @@ public class ServerInfo
 		
 		this.chantypes = "#";
 		this.network = "Unknown Network";
-	}
-	
-	public static ServerInfo getInstance()
-	{
-		return instance;
 	}
 	
 	public String getMotd()
