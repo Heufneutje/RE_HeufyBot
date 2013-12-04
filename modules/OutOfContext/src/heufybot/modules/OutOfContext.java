@@ -262,7 +262,7 @@ public class OutOfContext extends Module
 	
 	public String getHelp()
 	{
-		return null;
+		return "Commands: " + commandPrefix + "ooc, " + commandPrefix + "ooc add <quote>, " + commandPrefix + "ooc search <quote>, " + commandPrefix + "ooc searchnick <nick>, " + commandPrefix + "ooc random, " + commandPrefix + "ooc remove <quote> | Grab the OoC log, add an entry to it, search the log by providing a nickname or sentence or remove an entry.";
 	}
 
 	public void onLoad()
