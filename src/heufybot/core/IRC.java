@@ -78,13 +78,8 @@ public class IRC
 		try
 		{
 			this.socket = new Socket(server, port);
-			
-			CharsetDecoder decoder = StandardCharsets.UTF_8.newDecoder();
-			decoder.onMalformedInput(CodingErrorAction.REPORT);
-	        decoder.onUnmappableCharacter(CodingErrorAction.REPORT);
-			
-			this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), decoder));
-			this.outputWriter = new OutputStreamWriter(socket.getOutputStream(), Charset.forName("UTF-8"));
+			this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), Charset.defaultCharset()));
+			this.outputWriter = new OutputStreamWriter(socket.getOutputStream(), Charset.defaultCharset());
 			Logger.log("*** Connected to the server.");
 			return true;
 		}
