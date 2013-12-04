@@ -24,7 +24,7 @@ public class Config
 		this.nickname = "RE_HeufyBot";
 		this.username = "HeufyButt";
 		this.realname = "RE_HeufyBot Dev Build";
-		this.server = "192.168.2.7";
+		this.server = "localhost";
 		this.password = "";
 		this.passwordType = PasswordType.None;
 		this.port = 6667;

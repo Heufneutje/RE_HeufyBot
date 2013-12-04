@@ -469,27 +469,27 @@ public class InputParser
 		{
 			//Message is a CTCP request
 			String request = message.substring(1, message.length() - 1);
-			if (request.startsWith("ACTION ")) 
+			if (request.toUpperCase().startsWith("ACTION ")) 
 			{
 				// ACTION request
 				Logger.log("* " + sourceNick + " " + request.substring(7), target);
 			}
-			else if(request.startsWith("PING "))
+			else if(request.toUpperCase().startsWith("PING "))
 			{
 				Logger.log("[" + sourceNick + " PING]");
 				irc.ctcpReply(sourceNick, "PING", request.substring(5));
 			}
-			else if(request.equals("VERSION"))
+			else if(request.toUpperCase().equals("VERSION"))
 			{
 				Logger.log("[" + sourceNick + " VERSION]");
 				irc.ctcpReply(sourceNick, "VERSION", "RE_HeufyBot V" + HeufyBot.VERSION + ", OS: " + System.getProperty("os.name") + " ("+ System.getProperty("os.version") + ")," + System.getProperty("os.arch"));
 			}
-			else if(request.equals("TIME"))
+			else if(request.toUpperCase().equals("TIME"))
 			{
 				Logger.log("[" + sourceNick + " TIME]");
 				irc.ctcpReply(sourceNick, "TIME", new Date().toString());
 			}
-			else if(request.equals("FINGER"))
+			else if(request.toUpperCase().equals("FINGER"))
 			{
 				Logger.log("[" + sourceNick + " FINGER]");
 				irc.ctcpReply(sourceNick, "FINGER", "Why would you finger a bot?!");
