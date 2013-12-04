@@ -15,10 +15,9 @@ public class PastebinUtils
 	{
 		try
 	    {
-			FileUtils.touchFile("featuredata/pastebinapikey.txt");
-			String log = "";
+			FileUtils.touchFile("data/pastebinapikey.txt");
 			
-			String api_dev_key = FileUtils.readFile("featuredata/pastebinapikey.txt").replaceAll("\n", "");
+			String api_dev_key = FileUtils.readFile("data/pastebinapikey.txt").replaceAll("\n", "");
 			if(api_dev_key.equals(""))
 			{
 				Logger.error("PasteBin", "No API key found");
@@ -30,7 +29,7 @@ public class PastebinUtils
 	        connection.setDoOutput(true);
 
 	        String api_option = "paste";
-	        String api_paste_code = log;
+	        String api_paste_code = data;
 
 	        String api_user_key = "";
 	        String api_paste_name = title;

@@ -94,6 +94,7 @@ public class FileUtils
 		}
 		catch (IOException e)
 		{
+			e.printStackTrace();
 			Logger.error("FileUtils", "The file " + filePath + " could not be written.");
 			return false;
 		}

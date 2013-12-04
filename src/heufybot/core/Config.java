@@ -24,7 +24,7 @@ public class Config
 		this.nickname = "RE_HeufyBot";
 		this.username = "HeufyButt";
 		this.realname = "RE_HeufyBot Dev Build";
-		this.server = "localhost";
+		this.server = "192.168.2.7";
 		this.password = "";
 		this.passwordType = PasswordType.None;
 		this.port = 6667;
@@ -36,7 +36,7 @@ public class Config
 		this.reconnectInterval = 10;
 		this.messageDelay = 500;
 		this.commandPrefix = "~";
-		this.modulesToLoad = new String[] { "moduleloader", "say", "help", "join", "part", "do", "source" } ;
+		this.modulesToLoad = new String[] { "moduleloader", "say", "help", "join", "part", "do", "source", "outofcontext" } ;
 		
 		this.capHandlers = new ArrayList<CapHandler>();
 		this.capHandlers.add(new EnablingCapHandler("multi-prefix"));
