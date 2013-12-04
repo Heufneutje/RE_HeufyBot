@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.InterruptedIOException;
 import java.io.OutputStreamWriter;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
@@ -17,6 +18,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
+
+import javax.net.SocketFactory;
 
 public class IRC 
 {
@@ -70,24 +73,34 @@ public class IRC
 			Logger.error("IRC Connect", "Already connected to a server. Connection failed.");
 			return false;
 		}
-		Logger.log(String.format("*** Trying to connect to %s on port %d", server , port));
 		
-		try
+		SocketFactory sf = SocketFactory.getDefault();
+		Logger.log("*** Trying to connect to " + server + "...");
+		
+		try 
 		{
-			this.socket = new Socket(server, port);
-			this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), Charset.defaultCharset()));
-			this.outputWriter = new OutputStreamWriter(socket.getOutputStream(), Charset.defaultCharset());
-			Logger.log("*** Connected to the server.");
-			return true;
+			for (InetAddress curAddress : InetAddress.getAllByName(server))
+			{
+				try
+				{
+					Logger.log("*** Trying IP address " + curAddress.getHostAddress() + ":" + port + "...");
+					this.socket = sf.createSocket(curAddress, port, null, 0);
+					this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), Charset.defaultCharset()));
+					this.outputWriter = new OutputStreamWriter(socket.getOutputStream(), Charset.defaultCharset());
+					Logger.log("*** Connected to the server.");
+					return true;
+				}
+				catch (Exception e)
+				{
+					Logger.error("IRC Connect", "Could not connect to " + server + " on IP address " + curAddress);
+				}
+			}
+			Logger.error("IRC Connect", "Could not connect to " + server);
+			return false;
 		}
 		catch (UnknownHostException e)
 		{
 			Logger.error("IRC Connect", "Host could not be resolved. Connection failed.");
-			return false;
-		}
-		catch (IOException e)
-		{
-			Logger.error("IRC Connect", "Unkown connection error. Connection failed.");
 			return false;
 		}
 	}
