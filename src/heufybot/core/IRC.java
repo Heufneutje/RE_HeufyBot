@@ -75,8 +75,8 @@ public class IRC
 		try
 		{
 			this.socket = new Socket(server, port);
-			this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), Charset.defaultCharset()));
-			this.outputWriter = new OutputStreamWriter(socket.getOutputStream(), Charset.defaultCharset());
+			this.inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), Charset.forName("UTF-8")));
+			this.outputWriter = new OutputStreamWriter(socket.getOutputStream(), Charset.forName("UTF-8"));
 			Logger.log("*** Connected to the server.");
 			return true;
 		}
