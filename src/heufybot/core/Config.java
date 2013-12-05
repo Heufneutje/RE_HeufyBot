@@ -1,7 +1,13 @@
 package heufybot.core;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import org.yaml.snakeyaml.Yaml;
 
 import heufybot.core.cap.CapHandler;
 import heufybot.core.cap.EnablingCapHandler;
@@ -13,7 +19,7 @@ public class Config
 	private int port, reconnectAttempts, reconnectInterval;
 	private PasswordType passwordType;
 	private boolean autoJoinEnabled, autoNickChange, autoReconnect;
-	private String[] autoJoinChannels, modulesToLoad;
+	private List<String> autoJoinChannels, modulesToLoad;
 	private long messageDelay;
 	private List<CapHandler> capHandlers;
 	
@@ -21,23 +27,7 @@ public class Config
 	
 	private Config()
 	{
-		this.nickname = "RE_HeufyBot";
-		this.username = "HeufyButt";
-		this.realname = "RE_HeufyBot Dev Build";
-		this.server = "localhost";
-		this.password = "";
-		this.passwordType = PasswordType.None;
-		this.port = 6667;
-		this.autoJoinEnabled = true;
-		this.autoJoinChannels = new String[] { "#heufneutje" };
-		this.autoNickChange = true;
-		this.autoReconnect = true;
-		this.reconnectAttempts = 99;
-		this.reconnectInterval = 10;
 		this.messageDelay = 500;
-		this.commandPrefix = "~";
-		this.modulesToLoad = new String[] { "moduleloader", "say", "help", "join", "part", "do", "source", "outofcontext" } ;
-		
 		this.capHandlers = new ArrayList<CapHandler>();
 		this.capHandlers.add(new EnablingCapHandler("multi-prefix"));
 	}
@@ -45,6 +35,70 @@ public class Config
 	public static Config getInstance()
 	{
 		return instance;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public boolean loadConfigFromFile(String fileName)
+	{
+		try
+		{
+			InputStream input = new FileInputStream(new File(fileName));
+			Yaml yaml = new Yaml();
+
+			List<Map<?, ?>> readSettings = (List<Map<?, ?>>) yaml.load(input);
+			
+			Map<String, String> nickSetting = (Map<String, String>) readSettings.get(0);
+			this.nickname = nickSetting.get("nickname");
+			
+			Map<String, String> userSetting = (Map<String, String>) readSettings.get(1);
+			this.username = userSetting.get("username");
+			
+			Map<String, String> realnameSetting = (Map<String, String>) readSettings.get(2);
+			this.realname = realnameSetting.get("realname");
+			
+			Map<String, String> serverSetting = (Map<String, String>) readSettings.get(3);
+			this.server = serverSetting.get("server");
+			
+			Map<String, Integer> portSetting = (Map<String, Integer>) readSettings.get(4);
+			this.port = portSetting.get("port");
+			
+			Map<String, String> passSetting = (Map<String, String>) readSettings.get(5);
+			this.password = passSetting.get("password");
+			
+			Map<String, String> passTypeSetting = (Map<String, String>) readSettings.get(6);
+			this.passwordType = PasswordType.valueOf(passTypeSetting.get("passwordType"));
+			
+			Map<String, Boolean> autojoinSetting = (Map<String, Boolean>) readSettings.get(7);
+			this.autoJoinEnabled = autojoinSetting.get("autoJoinEnabled");
+			
+			Map<String, List<String>> joinChannelSetting = (Map<String, List<String>>) readSettings.get(8);
+			this.autoJoinChannels = joinChannelSetting.get("autoJoinChannels");
+			
+			Map<String, Boolean> nickChangeSetting = (Map<String, Boolean>) readSettings.get(9);
+			this.autoNickChange = nickChangeSetting.get("autoNickChange");
+			
+			Map<String, Boolean> reconnectSetting = (Map<String, Boolean>) readSettings.get(10);
+			this.autoReconnect = reconnectSetting.get("autoReconnect");
+			
+			Map<String, Integer> attemptsSetting = (Map<String, Integer>) readSettings.get(11);
+			this.reconnectAttempts = attemptsSetting.get("reconnectAttempts");
+			
+			Map<String, Integer> intervalSetting = (Map<String, Integer>) readSettings.get(12);
+			this.reconnectInterval = intervalSetting.get("reconnectInterval");
+			
+			Map<String, String> prefixSetting = (Map<String, String>) readSettings.get(13);
+			this.commandPrefix = prefixSetting.get("commandPrefix");
+			
+			Map<String, List<String>> modulesSetting = (Map<String, List<String>>) readSettings.get(14);
+			this.modulesToLoad = modulesSetting.get("modulesToLoad");
+		} 
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			Logger.error("Configuration", "The config file could not be read. Make sure to copy settings.yml.example into settings.yml for the default settings.");
+			return false;
+		}
+		return true;
 	}
 	
 	public String getNickname()
@@ -92,7 +146,7 @@ public class Config
 		return autoNickChange;
 	}
 	
-	public String[] getAutoJoinChannels()
+	public List<String> getAutoJoinChannels()
 	{
 		return autoJoinChannels;
 	}
@@ -102,19 +156,9 @@ public class Config
 		return reconnectAttempts;
 	}
 
-	public void setReconnectAttempts(int reconnectAttempts)
-	{
-		this.reconnectAttempts = reconnectAttempts;
-	}
-
 	public boolean autoReconnect() 
 	{
 		return autoReconnect;
-	}
-
-	public void setAutoReconnect(boolean autoReconnect) 
-	{
-		this.autoReconnect = autoReconnect;
 	}
 
 	public int getReconnectInterval()
@@ -122,19 +166,9 @@ public class Config
 		return reconnectInterval;
 	}
 
-	public void setReconnectInterval(int reconnectInterval)
-	{
-		this.reconnectInterval = reconnectInterval;
-	}
-
 	public long getMessageDelay()
 	{
 		return messageDelay;
-	}
-
-	public void setMessageDelay(long messageDelay)
-	{
-		this.messageDelay = messageDelay;
 	}
 	
 	public List<CapHandler> getCapHandlers()
@@ -147,13 +181,8 @@ public class Config
 		return commandPrefix;
 	}
 
-	public String[] getModulesToLoad()
+	public List<String> getModulesToLoad()
 	{
 		return modulesToLoad;
-	}
-
-	public void setModulesToLoad(String[] featuresToLoad)
-	{
-		this.modulesToLoad = featuresToLoad;
 	}
 }

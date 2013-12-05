@@ -1,0 +1,61 @@
+
+
+#==============#
+#=Bot Settings=#
+#==============#
+
+#nickname: The nickname the bot will have in chat
+- nickname: "RE_HeufyBot"
+
+#username: The username the bot will log into the server with
+- username: "RE_HeufyBot"
+
+#realname: The bot's real name.
+- realname: "My owner did not change this field"
+
+#=================#
+#=Server Settings=#
+#=================#
+
+#server: Address of the server the bot is connecting to
+- server: "irc.chatspike.net"
+
+#port: The port on the server the bot is connecting to
+- port: 6667
+
+#password: Password to login with if needed
+- password: ""
+
+#password type: The kind of password we're using. Possible values are None, ServerPass or NickServPass
+- passwordType: None 
+
+#autoJoinEnabled: Whether or not the bot should join any channels after connecting
+- autoJoinEnabled: true
+
+#autoJoinChannels: The channels the bot should join if autojoin is enabled
+- autoJoinChannels: 
+  - "#heufybot"
+  
+#autoNickChange: Whether or not the bot should try connecting with a different nickname if the current nickname is taken
+- autoNickChange: true
+
+#autoReconnect: Whether or not the bot should try to reconnect should it lose connection
+- autoReconnect: true
+
+#reconnectAttempts: The number of times the bot should try to reconnect if autoReconnect is enabled
+- reconnectAttempts: 99
+
+#reconnectInteval: The number of seconds the bot should wait between connection attempts
+- reconnectInterval: 10
+
+#=================#
+#=Module Settings=#
+#=================#
+
+#commandPrefix: The prefix that should be used when a user wants to execute a bot command
+- commandPrefix: "~"
+
+#modulesToLoad: The modules that should be loaded at startup. These modules need to be in the "modules" folder. Loading at least ModuleLoader is recommended.
+- modulesToLoad: 
+  - "moduleloader"
+  - "help"

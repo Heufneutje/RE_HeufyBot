@@ -136,11 +136,11 @@ public class InputParser
 				irc.nickservIdentify(irc.getConfig().getPassword());
 			}
 			
-			if(irc.getConfig().getAutoJoinEnabled() && irc.getConfig().getAutoJoinChannels().length > 0)
+			if(irc.getConfig().getAutoJoinEnabled() && irc.getConfig().getAutoJoinChannels().size() > 0)
 			{
-				for(int i = 0; i < irc.getConfig().getAutoJoinChannels().length; i++)
+				for(String channelName : irc.getConfig().getAutoJoinChannels())
 				{
-					String[] channel = irc.getConfig().getAutoJoinChannels()[i].split(" ");
+					String[] channel = channelName.split(" ");
 					if(channel.length > 1)
 					{
 						//This channel has a key

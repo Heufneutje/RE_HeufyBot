@@ -16,3 +16,4 @@
 *.gitignore
 *.bat
 *.sh
+/settings.yml

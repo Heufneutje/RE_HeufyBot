@@ -19,6 +19,7 @@ public class HeufyBot
 	{
 		this.config = Config.getInstance();
 		this.irc = IRC.getInstance();
+		config.loadConfigFromFile("settings.yml");
 		irc.setConfig(config);
 	}
 	
@@ -31,17 +32,17 @@ public class HeufyBot
 		moduleInterface = new ModuleInterface();
 		irc.getEventListenerManager().addListener(moduleInterface);
 
-		for(int i = 0; i < config.getModulesToLoad().length; i++)
+		for(String module : config.getModulesToLoad())
 		{
-			SimpleEntry<ModuleLoaderResponse, String> result = moduleInterface.loadModule(config.getModulesToLoad()[i]);
+			SimpleEntry<ModuleLoaderResponse, String> result = moduleInterface.loadModule(module);
 			
 			switch(result.getKey())
 			{
 			case Success: Logger.log("+++ Module " + result.getValue() + " was loaded");
 				break;
-			case AlreadyLoaded: Logger.error("Module Loader", "Module " + config.getModulesToLoad()[i] + " is already loaded");
+			case AlreadyLoaded: Logger.error("Module Loader", "Module " + module + " is already loaded");
 				break;
-			case DoesNotExist: Logger.error("Module Loader", "Module " + config.getModulesToLoad()[i] + " does not exist");
+			case DoesNotExist: Logger.error("Module Loader", "Module " + module + " does not exist");
 				break;
 			default:
 				break;
