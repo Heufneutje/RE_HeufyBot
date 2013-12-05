@@ -7,6 +7,10 @@ public class HeufyBotInit
 	public static void main(String[] args)
 	{
 		HeufyBot bot = HeufyBot.getInstance();
-		bot.start();
+		
+		if(bot.getConfig().loadConfigFromFile("settings.yml"))
+		{
+			bot.start();
+		}
 	}
 }

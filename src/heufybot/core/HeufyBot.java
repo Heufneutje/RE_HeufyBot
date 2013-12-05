@@ -19,7 +19,6 @@ public class HeufyBot
 	{
 		this.config = Config.getInstance();
 		this.irc = IRC.getInstance();
-		config.loadConfigFromFile("settings.yml");
 		irc.setConfig(config);
 	}
 	

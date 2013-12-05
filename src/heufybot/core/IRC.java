@@ -43,7 +43,6 @@ public class IRC
 	private final Condition writeNowCondition = writeLock.newCondition();
 	private long lastSentLine = 0;
 
-	
 	private String nickname;
 	
 	private IRC()

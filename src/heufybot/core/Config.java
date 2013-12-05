@@ -2,6 +2,7 @@ package heufybot.core;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,14 +92,29 @@ public class Config
 			
 			Map<String, List<String>> modulesSetting = (Map<String, List<String>>) readSettings.get(14);
 			this.modulesToLoad = modulesSetting.get("modulesToLoad");
-		} 
-		catch (Exception e)
+			
+			return true;
+		}
+		catch (FileNotFoundException e)
 		{
-			e.printStackTrace();
-			Logger.error("Configuration", "The config file could not be read. Make sure to copy settings.yml.example into settings.yml for the default settings.");
+			Logger.error("Configuration", "The config file could not be found. Make sure to create one or copy the default settings.yml.example into settings.yml.");
 			return false;
 		}
-		return true;
+		catch (NullPointerException e)
+		{
+			Logger.error("Configuration", "The config file could not be read. One of the setting fields is empty.");
+			return false;
+		}
+		catch (IllegalArgumentException e)
+		{
+			Logger.error("Configuration", "The config file could not be read. One of the setting fields has an invalid value.");
+			return false;
+		}
+		catch (Exception e)
+		{
+			Logger.error("Configuration", "The config file could not be read. Make sure the syntax is correct.");
+			return false;
+		}
 	}
 	
 	public String getNickname()
