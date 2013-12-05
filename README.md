@@ -12,5 +12,8 @@ Currently the following modules come with RE_HeufyBot:
 - Nick
 - Do
 - Source
+- OutOfContext
+- Choose
+- Uptime
 
 Detials about how to write your own module will be up later.
