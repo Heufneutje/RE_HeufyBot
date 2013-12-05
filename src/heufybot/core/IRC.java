@@ -143,7 +143,14 @@ public class IRC
 			ArrayList<String> channelsToRejoin = new ArrayList<String>();
 			for(Channel channel : channels)
 			{
-				channelsToRejoin.add(channel.getName());
+				if(channel.getModesWithArgs().containsKey("k"))
+				{
+					channelsToRejoin.add(channel.getName() + " " + channel.getModesWithArgs().get("k"));
+				}
+				else
+				{
+					channelsToRejoin.add(channel.getName());
+				}
 			}
 			channels.clear();
 			reconnect(channelsToRejoin);
@@ -167,7 +174,14 @@ public class IRC
 				login();
 				for(String channel : channelsToRejoin)
 				{
-					cmdJOIN(channel, "");
+					if(channel.contains(" "))
+					{
+						cmdJOIN(channel.split(" ")[0], channel.split(" ")[1]);
+					}
+					else
+					{
+						cmdJOIN(channel, "");
+					}
 				}
 				return;
 			}
