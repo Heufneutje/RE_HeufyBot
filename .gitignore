@@ -7,9 +7,12 @@
 *.settings
 *.project
 *.classpath
-*.gitignore
+
 /bin
 /logs
 /data
 
 *.log
+*.gitignore
+*.bat
+*.sh
