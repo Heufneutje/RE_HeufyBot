@@ -41,6 +41,8 @@ public class Config
 	@SuppressWarnings("unchecked")
 	public boolean loadConfigFromFile(String fileName)
 	{
+		Logger.log("*** Loading settings...");
+		
 		try
 		{
 			InputStream input = new FileInputStream(new File(fileName));
@@ -93,6 +95,30 @@ public class Config
 			Map<String, List<String>> modulesSetting = (Map<String, List<String>>) readSettings.get(14);
 			this.modulesToLoad = modulesSetting.get("modulesToLoad");
 			
+			if(autoJoinChannels == null)
+			{
+				this.autoJoinChannels = new ArrayList<String>();
+			}
+			if(modulesToLoad == null)
+			{
+				this.modulesToLoad = new ArrayList<String>();
+			}
+			
+			if(nickname.equals(""))
+			{
+				Logger.error("Configuration", "Nickname cannot be empty.");
+				return false;
+			}
+			if(username.equals(""))
+			{
+				username = "Unknown";
+			}
+			if(realname.equals(""))
+			{
+				realname = "Unknown";
+			}
+			
+			Logger.log("*** Loaded settings successfully");
 			return true;
 		}
 		catch (FileNotFoundException e)

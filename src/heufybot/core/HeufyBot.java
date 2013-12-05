@@ -30,14 +30,16 @@ public class HeufyBot
 		
 		moduleInterface = new ModuleInterface();
 		irc.getEventListenerManager().addListener(moduleInterface);
-
+		
+		Logger.log("*** Loading modules...");
+		
 		for(String module : config.getModulesToLoad())
 		{
 			SimpleEntry<ModuleLoaderResponse, String> result = moduleInterface.loadModule(module);
 			
 			switch(result.getKey())
 			{
-			case Success: Logger.log("+++ Module " + result.getValue() + " was loaded");
+			case Success: Logger.log(" -  Module " + result.getValue() + " was loaded");
 				break;
 			case AlreadyLoaded: Logger.error("Module Loader", "Module " + module + " is already loaded");
 				break;
