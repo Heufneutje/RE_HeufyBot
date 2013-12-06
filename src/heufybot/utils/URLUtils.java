@@ -33,6 +33,7 @@ public class URLUtils
 		catch(Exception e)
 		{
 			Logger.log("URL Utilities", "Couldn't grab URL \"" + urlString + "\"");
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -74,52 +75,42 @@ public class URLUtils
 	
 	public static String shortenURL(String urlstring)
 	{
-		FileUtils.touchFile("data/googleapikey.txt");
-		
-		String apiKey = FileUtils.readFile("data/googleapikey.txt").replaceAll("\n", "");
-		if(apiKey.equals(""))
+		try
 		{
-			return "NoKey";
+			String json = "";
+			if(urlstring.startsWith("http:"))
+			{
+				json = "{\"longUrl\": \"" + urlstring + "\"}";
+			}
+			else
+			{
+				json = "{\"longUrl\": \"http://"+urlstring+"/\"}";
+			}
+			
+			URL url = new URL("https://www.googleapis.com/urlshortener/v1/url");
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+	        connection.setRequestMethod("POST"); 
+	        connection.setRequestProperty("Content-Type", "application/json"); 
+	        connection.setDoOutput(true);
+
+	        OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
+	        out.write(json);
+	        out.close();
+
+	        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+	        String decodedString;
+	        String result = "";
+	        while ((decodedString = in.readLine()) != null)
+	        {
+	        	result += decodedString;
+	        }
+	        in.close();
+	        return result.substring(result.indexOf("http://goo.gl"), result.indexOf("\"", result.indexOf("http://goo.gl")));
 		}
-		else
+		catch(Exception e)
 		{
-			try
-			{
-				String json = "";
-				if(urlstring.startsWith("http:"))
-				{
-					json = "{\"longUrl\": \"" + urlstring + "\"}";
-				}
-				else
-				{
-					json = "{\"longUrl\": \"http://"+urlstring+"/\"}";
-				}
-				
-				URL url = new URL("https://www.googleapis.com/urlshortener/v1/url?key=" + apiKey);
-				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-		        connection.setRequestMethod("POST"); 
-		        connection.setRequestProperty("Content-Type", "application/json"); 
-		        connection.setDoOutput(true);
-	
-		        OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
-		        out.write(json);
-		        out.close();
-	
-		        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-		        String decodedString;
-		        String result = "";
-		        while ((decodedString = in.readLine()) != null)
-		        {
-		        	result += decodedString;
-		        }
-		        in.close();
-		        return result.substring(result.indexOf("http://goo.gl"), result.indexOf("\"", result.indexOf("http://goo.gl")));
-			}
-			catch(Exception e)
-			{
-				Logger.log("URL Utilities", "Couldn't shorten URL \"" + urlstring + "\"");
-				return null;
-			}
+			Logger.log("URL Utilities", "Couldn't shorten URL \"" + urlstring + "\"");
+			return null;
 		}
 	}
 }

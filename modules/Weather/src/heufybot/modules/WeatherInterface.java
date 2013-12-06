@@ -1,5 +1,6 @@
 package heufybot.modules;
 
+import heufybot.utils.FileUtils;
 import heufybot.utils.URLUtils;
 
 import org.json.simple.JSONArray;
@@ -9,10 +10,10 @@ import org.json.simple.parser.ParseException;
 
 public class WeatherInterface 
 {
-	private final static String APIkey = "rgeqdqv8vze8ytefbw3sa62c";
+	private final static String APIkey = FileUtils.readFile("data/worldweatheronlineapikey.txt").replaceAll("\n", "");
 	private final static String APIAddress = "http://api.worldweatheronline.com/free/v1/weather.ashx?";
 	private final static String web = "http://www.worldweatheronline.com/v2/weather.aspx?q=";
-	private final static String weatherFormat = "Temp: %s\u00B0C/%s\u00B0F | Weather: %s | Humidity: %s%c | Wind: %s kmph/%smph %s | Local Observation Time: %s";
+	private final static String weatherFormat = "Temp: %s °C/%s °F | Weather: %s | Humidity: %s%c | Wind: %s kmph/%smph %s | Local Observation Time: %s";
 	
 	public String getWeather(float latitude, float longitude) throws ParseException
 	{
