@@ -15,75 +15,26 @@ public class Weather extends Module {
 	// TODO Fix code redundancy, and get rid of those labels
 	@Override
 	public void processEvent(String source, String message, String triggerUser, List<String> params) {
-		if (params.size() == 1){
-			bot.getIRC().cmdPRIVMSG(source, "Check weather where?");
-			return;
-		} else {
-			params.remove(0);
-			GeocodingInterface geo = new GeocodingInterface();
+		if (params.size() == 1)
+			params.add(triggerUser);
 
-			// First try latitude and longitude. If these are not in fact lat/lon this will fail before any network stuff is done
-			latlong: {
-				try {
-					float latitude = Float.parseFloat(params.get(0));
-					float longitude = Float.parseFloat(params.get(1));
-					try {
-						Geolocation location = geo.getGeolocationForLatLng(latitude, longitude);
-						String weather = getWeatherFromGeolocation(location);
-						String prefix = location.success ? "City: " + location.locality : "Location: " + latitude + "," + longitude;
-						
-						bot.getIRC().cmdPRIVMSG(source, String.format("[Weather] %s | %s", prefix, weather));
-						return;
-					} catch (IOException e) {
-						bot.getIRC().cmdPRIVMSG(source, "[Weather] I'm sorry " + triggerUser + ", I'm afraid I can't let you do that.");
-						e.printStackTrace();
-						return;
-					} catch (ParseException e) {
-						bot.getIRC().cmdPRIVMSG(source, "[Weather] I don't think that's even a location in this multiverse...");
-						e.printStackTrace();
-						return;
-					}
-				} catch (NumberFormatException e){
-					// Nothing to see here, just not latitude/longitude, continuing.
-				} catch (IndexOutOfBoundsException e){
-					// Either this is fuzzing or invalid input. Either way we don't care, and should check the next two cases.
-				}
-			}
+		params.remove(0);
+		GeocodingInterface geo = new GeocodingInterface();
 
-			ircuser: {
+		// First try latitude and longitude. If these are not in fact lat/lon this will fail before any network stuff is done
+		latlong: {
+			try {
+				float latitude = Float.parseFloat(params.get(0));
+				float longitude = Float.parseFloat(params.get(1));
 				try {
-					Geolocation location = geo.getGeolocationForIRCUser(params.get(0));
-					if (location == null){
-						break ircuser;
-					}
+					Geolocation location = geo.getGeolocationForLatLng(latitude, longitude);
 					String weather = getWeatherFromGeolocation(location);
-					
-					bot.getIRC().cmdPRIVMSG(source, String.format("[Weather]: %s | %s", location.locality, weather));
+					String prefix = location.success ? "City: " + location.locality : "Location: " + latitude + "," + longitude;
+
+					bot.getIRC().cmdPRIVMSG(source, String.format("[Weather] %s | %s", prefix, weather));
 					return;
 				} catch (IOException e) {
 					bot.getIRC().cmdPRIVMSG(source, "[Weather] I'm sorry " + triggerUser + ", I'm afraid I can't let you do that.");
-					e.printStackTrace();
-					return;
-				} catch (ParseException e) {
-					bot.getIRC().cmdPRIVMSG(source, "[Weather] I don't think that's even a user in this multiverse...");
-					e.printStackTrace();
-					return;
-				}
-			}
-
-			place: {
-				try {
-					Geolocation location = geo.getGeolocationForPlace(message.substring(message.indexOf(' ') + 1));
-					if (!location.success){
-						bot.getIRC().cmdPRIVMSG(source, "[Weather] I don't think that's even a location in this multiverse...");
-						return;
-					}
-					String weather = getWeatherFromGeolocation(location);
-					
-					bot.getIRC().cmdPRIVMSG(source, String.format("[Weather]: %s | %s", location.locality, weather));
-					return;
-				} catch (IOException e) {
-					bot.getIRC().cmdPRIVMSG(source, "[Weather] That doesn't look like it's gonna work");
 					e.printStackTrace();
 					return;
 				} catch (ParseException e) {
@@ -91,10 +42,57 @@ public class Weather extends Module {
 					e.printStackTrace();
 					return;
 				}
+			} catch (NumberFormatException e){
+				// Nothing to see here, just not latitude/longitude, continuing.
+			} catch (IndexOutOfBoundsException e){
+				// Either this is fuzzing or invalid input. Either way we don't care, and should check the next two cases.
+			}
+		}
+
+		ircuser: {
+			try {
+				Geolocation location = geo.getGeolocationForIRCUser(params.get(0));
+				if (location == null){
+					break ircuser;
+				}
+				String weather = getWeatherFromGeolocation(location);
+
+				bot.getIRC().cmdPRIVMSG(source, String.format("[Weather]: %s | %s", location.locality, weather));
+				return;
+			} catch (IOException e) {
+				bot.getIRC().cmdPRIVMSG(source, "[Weather] I'm sorry " + triggerUser + ", I'm afraid I can't let you do that.");
+				e.printStackTrace();
+				return;
+			} catch (ParseException e) {
+				bot.getIRC().cmdPRIVMSG(source, "[Weather] I don't think that's even a user in this multiverse...");
+				e.printStackTrace();
+				return;
+			}
+		}
+
+		place: {
+			try {
+				Geolocation location = geo.getGeolocationForPlace(message.substring(message.indexOf(' ') + 1));
+				if (!location.success){
+					bot.getIRC().cmdPRIVMSG(source, "[Weather] I don't think that's even a location in this multiverse...");
+					return;
+				}
+				String weather = getWeatherFromGeolocation(location);
+
+				bot.getIRC().cmdPRIVMSG(source, String.format("[Weather]: %s | %s", location.locality, weather));
+				return;
+			} catch (IOException e) {
+				bot.getIRC().cmdPRIVMSG(source, "[Weather] That doesn't look like it's gonna work");
+				e.printStackTrace();
+				return;
+			} catch (ParseException e) {
+				bot.getIRC().cmdPRIVMSG(source, "[Weather] I don't think that's even a location in this multiverse...");
+				e.printStackTrace();
+				return;
 			}
 		}
 	}
-	
+
 	private String getWeatherFromGeolocation(Geolocation location) throws IOException, ParseException{
 		WeatherInterface weatherInterface = new WeatherInterface();
 		String weather = weatherInterface.getWeather(location.latitude, location.longitude);
