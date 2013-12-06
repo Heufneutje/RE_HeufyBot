@@ -27,7 +27,8 @@ public class ModuleInterface extends EventListenerAdapter
 		{
 			for(Module module : modules)
 			{
-				if(module.getClass().getName().equals("heufybot.modules." + moduleName))
+				String toLoad = "heufybot.modules." + moduleName;
+				if(module.getClass().getName().toLowerCase().equals(toLoad.toLowerCase()))
 				{
 					return new SimpleEntry<ModuleLoaderResponse, String>(ModuleLoaderResponse.AlreadyLoaded, "");
 				}
