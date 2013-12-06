@@ -61,7 +61,6 @@ public class GeocodingInterface {
 		}
 		JSONObject firstHit = (JSONObject) ((JSONArray)object.get("results")).get(0);
 		geo.locality = siftForCreepy(firstHit);
-		System.out.println(firstHit);
 		JSONObject location = (JSONObject)((JSONObject)firstHit.get("geometry")).get("location");
 		geo.latitude = Float.parseFloat(location.get("lat").toString());
 		geo.longitude = Float.parseFloat(location.get("lng").toString());
@@ -94,9 +93,7 @@ public class GeocodingInterface {
 
 	public Geolocation getGeolocationForIRCUser(String IRCUser) throws ParseException
 	{
-		String userLocation = URLUtils.grab("http://tsukiakariusagi.net/chatmaplookup.php?nick=" + IRCUser);
-		System.out.println(userLocation);
-		
+		String userLocation = URLUtils.grab("http://tsukiakariusagi.net/chatmaplookup.php?nick=" + IRCUser);		
 		if(userLocation.equals(", "))
 		{
 			return null;
