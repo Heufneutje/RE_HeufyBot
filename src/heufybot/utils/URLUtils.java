@@ -32,7 +32,7 @@ public class URLUtils
 		}
 		catch(Exception e)
 		{
-			Logger.log("URL Utilities", "Couldn't grab URL \"" + urlString + "\"");
+			Logger.error("URL Utilities", "Couldn't grab URL \"" + urlString + "\"");
 			e.printStackTrace();
 			return null;
 		}
@@ -53,7 +53,7 @@ public class URLUtils
 		}
 		catch (Exception e)
 		{
-			Logger.log("URL Utilities", "Couldn't get full hostname for \"" + urlString + "\"");
+			Logger.error("URL Utilities", "Couldn't get full hostname for \"" + urlString + "\"");
 			return null;
 		}
 	}
@@ -68,7 +68,7 @@ public class URLUtils
 		}
 		catch (MalformedURLException e)
 		{
-			Logger.log("URL Utilities", "Couldn't get the host for \"" + urlString + "\"");
+			Logger.error("URL Utilities", "Couldn't get the host for \"" + urlString + "\"");
 			return null;
 		}
 	}
@@ -109,7 +109,7 @@ public class URLUtils
 		}
 		catch(Exception e)
 		{
-			Logger.log("URL Utilities", "Couldn't shorten URL \"" + urlstring + "\"");
+			Logger.error("URL Utilities", "Couldn't shorten URL \"" + urlstring + "\"");
 			return null;
 		}
 	}

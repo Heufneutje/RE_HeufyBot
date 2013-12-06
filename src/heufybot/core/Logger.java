@@ -8,31 +8,45 @@ import heufybot.utils.FileUtils;
 
 public class Logger 
 {
-	public static void log(String line, String target)
+	public static void log(String line, String target, String network)
 	{
 		//Timestamp line
 		DateFormat dateFormat = new SimpleDateFormat("[HH:mm]");
 		Date date = new Date();
 		
 		//Output to console
-		if(target.equals(""))
+		String consoleLogLine = "";
+		if(target == null)
 		{
-			line = dateFormat.format(date) + " " + line;
+			consoleLogLine = dateFormat.format(date) + " " + line;
 		}
 		else
 		{
-			line = dateFormat.format(date) + " " + target + " - " + line;
+			consoleLogLine = dateFormat.format(date) + " " + target + " - " + line;
 		}
 		
-		System.out.println(line);
+		System.out.println(consoleLogLine);
 		
 		//Output to logfile
-		FileUtils.writeFileAppend("test.log", line + "\n");
+		if(network == null)
+		{
+			FileUtils.writeFileAppend("logs/server.log", line + "\n");
+		}
+		else
+		{
+			FileUtils.touchDir("logs/" + network);
+		    FileUtils.touchDir("logs/" + network + "/" + target);
+
+		    line = dateFormat.format(date) + " " + line;
+		    
+		    dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		    FileUtils.writeFileAppend("logs/" + network + "/" + target + "/" + dateFormat.format(date) + ".log", line + "\n");
+		}
 	}
 	
 	public static void log(String line)
 	{
-		log(line, "");
+		log(line, null, null);
 	}
 	
 	public static void error(String errorSource, String line)
