@@ -79,7 +79,7 @@ public class GeocodingInterface {
 			JSONArray types = (JSONArray) ((JSONObject)addresses.get(i)).get("types");
 			
 			// Creepy-alarm! Go less specific!
-			if (!(types.contains("street_number") || types.contains("route") || types.contains("neighborhood") || types.contains("postal_code") || types.contains("sublocality") || types.contains("administrative_area_level_2")))
+			if (types.contains("locality") || types.contains("administrative_area_level_1") || types.contains("country"))
 			{
 				locationInfo.add(((JSONObject)addresses.get(i)).get("long_name").toString());
 			}
