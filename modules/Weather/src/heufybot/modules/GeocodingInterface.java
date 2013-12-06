@@ -1,11 +1,8 @@
 package heufybot.modules;
 
 import heufybot.utils.StringUtils;
+import heufybot.utils.URLUtils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,46 +14,51 @@ import org.json.simple.parser.ParseException;
 public class GeocodingInterface {
 	private final static String APIAddress = "http://maps.googleapis.com/maps/api/geocode/json?";
 	
-	public Geolocation getGeolocationForLatLng(float latitude, float longitude) throws IOException, ParseException{
+	public Geolocation getGeolocationForLatLng(float latitude, float longitude) throws ParseException
+	{
 		StringBuilder builder = new StringBuilder();
 		builder.append(APIAddress);
 		builder.append("latlng=" + latitude + "," + longitude);
 		builder.append("&sensor=false");
-		URL url = new URL(builder.toString());
-		JSONObject json = getJSON(url);
+		JSONObject json = getJSON(builder.toString());
 		Geolocation geo = geolocationFromJson(json);
 		if (geo.success)
+		{
 			return geo;
+		}
 		
 		geo.latitude = latitude;
 		geo.longitude = longitude;
 		return geo;
 	}
 
-	public Geolocation getGeolocationForPlace(String locationName) throws IOException, ParseException {		
+	public Geolocation getGeolocationForPlace(String locationName) throws ParseException
+	{		
 		List<String> locationComponents = StringUtils.parseStringtoList(locationName, " ");
 		
 		StringBuilder builder = new StringBuilder();
 		builder.append(APIAddress);
 		builder.append("address=");		
-		for (String s : locationComponents) {
+		for (String s : locationComponents) 
+		{
 			builder.append(s);
 			builder.append('+');
 		}
 		builder.deleteCharAt(builder.length() - 1);
 		
 		builder.append("&sensor=false");
-		URL url = new URL(builder.toString());
-		JSONObject json = getJSON(url);
+		JSONObject json = getJSON(builder.toString());
 		return geolocationFromJson(json);
 	}
 	
-	private Geolocation geolocationFromJson(JSONObject object){
+	private Geolocation geolocationFromJson(JSONObject object)
+	{
 		Geolocation geo = new Geolocation();
 		geo.success = object.get("status").equals("OK");
 		if (!geo.success)
+		{
 			return geo;
-		
+		}
 		JSONObject firstHit = (JSONObject) ((JSONArray)object.get("results")).get(0);
 		geo.locality = siftForCreepy(firstHit);
 		System.out.println(firstHit);
@@ -85,26 +87,23 @@ public class GeocodingInterface {
 		return StringUtils.join(locationInfo, ", ");
 	}
 
-	private JSONObject getJSON(URL url) throws IOException, ParseException {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
-
-		StringBuilder builder = new StringBuilder();
-		String nextLine;
-		while ((nextLine = reader.readLine()) != null)
-			builder.append(nextLine + "\n");
-		System.out.println(builder.toString());
-		return (JSONObject)new JSONParser().parse(builder.toString());
+	private JSONObject getJSON(String urlString) throws ParseException 
+	{
+		return (JSONObject)new JSONParser().parse(URLUtils.grab(urlString));
 	}
 
-	public Geolocation getGeolocationForIRCUser(String IRCUser) throws IOException, ParseException{
-		URL url = new URL("http://tsukiakariusagi.net/chatmaplookup.php?nick=" + IRCUser);
-		BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
-		String nextLine;
-		nextLine = reader.readLine();
-		if (nextLine == null || nextLine.equals(",")){
-			return null;
+	public Geolocation getGeolocationForIRCUser(String IRCUser) throws ParseException
+	{
+		String userLocation = URLUtils.grab("http://tsukiakariusagi.net/chatmaplookup.php?nick=" + IRCUser);
+
+		if(userLocation != null)
+		{
+			if(userLocation.contains(","))
+			{
+				List<String> floats = StringUtils.parseStringtoList(userLocation, ",");
+				return getGeolocationForLatLng(Float.parseFloat(floats.get(0)), Float.parseFloat(floats.get(1)));
+			}	
 		}
-		List<String> floats = StringUtils.parseStringtoList(nextLine, ",");
-		return getGeolocationForLatLng(Float.parseFloat(floats.get(0)), Float.parseFloat(floats.get(1)));
+		return null;
 	}
 }

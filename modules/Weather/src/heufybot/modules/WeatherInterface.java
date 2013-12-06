@@ -1,35 +1,34 @@
 package heufybot.modules;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
+import heufybot.utils.URLUtils;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-public class WeatherInterface {
+public class WeatherInterface 
+{
 	private final static String APIkey = "rgeqdqv8vze8ytefbw3sa62c";
 	private final static String APIAddress = "http://api.worldweatheronline.com/free/v1/weather.ashx?";
 	private final static String web = "http://www.worldweatheronline.com/v2/weather.aspx?q=";
 	private final static String weatherFormat = "Temp: %s\u00B0C/%s\u00B0F | Weather: %s | Humidity: %s%c | Wind: %s kmph/%smph %s | Local Observation Time: %s";
 	
-	public String getWeather(float latitude, float longitude) throws IOException, ParseException{
+	public String getWeather(float latitude, float longitude) throws ParseException
+	{
 		StringBuilder builder = new StringBuilder();
 		builder.append(APIAddress);
 		builder.append("q=" + latitude + "," + longitude);
 		builder.append("&key=" + APIkey);
 		builder.append("&format=json");
 		builder.append("&extra=localObsTime");
-		URL url = new URL(builder.toString());
-		JSONObject object = getJSON(url);
+		JSONObject object = getJSON(builder.toString());
 		
-		return parseJSON(object);// + " | More info: " + URLShortener.getShortenedURL(web + latitude + "," + longitude);
+		return parseJSON(object) + " | More info: " + URLUtils.shortenURL(web + latitude + "," + longitude);
 	}
 	
-	private String parseJSON(JSONObject object){
+	private String parseJSON(JSONObject object)
+	{
 		JSONObject data = (JSONObject)object.get("data");
 		JSONObject currentCondition = (JSONObject) ((JSONArray)data.get("current_condition")).get(0);
 
@@ -45,13 +44,8 @@ public class WeatherInterface {
 		return String.format(weatherFormat, tempC, tempF, desc, humidity, '%', windspeedKmph, windspeedMiles, windDir, curTime);
 	}
 	
-	private JSONObject getJSON(URL url) throws IOException, ParseException {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
-
-		StringBuilder builder = new StringBuilder();
-		String nextLine;
-		while ((nextLine = reader.readLine()) != null)
-			builder.append(nextLine + "\n");
-		return (JSONObject)new JSONParser().parse(builder.toString());
+	private JSONObject getJSON(String urlString) throws ParseException 
+	{
+		return (JSONObject)new JSONParser().parse(URLUtils.grab(urlString));
 	}
 }
