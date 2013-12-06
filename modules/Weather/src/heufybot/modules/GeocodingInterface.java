@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.simple.JSONArray;
@@ -58,6 +59,7 @@ public class GeocodingInterface {
 		
 		JSONObject firstHit = (JSONObject) ((JSONArray)object.get("results")).get(0);
 		geo.locality = siftForCreepy(firstHit);
+		System.out.println(firstHit);
 		JSONObject location = (JSONObject)((JSONObject)firstHit.get("geometry")).get("location");
 		geo.latitude = Float.parseFloat(location.get("lat").toString());
 		geo.longitude = Float.parseFloat(location.get("lng").toString());
@@ -65,17 +67,22 @@ public class GeocodingInterface {
 		return geo;
 	}
 	
-	private String siftForCreepy(JSONObject object){
+	private String siftForCreepy(JSONObject object)
+	{
 		JSONArray addresses = (JSONArray) object.get("address_components");
-		for(int i = 0; i < addresses.size(); i++){
+		
+		List<String> locationInfo = new ArrayList<String>();
+		for(int i = 0; i < addresses.size(); i++)
+		{
 			JSONArray types = (JSONArray) ((JSONObject)addresses.get(i)).get("types");
-			if (types.contains("street_number") || types.contains("route") || types.contains("neighborhood")){
-				// Creepy-alarm! Go less specific!
-				continue;
+			
+			// Creepy-alarm! Go less specific!
+			if (!(types.contains("street_number") || types.contains("route") || types.contains("neighborhood") || types.contains("postal_code") || types.contains("administrative_area_level_2")))
+			{
+				locationInfo.add(((JSONObject)addresses.get(i)).get("long_name").toString());
 			}
-			return ((JSONObject)addresses.get(i)).get("long_name").toString();
 		}
-		return "Unnamed location";
+		return StringUtils.join(locationInfo, ", ");
 	}
 
 	private JSONObject getJSON(URL url) throws IOException, ParseException {
@@ -85,6 +92,7 @@ public class GeocodingInterface {
 		String nextLine;
 		while ((nextLine = reader.readLine()) != null)
 			builder.append(nextLine + "\n");
+		System.out.println(builder.toString());
 		return (JSONObject)new JSONParser().parse(builder.toString());
 	}
 

@@ -31,14 +31,14 @@ public class Weather extends Module {
 					String weather = getWeatherFromGeolocation(location);
 					String prefix = location.success ? "City: " + location.locality : "Location: " + latitude + "," + longitude;
 
-					bot.getIRC().cmdPRIVMSG(source, String.format("[Weather] %s | %s", prefix, weather));
+					bot.getIRC().cmdPRIVMSG(source, String.format("%s | %s", prefix, weather));
 					return;
 				} catch (IOException e) {
-					bot.getIRC().cmdPRIVMSG(source, "[Weather] I'm sorry " + triggerUser + ", I'm afraid I can't let you do that.");
+					bot.getIRC().cmdPRIVMSG(source, "I'm sorry " + triggerUser + ", I'm afraid I can't let you do that.");
 					e.printStackTrace();
 					return;
 				} catch (ParseException e) {
-					bot.getIRC().cmdPRIVMSG(source, "[Weather] I don't think that's even a location in this multiverse...");
+					bot.getIRC().cmdPRIVMSG(source, "I don't think that's even a location in this multiverse...");
 					e.printStackTrace();
 					return;
 				}
@@ -57,14 +57,14 @@ public class Weather extends Module {
 				}
 				String weather = getWeatherFromGeolocation(location);
 
-				bot.getIRC().cmdPRIVMSG(source, String.format("[Weather]: %s | %s", location.locality, weather));
+				bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s | %s", location.locality, weather));
 				return;
 			} catch (IOException e) {
-				bot.getIRC().cmdPRIVMSG(source, "[Weather] I'm sorry " + triggerUser + ", I'm afraid I can't let you do that.");
+				bot.getIRC().cmdPRIVMSG(source, "I'm sorry " + triggerUser + ", I'm afraid I can't let you do that.");
 				e.printStackTrace();
 				return;
 			} catch (ParseException e) {
-				bot.getIRC().cmdPRIVMSG(source, "[Weather] I don't think that's even a user in this multiverse...");
+				bot.getIRC().cmdPRIVMSG(source, "I don't think that's even a user in this multiverse...");
 				e.printStackTrace();
 				return;
 			}
@@ -78,7 +78,6 @@ public class Weather extends Module {
 					return;
 				}
 				String weather = getWeatherFromGeolocation(location);
-
 				bot.getIRC().cmdPRIVMSG(source, String.format("[Weather]: %s | %s", location.locality, weather));
 				return;
 			} catch (IOException e) {

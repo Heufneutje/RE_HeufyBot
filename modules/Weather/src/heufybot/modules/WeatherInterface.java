@@ -26,7 +26,7 @@ public class WeatherInterface {
 		URL url = new URL(builder.toString());
 		JSONObject object = getJSON(url);
 		
-		return parseJSON(object) + " | More info: " + URLShortener.getShortenedURL(web + latitude + "," + longitude);
+		return parseJSON(object);// + " | More info: " + URLShortener.getShortenedURL(web + latitude + "," + longitude);
 	}
 	
 	private String parseJSON(JSONObject object){
