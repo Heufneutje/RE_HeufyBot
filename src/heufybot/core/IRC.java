@@ -315,7 +315,7 @@ public class IRC
 	
 	public void cmdQUIT(String message)
 	{
-		sendRaw("QUIT: " + message);
+		sendRaw("QUIT :" + message);
 	}
 	
 	public void cmdPRIVMSG(String target, String message)
