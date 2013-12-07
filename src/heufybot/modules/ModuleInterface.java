@@ -85,14 +85,23 @@ public class ModuleInterface extends EventListenerAdapter
 		return new SimpleEntry<ModuleLoaderResponse, String>(ModuleLoaderResponse.DoesNotExist, "");
 	}
 	
+	public void onPMMessage(PMMessageEvent event)
+	{
+		handleMessage(event.getUser(), null, event.getMessage());
+	}
+	
 	public void onMessage(MessageEvent event)
 	{
-		if(ignores.contains(event.getUser().getNickname()))
+		handleMessage(event.getUser(), event.getChannel(), event.getMessage());
+	}
+	
+	private void handleMessage(User user, Channel channel, String message)
+	{
+		if(ignores.contains(user.getNickname()))
 		{
 			return;
 		}
 		
-		String message = event.getMessage();
 		Module[] listCopy = new Module[modules.size()];
 		listCopy = modules.toArray(listCopy);
 		for (int l = 0; l < listCopy.length; l++)
@@ -100,13 +109,27 @@ public class ModuleInterface extends EventListenerAdapter
 			Module module = listCopy[l];
 			if(message.toLowerCase().matches(module.getTrigger()))
 			{
-				if(isAuthorized(module, event.getChannel(), event.getUser()) || bot.getConfig().getBotAdmins().contains(event.getUser().getNickname()))
+				if(channel == null)
 				{
-					module.processEvent(event.getChannel().getName(), message, event.getUser().getNickname(), StringUtils.parseStringtoList(message, " "));
+					if(bot.getConfig().getBotAdmins().contains(user.getNickname()))
+					{
+						module.processEvent(user.getNickname(), message, user.getNickname(), StringUtils.parseStringtoList(message, " "));
+					}
+					else
+					{
+						bot.getIRC().cmdPRIVMSG(user.getNickname(), "You are not authorized to use the \"" + module.toString() + "\" module!");
+					}
 				}
 				else
 				{
-					bot.getIRC().cmdPRIVMSG(event.getChannel().getName(), "You are not authorized to use the \"" + module.toString() + "\" module!");
+					if(isAuthorized(module, channel, user) || bot.getConfig().getBotAdmins().contains(user.getNickname()))
+					{
+						module.processEvent(channel.getName(), message, user.getNickname(), StringUtils.parseStringtoList(message, " "));
+					}
+					else
+					{
+						bot.getIRC().cmdPRIVMSG(channel.getName(), "You are not authorized to use the \"" + module.toString() + "\" module!");
+					}
 				}
 			}
 		}
