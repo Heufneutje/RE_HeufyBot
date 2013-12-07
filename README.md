@@ -6,14 +6,20 @@ A from scratch rewrite of my original HeufyBot project, which was based on PircB
 Currently the following modules come with RE_HeufyBot:
 - ModuleLoader
 - Help
-- Say
-- Join
-- Part
-- Nick
-- Do
-- Source
-- OutOfContext
+- Ignore
+
 - Choose
-- Uptime
+- Do
+- Join
+- Log
+- Nick
+- OutOfContext
+- Part
+- Quit
+- Say
+- Shorten
+- Source
+- Translate
+- Weather
 
 Detials about how to write your own module will be up later.
