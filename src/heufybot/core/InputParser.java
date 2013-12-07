@@ -35,7 +35,9 @@ public class InputParser
 		
 		String senderInfo = "";
 		if (parsedLine.get(0).charAt(0) == ':')
-		        senderInfo = parsedLine.remove(0);
+		{
+			senderInfo = parsedLine.remove(0);
+		}
 		
 		String command = parsedLine.remove(0).toUpperCase();
 		
@@ -469,10 +471,15 @@ public class InputParser
 		{
 			//Message is a CTCP request
 			String request = message.substring(1, message.length() - 1);
-			if (request.toUpperCase().startsWith("ACTION ")) 
+			if (request.toUpperCase().startsWith("ACTION ") && channel != null) 
 			{
 				// ACTION request
 				Logger.log("* " + sourceNick + " " + request.substring(7), target, irc.getServerInfo().getNetwork());
+			}
+			else if(request.toUpperCase().startsWith("ACTION "))
+			{
+				// ACTION request in a PM
+				Logger.log("* " + sourceNick + " " + request.substring(7), sourceNick, irc.getServerInfo().getNetwork());
 			}
 			else if(request.toUpperCase().startsWith("PING "))
 			{
