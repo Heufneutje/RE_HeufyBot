@@ -46,7 +46,7 @@ public class Ignore extends Module
 	  	  		{
 	  	  			ignoreList.add(nick);
 	  	  			FileUtils.writeFileAppend(ignoreListPath, nick + "\n");
-	  	  			bot.getIRC().cmdPRIVMSG(source, nick + "was added to the ignore list.");
+	  	  			bot.getIRC().cmdPRIVMSG(source, nick + " was added to the ignore list.");
 	  	  		}
 			}
 		}
