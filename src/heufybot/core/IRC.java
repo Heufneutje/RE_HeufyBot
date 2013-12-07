@@ -226,7 +226,6 @@ public class IRC
 		             catch (Exception e)
 		             {
 		            	 line = null;
-		            	 e.printStackTrace();
 		            	 Logger.log("*** Connection to the server was lost. Trying to reconnect...");
 		            	 disconnect(true);
 		             }

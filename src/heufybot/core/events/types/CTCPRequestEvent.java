@@ -13,7 +13,7 @@ public class CTCPRequestEvent implements BotEvent
 		this.type = type;
 	}
 	
-	public String getMessage()
+	public String getType()
 	{
 		return type;
 	}

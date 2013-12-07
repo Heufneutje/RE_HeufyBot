@@ -56,6 +56,10 @@ public abstract class EventListenerAdapter implements EventListener
 		{
 			onPart((PartEvent) event);
 		}
+		else if(event instanceof PingEvent)
+		{
+			onPing((PingEvent) event);
+		}
 		else if(event instanceof PMActionEvent)
 		{
 			onPMAction((PMActionEvent) event);
@@ -67,6 +71,10 @@ public abstract class EventListenerAdapter implements EventListener
 		else if(event instanceof QuitEvent)
 		{
 			onQuit((QuitEvent) event);
+		}
+		else if(event instanceof ServerResponseChannelEvent)
+		{
+			onServerChannelResponse((ServerResponseChannelEvent) event);
 		}
 		else if(event instanceof ServerResponseEvent)
 		{
@@ -138,6 +146,11 @@ public abstract class EventListenerAdapter implements EventListener
 		
 	}
 	
+	public void onPing(PingEvent event)
+	{
+		
+	}
+	
 	public void onPMAction(PMActionEvent event)
 	{
 		
@@ -149,6 +162,11 @@ public abstract class EventListenerAdapter implements EventListener
 	}
 	
 	public void onQuit(QuitEvent event)
+	{
+		
+	}
+	
+	public void onServerChannelResponse(ServerResponseChannelEvent event)
 	{
 		
 	}

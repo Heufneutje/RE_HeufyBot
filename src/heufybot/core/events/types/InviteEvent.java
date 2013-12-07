@@ -1,21 +1,18 @@
 package heufybot.core.events.types;
 
-import heufybot.core.Channel;
 import heufybot.core.User;
 
 public class InviteEvent implements BotEvent
 {
 	private User inviter;
 	private String invitee;
-	private Channel channel;
-	private String message;
+	private String channel;
 	
-	public InviteEvent(User inviter, String invitee, Channel channel, String message)
+	public InviteEvent(User inviter, String invitee, String channel)
 	{
 		this.inviter = inviter;
 		this.invitee = invitee;
 		this.channel = channel;
-		this.message = message;
 	}
 	
 	public User getInviter()
@@ -28,14 +25,9 @@ public class InviteEvent implements BotEvent
 		return invitee;
 	}
 	
-	public Channel getChannel()
+	public String getChannel()
 	{
 		return channel;
-	}
-
-	public String getMessage()
-	{
-		return message;
 	}
 	
 	public String toString()

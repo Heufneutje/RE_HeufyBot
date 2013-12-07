@@ -1,29 +1,28 @@
 package heufybot.core.events.types;
 
 import heufybot.core.Channel;
-import heufybot.core.User;
 
 public class ModeEvent implements BotEvent
 {
-	private User user;
+	private String setter;
 	private Channel channel;
-	private String message;
+	private String mode;
 	
-	public ModeEvent(User user, Channel channel, String message)
+	public ModeEvent(String setter, Channel channel, String mode)
 	{
-		this.user = user;
+		this.setter = setter;
 		this.channel = channel;
-		this.message = message;
+		this.mode = mode;
 	}
 	
-	public String getMessage()
+	public String getMode()
 	{
-		return message;
+		return mode;
 	}
 	
-	public User getUser()
+	public String getSetter()
 	{
-		return user;
+		return setter;
 	}
 	
 	public Channel getChannel()

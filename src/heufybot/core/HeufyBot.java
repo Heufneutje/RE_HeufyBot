@@ -2,6 +2,7 @@ package heufybot.core;
 
 import java.util.AbstractMap.SimpleEntry;
 
+import heufybot.core.events.LoggingInterface;
 import heufybot.modules.ModuleInterface;
 import heufybot.utils.FileUtils;
 import heufybot.utils.enums.ModuleLoaderResponse;
@@ -12,6 +13,7 @@ public class HeufyBot
 	private Config config;
 	private IRC irc;
 	private ModuleInterface moduleInterface;
+	private LoggingInterface loggingInterface;
 	
 	private static final HeufyBot instance = new HeufyBot();
 	
@@ -29,7 +31,9 @@ public class HeufyBot
 		FileUtils.touchDir("modules");
 		
 		moduleInterface = new ModuleInterface(this);
+		loggingInterface = new LoggingInterface(this);
 		irc.getEventListenerManager().addListener(moduleInterface);
+		irc.getEventListenerManager().addListener(loggingInterface);
 		
 		Logger.log("*** Loading modules...");
 		
