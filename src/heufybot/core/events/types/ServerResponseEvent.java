@@ -2,16 +2,16 @@ package heufybot.core.events.types;
 
 public class ServerResponseEvent implements BotEvent
 {
-	private String message;
+	private String line;
 	
-	public ServerResponseEvent(String message)
+	public ServerResponseEvent(String line)
 	{
-		this.message = message;
+		this.line = line;
 	}
 	
-	public String getMessage()
+	public String getLine()
 	{
-		return message;
+		return line;
 	}
 	public String toString()
 	{

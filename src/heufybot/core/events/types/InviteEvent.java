@@ -3,22 +3,29 @@ package heufybot.core.events.types;
 import heufybot.core.Channel;
 import heufybot.core.User;
 
-public class PartEvent implements BotEvent
+public class InviteEvent implements BotEvent
 {
-	private User user;
+	private User inviter;
+	private String invitee;
 	private Channel channel;
 	private String message;
 	
-	public PartEvent(User user, Channel channel, String message)
+	public InviteEvent(User inviter, String invitee, Channel channel, String message)
 	{
-		this.user = user;
+		this.inviter = inviter;
+		this.invitee = invitee;
 		this.channel = channel;
 		this.message = message;
 	}
 	
-	public User getUser()
+	public User getInviter()
 	{
-		return user;
+		return inviter;
+	}
+	
+	public String getInvitee()
+	{
+		return invitee;
 	}
 	
 	public Channel getChannel()
@@ -33,6 +40,6 @@ public class PartEvent implements BotEvent
 	
 	public String toString()
 	{
-		return "PartEvent";
+		return "InviteEvent";
 	}
 }

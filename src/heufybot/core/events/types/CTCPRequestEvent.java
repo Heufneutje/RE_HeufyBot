@@ -5,18 +5,17 @@ import heufybot.core.User;
 public class CTCPRequestEvent implements BotEvent
 {
 	private User user;
-	private String message;
+	private String type;
 	
-	public CTCPRequestEvent(User user, String message)
+	public CTCPRequestEvent(User user, String type)
 	{
 		this.user = user;
-		this.message = message;
+		this.type = type;
 	}
 	
-	@Override
 	public String getMessage()
 	{
-		return message;
+		return type;
 	}
 	
 	public User getUser()

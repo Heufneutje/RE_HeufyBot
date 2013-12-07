@@ -3,15 +3,22 @@ package heufybot.core.events.types;
 import heufybot.core.Channel;
 import heufybot.core.User;
 
-public class JoinEvent implements BotEvent
+public class ModeEvent implements BotEvent
 {
 	private User user;
 	private Channel channel;
+	private String message;
 	
-	public JoinEvent(User user, Channel channel)
+	public ModeEvent(User user, Channel channel, String message)
 	{
 		this.user = user;
 		this.channel = channel;
+		this.message = message;
+	}
+	
+	public String getMessage()
+	{
+		return message;
 	}
 	
 	public User getUser()
@@ -26,6 +33,6 @@ public class JoinEvent implements BotEvent
 	
 	public String toString()
 	{
-		return "JoinEvent";
+		return "ModeEvent";
 	}
 }

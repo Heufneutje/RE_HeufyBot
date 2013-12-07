@@ -1,17 +1,16 @@
 package heufybot.core.events.types;
 
 import heufybot.core.Channel;
-import heufybot.core.User;
 
-public class MessageEvent implements BotEvent
+public class ChannelNoticeEvent implements BotEvent
 {
-	private User user;
+	private String source;
 	private Channel channel;
 	private String message;
 	
-	public MessageEvent(User user, Channel channel, String message)
+	public ChannelNoticeEvent(String source, Channel channel, String message)
 	{
-		this.user = user;
+		this.source = source;
 		this.channel = channel;
 		this.message = message;
 	}
@@ -21,9 +20,9 @@ public class MessageEvent implements BotEvent
 		return message;
 	}
 	
-	public User getUser()
+	public String getSource()
 	{
-		return user;
+		return source;
 	}
 	
 	public Channel getChannel()
@@ -33,6 +32,6 @@ public class MessageEvent implements BotEvent
 	
 	public String toString()
 	{
-		return "MessageEvent";
+		return "ChannelNoticeEvent";
 	}
 }

@@ -13,7 +13,6 @@ public class PMActionEvent implements BotEvent
 		this.message = message;
 	}
 	
-	@Override
 	public String getMessage()
 	{
 		return message;
