@@ -6,6 +6,7 @@ import java.net.URLClassLoader;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import heufybot.core.Channel;
 import heufybot.core.HeufyBot;
@@ -18,11 +19,13 @@ import heufybot.utils.enums.ModuleLoaderResponse;
 public class ModuleInterface extends EventListenerAdapter
 {
 	private ArrayList<Module> modules;
+	private List<String> ignores;
 	private HeufyBot bot;
 	
 	public ModuleInterface(HeufyBot bot)
 	{
 		this.modules = new ArrayList<Module>();
+		this.setIgnores(new ArrayList<String>());
 		this.bot = bot;
 	}
 	
@@ -84,6 +87,11 @@ public class ModuleInterface extends EventListenerAdapter
 	
 	public void onMessage(MessageEvent event)
 	{
+		if(ignores.contains(event.getUser().getNickname()))
+		{
+			return;
+		}
+		
 		String message = event.getMessage();
 		Module[] listCopy = new Module[modules.size()];
 		listCopy = modules.toArray(listCopy);
@@ -116,11 +124,6 @@ public class ModuleInterface extends EventListenerAdapter
 		}
 	}
 	
-	public ArrayList<Module> getModuleList()
-	{
-		return modules;
-	}
-	
 	public String getModuleHelp(String moduleName)
 	{
 		for(Module module : modules)
@@ -131,5 +134,20 @@ public class ModuleInterface extends EventListenerAdapter
 			}
 		}
 		return null;
+	}
+	
+	public ArrayList<Module> getModuleList()
+	{
+		return modules;
+	}
+	
+	public List<String> getIgnores() 
+	{
+		return ignores;
+	}
+
+	public void setIgnores(List<String> ignores) 
+	{
+		this.ignores = ignores;
 	}
 }
