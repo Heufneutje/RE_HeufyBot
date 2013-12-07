@@ -30,7 +30,7 @@ public class Logger
 		//Output to logfile
 		if(network == null)
 		{
-			FileUtils.writeFileAppend("logs/server.log", line + "\n");
+			FileUtils.writeFileAppend("logs/server.log", consoleLogLine + "\n");
 		}
 		else
 		{
