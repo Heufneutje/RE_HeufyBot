@@ -92,7 +92,7 @@ public class ModuleInterface extends EventListenerAdapter
 			Module module = listCopy[l];
 			if(message.toLowerCase().matches(module.getTrigger()))
 			{
-				if(isAuthorized(module, event.getChannel(), event.getUser()))
+				if(isAuthorized(module, event.getChannel(), event.getUser()) || bot.getConfig().getBotAdmins().contains(event.getUser().getNickname()))
 				{
 					module.processEvent(event.getChannel().getName(), message, event.getUser().getNickname(), StringUtils.parseStringtoList(message, " "));
 				}

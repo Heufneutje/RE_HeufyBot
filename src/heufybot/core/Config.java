@@ -20,7 +20,7 @@ public class Config
 	private int port, reconnectAttempts, reconnectInterval;
 	private PasswordType passwordType;
 	private boolean autoJoinEnabled, autoNickChange, autoReconnect;
-	private List<String> autoJoinChannels, modulesToLoad;
+	private List<String> autoJoinChannels, modulesToLoad, botAdmins;
 	private long messageDelay;
 	private List<CapHandler> capHandlers;
 	
@@ -95,6 +95,9 @@ public class Config
 			Map<String, List<String>> modulesSetting = (Map<String, List<String>>) readSettings.get(14);
 			this.modulesToLoad = modulesSetting.get("modulesToLoad");
 			
+			Map<String, List<String>> adminSetting = (Map<String, List<String>>) readSettings.get(15);
+			this.botAdmins = adminSetting.get("botAdmins");
+			
 			if(autoJoinChannels == null)
 			{
 				this.autoJoinChannels = new ArrayList<String>();
@@ -102,6 +105,10 @@ public class Config
 			if(modulesToLoad == null)
 			{
 				this.modulesToLoad = new ArrayList<String>();
+			}
+			if(botAdmins == null)
+			{
+				this.botAdmins = new ArrayList<String>();
 			}
 			
 			if(nickname.equals(""))
@@ -226,5 +233,10 @@ public class Config
 	public List<String> getModulesToLoad()
 	{
 		return modulesToLoad;
+	}
+	
+	public List<String> getBotAdmins()
+	{
+		return botAdmins;
 	}
 }
