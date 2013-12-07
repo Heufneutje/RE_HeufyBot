@@ -75,11 +75,11 @@ public class ModuleInterface extends EventListenerAdapter
 		for(Iterator<Module> iter = modules.iterator(); iter.hasNext();)
 		{
   			Module module = iter.next();
-  			if(module.getClass().getSimpleName().equalsIgnoreCase(moduleName))
+  			if(module.toString().equalsIgnoreCase(moduleName))
   			{
   				module.onUnload();
   				iter.remove();
-  				return new SimpleEntry<ModuleLoaderResponse, String>(ModuleLoaderResponse.Success, module.getClass().getSimpleName());
+  				return new SimpleEntry<ModuleLoaderResponse, String>(ModuleLoaderResponse.Success, module.toString());
   			}
 		}
 		return new SimpleEntry<ModuleLoaderResponse, String>(ModuleLoaderResponse.DoesNotExist, "");
@@ -106,7 +106,7 @@ public class ModuleInterface extends EventListenerAdapter
 				}
 				else
 				{
-					bot.getIRC().cmdPRIVMSG(event.getChannel().getName(), "You are not authorized to use the \"" + module.getClass().getSimpleName() + "\" module!");
+					bot.getIRC().cmdPRIVMSG(event.getChannel().getName(), "You are not authorized to use the \"" + module.toString() + "\" module!");
 				}
 			}
 		}
@@ -128,7 +128,7 @@ public class ModuleInterface extends EventListenerAdapter
 	{
 		for(Module module : modules)
 		{
-			if(module.getClass().getSimpleName().equalsIgnoreCase(moduleName))
+			if(module.toString().equalsIgnoreCase(moduleName))
 			{
 				return module.getHelp();
 			}

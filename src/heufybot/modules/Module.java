@@ -69,6 +69,12 @@ public abstract class Module
 	{
 		return authType;
 	}
+	
+	public String toString()
+	{
+		return this.getClass().getSimpleName();
+	}
+	
 	/**
 	 * Every module can be checked for syntax by the help module. This is the method that gets called to facilitate that.
 	 * @return The string to be printed by the help module when a user calls (commandPrefix)help yourmodule
