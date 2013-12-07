@@ -18,7 +18,7 @@ public class Quit extends Module
 
 	public String getHelp()
 	{
-		return "Commands: " + commandPrefix + "part (<channel> <message>) | Makes the bot part the current channel or a given one.";
+		return "Commands: " + commandPrefix + "quit | Makes the quit the server.";
 	}
 
 	@Override
