@@ -7,7 +7,6 @@ Currently the following modules come with RE_HeufyBot:
 - ModuleLoader
 - Help
 - Ignore
-
 - Choose
 - Do
 - Join
