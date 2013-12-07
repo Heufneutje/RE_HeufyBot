@@ -160,4 +160,19 @@ public class Channel
 	{
 		return modesWithArgs;
 	}
+	
+	public boolean checkOpStatus(User user)
+	{
+		String modes = usersInChannel.get(user);
+		ServerInfo info = ServerInfo.getInstance();
+		
+		for(char modeChar : modes.toCharArray())
+		{
+			if(modeChar != 'v' && info.getUserPrefixes().containsKey(Character.toString(modeChar)))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 }

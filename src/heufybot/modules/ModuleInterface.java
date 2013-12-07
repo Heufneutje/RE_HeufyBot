@@ -7,6 +7,9 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import heufybot.core.Channel;
+import heufybot.core.HeufyBot;
+import heufybot.core.User;
 import heufybot.core.events.EventListenerAdapter;
 import heufybot.core.events.types.*;
 import heufybot.utils.StringUtils;
@@ -15,10 +18,12 @@ import heufybot.utils.enums.ModuleLoaderResponse;
 public class ModuleInterface extends EventListenerAdapter
 {
 	private ArrayList<Module> modules;
+	private HeufyBot bot;
 	
-	public ModuleInterface()
+	public ModuleInterface(HeufyBot bot)
 	{
 		this.modules = new ArrayList<Module>();
+		this.bot = bot;
 	}
 	
 	public SimpleEntry<ModuleLoaderResponse, String> loadModule(String moduleName)
@@ -87,8 +92,27 @@ public class ModuleInterface extends EventListenerAdapter
 			Module module = listCopy[l];
 			if(message.toLowerCase().matches(module.getTrigger()))
 			{
-				module.processEvent(event.getChannel().getName(), message, event.getUser().getNickname(), StringUtils.parseStringtoList(message, " "));
+				if(isAuthorized(module, event.getChannel(), event.getUser()))
+				{
+					module.processEvent(event.getChannel().getName(), message, event.getUser().getNickname(), StringUtils.parseStringtoList(message, " "));
+				}
+				else
+				{
+					bot.getIRC().cmdPRIVMSG(event.getChannel().getName(), "You are not authorized to use the " + module.getClass().getSimpleName() + " module!");
+				}
 			}
+		}
+	}
+	
+	public boolean isAuthorized(Module module, Channel channel, User user)
+	{
+		if(module.authType == Module.AuthType.Anyone)
+		{
+			return true;
+		}
+		else
+		{
+			return channel.checkOpStatus(user);
 		}
 	}
 	

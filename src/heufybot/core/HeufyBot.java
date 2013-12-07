@@ -28,7 +28,7 @@ public class HeufyBot
 		FileUtils.touchDir("logs");
 		FileUtils.touchDir("modules");
 		
-		moduleInterface = new ModuleInterface();
+		moduleInterface = new ModuleInterface(this);
 		irc.getEventListenerManager().addListener(moduleInterface);
 		
 		Logger.log("*** Loading modules...");
