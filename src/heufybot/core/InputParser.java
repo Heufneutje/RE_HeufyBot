@@ -612,6 +612,11 @@ public class InputParser
 					}
 				}
 			}
+			else
+			{
+				//The bot disconnected
+			irc.disconnect(false);
+			}
 		}
 		else if(command.equals("KICK"))
 		{
