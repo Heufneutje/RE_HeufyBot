@@ -128,6 +128,7 @@ public class IRC
 		{
 			serverInfo.clear();
 			enabledCapabilities.clear();
+			this.inputThread.interrupt();
 			this.inputReader.close();
 			this.outputWriter.flush();
 			this.outputWriter.close();
@@ -225,6 +226,7 @@ public class IRC
 		             catch (Exception e)
 		             {
 		            	 line = null;
+		            	 e.printStackTrace();
 		            	 Logger.log("*** Connection to the server was lost. Trying to reconnect...");
 		            	 disconnect(true);
 		             }
