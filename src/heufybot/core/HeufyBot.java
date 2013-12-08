@@ -9,7 +9,7 @@ import heufybot.utils.enums.ModuleLoaderResponse;
 
 public class HeufyBot
 {
-	public final static String VERSION = "0.1.0";
+	public final static String VERSION = "0.2.0";
 	private Config config;
 	private IRC irc;
 	private ModuleInterface moduleInterface;
