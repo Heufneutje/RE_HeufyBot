@@ -72,7 +72,6 @@ public class Translate extends Module
 				{
 					String fromLanguage = languageParam.substring(0, 2);
 					String toLanguage = languageParam.substring(3, 5);
-					System.out.println(fromLanguage + "\n" + toLanguage);
 					String translatedText = com.memetix.mst.translate.Translate.execute(textToTranslate, Language.fromString(fromLanguage), Language.fromString(toLanguage));
 					bot.getIRC().cmdPRIVMSG(source, translatedText + " | Source Language: " + fromLanguage);
 				}

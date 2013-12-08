@@ -33,7 +33,6 @@ public class URLUtils
 		catch(Exception e)
 		{
 			Logger.error("URL Utilities", "Couldn't grab URL \"" + urlString + "\"");
-			e.printStackTrace();
 			return null;
 		}
 	}

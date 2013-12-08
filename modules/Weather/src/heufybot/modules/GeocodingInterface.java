@@ -11,7 +11,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-public class GeocodingInterface {
+public class GeocodingInterface
+{
 	private final static String APIAddress = "http://maps.googleapis.com/maps/api/geocode/json?";
 	
 	public Geolocation getGeolocationForLatLng(float latitude, float longitude) throws ParseException
