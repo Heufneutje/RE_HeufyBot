@@ -13,7 +13,7 @@ public class WeatherInterface
 	private final static String APIkey = FileUtils.readFile("data/worldweatheronlineapikey.txt").replaceAll("\n", "");
 	private final static String APIAddress = "http://api.worldweatheronline.com/free/v1/weather.ashx?";
 	private final static String web = "http://www.worldweatheronline.com/v2/weather.aspx?q=";
-	private final static String weatherFormat = "Temp: %s °C/%s °F | Weather: %s | Humidity: %s%c | Wind: %s kmph/%smph %s | Local Observation Time: %s";
+	private final static String weatherFormat = "Temp: %s °C/%s °F | Weather: %s | Humidity: %s%c | Wind: %s kmph/%smph %s";
 	
 	public String getWeather(float latitude, float longitude) throws ParseException
 	{
@@ -22,7 +22,6 @@ public class WeatherInterface
 		builder.append("q=" + latitude + "," + longitude);
 		builder.append("&key=" + APIkey);
 		builder.append("&format=json");
-		builder.append("&extra=localObsTime");
 		JSONObject object = getJSON(builder.toString());
 		
 		return parseJSON(object) + " | More info: " + URLUtils.shortenURL(web + latitude + "," + longitude);
@@ -33,7 +32,6 @@ public class WeatherInterface
 		JSONObject data = (JSONObject)object.get("data");
 		JSONObject currentCondition = (JSONObject) ((JSONArray)data.get("current_condition")).get(0);
 
-		String curTime = currentCondition.get("localObsDateTime").toString();
 		String tempC = currentCondition.get("temp_C").toString();
 		String tempF = currentCondition.get("temp_F").toString();
 		String windspeedMiles = currentCondition.get("windspeedMiles").toString();
@@ -42,7 +40,7 @@ public class WeatherInterface
 		String desc = ((JSONObject)((JSONArray)currentCondition.get("weatherDesc")).get(0)).get("value").toString();
 		String humidity = currentCondition.get("humidity").toString();
 		
-		return String.format(weatherFormat, tempC, tempF, desc, humidity, '%', windspeedKmph, windspeedMiles, windDir, curTime);
+		return String.format(weatherFormat, tempC, tempF, desc, humidity, '%', windspeedKmph, windspeedMiles, windDir);
 	}
 	
 	private JSONObject getJSON(String urlString) throws ParseException 
