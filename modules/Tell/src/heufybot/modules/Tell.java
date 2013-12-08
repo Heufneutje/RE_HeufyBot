@@ -296,7 +296,30 @@ public class Tell extends Module
 	@Override
 	public void onLoad()
 	{
-		FileUtils.touchFile(settingsPath);
+		if(FileUtils.touchFile(settingsPath))
+		{
+			try
+			{
+				DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+				DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+				Document doc = docBuilder.newDocument();
+				
+				Element root = doc.createElement("recepients");
+				doc.appendChild(root);
+				
+				TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			    Transformer transformer = transformerFactory.newTransformer();
+			    transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			    DOMSource source = new DOMSource(doc);
+			    StreamResult result = new StreamResult(new File(settingsPath));
+	
+			    transformer.transform(source, result);
+			}
+			catch (Exception e)
+			{
+				Logger.error("Module: Tell", "Message database could not be written.");
+			}
+		}
 		readMessages();
 	}
 
