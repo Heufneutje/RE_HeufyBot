@@ -92,9 +92,9 @@ public class GeocodingInterface
 		return (JSONObject)new JSONParser().parse(URLUtils.grab(urlString));
 	}
 
-	public Geolocation getGeolocationForIRCUser(String IRCUser) throws ParseException
+	public Geolocation getGeolocationForIRCUser(String ircUser) throws ParseException
 	{
-		String userLocation = URLUtils.grab("http://tsukiakariusagi.net/chatmaplookup.php?nick=" + IRCUser);		
+		String userLocation = URLUtils.grab("http://tsukiakariusagi.net/chatmaplookup.php?nick=" + ircUser);		
 		if(userLocation.equals(", "))
 		{
 			return null;

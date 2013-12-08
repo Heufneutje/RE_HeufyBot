@@ -1,6 +1,7 @@
 package heufybot.modules;
 
 import heufybot.utils.FileUtils;
+import heufybot.utils.URLUtils;
 
 import java.util.List;
 
@@ -25,6 +26,12 @@ public class Weather extends Module
 		
 		if (params.size() == 1)
 		{
+			if(URLUtils.grab("http://tsukiakariusagi.net/chatmaplookup.php?nick=" + triggerUser).equals(", "))
+			{
+				bot.getIRC().cmdPRIVMSG(source, "You are not registered on the chatmap.");
+			}
+			
+			
 			params.add(triggerUser);
 		}
 
