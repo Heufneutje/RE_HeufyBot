@@ -19,6 +19,10 @@ public class HeufyBot
 	
 	private HeufyBot()
 	{
+		FileUtils.touchDir("data");
+		FileUtils.touchDir("logs");
+		FileUtils.touchDir("modules");
+		
 		this.config = Config.getInstance();
 		this.irc = IRC.getInstance();
 		irc.setConfig(config);
@@ -26,10 +30,6 @@ public class HeufyBot
 	
 	public void start()
 	{
-		FileUtils.touchDir("data");
-		FileUtils.touchDir("logs");
-		FileUtils.touchDir("modules");
-		
 		moduleInterface = new ModuleInterface(this);
 		loggingInterface = new LoggingInterface(this);
 		irc.getEventListenerManager().addListener(moduleInterface);
