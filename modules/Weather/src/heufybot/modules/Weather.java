@@ -29,9 +29,8 @@ public class Weather extends Module
 			if(URLUtils.grab("http://tsukiakariusagi.net/chatmaplookup.php?nick=" + triggerUser).equals(", "))
 			{
 				bot.getIRC().cmdPRIVMSG(source, "You are not registered on the chatmap.");
-			}
-			
-			
+				return;
+			}			
 			params.add(triggerUser);
 		}
 
