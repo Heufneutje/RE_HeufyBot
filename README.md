@@ -7,6 +7,7 @@ Currently the following modules come with RE_HeufyBot:
 - ModuleLoader
 - Help
 - Ignore
+
 - Choose
 - Do
 - Join
@@ -18,7 +19,11 @@ Currently the following modules come with RE_HeufyBot:
 - Say
 - Shorten
 - Source
+- Tell
+- Time
 - Translate
+- TranslationParty
 - Weather
+- YouTube
 
-Detials about how to write your own module will be up later.
+Detials about how to write your own module can be found here: https://github.com/Heufneutje/RE_HeufyBot/blob/master/src/heufybot/modules/Module.java
