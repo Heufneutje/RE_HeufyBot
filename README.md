@@ -32,3 +32,5 @@ Optional modules:
 - YouTube
 
 Detials about how to write your own module can be found here: https://github.com/Heufneutje/RE_HeufyBot/blob/master/src/heufybot/modules/Module.java
+
+To use the bot, copy the settings.yml.example file into settings.yml and edit it. Then run java -jar RE_HeufyBot.jar to run the bot.
