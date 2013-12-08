@@ -30,7 +30,7 @@ public class YouTube extends Module
 		else
 		{
 			params.remove(0);
-			String searchTerms = StringUtils.join(params, " ");
+			String searchTerms = StringUtils.join(params, "%20");
 			
 			String urlString = "https://gdata.youtube.com/feeds/api/videos?q=" + searchTerms +
                     "&orderby=relevance" +
