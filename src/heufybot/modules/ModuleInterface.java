@@ -143,7 +143,14 @@ public class ModuleInterface extends EventListenerAdapter
 		}
 		else
 		{
-			return channel.checkOpStatus(user);
+			if(bot.getConfig().isOpAdmins())
+			{
+				return channel.checkOpStatus(user);
+			}
+			else
+			{
+				return false;
+			}
 		}
 	}
 	

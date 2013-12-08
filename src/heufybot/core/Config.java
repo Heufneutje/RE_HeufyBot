@@ -19,7 +19,7 @@ public class Config
 	private String nickname, username, realname, server, password, commandPrefix;
 	private int port, reconnectAttempts, reconnectInterval;
 	private PasswordType passwordType;
-	private boolean autoJoinEnabled, autoNickChange, autoReconnect;
+	private boolean autoJoinEnabled, autoNickChange, autoReconnect, opAdmins;
 	private List<String> autoJoinChannels, modulesToLoad, botAdmins;
 	private long messageDelay;
 	private List<CapHandler> capHandlers;
@@ -97,6 +97,9 @@ public class Config
 			
 			Map<String, List<String>> adminSetting = (Map<String, List<String>>) readSettings.get(15);
 			this.botAdmins = adminSetting.get("botAdmins");
+			
+			Map<String, Boolean> opSetting = (Map<String, Boolean>) readSettings.get(16);
+			this.autoReconnect = opSetting.get("opAdmins");
 			
 			if(autoJoinChannels == null)
 			{
@@ -238,5 +241,10 @@ public class Config
 	public List<String> getBotAdmins()
 	{
 		return botAdmins;
+	}
+	
+	public boolean isOpAdmins()
+	{
+		return opAdmins;
 	}
 }
