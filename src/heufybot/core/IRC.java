@@ -58,7 +58,6 @@ public class IRC
 		this.nickname = "";
 	}
 	
-	
 	//Singleton stuff
 	public static IRC getInstance()
 	{
@@ -141,20 +140,8 @@ public class IRC
 		
 		if(reconnect && config.autoReconnect())
 		{
-			ArrayList<String> channelsToRejoin = new ArrayList<String>();
-			for(Channel channel : channels)
-			{
-				if(channel.getModesWithArgs().containsKey("k"))
-				{
-					channelsToRejoin.add(channel.getName() + " " + channel.getModesWithArgs().get("k"));
-				}
-				else
-				{
-					channelsToRejoin.add(channel.getName());
-				}
-			}
 			channels.clear();
-			reconnect(channelsToRejoin);
+			reconnect();
 		}
 		else
 		{
@@ -162,7 +149,7 @@ public class IRC
 		}
 	}
 	
-	public void reconnect(ArrayList<String> channelsToRejoin)
+	public void reconnect()
 	{
 		int reconnects = 0;
 		while(reconnects < config.getReconnectAttempts())
@@ -173,17 +160,6 @@ public class IRC
 			if(success)
 			{
 				login();
-				for(String channel : channelsToRejoin)
-				{
-					if(channel.contains(" "))
-					{
-						cmdJOIN(channel.split(" ")[0], channel.split(" ")[1]);
-					}
-					else
-					{
-						cmdJOIN(channel, "");
-					}
-				}
 				return;
 			}
 			else
@@ -296,7 +272,7 @@ public class IRC
 	
 	public void cmdNICK(String nick)
 	{
-		sendRaw("NICK " + nick);
+		sendRawNow("NICK " + nick);
 	}
 	
 	public void cmdUSER(String user, String realname)

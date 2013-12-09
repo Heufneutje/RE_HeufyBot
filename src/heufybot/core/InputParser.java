@@ -132,6 +132,11 @@ public class InputParser
 			nickSuffix = 1;
 			
 			Logger.log("*** Logged onto server");
+			
+			//Reset CAP stuff
+			capEndSent = false;
+			finishedHandlers.clear();
+			
 			irc.getEventListenerManager().dispatchEvent(new ServerResponseEvent(parsedLine.get(1)));
 			
 			if(irc.getConfig().getPasswordType() == PasswordType.NickServPass)
@@ -175,17 +180,17 @@ public class InputParser
 				irc.disconnect(false);
 			}
 		}
+		else if(code.equals("451"))
+		{
+			//451 ERR_NOTREGISTERED
+			//The server does not support CAP. No action required
+		}
 		else if(code.startsWith("4") || code.startsWith("5") && !code.equals("439"))
 		{
 			//439 ERR_TARGETTOOFAST : No action required
 			//Couldn't login. Disconnect.
 			Logger.error("IRC Login", "Login failed.");
 			irc.disconnect(false);
-		}
-		else if(code.equals("451"))
-		{
-			//451 ERR_NOTREGISTERED
-			//The server does not support CAP. No action required
 		}
 		else if(code.equals("CAP"))
 		{
