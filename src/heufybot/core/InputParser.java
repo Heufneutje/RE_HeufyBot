@@ -207,6 +207,7 @@ public class InputParser
 			List<String> capParams = Arrays.asList(parsedLine.get(2).split(" "));
 			if(capCommand.equals("LS"))
 			{
+				Logger.log("*** Supported capabilities: " + StringUtils.join(capParams, ", "));
 				for(CapHandler currentCapHandler : irc.getConfig().getCapHandlers())
 				{
 					try

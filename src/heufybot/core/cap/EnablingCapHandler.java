@@ -23,7 +23,7 @@ public class EnablingCapHandler implements CapHandler
 		{
 			irc.cmdCAP("REQ :", StringUtils.join(Arrays.asList(cap), ""));
 			irc.getEnabledCapabilities().add(cap);
-			Logger.log("*** Capability \"" + cap + "\" is enabled");
+			Logger.log(" -  Capability \"" + cap + "\" is enabled");
 		}
 		else
 		{
