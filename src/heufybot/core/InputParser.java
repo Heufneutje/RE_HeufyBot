@@ -50,8 +50,17 @@ public class InputParser
 		else if(command.startsWith("ERROR"))
 		{
 			//Connection closed by server
+			String errorMessage = parsedLine.get(0).substring(parsedLine.get(0).indexOf(")") + 3, parsedLine.get(0).length() - 1).toLowerCase();
 			irc.getEventListenerManager().dispatchEvent(new ErrorEvent(parsedLine.get(0)));
-			irc.disconnect(false);
+			
+			if(errorMessage.startsWith("killed") || errorMessage.contains("lined"))
+			{
+				irc.disconnect(false);
+			}
+			else
+			{
+				irc.disconnect(true);
+			}
 			return;
 		}
 		

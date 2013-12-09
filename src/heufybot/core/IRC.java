@@ -240,7 +240,7 @@ public class IRC
 		catch (IOException e)
 		{
 			Logger.error("IRC Output", "Error sending line");
-		} 
+		}
 		catch (InterruptedException e)
 		{
 			Logger.error("IRC Output", "Error while waiting to send line");
