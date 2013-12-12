@@ -24,7 +24,7 @@ public class Ignore extends Module
 		{
 			if(params.size() == 1)
 			{
-				bot.getIRC().cmdPRIVMSG(source, "Who do you want me to ignore?");
+				bot.getIRC().cmdPRIVMSG(source, "Users currently ignored: " + StringUtils.join(ignoreList, ", "));
 			}
 			else
 			{
