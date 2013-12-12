@@ -1,6 +1,7 @@
 package heufybot.core;
 
 import heufybot.core.events.EventListenerManager;
+import heufybot.core.events.types.BotMessageEvent;
 import heufybot.utils.enums.ConnectionState;
 import heufybot.utils.enums.PasswordType;
 
@@ -298,6 +299,7 @@ public class IRC
 	public void cmdPRIVMSG(String target, String message)
 	{
 		sendRaw("PRIVMSG " + target + " :" + message);
+		eventListenerManager.dispatchEvent(new BotMessageEvent(getUser(nickname), target, message));
 	}
 	
 	public void cmdJOIN(String channel, String key)

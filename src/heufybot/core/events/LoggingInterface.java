@@ -20,6 +20,29 @@ public class LoggingInterface extends EventListenerAdapter
 		Logger.log("* " + event.getUser().getNickname() + " " + event.getMessage(), event.getChannel().getName(), bot.getIRC().getServerInfo().getNetwork());
 	}
 	
+	public void onBotMessage(BotMessageEvent event) 
+	{
+		User user = event.getUser();
+		Channel channel = bot.getIRC().getChannel(event.getTarget());
+		
+		if(channel == null)
+		{
+			String sourceNick = event.getUser().getNickname();
+			Logger.log("<" + sourceNick + "> " + event.getMessage(), event.getTarget(), bot.getIRC().getServerInfo().getNetwork());
+			return;
+		}
+				
+		String modes = channel.getModesOnUser(user);
+		if(!modes.equals(""))
+		{
+			Logger.log("<" + bot.getIRC().getServerInfo().getUserPrefixes().get(bot.getIRC().getAccessLevelOnUser(channel, user)) + user.getNickname() + "> " + event.getMessage(), channel.getName(), bot.getIRC().getServerInfo().getNetwork());
+		}
+		else
+		{
+			Logger.log("<" + user.getNickname() + "> " + event.getMessage(), channel.getName(), bot.getIRC().getServerInfo().getNetwork());
+		}
+	}
+	
 	public void onChannelNotice(ChannelNoticeEvent event)
 	{
 		Logger.log("[Notice] --" + event.getSource() + "-- [" + event.getChannel().getName() + "] " + event.getMessage(), event.getChannel().getName(), bot.getIRC().getServerInfo().getNetwork());

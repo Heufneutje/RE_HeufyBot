@@ -117,7 +117,7 @@ public class ModuleInterface extends EventListenerAdapter
 					}
 					else
 					{
-						bot.getIRC().cmdPRIVMSG(user.getNickname(), "You are not authorized to use the \"" + module.toString() + "\" module!");
+						bot.getIRC().cmdACTION(user.getNickname(), "You are not authorized to use the \"" + module.toString() + "\" module!");
 					}
 				}
 				else

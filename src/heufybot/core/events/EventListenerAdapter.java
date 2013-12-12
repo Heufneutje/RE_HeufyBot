@@ -12,6 +12,10 @@ public abstract class EventListenerAdapter implements EventListener
 		{
 			onAction((ActionEvent) event);
 		}
+		else if(event instanceof BotMessageEvent)
+		{
+			onBotMessage((BotMessageEvent) event);
+		}
 		else if(event instanceof ChannelNoticeEvent)
 		{
 			onChannelNotice((ChannelNoticeEvent) event);
@@ -85,8 +89,13 @@ public abstract class EventListenerAdapter implements EventListener
 			onTopicChange((TopicEvent) event);
 		}
 	}
-	
+
 	public void onAction(ActionEvent event)
+	{
+		
+	}
+	
+	public void onBotMessage(BotMessageEvent event) 
 	{
 		
 	}
