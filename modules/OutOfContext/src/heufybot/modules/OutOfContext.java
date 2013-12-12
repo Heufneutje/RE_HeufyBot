@@ -283,7 +283,7 @@ public class OutOfContext extends Module
 			return "Commands: " + commandPrefix + "ooc random | Returns a random quote from the Out of Context log.";
 		}
 		
-		return "Commands: " + commandPrefix + "ooc (add/remove/search/searchnick/random) | The log of Out of Context quote! Without a subcommand this will post a link to the log. Type \"" + commandPrefix + "help ooc <subcommand>\" for help on that specific subcommand.";
+		return "Commands: " + commandPrefix + "ooc (add/remove/search/searchnick/random) | The log of Out of Context quotes! Without a subcommand this will post a link to the log. Type \"" + commandPrefix + "help ooc <subcommand>\" for help on a specific subcommand.";
 	}
 
 	public void onLoad()
