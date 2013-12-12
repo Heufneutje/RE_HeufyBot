@@ -154,13 +154,13 @@ public class ModuleInterface extends EventListenerAdapter
 		}
 	}
 	
-	public String getModuleHelp(String moduleName)
+	public String getModuleHelp(String message)
 	{
 		for(Module module : modules)
 		{
-			if(module.toString().equalsIgnoreCase(moduleName))
+			if(module.toString().equalsIgnoreCase(message) || message.matches(module.getTrigger()))
 			{
-				return module.getHelp();
+				return module.getHelp(message);
 			}
 		}
 		return null;

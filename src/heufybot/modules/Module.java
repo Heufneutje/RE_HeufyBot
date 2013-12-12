@@ -77,9 +77,10 @@ public abstract class Module
 	
 	/**
 	 * Every module can be checked for syntax by the help module. This is the method that gets called to facilitate that.
+	 * @param message The message received. It is sent to provide help for possible subcommands
 	 * @return The string to be printed by the help module when a user calls (commandPrefix)help yourmodule
 	 */
-	public abstract String getHelp();
+	public abstract String getHelp(String message);
 	
 	/**
 	 * Gets called when the module is loaded.
