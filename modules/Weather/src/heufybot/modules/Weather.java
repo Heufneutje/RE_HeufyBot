@@ -110,7 +110,7 @@ public class Weather extends Module
 	}
 
 	@Override
-	public String getHelp() 
+	public String getHelp(String message) 
 	{
 		return "Commands: " + commandPrefix + "weather <place>/<latitude longitude>/<ircuser> | Makes the bot get the current weather conditions at the location specified or at the location of the ircuser.";
 	}

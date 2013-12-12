@@ -38,7 +38,7 @@ public class Uptime extends Module
 	}
 
 	@Override
-	public String getHelp() 
+	public String getHelp(String message) 
 	{
 		return "Commands: " + commandPrefix + "uptime | Shows how long the bot has been running.";
 	}

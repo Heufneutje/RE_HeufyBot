@@ -96,7 +96,7 @@ public class YouTube extends Module
 	}
 
 	@Override
-	public String getHelp() 
+	public String getHelp(String message) 
 	{
 		return "Commands: " + commandPrefix + "youtube <terms> | Returns the first search result on YouTube for the given search term.";
 	}

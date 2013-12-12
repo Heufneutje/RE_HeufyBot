@@ -26,7 +26,7 @@ public class Do extends Module
 		}
 	}
 
-	public String getHelp()
+	public String getHelp(String message)
 	{
 		return "Commands: " + commandPrefix + "do <message> | Makes the bot perform the given line in an action.";
 	}

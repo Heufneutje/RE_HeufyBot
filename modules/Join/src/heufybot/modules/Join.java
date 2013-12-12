@@ -30,7 +30,7 @@ public class Join extends Module
 		}
 	}
 
-	public String getHelp()
+	public String getHelp(String message)
 	{
 		return "Commands: " + commandPrefix + "join <channel> (<password>) | Makes the bot join a channel.";
 	}

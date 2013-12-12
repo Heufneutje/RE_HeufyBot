@@ -21,7 +21,7 @@ public class Help extends Module
 			ArrayList<String> moduleNames = new ArrayList<String>();
 			for(Module module : bot.getModuleInterface().getModuleList())
 			{
-				moduleNames.add(module.getClass().getSimpleName());
+				moduleNames.add(module.toString());
 			}
 
 			Collections.sort(moduleNames);
@@ -30,20 +30,22 @@ public class Help extends Module
 		}
 		else
 		{
-			String help = bot.getModuleInterface().getModuleHelp(params.get(1));
+			params.remove(0);
+			String helpParams = StringUtils.join(params, " ");
+			String help = bot.getModuleInterface().getModuleHelp(helpParams);
 			if(help != null)
 			{
 				bot.getIRC().cmdPRIVMSG(source, help);
 			}
 			else
 			{
-				bot.getIRC().cmdPRIVMSG(source, "Module \"" + params.get(1) + "\" is not loaded or does not exist!");
+				bot.getIRC().cmdPRIVMSG(source, "Module or command matching \"" + helpParams + "\" is not loaded or does not exist!");
 			}
 		}
 	}
 
 	@Override
-	public String getHelp()
+	public String getHelp(String message)
 	{
 		return "Commands: " + commandPrefix + "help (<module>) | Shows all modules that are currently loaded or shows help for a given module. Command syntax will be as such: command <parameter>. Parameters in brackets are optional.";
 	}

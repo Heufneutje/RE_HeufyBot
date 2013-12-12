@@ -260,9 +260,30 @@ public class OutOfContext extends Module
 		}
 	}
 	
-	public String getHelp()
+	public String getHelp(String message)
 	{
-		return "Commands: " + commandPrefix + "ooc, " + commandPrefix + "ooc add <quote>, " + commandPrefix + "ooc search <quote>, " + commandPrefix + "ooc searchnick <nick>, " + commandPrefix + "ooc random, " + commandPrefix + "ooc remove <quote> | Grab the OoC log, add an entry to it, search the log by providing a nickname or sentence or remove an entry.";
+		if(message.matches("ooc add"))
+		{
+			return "Commands: " + commandPrefix + "ooc add <quote> | Add a quote to the Out of Context log. Format is \"<nick> message\" for normal messages and \"* nick message\" for actions.";
+		}
+		else if(message.matches("ooc remove"))
+		{
+			return "Commands: " + commandPrefix + "ooc remove <quote> | Remove a quote from the Out of Context log. Provide words that are in the quote you're trying to remove. Quote will only be removed if there's only one match.";
+		}
+		else if(message.matches("ooc search"))
+		{
+			return "Commands: " + commandPrefix + "ooc search <quote> | Search for a quote in the Out of Context log. The results are the ones that have the given words in them";
+		}
+		else if(message.matches("ooc searchnick"))
+		{
+			return "Commands: " + commandPrefix + "ooc searchnick <nickname> | Search for a quote in the Out of Context log by providing a nickname or part of one.";
+		}
+		else if(message.matches("ooc random"))
+		{
+			return "Commands: " + commandPrefix + "ooc random | Returns a random quote from the Out of Context log.";
+		}
+		
+		return "Commands: " + commandPrefix + "ooc (add/remove/search/searchnick/random) | The log of Out of Context quote! Without a subcommand this will post a link to the log. Type \"" + commandPrefix + "help ooc <subcommand>\" for help on that specific subcommand.";
 	}
 
 	public void onLoad()

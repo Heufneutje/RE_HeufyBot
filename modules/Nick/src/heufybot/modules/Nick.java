@@ -23,7 +23,7 @@ public class Nick extends Module
 		}
 	}
 
-	public String getHelp()
+	public String getHelp(String message)
 	{
 		return "Commands: " + commandPrefix + "nick <nickname> | Changes the bot's nickname.";
 	}

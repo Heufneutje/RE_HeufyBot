@@ -16,7 +16,7 @@ public class Quit extends Module
 		bot.getIRC().cmdQUIT("Quit command issued by " + triggerUser);
 	}
 
-	public String getHelp()
+	public String getHelp(String message)
 	{
 		return "Commands: " + commandPrefix + "quit | Makes the quit the server.";
 	}

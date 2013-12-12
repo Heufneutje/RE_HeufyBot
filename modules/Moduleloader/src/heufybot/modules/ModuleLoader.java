@@ -99,8 +99,21 @@ public class ModuleLoader extends Module
 	}
 
 	@Override
-	public String getHelp()
+	public String getHelp(String message)
 	{
+		if(message.matches("load.*"))
+		{
+			return "Commands: " + commandPrefix + "load <module> | Load one or more modules. Seperate module names by spaces if more.";
+		}
+		else if(message.matches("unload.*"))
+		{
+			return "Commands: " + commandPrefix + "unload <module> | Unload one or more modules. Seperate module names by spaces if more.";
+		}
+		else if(message.matches("reload.*"))
+		{
+			return "Commands: " + commandPrefix + "reload <module> | Reload one or more modules. Seperate module names by spaces if more.";
+		}
+		
 		return "Commands: " + commandPrefix + "load <module>, " + commandPrefix + "unload <module>, " + commandPrefix + "reload <module> | Load, unload or reload one or more modules. Seperate module names by spaces if more.";
 	}
 

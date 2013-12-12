@@ -26,7 +26,7 @@ public class Say extends Module
 		}
 	}
 
-	public String getHelp()
+	public String getHelp(String message)
 	{
 		return "Commands: " + commandPrefix + "say <message> | Makes the bot say the given line.";
 	}

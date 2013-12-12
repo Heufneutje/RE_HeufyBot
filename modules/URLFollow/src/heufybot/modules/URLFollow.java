@@ -66,7 +66,7 @@ public class URLFollow extends Module
 	}
 
 	@Override
-	public String getHelp()
+	public String getHelp(String message)
 	{
 		return "Commands: None | Looks up and posts the title of a URL when posted.";
 	}

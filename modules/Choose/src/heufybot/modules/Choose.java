@@ -44,7 +44,7 @@ public class Choose extends Module
 		}
 	}
 
-	public String getHelp()
+	public String getHelp(String message)
 	{
 		return "Commands: " + commandPrefix + "choose <choice1>, <choice2> | Makes the bot choose one of the given options at random.";
 	}

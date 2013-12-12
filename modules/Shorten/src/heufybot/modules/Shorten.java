@@ -33,7 +33,7 @@ public class Shorten extends Module
 		}
 	}
 
-	public String getHelp()
+	public String getHelp(String message)
 	{
 		return "Commands: " + commandPrefix + "shorten <url> | Shortens the given URL using Googl.";
 	}

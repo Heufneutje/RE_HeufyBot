@@ -20,7 +20,7 @@ public class TranslationParty extends Module
 	}
 
 	@Override
-	public String getHelp()
+	public String getHelp(String message)
 	{
 		return "Commands: " + commandPrefix + "tp <sentence> | Follow translationparty.com to get a new sentence";
 	}

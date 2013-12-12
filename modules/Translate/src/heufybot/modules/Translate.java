@@ -17,7 +17,7 @@ public class Translate extends Module
 	}
 
 	@Override
-	public String getHelp()
+	public String getHelp(String message)
 	{
 		return "Commands: " + commandPrefix + "translate (<fromlanguage/)<tolanguage> <sentence> | Translates a sentence to a different language through Bing Translate. Language codes: http://msdn.microsoft.com/en-us/library/hh456380.aspx";
 	}

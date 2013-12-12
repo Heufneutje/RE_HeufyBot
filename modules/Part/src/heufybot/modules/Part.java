@@ -30,7 +30,7 @@ public class Part extends Module
 		}
 	}
 
-	public String getHelp()
+	public String getHelp(String message)
 	{
 		return "Commands: " + commandPrefix + "part (<channel> <message>) | Makes the bot part the current channel or a given one.";
 	}

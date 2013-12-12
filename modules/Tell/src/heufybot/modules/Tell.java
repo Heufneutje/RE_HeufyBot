@@ -51,13 +51,13 @@ public class Tell extends Module
 	public Tell()
 	{
 		this.authType = AuthType.Anyone;
-		this.trigger = ".*";
-		
+		this.trigger = "^" + commandPrefix + "(tell|rtell|senttells)($| .*)";
+		this.triggerOnEveryMessage = true;
 		this.tellsMap = new HashMap<String, ArrayList<Message>>();
 	}
 
 	@Override
-	public String getHelp()
+	public String getHelp(String message)
 	{
 		return "Commands: " + commandPrefix + "tell <user> <message>, " + commandPrefix + "rtell <message>, " + commandPrefix + "senttells | Tells the specified user a message the next time they speak, removes a message sent by you from the database or lists your pending messages.";
 	}

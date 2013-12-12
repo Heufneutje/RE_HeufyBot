@@ -16,7 +16,7 @@ public class Source extends Module
 		bot.getIRC().cmdPRIVMSG(source, "https://github.com/Heufneutje/RE_HeufyBot/");
 	}
 
-	public String getHelp()
+	public String getHelp(String message)
 	{
 		return "Commands: " + commandPrefix + "source | Provides a link to the bot's source code.";
 	}

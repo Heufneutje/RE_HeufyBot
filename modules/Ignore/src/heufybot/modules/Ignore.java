@@ -89,7 +89,7 @@ public class Ignore extends Module
 		}
 	}
 
-	public String getHelp()
+	public String getHelp(String message)
 	{
 		return "Commands: " + commandPrefix + "ignore <nickname>, " + commandPrefix + "unignore <nickname> | Add or remove a nickname from the ignore list.";
 	}

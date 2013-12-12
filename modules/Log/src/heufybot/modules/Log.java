@@ -123,9 +123,9 @@ public class Log extends Module
 	}
 
 	@Override
-	public String getHelp()
+	public String getHelp(String message)
 	{
-		return "Commands: " + commandPrefix + "log, " + commandPrefix + "log <YYYY-MM-DD>, " + commandPrefix + "log -<numberofdays> | Provides a log of the current channel for today, or another date if specified.";
+		return "Commands: " + commandPrefix + "log (<YYYY-MM-DD>/-<numberofdays>) | Provides a log of the current channel for today, or another date if specified.";
 	}
 
 	@Override
