@@ -34,13 +34,18 @@ public abstract class Module
 	 */
 	protected String commandPrefix;
 	/**
-	 * A reference to the static {@link HeufyBot} instance.
+	 * This determines whether or not the module should be triggered on every message.
+	 * This is useful for automatic commands, like checking when a certain person talks.
 	 */
+	protected boolean triggerOnEveryMessage;
+	/**
+	 * A reference to the static {@link HeufyBot} instance.
+	 */	
 	protected HeufyBot bot;
 	/**
 	 * Who can invoke the module.
 	 * If Anyone is used, any IRC user is allowed to invoke the module.
-	 * If OPs is used, only channel operators are allowed to invoke the module.
+	 * If OPs is used, only channel operators and bot admins are allowed to invoke the module.
 	 *
 	 */
 	protected AuthType authType;
@@ -93,4 +98,9 @@ public abstract class Module
 	 * Do not use this to destroy resources that would be recreated by onLoad().
 	 */
 	public abstract void onUnload();
+	
+	public boolean getTriggerOnEveryMessage()
+	{
+		return triggerOnEveryMessage;
+	}
 }

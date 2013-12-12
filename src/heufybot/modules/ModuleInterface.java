@@ -107,7 +107,7 @@ public class ModuleInterface extends EventListenerAdapter
 		for (int l = 0; l < listCopy.length; l++)
 		{
 			Module module = listCopy[l];
-			if(message.toLowerCase().matches(module.getTrigger()))
+			if(message.toLowerCase().matches(module.getTrigger()) || module.getTriggerOnEveryMessage())
 			{
 				String target = "";
 				if(channel == null)
@@ -158,9 +158,17 @@ public class ModuleInterface extends EventListenerAdapter
 	{
 		for(Module module : modules)
 		{
-			if(module.toString().equalsIgnoreCase(message) || message.matches(module.getTrigger()))
+			String moduleTrigger = module.getTrigger();
+			String commandPrefix = bot.getConfig().getCommandPrefix();
+			
+			if(moduleTrigger.startsWith("^" + commandPrefix))
 			{
-				return module.getHelp(message);
+				moduleTrigger = moduleTrigger.substring(moduleTrigger.indexOf(commandPrefix) + commandPrefix.length());
+			}
+			
+			if(module.toString().equalsIgnoreCase(message) || message.toLowerCase().matches(moduleTrigger))
+			{
+				return module.getHelp(message.toLowerCase());
 			}
 		}
 		return null;
