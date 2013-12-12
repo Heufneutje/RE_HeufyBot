@@ -298,8 +298,8 @@ public class IRC
 	
 	public void cmdPRIVMSG(String target, String message)
 	{
-		sendRaw("PRIVMSG " + target + " :" + message);
 		eventListenerManager.dispatchEvent(new BotMessageEvent(getUser(nickname), target, message));
+		sendRaw("PRIVMSG " + target + " :" + message);
 	}
 	
 	public void cmdJOIN(String channel, String key)

@@ -109,27 +109,23 @@ public class ModuleInterface extends EventListenerAdapter
 			Module module = listCopy[l];
 			if(message.toLowerCase().matches(module.getTrigger()))
 			{
+				String target = "";
 				if(channel == null)
 				{
-					if(bot.getConfig().getBotAdmins().contains(user.getNickname()))
-					{
-						module.processEvent(user.getNickname(), message, user.getNickname(), StringUtils.parseStringtoList(message, " "));
-					}
-					else
-					{
-						bot.getIRC().cmdACTION(user.getNickname(), "You are not authorized to use the \"" + module.toString() + "\" module!");
-					}
+					target = user.getNickname();
 				}
 				else
 				{
-					if(isAuthorized(module, channel, user) || bot.getConfig().getBotAdmins().contains(user.getNickname()))
-					{
-						module.processEvent(channel.getName(), message, user.getNickname(), StringUtils.parseStringtoList(message, " "));
-					}
-					else
-					{
-						bot.getIRC().cmdPRIVMSG(channel.getName(), "You are not authorized to use the \"" + module.toString() + "\" module!");
-					}
+					target = channel.getName();
+				}
+				
+				if(isAuthorized(module, channel, user))
+				{
+					module.processEvent(target, message, user.getNickname(), StringUtils.parseStringtoList(message, " "));
+				}
+				else
+				{
+					bot.getIRC().cmdPRIVMSG(target, "You are not authorized to use the \"" + module.toString() + "\" module!");
 				}
 			}
 		}
@@ -137,13 +133,17 @@ public class ModuleInterface extends EventListenerAdapter
 	
 	public boolean isAuthorized(Module module, Channel channel, User user)
 	{
-		if(module.authType == Module.AuthType.Anyone)
+		if(module.authType == Module.AuthType.Anyone || bot.getConfig().getBotAdmins().contains(user.getNickname()))
 		{
 			return true;
 		}
 		else
 		{
-			if(bot.getConfig().isOpAdmins())
+			if(channel == null)
+			{
+				return false;
+			}
+			else if(bot.getConfig().isOpAdmins())
 			{
 				return channel.checkOpStatus(user);
 			}
