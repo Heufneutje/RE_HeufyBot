@@ -99,7 +99,7 @@ public class Config
 			this.botAdmins = adminSetting.get("botAdmins");
 			
 			Map<String, Boolean> opSetting = (Map<String, Boolean>) readSettings.get(16);
-			this.autoReconnect = opSetting.get("opAdmins");
+			this.opAdmins = opSetting.get("opAdmins");
 			
 			if(autoJoinChannels == null)
 			{
