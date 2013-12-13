@@ -24,11 +24,11 @@ public class Shorten extends Module
 			String shortenedURL = URLUtils.shortenURL(params.get(1));
 			if(shortenedURL == null)
 			{
-				bot.getIRC().cmdPRIVMSG(source, "[Shorten] Error: URL could not be shortned");
+				bot.getIRC().cmdPRIVMSG(source, "Error: URL could not be shortned");
 			}
 			else
 			{
-				bot.getIRC().cmdPRIVMSG(source, "[Shorten] " + shortenedURL);
+				bot.getIRC().cmdPRIVMSG(source, shortenedURL);
 			}
 		}
 	}

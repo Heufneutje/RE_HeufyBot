@@ -76,7 +76,7 @@ public class TranslationParty extends Module
 							newText = Translate.execute(newText, Language.JAPANESE, Language.ENGLISH);
 							if(newText.equals(lastEnglishEntry))
 							{
-								bot.getIRC().cmdPRIVMSG(source, "[TranslationParty] " + newText + " | Steps: " + tries);
+								bot.getIRC().cmdPRIVMSG(source, newText + " | Steps: " + tries);
 								return;
 							}
 							else
