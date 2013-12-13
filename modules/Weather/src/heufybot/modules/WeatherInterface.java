@@ -24,12 +24,23 @@ public class WeatherInterface
 		builder.append("&format=json");
 		JSONObject object = getJSON(builder.toString());
 		
+		String parsedJSON = parseJSON(object);
+		if(parsedJSON == null)
+		{
+			return null;
+		}
 		return parseJSON(object) + " | More info: " + URLUtils.shortenURL(web + latitude + "," + longitude);
 	}
 	
 	private String parseJSON(JSONObject object)
 	{
 		JSONObject data = (JSONObject)object.get("data");
+		
+		if((JSONArray)data.get("current_condition") == null)
+		{
+			return null;
+		}
+		
 		JSONObject currentCondition = (JSONObject) ((JSONArray)data.get("current_condition")).get(0);
 
 		String tempC = currentCondition.get("temp_C").toString();

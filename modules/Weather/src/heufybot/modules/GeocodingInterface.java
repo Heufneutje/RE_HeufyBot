@@ -72,14 +72,12 @@ public class GeocodingInterface
 	private String siftForCreepy(JSONObject object)
 	{
 		JSONArray addresses = (JSONArray) object.get("address_components");
-		
 		List<String> locationInfo = new ArrayList<String>();
 		for(int i = 0; i < addresses.size(); i++)
 		{
 			JSONArray types = (JSONArray) ((JSONObject)addresses.get(i)).get("types");
-			
 			// Creepy-alarm! Go less specific!
-			if (types.contains("locality") || types.contains("administrative_area_level_1") || types.contains("country"))
+			if (types.contains("locality") || types.contains("administrative_area_level_1") || types.contains("country") || types.contains("natural_feature") || types.contains("colloquial_area"))
 			{
 				locationInfo.add(((JSONObject)addresses.get(i)).get("long_name").toString());
 			}

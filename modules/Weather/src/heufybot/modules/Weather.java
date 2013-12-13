@@ -47,7 +47,7 @@ public class Weather extends Module
 				Geolocation location = geo.getGeolocationForLatLng(latitude, longitude);
 				String weather = getWeatherFromGeolocation(location);
 				String prefix = location.success ? "Location: " + location.locality : "City: " + latitude + "," + longitude;
-
+				
 				bot.getIRC().cmdPRIVMSG(source, String.format("%s | %s", prefix, weather));
 				return;
 			} 
@@ -72,8 +72,14 @@ public class Weather extends Module
 			if (location != null)
 			{
 				String weather = getWeatherFromGeolocation(location);
-
-				bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s | %s", location.locality, weather));
+				
+				String loc = location.locality;
+				if(loc == null)
+				{
+					loc = "Unknown";
+				}
+				
+				bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s | %s", loc, weather));
 				return;
 			}
 		} 
@@ -92,6 +98,12 @@ public class Weather extends Module
 				return;
 			}
 			String weather = getWeatherFromGeolocation(location);
+			
+			if(weather == null)
+			{
+				weather = "Weather for this location could not be retrieved.";
+			}
+			
 			bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s | %s", location.locality, weather));
 			return;
 		} 
