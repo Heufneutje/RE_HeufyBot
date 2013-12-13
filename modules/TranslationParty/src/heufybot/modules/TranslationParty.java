@@ -1,6 +1,5 @@
 package heufybot.modules;
 
-import heufybot.core.HeufyBot;
 import heufybot.utils.FileUtils;
 import heufybot.utils.StringUtils;
 
@@ -52,47 +51,38 @@ public class TranslationParty extends Module
 				bot.getIRC().cmdPRIVMSG(source, "Error: No MS Azure login credentials were provided.");
 				return;
 			}
-			
-			final HeufyBot bot = this.bot;
-			Thread thread = new Thread()
+			try
 			{
-				public void run()
+				String newText = textToTranslate;
+				String lastEnglishEntry = textToTranslate;
+				for(int tries = 0; tries < 21; tries++)
 				{
-					try
+					if(newText.length() > 99)
 					{
-						String newText = textToTranslate;
-						String lastEnglishEntry = textToTranslate;
-						for(int tries = 0; tries < 21; tries++)
-						{
-							if(newText.length() > 99)
-							{
-								newText = newText.substring(0, 99);
-							}
-							newText = Translate.execute(newText, Language.ENGLISH, Language.JAPANESE);
-							if(newText.length() > 99)
-							{
-								newText = newText.substring(0, 99);
-							}
-							newText = Translate.execute(newText, Language.JAPANESE, Language.ENGLISH);
-							if(newText.equals(lastEnglishEntry))
-							{
-								bot.getIRC().cmdPRIVMSG(source, newText + " | Steps: " + tries);
-								return;
-							}
-							else
-							{
-								lastEnglishEntry = newText;
-							}
-						}
-						bot.getIRC().cmdPRIVMSG(source, newText + " | Steps: 20+");
+						newText = newText.substring(0, 99);
 					}
-					catch (Exception e)
+					newText = Translate.execute(newText, Language.ENGLISH, Language.JAPANESE);
+					if(newText.length() > 99)
 					{
-						bot.getIRC().cmdPRIVMSG(source, "Error: Text could not be translated.");
+						newText = newText.substring(0, 99);
+					}
+					newText = Translate.execute(newText, Language.JAPANESE, Language.ENGLISH);
+					if(newText.equals(lastEnglishEntry))
+					{
+						bot.getIRC().cmdPRIVMSG(source, newText + " | Steps: " + tries);
+						return;
+					}
+					else
+					{
+						lastEnglishEntry = newText;
 					}
 				}
-			};
-			thread.start();
+				bot.getIRC().cmdPRIVMSG(source, newText + " | Steps: 20+");
+			}
+			catch (Exception e)
+			{
+				bot.getIRC().cmdPRIVMSG(source, "Error: Text could not be translated.");
+			}
 		} 
 	}
 

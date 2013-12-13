@@ -83,38 +83,31 @@ public class Log extends Module
   
 	public void post(final HeufyBot bot)
 	{
-		Thread thread = new Thread(new Runnable()
+		String targetLog = source;
+		String filePath = "logs/" + bot.getIRC().getServerInfo().getNetwork() + "/" + targetLog + "/" + dateString + ".log";
+		
+		if(FileUtils.readFile(filePath) == null)
 		{
-			public void run()
+			bot.getIRC().cmdPRIVMSG(source, "[Log] I do not have that log");
+			return;
+		}
+		
+		String result = PastebinUtils.post(FileUtils.readFile(filePath), "Log for " + source + " on " + dateString, "10M");
+		if(result != null)
+		{
+			if(result.startsWith("http://pastebin.com/"))
 			{
-				String targetLog = source;
-				String filePath = "logs/" + bot.getIRC().getServerInfo().getNetwork() + "/" + targetLog + "/" + dateString + ".log";
-				
-				if(FileUtils.readFile(filePath) == null)
-				{
-					bot.getIRC().cmdPRIVMSG(source, "[Log] I do not have that log");
-					return;
-				}
-				
-				String result = PastebinUtils.post(FileUtils.readFile(filePath), "Log for " + source + " on " + dateString, "10M");
-				if(result != null)
-				{
-					if(result.startsWith("http://pastebin.com/"))
-					{
-						bot.getIRC().cmdPRIVMSG(source, "Log for " + source + " on " + dateString + " posted: " + result + " (Link expires in 10 minutes)");
-					}
-					else
-					{
-						bot.getIRC().cmdPRIVMSG(source, "Error: " + result);
-					}
-				}
-				else
-				{
-					bot.getIRC().cmdPRIVMSG(source, "Error: Log could not be posted");
-				}
+				bot.getIRC().cmdPRIVMSG(source, "Log for " + source + " on " + dateString + " posted: " + result + " (Link expires in 10 minutes)");
 			}
-		});
-		thread.start();
+			else
+			{
+				bot.getIRC().cmdPRIVMSG(source, "Error: " + result);
+			}
+		}
+		else
+		{
+			bot.getIRC().cmdPRIVMSG(source, "Error: Log could not be posted");
+		}
 	}
 
 	@Override

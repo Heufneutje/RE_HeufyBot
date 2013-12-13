@@ -95,40 +95,47 @@ public class ModuleInterface extends EventListenerAdapter
 		handleMessage(event.getUser(), event.getChannel(), event.getMessage());
 	}
 	
-	private void handleMessage(User user, Channel channel, String message)
+	private void handleMessage(final User user, final Channel channel, final String message)
 	{
-		if(ignores.contains(user.getNickname()))
+		Thread thread = new Thread()
 		{
-			return;
-		}
-		
-		Module[] listCopy = new Module[modules.size()];
-		listCopy = modules.toArray(listCopy);
-		for (int l = 0; l < listCopy.length; l++)
-		{
-			Module module = listCopy[l];
-			if(message.toLowerCase().matches(module.getTrigger()) || module.getTriggerOnEveryMessage())
+			public void run()
 			{
-				String target = "";
-				if(channel == null)
+				if(ignores.contains(user.getNickname()))
 				{
-					target = user.getNickname();
-				}
-				else
-				{
-					target = channel.getName();
+					return;
 				}
 				
-				if(isAuthorized(module, channel, user))
+				Module[] listCopy = new Module[modules.size()];
+				listCopy = modules.toArray(listCopy);
+				for (int l = 0; l < listCopy.length; l++)
 				{
-					module.processEvent(target, message, user.getNickname(), StringUtils.parseStringtoList(message, " "));
-				}
-				else
-				{
-					bot.getIRC().cmdPRIVMSG(target, "You are not authorized to use the \"" + module.toString() + "\" module!");
+					Module module = listCopy[l];
+					if(message.toLowerCase().matches(module.getTrigger()) || module.getTriggerOnEveryMessage())
+					{
+						String target = "";
+						if(channel == null)
+						{
+							target = user.getNickname();
+						}
+						else
+						{
+							target = channel.getName();
+						}
+						
+						if(isAuthorized(module, channel, user))
+						{
+							module.processEvent(target, message, user.getNickname(), StringUtils.parseStringtoList(message, " "));
+						}
+						else
+						{
+							bot.getIRC().cmdPRIVMSG(target, "You are not authorized to use the \"" + module.toString() + "\" module!");
+						}
+					}
 				}
 			}
-		}
+		};
+		thread.start();
 	}
 	
 	public boolean isAuthorized(Module module, Channel channel, User user)

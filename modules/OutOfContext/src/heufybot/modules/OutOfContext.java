@@ -28,34 +28,27 @@ public class OutOfContext extends Module
 		final HeufyBot bot = this.bot;
 		if(params.size() == 1)
 		{
-			Thread thread = new Thread(new Runnable()
+			String data = FileUtils.readFile(dataPath);
+			if(data.equals(""))
 			{
-				public void run()
+				bot.getIRC().cmdPRIVMSG(source, "No quotes to be posted.");
+			}
+			else
+			{
+				String result = PastebinUtils.post(data, "HeufyBot OutOfContext Log", "10M");
+				if(result == null)
 				{
-					String data = FileUtils.readFile(dataPath);
-					if(data.equals(""))
-					{
-						bot.getIRC().cmdPRIVMSG(source, "No quotes to be posted.");
-					}
-					else
-					{
-						String result = PastebinUtils.post(data, "HeufyBot OutOfContext Log", "10M");
-						if(result == null)
-						{
-							bot.getIRC().cmdPRIVMSG(source, "Error: OoC Log could not be posted.");
-						}
-						else if(result.startsWith("http://pastebin.com/"))
-						{
-							bot.getIRC().cmdPRIVMSG(source, "OoC Log posted: " + result  + " (Link expires in 10 minutes).");
-						}
-						else
-						{
-							bot.getIRC().cmdPRIVMSG(source, "Error: " + result + ".");
-						}
-					}
+					bot.getIRC().cmdPRIVMSG(source, "Error: OoC Log could not be posted.");
 				}
-			});
-			thread.start();
+				else if(result.startsWith("http://pastebin.com/"))
+				{
+					bot.getIRC().cmdPRIVMSG(source, "OoC Log posted: " + result  + " (Link expires in 10 minutes).");
+				}
+				else
+				{
+					bot.getIRC().cmdPRIVMSG(source, "Error: " + result + ".");
+				}
+			}
 		}
 		else
 		{
