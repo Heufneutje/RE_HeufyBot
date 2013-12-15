@@ -2,6 +2,7 @@ package heufybot.core;
 
 import heufybot.core.events.EventListenerManager;
 import heufybot.core.events.types.BotMessageEvent;
+import heufybot.utils.SSLSocketUtils;
 import heufybot.utils.enums.ConnectionState;
 import heufybot.utils.enums.PasswordType;
 
@@ -73,7 +74,16 @@ public class IRC
 			return false;
 		}
 		
-		SocketFactory sf = SocketFactory.getDefault();
+		SocketFactory sf;
+		if(config.isSSLEnabled())
+		{
+			//Trusting all certificates for now. Might make this a setting later
+			sf = new SSLSocketUtils().trustAllCertificates();
+		}
+		else
+		{
+			sf = SocketFactory.getDefault();
+		}
 		Logger.log("*** Trying to connect to " + server + "...");
 		
 		try 

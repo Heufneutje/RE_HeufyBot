@@ -18,8 +18,8 @@
 #server: Address of the server the bot is connecting to
 - server: "irc.chatspike.net"
 
-#port: The port on the server the bot is connecting to
-- port: 6667
+#port: The port on the server the bot is connecting to. Put a "+" in front of the port number for SSL
+- port: "6667"
 
 #password: Password to login with if needed
 - password: ""
