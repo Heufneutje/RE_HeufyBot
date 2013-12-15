@@ -78,7 +78,7 @@ public class WeatherInterface
 		String desc = ((JSONObject)((JSONArray)currentCondition.get("weatherDesc")).get(0)).get("value").toString();
 		String humidity = currentCondition.get("humidity").toString();
 		
-		return String.format("Temp: %s°C/%s°F | Weather: %s | Humidity: %s%c | Wind: %s kmph/%smph %s", tempC, tempF, desc, humidity, '%', windspeedKmph, windspeedMiles, windDir);
+		return String.format("Temp: %s°C/%s°F, Weather: %s, Humidity: %s%c, Wind: %s kmph/%smph %s", tempC, tempF, desc, humidity, '%', windspeedKmph, windspeedMiles, windDir);
 	}
 	
 	private String parseJSONForForecast(JSONObject object)
@@ -114,9 +114,9 @@ public class WeatherInterface
 			String maxF = day.get("tempMaxF").toString();
 			String weatherDescription = ((JSONObject)((JSONArray)day.get("weatherDesc")).get(0)).get("value").toString();
 			
-			days.add(String.format("%s ~ Low: %s°C/%s°F | High: %s°C/%s°F | Weather: %s", dayOfWeek, minC, minF, maxC, maxF, weatherDescription));
+			days.add(String.format("%s - Low: %s°C/%s°F, High: %s°C/%s°F, Weather: %s", dayOfWeek, minC, minF, maxC, maxF, weatherDescription));
 		}
-		return StringUtils.join(days, " -- ");
+		return StringUtils.join(days, " | ");
 	}
 	
 	private JSONObject getJSON(String urlString) throws ParseException 
