@@ -19,7 +19,7 @@ public class Config
 	private String nickname, username, realname, server, password, commandPrefix;
 	private int port, reconnectAttempts, reconnectInterval;
 	private PasswordType passwordType;
-	private boolean autoJoinEnabled, autoNickChange, autoReconnect, opAdmins;
+	private boolean autoJoinEnabled, sslEnabled, autoNickChange, autoReconnect, opAdmins;
 	private List<String> autoJoinChannels, modulesToLoad, botAdmins;
 	private long messageDelay;
 	private List<CapHandler> capHandlers;
@@ -62,8 +62,14 @@ public class Config
 			Map<String, String> serverSetting = (Map<String, String>) readSettings.get(3);
 			this.server = serverSetting.get("server");
 			
-			Map<String, Integer> portSetting = (Map<String, Integer>) readSettings.get(4);
-			this.port = portSetting.get("port");
+			Map<String, String> portSetting = (Map<String, String>) readSettings.get(4);
+			String stringPort = portSetting.get("port");
+			if(stringPort.startsWith("+"))
+			{
+				stringPort = stringPort.substring(1);
+				sslEnabled = true;
+			}
+			this.port = Integer.parseInt(stringPort);
 			
 			Map<String, String> passSetting = (Map<String, String>) readSettings.get(5);
 			this.password = passSetting.get("password");
@@ -181,6 +187,11 @@ public class Config
 	public int getPort()
 	{
 		return port;
+	}
+	
+	public boolean isSSLEnabled()
+	{
+		return sslEnabled;
 	}
 	
 	public PasswordType getPasswordType()
