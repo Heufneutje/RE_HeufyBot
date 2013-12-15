@@ -12,7 +12,7 @@ public class Weather extends Module
 	public Weather()
 	{
 		this.authType = Module.AuthType.Anyone;
-		this.trigger = "^" + commandPrefix + "(weather)($| .*)";
+		this.trigger = "^" + commandPrefix + "(weather|forecast)($| .*)";
 	}
 
 	@Override
@@ -22,8 +22,8 @@ public class Weather extends Module
 		{
 			bot.getIRC().cmdPRIVMSG(source, "No WorldWeatherOnline API key found");
 			return;
-		}	
-		
+		}
+
 		if (params.size() == 1)
 		{
 			if(URLUtils.grab("http://tsukiakariusagi.net/chatmaplookup.php?nick=" + triggerUser).equals(", "))
@@ -45,10 +45,19 @@ public class Weather extends Module
 			try
 			{
 				Geolocation location = geo.getGeolocationForLatLng(latitude, longitude);
-				String weather = getWeatherFromGeolocation(location);
 				String prefix = location.success ? "Location: " + location.locality : "City: " + latitude + "," + longitude;
 				
-				bot.getIRC().cmdPRIVMSG(source, String.format("%s | %s", prefix, weather));
+				if(message.matches("^" + commandPrefix + "weather.*"))
+				{
+					String weather = getWeatherFromGeolocation(location);
+					bot.getIRC().cmdPRIVMSG(source, String.format("%s | %s", prefix, weather));
+				}
+				else if(message.matches("^" + commandPrefix + "forecast.*"))
+				{
+					String forecast = getForecastFromGeolocation(location);
+					bot.getIRC().cmdPRIVMSG(source, prefix);
+					bot.getIRC().cmdPRIVMSG(source, forecast);
+				}
 				return;
 			} 
 			catch (ParseException e)
@@ -71,15 +80,32 @@ public class Weather extends Module
 			Geolocation location = geo.getGeolocationForIRCUser(params.get(0));
 			if (location != null)
 			{
-				String weather = getWeatherFromGeolocation(location);
-				
 				String loc = location.locality;
 				if(loc == null)
 				{
 					loc = "Unknown";
 				}
 				
-				bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s | %s", loc, weather));
+				if(message.matches("^" + commandPrefix + "weather.*"))
+				{
+					String weather = getWeatherFromGeolocation(location);
+					if(weather == null)
+					{
+						weather = "Weather for this location could not be retrieved.";
+					}
+					bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s | %s", loc, weather));
+				}
+				else if(message.matches("^" + commandPrefix + "forecast.*"))
+				{
+					String forecast = getForecastFromGeolocation(location);
+					if(forecast == null)
+					{
+						bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s | %s", location.locality, "Forecast for this location could not be retrieved."));
+						return;
+					}
+					bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s", loc));
+					bot.getIRC().cmdPRIVMSG(source, forecast);
+				}
 				return;
 			}
 		} 
@@ -97,15 +123,28 @@ public class Weather extends Module
 				bot.getIRC().cmdPRIVMSG(source, "I don't think that's even a location in this multiverse...");
 				return;
 			}
-			String weather = getWeatherFromGeolocation(location);
 			
-			if(weather == null)
+			if(message.matches("^" + commandPrefix + "weather.*"))
 			{
-				weather = "Weather for this location could not be retrieved.";
+				String weather = getWeatherFromGeolocation(location);
+				if(weather == null)
+				{
+					weather = "Weather for this location could not be retrieved.";
+				}
+				bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s | %s", location.locality, weather));
 			}
-			
-			bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s | %s", location.locality, weather));
-			return;
+			else if(message.matches("^" + commandPrefix + "forecast.*"))
+			{
+				String forecast = getForecastFromGeolocation(location);
+				if(forecast == null)
+				{
+					bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s | %s", location.locality, "Forecast for this location could not be retrieved."));
+					return;
+				}
+				
+				bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s", location.locality));
+				bot.getIRC().cmdPRIVMSG(source, forecast);
+			}
 		} 
 		catch (ParseException e)
 		{
@@ -119,6 +158,13 @@ public class Weather extends Module
 		WeatherInterface weatherInterface = new WeatherInterface();
 		String weather = weatherInterface.getWeather(location.latitude, location.longitude);
 		return weather;
+	}
+	
+	private String getForecastFromGeolocation(Geolocation location) throws ParseException
+	{
+		WeatherInterface weatherInterface = new WeatherInterface();
+		String forecast = weatherInterface.getForecast(location.latitude, location.longitude);
+		return forecast;
 	}
 
 	@Override
