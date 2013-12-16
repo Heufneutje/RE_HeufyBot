@@ -80,7 +80,7 @@ public class LogDB extends Module
 		String targetLog = source;
 		String filePath = "logs/" + bot.getIRC().getServerInfo().getNetwork() + "/" + targetLog + "/" + dateString + ".log";
 		
-		if(FileUtils.readFile(filePath) == null)
+		if(!FileUtils.fileExists(filePath))
 		{
 			bot.getIRC().cmdPRIVMSG(source, "[Log] I do not have that log");
 			return;

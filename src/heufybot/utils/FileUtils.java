@@ -113,4 +113,10 @@ public class FileUtils
 		File file = new File(filePath);
 		return file.delete();
 	}
+	
+	public static boolean fileExists(String filePath)
+	{
+		File file = new File(filePath);
+		return file.exists();
+	}
 }
