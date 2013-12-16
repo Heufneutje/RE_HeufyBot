@@ -125,8 +125,9 @@ public class ModuleInterface extends EventListenerAdapter
 					{
 						module.processEvent(target, message, user.getNickname(), StringUtils.parseStringtoList(message, " "));
 					}
-					else
+					else if (Thread.activeCount() < 4)
 					{
+						//Thread limit might have to become a setting in the future
 						Thread thread = new Thread()
 						{
 							public void run()
@@ -135,6 +136,10 @@ public class ModuleInterface extends EventListenerAdapter
 							}
 						};
 						thread.start();
+					}
+					else
+					{
+						bot.getIRC().cmdPRIVMSG(target, "Calm down, " + user.getNickname() + "! Can't you see I'm busy?");
 					}
 				}
 				else
