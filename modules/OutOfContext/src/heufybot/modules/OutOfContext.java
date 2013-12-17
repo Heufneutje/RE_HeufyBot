@@ -294,14 +294,18 @@ public class OutOfContext extends Module
 		}
 		else if(message.matches("ooc searchnick"))
 		{
-			return "Commands: " + commandPrefix + "ooc searchnick <nickname> | Search for a quote in the Out of Context log by providing a nickname or part of one.";
+			return "Commands: " + commandPrefix + "ooc searchnick <nickname> (<id>) | Search for a quote in the Out of Context log by providing a nickname or part of one. An ID can also be given to get a specific quote.";
 		}
 		else if(message.matches("ooc random"))
 		{
 			return "Commands: " + commandPrefix + "ooc random | Returns a random quote from the Out of Context log.";
 		}
+		else if(message.matches("ooc id"))
+		{
+			return "Commands: " + commandPrefix + "ooc id <quoteid> | Returns the quote from the Out of Context log that has the given ID.";
+		}
 		
-		return "Commands: " + commandPrefix + "ooc (add/remove/search/searchnick/random) | The log of Out of Context quotes! Without a subcommand this will post a link to the log. Type \"" + commandPrefix + "help ooc <subcommand>\" for help on a specific subcommand.";
+		return "Commands: " + commandPrefix + "ooc (add/remove/search/searchnick/random/id) | The log of Out of Context quotes! Without a subcommand this will post a link to the log. Type \"" + commandPrefix + "help ooc <subcommand>\" for help on a specific subcommand.";
 	}
 
 	public void onLoad()
