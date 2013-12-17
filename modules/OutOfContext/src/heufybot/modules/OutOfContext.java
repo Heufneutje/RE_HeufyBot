@@ -260,9 +260,13 @@ public class OutOfContext extends Module
 			{
 				return "No matches for \"" + searchString + "\" found.";
 			}
-			else if(quoteID == -1)
+			else if(quoteID < 1)
 			{
 				quoteID = (int) (Math.random() * matches.size());
+			}
+			else
+			{
+				quoteID--;
 			}
 			return "Quote #" + (quoteID + 1) + "/" + matches.size() + " - " + matches.get(quoteID);
 		}
