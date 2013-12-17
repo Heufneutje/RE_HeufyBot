@@ -193,13 +193,13 @@ public class OutOfContext extends Module
 			  	  			}
 			  	  		}
 						writeLog();
-			  	  		bot.getIRC().cmdPRIVMSG(source, "[OutOfContext] Quote '" + matches.get(0) + "' was removed from the log!");
+			  	  		bot.getIRC().cmdPRIVMSG(source, "Quote '" + matches.get(0) + "' was removed from the log!");
 					}
 				}
 			}
 			else
 			{
-				bot.getIRC().cmdPRIVMSG(source, "[OutOfContext] Invalid operation. Please try again.");
+				bot.getIRC().cmdPRIVMSG(source, "Invalid operation. Please try again.");
 			}
 		}
 	}
