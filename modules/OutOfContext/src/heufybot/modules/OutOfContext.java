@@ -199,7 +199,7 @@ public class OutOfContext extends Module
 			}
 			else
 			{
-				bot.getIRC().cmdPRIVMSG(source, "Invalid operation. Please try again.");
+				bot.getIRC().cmdPRIVMSG(source, "Invalid subcommand. Subcommands are add/remove/search/searchnick/random/id.");
 			}
 		}
 	}
