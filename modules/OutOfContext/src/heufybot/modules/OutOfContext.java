@@ -100,15 +100,16 @@ public class OutOfContext extends Module
 				    	newQuote = newQuote.replace(toQuote, toQuote.substring(1));
 				    }
 				    
-				    if(quoteLog.contains(newQuote.toLowerCase().substring(21)))
+				    for(String quote : quoteLog)
 				    {
-				    	bot.getIRC().cmdPRIVMSG(source, "This quote is already in the log.");
+				    	if(quote.substring(21).equalsIgnoreCase(newQuote.substring(21)))
+				    	{
+				    		bot.getIRC().cmdPRIVMSG(source, "This quote is already in the log.");
+				    		return;
+				    	}
 				    }
-				    else
-				    {
-					    FileUtils.writeFileAppend(dataPath, newQuote + "\n");
-						bot.getIRC().cmdPRIVMSG(source, "Quote \"" + newQuote + "\" was added to the log!");
-				    }
+				    FileUtils.writeFileAppend(dataPath, newQuote + "\n");
+				    bot.getIRC().cmdPRIVMSG(source, "Quote \"" + newQuote + "\" was added to the log!");
 			    }
 			    else
 			    {
