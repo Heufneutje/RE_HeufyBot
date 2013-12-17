@@ -195,7 +195,7 @@ public class OutOfContext extends Module
 		}
 	}
 	
-	private String search(String searchString, boolean searchInQuotes, int id)
+	private String search(String searchString, boolean searchInQuotes, int quoteID)
 	{
 		ArrayList<String> matches = new ArrayList<String>();
 		
@@ -252,13 +252,11 @@ public class OutOfContext extends Module
 			{
 				return "No matches for \"" + searchString + "\" found.";
 			}
-			else
+			else if(quoteID == -1)
 			{
-				int quoteID = (int) (Math.random() * matches.size());
-				
-				
-				return "Quote #" + (quoteID + 1) + "/" + matches.size() + " - " + matches.get(quoteID);
+				quoteID = (int) (Math.random() * matches.size());
 			}
+			return "Quote #" + (quoteID + 1) + "/" + matches.size() + " - " + matches.get(quoteID);
 		}
 	}
 	
