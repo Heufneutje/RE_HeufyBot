@@ -50,10 +50,10 @@ public class InputParser
 		else if(command.startsWith("ERROR"))
 		{
 			//Connection closed by server
-			String errorMessage = parsedLine.get(0).substring(parsedLine.get(0).indexOf(")") + 3, parsedLine.get(0).length() - 1).toLowerCase();
+			String errorMessage = parsedLine.get(0).toLowerCase();
 			irc.getEventListenerManager().dispatchEvent(new ErrorEvent(parsedLine.get(0)));
 			
-			if(errorMessage.startsWith("killed") || errorMessage.contains("lined") || errorMessage.startsWith("quit"))
+			if(errorMessage.contains("[killed:") || errorMessage.contains("lined") || errorMessage.contains("[quit:"))
 			{
 				irc.disconnect(false);
 			}
