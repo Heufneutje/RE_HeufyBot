@@ -108,6 +108,7 @@ public class OutOfContext extends Module
 				    		return;
 				    	}
 				    }
+				    quoteLog.add(newQuote);
 				    FileUtils.writeFileAppend(dataPath, newQuote + "\n");
 				    bot.getIRC().cmdPRIVMSG(source, "Quote \"" + newQuote + "\" was added to the log!");
 			    }
