@@ -2,6 +2,7 @@ package heufybot.modules;
 
 import heufybot.core.HeufyBot;
 import heufybot.utils.FileUtils;
+import heufybot.utils.ParsingUtils;
 import heufybot.utils.PastebinUtils;
 import heufybot.utils.StringUtils;
 
@@ -16,6 +17,7 @@ import java.util.regex.Pattern;
 public class OutOfContext extends Module
 {
 	private String dataPath = "data/ooclog.txt";
+	private List<String> quoteLog;
 	
 	public OutOfContext()
 	{
@@ -110,43 +112,57 @@ public class OutOfContext extends Module
 			{
 				if(params.size() == 0)
 				{
-					bot.getIRC().cmdPRIVMSG(source, search(triggerUser, false));
+					bot.getIRC().cmdPRIVMSG(source, search(triggerUser, false, -1));
+				}
+				else if(params.size() > 1)
+				{
+					bot.getIRC().cmdPRIVMSG(source, search(params.get(0), false, ParsingUtils.tryParseInt(params.get(1))));
 				}
 				else
 				{
-					bot.getIRC().cmdPRIVMSG(source, search(params.get(0), false));
+					bot.getIRC().cmdPRIVMSG(source, search(params.get(0), false, -1));
 				}
 			}
 			else if(subCommand.equals("search"))
 			{
-				bot.getIRC().cmdPRIVMSG(source, search(StringUtils.join(params, " "), true));
+				bot.getIRC().cmdPRIVMSG(source, search(StringUtils.join(params, " "), true, -1));
 			}
 			else if(subCommand.equals("random"))
 			{
-				bot.getIRC().cmdPRIVMSG(source, search(".*", true));
+				bot.getIRC().cmdPRIVMSG(source, search(".*", true, -1));
+			}
+			else if(subCommand.equals("id"))
+			{
+				if(params.size() == 0)
+				{
+					bot.getIRC().cmdPRIVMSG(source, "You didn't give a quote ID.");
+				}
+				else if(ParsingUtils.tryParseInt(params.get(0)) == -1)
+				{
+					bot.getIRC().cmdPRIVMSG(source, "That is not a valid quote ID.");
+				}
+				else
+				{
+					bot.getIRC().cmdPRIVMSG(source, search(".*", true, ParsingUtils.tryParseInt(params.get(0))));
+				}
 			}
 			else if(subCommand.equals("remove"))
 			{
 				String search = StringUtils.join(params, " ");
-				
-				String quoteFile = FileUtils.readFile(dataPath);
-				String[] quotes = quoteFile.split("\n");
-				ArrayList<String> quoteList = new ArrayList<String>();
 				ArrayList<String> matches = new ArrayList<String>();
 				Pattern pattern = Pattern.compile(".*" + search + ".*", Pattern.CASE_INSENSITIVE);
 				
-				if(quotes[0].length() < 21)
+				if(quoteLog.get(0).length() < 21)
 				{
 					bot.getIRC().cmdPRIVMSG(source, "No quotes in the log.");
 				}
 				else
 				{
-					for(int i = 0; i < quotes.length; i++)
+					for(String quote : quoteLog)
 					{
-						quoteList.add(quotes[i]);
-						if(pattern.matcher(quotes[i].substring(21)).matches())
+						if(pattern.matcher(quote).matches())
 						{
-							matches.add(quotes[i]);
+							matches.add(quote);
 						}
 					}
 					if(matches.size() == 0)
@@ -159,7 +175,7 @@ public class OutOfContext extends Module
 					}
 					else
 					{
-						for(Iterator<String> iter = quoteList.iterator(); iter.hasNext();)
+						for(Iterator<String> iter = quoteLog.iterator(); iter.hasNext();)
 			  	  		{
 			  	  			String quote = iter.next();
 			  	  			if(quote.equalsIgnoreCase(matches.get(0)))
@@ -167,12 +183,7 @@ public class OutOfContext extends Module
 			  	  				iter.remove();
 			  	  			}
 			  	  		}
-						FileUtils.deleteFile(dataPath);
-		  	  			FileUtils.touchFile(dataPath);
-			  	  		for(String quote : quoteList)
-			  	  		{
-			  	  			FileUtils.writeFileAppend(dataPath, quote + "\n");
-			  	  		}
+						writeLog();
 			  	  		bot.getIRC().cmdPRIVMSG(source, "[OutOfContext] Quote '" + matches.get(0) + "' was removed from the log!");
 					}
 				}
@@ -184,15 +195,13 @@ public class OutOfContext extends Module
 		}
 	}
 	
-	private String search(String searchString, boolean searchInQuotes)
+	private String search(String searchString, boolean searchInQuotes, int id)
 	{
-		String quoteFile = FileUtils.readFile(dataPath);
-		String[] quotes = quoteFile.split("\n");
 		ArrayList<String> matches = new ArrayList<String>();
 		
 		Pattern pattern = Pattern.compile(".*" + searchString + ".*", Pattern.CASE_INSENSITIVE);
 		
-		if(quotes[0].length() < 21)
+		if(quoteLog.get(0).length() < 21)
 		{
 			return "No quotes in the log.";
 		}
@@ -200,40 +209,40 @@ public class OutOfContext extends Module
 		{
 			if(searchInQuotes) //Search for a word or words in the quotes themselves
 			{
-				for(int i = 0; i < quotes.length; i++)
+				for(String quote : quoteLog)
 				{
-					if(quotes[i].indexOf("<") == 21)
+					if(quote.indexOf("<") == 21)
 					{
-						if(pattern.matcher(quotes[i].substring(quotes[i].indexOf(">") + 1)).matches())
+						if(pattern.matcher(quote.substring(quote.indexOf(">") + 1)).matches())
 						{
-							matches.add(quotes[i]);
+							matches.add(quote);
 						}
 					}
 					else
 					{
-						if(pattern.matcher(quotes[i].substring(21)).matches())
+						if(pattern.matcher(quote.substring(21)).matches())
 						{
-							matches.add(quotes[i]);
+							matches.add(quote);
 						}
 					}
 				}
 			}
 			else //search for nicknames
 			{
-				for(int i = 0; i < quotes.length; i++)
+				for(String quote : quoteLog)
 				{
-					if(quotes[i].substring(21).matches("^<.*>.*"))
+					if(quote.substring(21).matches("^<.*>.*"))
 					{
-						if(pattern.matcher(quotes[i].substring(quotes[i].indexOf("<") + 1, quotes[i].indexOf(">"))).matches())
+						if(pattern.matcher(quote.substring(quote.indexOf("<") + 1, quote.indexOf(">"))).matches())
 						{
-							matches.add(quotes[i]);
+							matches.add(quote);
 						}
 					}
-					else if(quotes[i].substring(21).matches("^\\* .*"))
+					else if(quote.substring(21).matches("^\\* .*"))
 					{
-						if(pattern.matcher(quotes[i].substring(quotes[i].indexOf("* ") + 2).split(" ")[0]).matches())
+						if(pattern.matcher(quote.substring(quote.indexOf("* ") + 2).split(" ")[0]).matches())
 						{
-							matches.add(quotes[i]);
+							matches.add(quote);
 						}
 					}
 				}
@@ -251,6 +260,11 @@ public class OutOfContext extends Module
 				return "Quote #" + (quoteID + 1) + "/" + matches.size() + " - " + matches.get(quoteID);
 			}
 		}
+	}
+	
+	private void writeLog()
+	{
+		FileUtils.writeFile(dataPath, StringUtils.join(quoteLog, "\n"));
 	}
 	
 	public String getHelp(String message)
@@ -282,9 +296,11 @@ public class OutOfContext extends Module
 	public void onLoad()
 	{
 		FileUtils.touchFile(dataPath);
+		quoteLog = StringUtils.parseStringtoList(FileUtils.readFile(dataPath), "\n");
 	}
 
 	public void onUnload() 
 	{
+		writeLog();
 	}
 }
