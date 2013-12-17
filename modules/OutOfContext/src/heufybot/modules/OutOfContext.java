@@ -100,8 +100,15 @@ public class OutOfContext extends Module
 				    	newQuote = newQuote.replace(toQuote, toQuote.substring(1));
 				    }
 				    
-				    FileUtils.writeFileAppend(dataPath, newQuote + "\n");
-					bot.getIRC().cmdPRIVMSG(source, "Quote \"" + newQuote + "\" was added to the log!");
+				    if(quoteLog.contains(newQuote.toLowerCase().substring(21)))
+				    {
+				    	bot.getIRC().cmdPRIVMSG(source, "This quote is already in the log.");
+				    }
+				    else
+				    {
+					    FileUtils.writeFileAppend(dataPath, newQuote + "\n");
+						bot.getIRC().cmdPRIVMSG(source, "Quote \"" + newQuote + "\" was added to the log!");
+				    }
 			    }
 			    else
 			    {
@@ -160,7 +167,7 @@ public class OutOfContext extends Module
 				{
 					for(String quote : quoteLog)
 					{
-						if(pattern.matcher(quote).matches())
+						if(pattern.matcher(quote.substring(21)).matches())
 						{
 							matches.add(quote);
 						}
@@ -262,7 +269,7 @@ public class OutOfContext extends Module
 	
 	private void writeLog()
 	{
-		FileUtils.writeFile(dataPath, StringUtils.join(quoteLog, "\n"));
+		FileUtils.writeFile(dataPath, StringUtils.join(quoteLog, "\n") + "\n");
 	}
 	
 	public String getHelp(String message)
