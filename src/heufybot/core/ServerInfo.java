@@ -1,6 +1,7 @@
 package heufybot.core;
 
-import java.util.ArrayList;
+import heufybot.utils.StringUtils;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -11,7 +12,7 @@ public class ServerInfo
 	private String motd, network, chantypes;
 	private LinkedHashMap<String, String> userPrefixes;
 	private LinkedHashMap<String, String> reverseUserPrefixes;
-	private List<String> channelListModes, channelSetArgsModes, channelSetUnsetArgsModes, channelNoArgsModes;
+	private List<String> channelListModes, channelSetArgsModes, channelSetUnsetArgsModes, channelNoArgsModes, userModes;
 	
 	private static final ServerInfo instance = new ServerInfo();
 	
@@ -30,17 +31,21 @@ public class ServerInfo
 		this.userPrefixes = new LinkedHashMap<String, String>();
 		this.reverseUserPrefixes = new LinkedHashMap<String, String>();
 		
-		//Initialize user prefixes with default values (@ for op (o) and + for voice (v))
+		//Initialize user prefixes with default values (@ for op (o) and + for voice (v)), as documented in RFC1459
 		userPrefixes.put("o", "@");
 		userPrefixes.put("v", "+");
 		
 		reverseUserPrefixes.put("@", "o");
 		reverseUserPrefixes.put("+", "v");	
 		
-		this.channelListModes = new ArrayList<String>();
-		this.channelSetArgsModes = new ArrayList<String>();
-		this.channelSetUnsetArgsModes = new ArrayList<String>();
-		this.channelNoArgsModes = new ArrayList<String>();
+		//Initialize channel modes with the default set documented in RFC1459
+		this.channelListModes = StringUtils.parseStringtoList("b", ",");
+		this.channelSetArgsModes = StringUtils.parseStringtoList("l", ",");
+		this.channelSetUnsetArgsModes = StringUtils.parseStringtoList("k", ",");
+		this.channelNoArgsModes = StringUtils.parseStringtoList("p,s,i,t,n,m", ",");
+		
+		//Initialize user modes with the default set documented in RFC1459
+		this.userModes = StringUtils.parseStringtoList("i,s,w,o", ",");
 		
 		this.chantypes = "#";
 		this.network = "Unknown Network";
@@ -109,6 +114,11 @@ public class ServerInfo
 	public List<String> getChannelNoArgsModes()
 	{
 		return channelNoArgsModes;
+	}
+	
+	public List<String> getUserModes()
+	{
+		return userModes;
 	}
 
 	public String getChantypes() 
