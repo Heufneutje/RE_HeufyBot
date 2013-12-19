@@ -691,7 +691,8 @@ public class InputParser
 	{
 		if(source.equals(target))
 		{
-			//This is a user mode. Not important for now.
+			//This is a user mode.
+			irc.parseUserModesChange(mode);
 			return;
 		}
 		else

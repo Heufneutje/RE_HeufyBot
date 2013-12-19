@@ -460,8 +460,35 @@ public class IRC
 		return userModes;
 	}
 
-	public void parseUserModesChange(List<String> userModes)
+	public void parseUserModesChange(String modeChange)
 	{
-		this.userModes = userModes;
+		boolean adding = true;
+		for (char curChar : modeChange.toCharArray())
+		{
+			if (curChar == '-')
+			{
+				adding = false;
+			}
+			else if (curChar == '+')
+			{
+				adding = true;
+			}
+			else if (adding)
+			{
+				String current = Character.toString(curChar);
+				if(!userModes.contains(current))
+				{
+					userModes.add(current);
+				}
+			}
+			else
+			{
+				String current = Character.toString(curChar);
+				if(userModes.contains(current))
+				{
+					userModes.remove(current);
+				}
+			}
+		}
 	}
 }
