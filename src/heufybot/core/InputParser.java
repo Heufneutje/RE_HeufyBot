@@ -228,6 +228,7 @@ public class InputParser
 					catch(CAPException e)
 					{
 						finishedHandlers.add(currentCapHandler);
+						Logger.error("CAP Enabling", e.getMessage());
 					}
 				}
 			}
@@ -245,9 +246,16 @@ public class InputParser
 			{
 				for(CapHandler currentCapHandler : irc.getConfig().getCapHandlers())
 				{
-					if(currentCapHandler.handleNAK(irc, capParams))
+					try
 					{
-						finishedHandlers.add(currentCapHandler);
+						if(currentCapHandler.handleNAK(irc, capParams))
+						{
+							finishedHandlers.add(currentCapHandler);
+						}
+					}
+					catch(CAPException e)
+					{
+						Logger.error("CAP Enabling", e.getMessage());
 					}
 				}
 			}

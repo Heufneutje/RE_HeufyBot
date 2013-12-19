@@ -2,9 +2,8 @@ package heufybot.core.cap;
 
 import heufybot.core.IRC;
 import heufybot.core.Logger;
-import heufybot.utils.StringUtils;
-
-import java.util.Arrays;
+import heufybot.utils.Base64;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public class SASLCapHandler implements CapHandler
@@ -49,8 +48,8 @@ public class SASLCapHandler implements CapHandler
 	{
 		if(capabilities.contains("sasl"))
 		{
-			capabilities.remove("sasl");
-			return true;
+			irc.getConfig().getCapHandlers().remove("sasl");
+			throw new CAPException(CAPException.Reason.UnsupportedCapability, "sasl");
 		}
 		return false;
 	}
@@ -58,7 +57,41 @@ public class SASLCapHandler implements CapHandler
 	@Override
 	public boolean handleUnknown(IRC irc, String line) throws CAPException 
 	{
-		// TODO Auto-generated method stub
+		if(line.equals("AUTHENTICATE +"))
+		{
+			try 
+			{
+				String encodedAuth = Base64.encodeToString((username + '\u0000' + username + '\u0000' + password).getBytes("UTF-8"), false);
+				irc.sendRawNow("AUTHENTICATE " + encodedAuth);
+				Logger.log("*** Attempting SASL authentication...");
+			}
+			catch (UnsupportedEncodingException e) 
+			{
+				Logger.error("SASL Authentication", "SASL authentication failed");
+				return true;
+			}
+		}
+			
+		String[] parsedLine = line.split(" ", 4);
+		if(parsedLine.length > 0)
+		{
+			String code = parsedLine[1];
+			if(code.equals("904") || code.equals("905"))
+			{
+				irc.getEnabledCapabilities().remove("sasl");
+				Logger.error("SASL Authentication", "SASL authentication failed with message: " + parsedLine[3].substring(1));
+				return true;
+			}
+			else if(code.equals("900"))
+			{
+				Logger.log(parsedLine[3]);
+			}
+			else if(code.equals("903"))
+			{
+				Logger.log("*** " + parsedLine[3].substring(1));
+				return true;
+			}
+		}
 		return false;
 	}
 

@@ -27,7 +27,6 @@ public class EnablingCapHandler implements CapHandler
 		}
 		else
 		{
-			Logger.error("CAP Enabling", cap + " is not supported by the server");
 			throw new CAPException(CAPException.Reason.UnsupportedCapability, cap);
 		}
 		return false;
@@ -44,8 +43,8 @@ public class EnablingCapHandler implements CapHandler
 	{
 		if(capabilities.contains(cap))
 		{
-			capabilities.remove(cap);
-			return true;
+			irc.getEnabledCapabilities().remove(cap);
+			throw new CAPException(CAPException.Reason.UnsupportedCapability, cap);
 		}
 		return false;
 	}

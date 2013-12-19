@@ -24,7 +24,7 @@
 #password: Password to login with if needed
 - password: ""
 
-#password type: The kind of password we're using. Possible values are None, ServerPass or NickServPass
+#password type: The kind of password we're using. Possible values are None, ServerPass, NickServPass or SASL
 - passwordType: None 
 
 #autoJoinEnabled: Whether or not the bot should join any channels after connecting

@@ -10,8 +10,7 @@ import java.util.Map;
 
 import org.yaml.snakeyaml.Yaml;
 
-import heufybot.core.cap.CapHandler;
-import heufybot.core.cap.EnablingCapHandler;
+import heufybot.core.cap.*;
 import heufybot.utils.enums.PasswordType;
 
 public class Config 
@@ -132,6 +131,11 @@ public class Config
 			if(realname.equals(""))
 			{
 				realname = "Unknown";
+			}
+			
+			if(passwordType == PasswordType.SASL)
+			{
+				this.capHandlers.add(new SASLCapHandler(username, password));
 			}
 			
 			Logger.log("*** Loaded settings successfully");
