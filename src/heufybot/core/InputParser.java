@@ -3,8 +3,6 @@ package heufybot.core;
 import heufybot.core.cap.CAPException;
 import heufybot.core.cap.CapHandler;
 import heufybot.core.events.types.*;
-import heufybot.utils.MessageUtils;
-import heufybot.utils.ParsingUtils;
 import heufybot.utils.StringUtils;
 import heufybot.utils.enums.ConnectionState;
 import heufybot.utils.enums.PasswordType;
@@ -31,7 +29,7 @@ public class InputParser
 	
 	public void parseLine(String line)
 	{
-		List<String> parsedLine = MessageUtils.tokenizeLine(line);
+		List<String> parsedLine = StringUtils.tokenizeLine(line);
 		
 		String senderInfo = "";
 		if (parsedLine.get(0).charAt(0) == ':')
@@ -89,7 +87,7 @@ public class InputParser
 			else
 			{
 				//This is probably a server response
-				int code = ParsingUtils.tryParseInt(command);
+				int code = StringUtils.tryParseInt(command);
 				if(code != -1)
 				{
 					if(irc.getConnectionState() != ConnectionState.Connected)
@@ -278,8 +276,8 @@ public class InputParser
 			{
 				String prefixes = rawResponse.split("PREFIX=")[1];
 				prefixes = prefixes.substring(0, prefixes.indexOf(" "));
-				irc.getServerInfo().setUserPrefixes(MessageUtils.getUserPrefixes(prefixes));
-				irc.getServerInfo().setReverseUserPrefixes(MessageUtils.getReverseUserPrefixes(prefixes));
+				irc.getServerInfo().setUserPrefixes(StringUtils.getUserPrefixes(prefixes));
+				irc.getServerInfo().setReverseUserPrefixes(StringUtils.getReverseUserPrefixes(prefixes));
 			}
 			if(rawResponse.contains("CHANTYPES="))
 			{
@@ -359,7 +357,7 @@ public class InputParser
 		{
 			//329 RPL_CREATIONTIME
 			Channel channel = irc.getChannel(parsedLine.get(1));
-			irc.getEventListenerManager().dispatchEvent(new ServerResponseChannelEvent(channel, "Channel was created on " + new Date(ParsingUtils.tryParseLong(parsedLine.get(2)) * 1000)));
+			irc.getEventListenerManager().dispatchEvent(new ServerResponseChannelEvent(channel, "Channel was created on " + new Date(StringUtils.tryParseLong(parsedLine.get(2)) * 1000)));
 		}
 		else if(code.equals("332"))
 		{
@@ -374,7 +372,7 @@ public class InputParser
 			Channel channel = irc.getChannel(parsedLine.get(1));
 			channel.setTopicSetter(parsedLine.get(2));
 			
-			long topicTimestamp = ParsingUtils.tryParseLong(parsedLine.get(3));
+			long topicTimestamp = StringUtils.tryParseLong(parsedLine.get(3));
 			
 			channel.setTopicSetTimestamp(topicTimestamp);
 			irc.getEventListenerManager().dispatchEvent(new ServerResponseChannelEvent(channel, "Set by " + parsedLine.get(2) + " on " + new Date(topicTimestamp * 1000)));
@@ -416,7 +414,7 @@ public class InputParser
 			}
 			
 			String rawEnd = parsedLine.get(7);
-			user.setHops(ParsingUtils.tryParseInt(rawEnd.substring(0, rawEnd.indexOf(" "))));
+			user.setHops(StringUtils.tryParseInt(rawEnd.substring(0, rawEnd.indexOf(" "))));
 			user.setRealname(rawEnd.substring(rawEnd.indexOf(" ") + 1));
 		}
 		else if(code.equals("353"))

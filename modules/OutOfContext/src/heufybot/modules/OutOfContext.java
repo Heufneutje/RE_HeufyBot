@@ -2,7 +2,6 @@ package heufybot.modules;
 
 import heufybot.core.HeufyBot;
 import heufybot.utils.FileUtils;
-import heufybot.utils.ParsingUtils;
 import heufybot.utils.PastebinUtils;
 import heufybot.utils.StringUtils;
 
@@ -125,7 +124,7 @@ public class OutOfContext extends Module
 				}
 				else if(params.size() > 1)
 				{
-					bot.getIRC().cmdPRIVMSG(source, search(params.get(0), false, ParsingUtils.tryParseInt(params.get(1))));
+					bot.getIRC().cmdPRIVMSG(source, search(params.get(0), false, StringUtils.tryParseInt(params.get(1))));
 				}
 				else
 				{
@@ -146,13 +145,13 @@ public class OutOfContext extends Module
 				{
 					bot.getIRC().cmdPRIVMSG(source, "You didn't give a quote ID.");
 				}
-				else if(ParsingUtils.tryParseInt(params.get(0)) == -1)
+				else if(StringUtils.tryParseInt(params.get(0)) == -1)
 				{
 					bot.getIRC().cmdPRIVMSG(source, "That is not a valid quote ID.");
 				}
 				else
 				{
-					bot.getIRC().cmdPRIVMSG(source, search(".*", true, ParsingUtils.tryParseInt(params.get(0))));
+					bot.getIRC().cmdPRIVMSG(source, search(".*", true, StringUtils.tryParseInt(params.get(0))));
 				}
 			}
 			else if(subCommand.equals("remove"))

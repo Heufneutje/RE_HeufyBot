@@ -1,7 +1,6 @@
 package heufybot.modules;
 
 import heufybot.core.Logger;
-import heufybot.utils.ParsingUtils;
 import heufybot.utils.StringUtils;
 import heufybot.utils.URLUtils;
 
@@ -42,7 +41,7 @@ public class YouTube extends Module
 				JSONObject data = (JSONObject) getJSON(urlString).get("feed");
 				
 				JSONObject jTotalResults = (JSONObject) data.get("openSearch$totalResults");
-				int totalResults = ParsingUtils.tryParseInt(jTotalResults.get("$t").toString());
+				int totalResults = StringUtils.tryParseInt(jTotalResults.get("$t").toString());
 				
 				if(totalResults == 0)
 				{
