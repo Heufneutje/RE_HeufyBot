@@ -49,4 +49,10 @@ public class EnablingCapHandler implements CapHandler
 		}
 		return false;
 	}
+
+	@Override
+	public boolean handleUnknown(IRC irc, String line) throws CAPException 
+	{
+		return false;
+	}
 }
