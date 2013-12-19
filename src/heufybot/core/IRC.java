@@ -57,6 +57,7 @@ public class IRC
 		this.serverInfo = ServerInfo.getInstance();
 		this.enabledCapabilities = new ArrayList<String>();
 		this.eventListenerManager = new EventListenerManager();
+		this.userModes = new ArrayList<String>();
 		
 		this.nickname = "";
 	}
@@ -139,6 +140,7 @@ public class IRC
 		{
 			serverInfo.clear();
 			enabledCapabilities.clear();
+			userModes.clear();
 			this.inputThread.interrupt();
 			this.inputReader.close();
 			this.outputWriter.flush();
