@@ -720,11 +720,11 @@ public class InputParser
 						//This mode needs an argument to be set. Handle it in the channel.
 						if(modeOperator == '+')
 						{
-							channel.getModesWithArgs().put(Character.toString(atPosition), params.get(paramNumber));
+							channel.getModes().put(Character.toString(atPosition), params.get(paramNumber));
 						}
 						else
 						{
-							channel.getModesWithArgs().remove(Character.toString(atPosition));
+							channel.getModes().remove(Character.toString(atPosition));
 						}
 						paramNumber++;
 					}
@@ -733,11 +733,11 @@ public class InputParser
 						//This mode needs an argument to be set AND to be unset. Handle it in the channel.
 						if(modeOperator == '+')
 						{
-							channel.getModesWithArgs().put(Character.toString(atPosition), params.get(paramNumber));
+							channel.getModes().put(Character.toString(atPosition), params.get(paramNumber));
 						}
 						else
 						{
-							channel.getModesWithArgs().remove(Character.toString(atPosition));
+							channel.getModes().remove(Character.toString(atPosition));
 						}
 						paramNumber++;
 					}

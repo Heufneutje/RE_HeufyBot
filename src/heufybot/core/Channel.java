@@ -6,31 +6,24 @@ import java.util.Set;
 public class Channel
 {
 	private String name;
-	private String modes;
 	private HashMap<User, String> usersInChannel;
 	private String topic;
 	private String topicSetter;
 	private long topicSetTimestamp;
-	private HashMap<String, String> modesWithArgs;
+	private HashMap<String, String> modes;
 	
 	public Channel(String name)
 	{
 		this.name = name;
-		this.modes = "";
 		this.usersInChannel = new HashMap<User, String>();
 		this.topic = "";
 		this.topicSetter = "";
-		this.modesWithArgs = new HashMap<String, String>();
+		this.modes = new HashMap<String, String>();
 	}
 	
 	public String getName()
 	{
 		return name;
-	}
-	
-	public String getModes()
-	{
-		return modes;
 	}
 	
 	public void parseModeChange(String modeChange)
@@ -48,15 +41,19 @@ public class Channel
 			}
 			else if (adding)
 			{
-				if(!modes.contains(Character.toString(curChar)))
+				String current = Character.toString(curChar);
+				if(!modes.containsKey(current))
 				{
-					modes += curChar;
+					modes.put(current, "");
 				}
 			}
 			else
 			{
-				String parsedString = Character.toString(curChar);
-				modes = modes.replace(parsedString, "");
+				String current = Character.toString(curChar);
+				if(modes.containsKey(current))
+				{
+					modes.remove(current);
+				}
 			}
 		}
 	}
@@ -156,9 +153,9 @@ public class Channel
 		this.topicSetTimestamp = topicSetTimestamp;
 	}
 
-	public HashMap<String, String> getModesWithArgs() 
+	public HashMap<String, String> getModes() 
 	{
-		return modesWithArgs;
+		return modes;
 	}
 	
 	public boolean checkOpStatus(User user)
