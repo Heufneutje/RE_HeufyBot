@@ -37,6 +37,7 @@ public class IRC
 	private ConnectionState connectionState;
 	private ArrayList<Channel> channels;
 	private ServerInfo serverInfo;
+	private List<String> userModes;
 	private List<String> enabledCapabilities;
 	private EventListenerManager eventListenerManager;
 	
@@ -452,5 +453,15 @@ public class IRC
 	public EventListenerManager getEventListenerManager() 
 	{
 		return eventListenerManager;
+	}
+
+	public List<String> getUserModes() 
+	{
+		return userModes;
+	}
+
+	public void parseUserModesChange(List<String> userModes)
+	{
+		this.userModes = userModes;
 	}
 }

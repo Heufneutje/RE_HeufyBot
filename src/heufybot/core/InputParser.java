@@ -265,7 +265,16 @@ public class InputParser
 		else if(code.equals("004"))
 		{
 			//004 RPL_MYINFO
-			//Server information. Might do something with this later.
+			String[] parts = rawResponse.split(" ");
+			irc.getServerInfo().setServer(parts[0]);
+			irc.getServerInfo().setServerVersion(parts[1]);
+			
+			irc.getServerInfo().getUserModes().clear();
+			for(int i = 0; i < parts[2].length(); i++)
+			{
+				irc.getServerInfo().getUserModes().add(Character.toString(parts[2].charAt(i)));
+			}
+			
 			irc.getEventListenerManager().dispatchEvent(new ServerResponseEvent(rawResponse.split(irc.getNickname() + " ")[1]));
 		}
 		else if (code.equals("005"))
@@ -290,6 +299,11 @@ public class InputParser
 				String rawChanmodes = rawResponse.split("CHANMODES=")[1];
 				rawChanmodes = rawChanmodes.substring(0, rawChanmodes.indexOf(" "));
 				String[] chanmodes = rawChanmodes.split(",");
+				
+				irc.getServerInfo().getChannelListModes().clear();
+				irc.getServerInfo().getChannelNoArgsModes().clear();
+				irc.getServerInfo().getChannelSetArgsModes().clear();
+				irc.getServerInfo().getChannelSetUnsetArgsModes().clear();
 				
 				for(int i = 0; i < chanmodes[0].length(); i++)
 				{

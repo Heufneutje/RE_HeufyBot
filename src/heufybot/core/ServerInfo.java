@@ -7,9 +7,7 @@ import java.util.List;
 
 public class ServerInfo 
 {
-	//TODO Add more server info
-	
-	private String motd, network, chantypes;
+	private String server, serverVersion, motd, network, chantypes;
 	private LinkedHashMap<String, String> userPrefixes;
 	private LinkedHashMap<String, String> reverseUserPrefixes;
 	private List<String> channelListModes, channelSetArgsModes, channelSetUnsetArgsModes, channelNoArgsModes, userModes;
@@ -129,5 +127,25 @@ public class ServerInfo
 	public void setChantypes(String chantypes) 
 	{
 		this.chantypes = chantypes;
+	}
+
+	public String getServer() 
+	{
+		return server;
+	}
+
+	public void setServer(String server) 
+	{
+		this.server = server;
+	}
+
+	public String getServerVersion() 
+	{
+		return serverVersion;
+	}
+
+	public void setServerVersion(String serverVersion) 
+	{
+		this.serverVersion = serverVersion;
 	}
 }
