@@ -274,6 +274,11 @@ public class InputParser
 				irc.getServerInfo().getUserModes().add(Character.toString(parsedLine.get(3).charAt(i)));
 			}
 			
+			if(irc.getServerInfo().getUserModes().contains("B"))
+			{
+				irc.cmdMODE(irc.getNickname(), "+B");
+			}
+			
 			irc.getEventListenerManager().dispatchEvent(new ServerResponseEvent(rawResponse.split(irc.getNickname() + " ")[1]));
 		}
 		else if (code.equals("005"))
