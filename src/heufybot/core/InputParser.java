@@ -265,14 +265,13 @@ public class InputParser
 		else if(code.equals("004"))
 		{
 			//004 RPL_MYINFO
-			String[] parts = rawResponse.split(" ");
-			irc.getServerInfo().setServer(parts[0]);
-			irc.getServerInfo().setServerVersion(parts[1]);
+			irc.getServerInfo().setServer(parsedLine.get(1));
+			irc.getServerInfo().setServerVersion(parsedLine.get(2));
 			
 			irc.getServerInfo().getUserModes().clear();
-			for(int i = 0; i < parts[2].length(); i++)
+			for(int i = 0; i < parsedLine.get(3).length(); i++)
 			{
-				irc.getServerInfo().getUserModes().add(Character.toString(parts[2].charAt(i)));
+				irc.getServerInfo().getUserModes().add(Character.toString(parsedLine.get(3).charAt(i)));
 			}
 			
 			irc.getEventListenerManager().dispatchEvent(new ServerResponseEvent(rawResponse.split(irc.getNickname() + " ")[1]));
