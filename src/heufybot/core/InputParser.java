@@ -109,7 +109,17 @@ public class InputParser
 		}
 		else
 		{
-			//No idea what this is
+			//No idea what this is, pass it to the CAP handlers
+			if(irc.getConnectionState() != ConnectionState.Connected)
+			{
+				for(CapHandler currentHandler : irc.getConfig().getCapHandlers())
+				{
+					if(currentHandler.handleUnknown(irc, line))
+					{
+						finishedHandlers.add(currentHandler);
+					}
+				}
+			}
 			return;
 		}
 		
@@ -241,10 +251,26 @@ public class InputParser
 					}
 				}
 			}
+			else
+			{
+				for(CapHandler currentHandler : irc.getConfig().getCapHandlers())
+				{
+					if(currentHandler.handleUnknown(irc, line))
+					{
+						finishedHandlers.add(currentHandler);
+					}
+				}
+			}
 		}
 		else
 		{
-			Logger.log(line);
+			for(CapHandler currentHandler : irc.getConfig().getCapHandlers())
+			{
+				if(currentHandler.handleUnknown(irc, line))
+				{
+					finishedHandlers.add(currentHandler);
+				}
+			}
 		}
 		
 		if(!capEndSent && finishedHandlers.containsAll(irc.getConfig().getCapHandlers()))

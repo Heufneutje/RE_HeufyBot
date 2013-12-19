@@ -37,14 +37,21 @@ public class SASLCapHandler implements CapHandler
 	@Override
 	public boolean handleACK(IRC irc, List<String> capabilities) throws CAPException 
 	{
-		// TODO Auto-generated method stub
+		if(capabilities.contains("sasl"))
+		{
+			irc.sendRawNow("AUTHENTICATE PLAIN");
+		}
 		return false;
 	}
 
 	@Override
 	public boolean handleNAK(IRC irc, List<String> capabilities)throws CAPException 
 	{
-		// TODO Auto-generated method stub
+		if(capabilities.contains("sasl"))
+		{
+			capabilities.remove("sasl");
+			return true;
+		}
 		return false;
 	}
 
