@@ -660,6 +660,13 @@ public class InputParser
 			{
 				mode = mode.substring(1);
 			}
+			
+			if(sourceNick.equals(target))
+			{
+				List<String> modeToParse = StringUtils.parseStringtoList(mode, " ");
+				mode = modeToParse.get(modeToParse.size() - 1);
+			}
+			
 			irc.getEventListenerManager().dispatchEvent(new ModeEvent(sourceNick, channel, mode));
 			handleMode(sourceNick, target, mode);
 		}
