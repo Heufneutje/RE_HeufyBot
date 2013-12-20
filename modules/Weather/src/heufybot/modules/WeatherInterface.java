@@ -114,7 +114,7 @@ public class WeatherInterface
 			String maxF = day.get("tempMaxF").toString();
 			String weatherDescription = ((JSONObject)((JSONArray)day.get("weatherDesc")).get(0)).get("value").toString();
 			
-			days.add(String.format("%s - %s: %s°C, %s - %s°F, %s", dayOfWeek, minC, maxC, minF, maxF, weatherDescription));
+			days.add(String.format("%s: %s - %s°C, %s - %s°F, %s", dayOfWeek, minC, maxC, minF, maxF, weatherDescription));
 		}
 		return StringUtils.join(days, " || ");
 	}
