@@ -55,8 +55,7 @@ public class Weather extends Module
 				else if(message.matches("^" + commandPrefix + "forecast.*"))
 				{
 					String forecast = getForecastFromGeolocation(location);
-					bot.getIRC().cmdPRIVMSG(source, prefix);
-					bot.getIRC().cmdPRIVMSG(source, forecast);
+					bot.getIRC().cmdPRIVMSG(source, String.format("%s | %s", prefix, forecast));
 				}
 				return;
 			} 
@@ -103,8 +102,7 @@ public class Weather extends Module
 						bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s | %s", location.locality, "Forecast for this location could not be retrieved."));
 						return;
 					}
-					bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s", loc));
-					bot.getIRC().cmdPRIVMSG(source, forecast);
+					bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s", loc + " | " + forecast));
 				}
 				return;
 			}
@@ -142,8 +140,7 @@ public class Weather extends Module
 					return;
 				}
 				
-				bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s", location.locality));
-				bot.getIRC().cmdPRIVMSG(source, forecast);
+				bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s", location.locality + " | " + forecast));
 			}
 		} 
 		catch (ParseException e)
