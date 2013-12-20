@@ -25,10 +25,8 @@ Optional modules:
 - Shorten
 - Source
 - Tell
-- Time [DesertBus]
 - Translate
 - TranslationParty
-- Weather [DesertBus]
 - YouTube
 
 Detials about how to write your own module can be found here: https://github.com/Heufneutje/RE_HeufyBot/blob/master/src/heufybot/modules/Module.java
