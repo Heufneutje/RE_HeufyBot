@@ -173,6 +173,18 @@ public class ModuleInterface extends EventListenerAdapter
 		}
 	}
 	
+	public boolean isModuleLoaded(String moduleName)
+	{
+		for(Module module : modules)
+		{
+			if(module.toString().equalsIgnoreCase(moduleName))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public String getModuleHelp(String message)
 	{
 		for(Module module : modules)

@@ -1,7 +1,6 @@
 package heufybot.modules;
 
 import heufybot.utils.FileUtils;
-import heufybot.utils.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,15 +9,12 @@ import org.json.simple.parser.ParseException;
 
 public class Weather extends Module 
 {
-	private HashMap<String, String> userLocations;
 	private final String locationsPath = "data/userlocations.txt";
 	
 	public Weather()
 	{
 		this.authType = Module.AuthType.Anyone;
-		this.trigger = "^" + commandPrefix + "(weather|forecast|registerloc)($| .*)";
-		
-		this.userLocations = new HashMap<String, String>();
+		this.trigger = "^" + commandPrefix + "(weather|forecast)($| .*)";
 	}
 
 	@Override
@@ -29,45 +25,19 @@ public class Weather extends Module
 			bot.getIRC().cmdPRIVMSG(source, "No WorldWeatherOnline API key found");
 			return;
 		}
-		
-		if(message.matches("^" + commandPrefix + "registerloc.*"))
-		{
-			if(params.size() == 1)
-			{
-				bot.getIRC().cmdPRIVMSG(source, "You didn't give a location to register.");
-				return;
-			}
-			else
-			{
-				params.remove(0);
-				String location = StringUtils.join(params, " ").replaceAll("=", "");
-				boolean alreadyRegistered = false;
-				
-				if(userLocations.containsKey(triggerUser))
-				{
-					alreadyRegistered = true;
-				}
-				
-				userLocations.put(triggerUser, location);
-				writeLocations();
-				
-				if(alreadyRegistered)
-				{
-					bot.getIRC().cmdPRIVMSG(source, "Your location has been updated.");
-				}
-				else
-				{
-					bot.getIRC().cmdPRIVMSG(source, "Your location is now registered.");
-				}
-				return;
-			}
-		}
 
 		if (params.size() == 1)
 		{
-			if(!userLocations.containsKey(triggerUser))
+			if(!readLocations().containsKey(triggerUser.toLowerCase()))
 			{
-				bot.getIRC().cmdPRIVMSG(source, "You are not registered. Use \"" + commandPrefix + "registerloc <location>\" to register your location.");
+				if(bot.getModuleInterface().isModuleLoaded("UserLocation"))
+				{
+					bot.getIRC().cmdPRIVMSG(source, "You are not registered. Use \"" + commandPrefix + "registerloc <location>\" to register your location.");
+				}
+				else
+				{
+					bot.getIRC().cmdPRIVMSG(source, "You are not registered. The module \"UserLocation\" is required for registration, but is currently not loaded.");
+				}
 				return;
 			}
 			params.add(triggerUser);
@@ -115,7 +85,16 @@ public class Weather extends Module
 
 		try
 		{
-			Geolocation location = geo.getGeolocationForPlace(userLocations.get(params.get(0)));
+			Geolocation location = null;
+			if(readLocations().containsKey(params.get(0).toLowerCase()))
+			{
+				location = geo.getGeolocationForPlace(readLocations().get(params.get(0).toLowerCase()));
+			}
+			else
+			{
+				location = geo.getGeolocationForPlace(message.substring(message.indexOf(' ') + 1));
+			}
+			
 			if (location != null)
 			{
 				String loc = location.locality;
@@ -151,42 +130,6 @@ public class Weather extends Module
 			bot.getIRC().cmdPRIVMSG(source, "I don't think that's even a user in this multiverse...");
 			return;
 		}
-
-		try
-		{
-			Geolocation location = geo.getGeolocationForPlace(message.substring(message.indexOf(' ') + 1));
-			if (!location.success)
-			{
-				bot.getIRC().cmdPRIVMSG(source, "I don't think that's even a location in this multiverse...");
-				return;
-			}
-			
-			if(message.matches("^" + commandPrefix + "weather.*"))
-			{
-				String weather = getWeatherFromGeolocation(location);
-				if(weather == null)
-				{
-					weather = "Weather for this location could not be retrieved.";
-				}
-				bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s | %s", location.locality, weather));
-			}
-			else if(message.matches("^" + commandPrefix + "forecast.*"))
-			{
-				String forecast = getForecastFromGeolocation(location);
-				if(forecast == null)
-				{
-					bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s | %s", location.locality, "Forecast for this location could not be retrieved."));
-					return;
-				}
-				
-				bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s", location.locality + " | " + forecast));
-			}
-		} 
-		catch (ParseException e)
-		{
-			bot.getIRC().cmdPRIVMSG(source, "I don't think that's even a location in this multiverse...");
-			return;
-		}
 	}
 
 	private String getWeatherFromGeolocation(Geolocation location) throws ParseException
@@ -203,19 +146,10 @@ public class Weather extends Module
 		return forecast;
 	}
 	
-	private void writeLocations()
-	{
-		String result = "";
-		for(String user : userLocations.keySet())
-		{
-			result += user + "=" + userLocations.get(user);
-		}
-		FileUtils.writeFile(locationsPath, result);
-	}
-	
-	private void readLocations()
+	private HashMap<String, String> readLocations()
 	{
 		String[] locationArray = FileUtils.readFile(locationsPath).split("\n");
+		HashMap<String, String> userLocations = new HashMap<String, String>();
 		if(locationArray[0].length() > 0)
 		{
 			for(int i = 0; i < locationArray.length; i++)
@@ -224,20 +158,13 @@ public class Weather extends Module
 				userLocations.put(location[0], location[1]);
 			}
 		}
+		return userLocations;
 	}
 
 	@Override
 	public String getHelp(String message) 
 	{
-		if(message.matches("forecast"))
-		{
-			return "Commands: " + commandPrefix + "forecast (<place>/<latitude longitude>/<ircuser>) | Makes the bot get the forecast for a location or IRC user. Without a parameter it will look up the forecast at your location, as long as it's registered. Type \"" + commandPrefix + "help registerloc\" for more information.";
-		}
-		else if(message.matches("registerloc"))
-		{
-			return "Commands: " + commandPrefix + "registerloc <location> | Registers your current nickname at the given location.";
-		}
-		return "Commands: " + commandPrefix + "weather (<place>/<latitude longitude>/<ircuser>), " + commandPrefix + "forecast (<place>/<latitude longitude>/<ircuser>), " + commandPrefix + "registerloc <location> | Makes the bot get the current weather conditions at the location specified or at the location of the ircuser.";
+		return "Commands: " + commandPrefix + "weather (<place>/<latitude longitude>/<ircuser>), " + commandPrefix + "forecast (<place>/<latitude longitude>/<ircuser>) | Makes the bot get the current weather conditions at the location specified or at the location of the ircuser.";
 	}
 
 	@Override
@@ -252,6 +179,5 @@ public class Weather extends Module
 	@Override
 	public void onUnload() 
 	{
-		writeLocations();
 	}
 }

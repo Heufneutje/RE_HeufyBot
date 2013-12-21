@@ -30,7 +30,6 @@ public class WeatherInterface
 		builder.append("&key=" + APIkey);
 		builder.append("&format=json");
 		JSONObject object = getJSON(builder.toString());
-		System.out.println(builder.toString());
 		
 		String parsedJSON = parseJSONForWeather(object);
 		if(parsedJSON == null)

@@ -1,7 +1,7 @@
 package heufybot.modules;
 
 import heufybot.utils.FileUtils;
-import heufybot.utils.StringUtils;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -9,15 +9,12 @@ import org.json.simple.parser.ParseException;
 
 public class Time extends Module 
 {
-	private HashMap<String, String> userLocations;
 	private final String locationsPath = "data/userlocations.txt";
 	
 	public Time()
 	{
 		this.authType = Module.AuthType.Anyone;
-		this.trigger = "^" + commandPrefix + "(time|registerloc)($| .*)";
-		
-		this.userLocations = new HashMap<String, String>();
+		this.trigger = "^" + commandPrefix + "(time)($| .*)";
 	}
 
 	@Override
@@ -29,44 +26,18 @@ public class Time extends Module
 			return;
 		}
 		
-		if(message.matches("^" + commandPrefix + "registerloc.*"))
+		if (params.size() == 1)
 		{
-			if(params.size() == 1)
+			if(!readLocations().containsKey(triggerUser.toLowerCase()))
 			{
-				bot.getIRC().cmdPRIVMSG(source, "You didn't give a location to register.");
-				return;
-			}
-			else
-			{
-				params.remove(0);
-				String location = StringUtils.join(params, " ").replaceAll("=", "");
-				boolean alreadyRegistered = false;
-				
-				if(userLocations.containsKey(triggerUser))
+				if(bot.getModuleInterface().isModuleLoaded("UserLocation"))
 				{
-					alreadyRegistered = true;
-				}
-				
-				userLocations.put(triggerUser, location);
-				writeLocations();
-				
-				if(alreadyRegistered)
-				{
-					bot.getIRC().cmdPRIVMSG(source, "Your location has been updated.");
+					bot.getIRC().cmdPRIVMSG(source, "You are not registered. Use \"" + commandPrefix + "registerloc <location>\" to register your location.");
 				}
 				else
 				{
-					bot.getIRC().cmdPRIVMSG(source, "Your location is now registered.");
+					bot.getIRC().cmdPRIVMSG(source, "You are not registered. The module \"UserLocation\" is required for registration, but is currently not loaded.");
 				}
-				return;
-			}
-		}
-		
-		if (params.size() == 1)
-		{
-			if(!userLocations.containsKey(triggerUser))
-			{
-				bot.getIRC().cmdPRIVMSG(source, "You are not registered. Use \"" + commandPrefix + "registerloc <location>\" to register your location.");
 				return;
 			}
 			params.add(triggerUser);
@@ -106,7 +77,16 @@ public class Time extends Module
 
 		try
 		{
-			Geolocation location = geo.getGeolocationForPlace(userLocations.get(params.get(0)));
+			Geolocation location = null;
+			if(readLocations().containsKey(params.get(0).toLowerCase()))
+			{
+				location = geo.getGeolocationForPlace(readLocations().get(params.get(0).toLowerCase()));
+			}
+			else
+			{
+				location = geo.getGeolocationForPlace(message.substring(message.indexOf(' ') + 1));
+			}
+			
 			if (location != null)
 			{
 				String weather = getTimeFromGeolocation(location);
@@ -120,24 +100,6 @@ public class Time extends Module
 			bot.getIRC().cmdPRIVMSG(source, "I don't think that's even a user in this multiverse...");
 			return;
 		}
-
-		try
-		{
-			Geolocation location = geo.getGeolocationForPlace(message.substring(message.indexOf(' ') + 1));
-			if (!location.success)
-			{
-				bot.getIRC().cmdPRIVMSG(source, "I don't think that's even a location in this multiverse...");
-				return;
-			}
-			String weather = getTimeFromGeolocation(location);
-			bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s | %s", location.locality, weather));
-			return;
-		} 
-		catch (ParseException e)
-		{
-			bot.getIRC().cmdPRIVMSG(source, "I don't think that's even a location in this multiverse...");
-			return;
-		}
 	}
 
 	private String getTimeFromGeolocation(Geolocation location) throws ParseException
@@ -147,19 +109,10 @@ public class Time extends Module
 		return weather;
 	}
 	
-	private void writeLocations()
-	{
-		String result = "";
-		for(String user : userLocations.keySet())
-		{
-			result += user + "=" + userLocations.get(user);
-		}
-		FileUtils.writeFile(locationsPath, result);
-	}
-	
-	private void readLocations()
+	private HashMap<String, String> readLocations()
 	{
 		String[] locationArray = FileUtils.readFile(locationsPath).split("\n");
+		HashMap<String, String> userLocations = new HashMap<String, String>();
 		if(locationArray[0].length() > 0)
 		{
 			for(int i = 0; i < locationArray.length; i++)
@@ -168,12 +121,13 @@ public class Time extends Module
 				userLocations.put(location[0], location[1]);
 			}
 		}
+		return userLocations;
 	}
 
 	@Override
 	public String getHelp(String message) 
 	{
-		return "Commands: " + commandPrefix + "time <place>/<latitude longitude>/<ircuser> | Makes the bot get the current time at the location specified or at the location of the ircuser.";
+		return "Commands: " + commandPrefix + "time (<place>/<latitude longitude>/<ircuser>) | Makes the bot get the current time at the location specified or at the location of the ircuser.";
 	}
 
 	@Override
@@ -188,6 +142,5 @@ public class Time extends Module
 	@Override
 	public void onUnload() 
 	{
-		writeLocations();
 	}
 }
