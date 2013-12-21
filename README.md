@@ -25,8 +25,11 @@ Optional modules:
 - Shorten
 - Source
 - Tell
+- Time
 - Translate
 - TranslationParty
+- UserLocation
+- Weather
 - YouTube
 
 Detials about how to write your own module can be found here: https://github.com/Heufneutje/RE_HeufyBot/blob/master/src/heufybot/modules/Module.java
