@@ -229,7 +229,19 @@ public class Weather extends Module
 	@Override
 	public String getHelp(String message) 
 	{
-		return "Commands: " + commandPrefix + "weather <place>/<latitude longitude>/<ircuser>, " + commandPrefix + "forecast <place>/<latitude longitude>/<ircuser> | Makes the bot get the current weather conditions at the location specified or at the location of the ircuser.";
+		if(message.matches("weather"))
+		{
+			return "Commands: " + commandPrefix + "weather (<place>/<latitude longitude>/<ircuser>) | Makes the bot get the current weather for a location or IRC user. Without a parameter it will look up the weather at your location, as long as it's registered. Type \"" + commandPrefix + "help registerloc\" for more information.";
+		}
+		else if(message.matches("forecast"))
+		{
+			return "Commands: " + commandPrefix + "forecast (<place>/<latitude longitude>/<ircuser>) | Makes the bot get the forecast for a location or IRC user. Without a parameter it will look up the forecast at your location, as long as it's registered. Type \"" + commandPrefix + "help registerloc\" for more information.";
+		}
+		else if(message.matches("registerloc"))
+		{
+			return "Commands: " + commandPrefix + "registerloc <location> | Registers your current nickname at the given location.";
+		}
+		return "Commands: " + commandPrefix + "weather (<place>/<latitude longitude>/<ircuser>), " + commandPrefix + "forecast (<place>/<latitude longitude>/<ircuser>), " + commandPrefix + "registerloc <location> | Makes the bot get the current weather conditions at the location specified or at the location of the ircuser.";
 	}
 
 	@Override
