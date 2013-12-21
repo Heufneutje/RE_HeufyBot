@@ -112,7 +112,7 @@ public class TimeDB extends Module
 	@Override
 	public String getHelp(String message) 
 	{
-		return "Commands: " + commandPrefix + "time <place>/<latitude longitude>/<ircuser> | Makes the bot get the current time at the location specified or at the location of the ircuser.";
+		return "Commands: " + commandPrefix + "time (<place>/<latitude longitude>/<ircuser>) | Makes the bot get the current time at the location specified or at the location of the ircuser.";
 	}
 
 	@Override
