@@ -116,7 +116,7 @@ public class WeatherInterface
 			
 			days.add(String.format("%s: %s - %s°C, %s - %s°F, %s", dayOfWeek, minC, maxC, minF, maxF, weatherDescription));
 		}
-		return StringUtils.join(days, " || ");
+		return StringUtils.join(days, " | ");
 	}
 	
 	private JSONObject getJSON(String urlString) throws ParseException 
