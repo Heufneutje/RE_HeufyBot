@@ -1,18 +1,23 @@
 package heufybot.modules;
 
 import heufybot.utils.FileUtils;
-import heufybot.utils.URLUtils;
-
+import heufybot.utils.StringUtils;
+import java.util.HashMap;
 import java.util.List;
 
 import org.json.simple.parser.ParseException;
 
 public class Time extends Module 
 {
+	private HashMap<String, String> userLocations;
+	private final String locationsPath = "data/userlocations.txt";
+	
 	public Time()
 	{
 		this.authType = Module.AuthType.Anyone;
-		this.trigger = "^" + commandPrefix + "(time)($| .*)";
+		this.trigger = "^" + commandPrefix + "(time|registerloc)($| .*)";
+		
+		this.userLocations = new HashMap<String, String>();
 	}
 
 	@Override
@@ -22,15 +27,48 @@ public class Time extends Module
 		{
 			bot.getIRC().cmdPRIVMSG(source, "No WorldWeatherOnline API key found");
 			return;
-		}	
+		}
+		
+		if(message.matches("^" + commandPrefix + "registerloc.*"))
+		{
+			if(params.size() == 1)
+			{
+				bot.getIRC().cmdPRIVMSG(source, "You didn't give a location to register.");
+				return;
+			}
+			else
+			{
+				params.remove(0);
+				String location = StringUtils.join(params, " ").replaceAll("=", "");
+				boolean alreadyRegistered = false;
+				
+				if(userLocations.containsKey(triggerUser))
+				{
+					alreadyRegistered = true;
+				}
+				
+				userLocations.put(triggerUser, location);
+				writeLocations();
+				
+				if(alreadyRegistered)
+				{
+					bot.getIRC().cmdPRIVMSG(source, "Your location has been updated.");
+				}
+				else
+				{
+					bot.getIRC().cmdPRIVMSG(source, "Your location is now registered.");
+				}
+				return;
+			}
+		}
 		
 		if (params.size() == 1)
 		{
-			if(URLUtils.grab("http://tsukiakariusagi.net/chatmaplookup.php?nick=" + triggerUser).equals(", "))
+			if(!userLocations.containsKey(triggerUser))
 			{
-				bot.getIRC().cmdPRIVMSG(source, "You are not registered on the chatmap.");
+				bot.getIRC().cmdPRIVMSG(source, "You are not registered. Use \"" + commandPrefix + "registerloc <location>\" to register your location.");
 				return;
-			}			
+			}
 			params.add(triggerUser);
 		}
 
@@ -68,7 +106,7 @@ public class Time extends Module
 
 		try
 		{
-			Geolocation location = geo.getGeolocationForIRCUser(params.get(0));
+			Geolocation location = geo.getGeolocationForPlace(userLocations.get(params.get(0)));
 			if (location != null)
 			{
 				String weather = getTimeFromGeolocation(location);
@@ -108,6 +146,29 @@ public class Time extends Module
 		String weather = weatherInterface.getTime(location.latitude, location.longitude);
 		return weather;
 	}
+	
+	private void writeLocations()
+	{
+		String result = "";
+		for(String user : userLocations.keySet())
+		{
+			result += user + "=" + userLocations.get(user);
+		}
+		FileUtils.writeFile(locationsPath, result);
+	}
+	
+	private void readLocations()
+	{
+		String[] locationArray = FileUtils.readFile(locationsPath).split("\n");
+		if(locationArray[0].length() > 0)
+		{
+			for(int i = 0; i < locationArray.length; i++)
+			{
+				String[] location = locationArray[i].split("=");
+				userLocations.put(location[0], location[1]);
+			}
+		}
+	}
 
 	@Override
 	public String getHelp(String message) 
@@ -119,10 +180,14 @@ public class Time extends Module
 	public void onLoad() 
 	{
 		FileUtils.touchFile("data/worldweatheronlineapikey.txt");
+		FileUtils.touchFile(locationsPath);
+		
+		readLocations();
 	}
 
 	@Override
 	public void onUnload() 
 	{
+		writeLocations();
 	}
 }

@@ -69,7 +69,7 @@ public class Weather extends Module
 			{
 				bot.getIRC().cmdPRIVMSG(source, "You are not registered. Use \"" + commandPrefix + "registerloc <location>\" to register your location.");
 				return;
-			}			
+			}
 			params.add(triggerUser);
 		}
 
