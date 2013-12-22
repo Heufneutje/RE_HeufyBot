@@ -8,6 +8,16 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 
 public class URLUtils
 {
@@ -109,6 +119,48 @@ public class URLUtils
 		catch(Exception e)
 		{
 			Logger.error("URL Utilities", "Couldn't shorten URL \"" + urlstring + "\"");
+			return null;
+		}
+	}
+	
+	public static HashMap<String, String> grabRSSFeed(String url)
+	{
+		try
+		{
+			HashMap<String, String> elements = new HashMap<String, String>();
+			
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			Document doc = dBuilder.parse(url);
+			doc.getDocumentElement().normalize();
+	
+			XPathFactory factory = XPathFactory.newInstance();
+			XPath xpath = factory.newXPath();
+			XPathExpression expr = xpath.compile("//rss/channel/item/title/text()");
+			
+			Object result = expr.evaluate(doc, XPathConstants.NODESET);
+			NodeList nodes = (NodeList) result;
+			
+			String[] titles = new String[nodes.getLength()];
+			
+			for (int i = 0; i < nodes.getLength(); i++) 
+			{
+			    titles[i] = nodes.item(i).getNodeValue();
+			}
+			
+			expr = xpath.compile("//rss/channel/item/link/text()");
+			result = expr.evaluate(doc, XPathConstants.NODESET);
+			nodes = (NodeList) result;
+
+			for (int i = 0; i < nodes.getLength(); i++) 
+			{
+				elements.put(titles[i], nodes.item(i).getNodeValue());
+			}
+			return elements;
+		}
+		catch(Exception e)
+		{
+			Logger.error("URL Utilities", "Couldn't grab RSS feed at " + url);
 			return null;
 		}
 	}
