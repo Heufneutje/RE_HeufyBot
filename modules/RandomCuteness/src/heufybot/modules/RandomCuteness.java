@@ -2,8 +2,12 @@ package heufybot.modules;
 
 import heufybot.utils.URLUtils;
 
-import java.util.HashMap;
 import java.util.List;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 public class RandomCuteness extends Module
 {
@@ -16,24 +20,37 @@ public class RandomCuteness extends Module
 	@Override
 	public void processEvent(String source, String message, String triggerUser, List<String> params) 
 	{
-		try
+		try 
 		{
-			HashMap<String, String> feedElements = URLUtils.grabRSSFeed("http://imgur.com/r/aww/rss");
-			String[] titles = new String[feedElements.keySet().size()];
-			titles = feedElements.keySet().toArray(titles);
+			int pageNumber = (int) (Math.random() * 100 + 1);
+			JSONArray dataArray = (JSONArray) (getJSON("https://api.imgur.com/3/gallery/r/aww/time/all/" + pageNumber)).get("data");
+			JSONObject object = (JSONObject) dataArray.get((int) (Math.random() * dataArray.size()));
 			
-			int id = (int) (Math.random() * titles.length);
-			bot.getIRC().cmdPRIVMSG(source, titles[id] + " | " + feedElements.get(titles[id]));
-		}
-		catch(Exception e)
+			String title = object.get("title").toString();
+			String url = object.get("link").toString();
+			
+			if(url.equals(""))
+			{
+				bot.getIRC().cmdPRIVMSG(source, "Something went wrong while trying to get an image. Most likely the Imgur API is down.");
+				return;
+			}
+			
+			bot.getIRC().cmdPRIVMSG(source, title + " | " + url);
+		} 
+		catch (ParseException e) 
 		{
-			bot.getIRC().cmdPRIVMSG(source, "Something went wrong while trying to read the RSS feed.");
+			bot.getIRC().cmdPRIVMSG(source, "Something went wrong while trying to read the data.");
 		}
+	}
+	
+	private JSONObject getJSON(String urlString) throws ParseException 
+	{
+		return (JSONObject)new JSONParser().parse(URLUtils.grab(urlString));
 	}
 
 	public String getHelp(String message)
 	{
-		return "Commands: " + commandPrefix + "aww | Returns random cuteness from the imgur /r/aww RSS feed.";
+		return "Commands: " + commandPrefix + "aww | Returns random cuteness from the /r/aww subreddit.";
 	}
 
 	@Override
