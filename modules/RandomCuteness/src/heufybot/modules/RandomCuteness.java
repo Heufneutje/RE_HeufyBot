@@ -1,7 +1,9 @@
 package heufybot.modules;
 
+import heufybot.utils.FileUtils;
 import heufybot.utils.URLUtils;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.json.simple.JSONArray;
@@ -11,6 +13,8 @@ import org.json.simple.parser.ParseException;
 
 public class RandomCuteness extends Module
 {
+	private final String clientIDPath = "data/imgurclientid.txt";
+	
 	public RandomCuteness()
 	{
 		this.authType = Module.AuthType.Anyone;
@@ -22,6 +26,12 @@ public class RandomCuteness extends Module
 	{
 		try 
 		{
+			if(FileUtils.readFile(clientIDPath).equals(""))
+			{
+				bot.getIRC().cmdPRIVMSG(source, "No Imgur client ID found.");
+				return;
+			}
+			
 			int pageNumber = (int) (Math.random() * 100 + 1);
 			JSONArray dataArray = (JSONArray) (getJSON("https://api.imgur.com/3/gallery/r/aww/time/all/" + pageNumber)).get("data");
 			JSONObject object = (JSONObject) dataArray.get((int) (Math.random() * dataArray.size()));
@@ -45,7 +55,9 @@ public class RandomCuteness extends Module
 	
 	private JSONObject getJSON(String urlString) throws ParseException 
 	{
-		return (JSONObject)new JSONParser().parse(URLUtils.grab(urlString));
+		HashMap<String, String> headers = new HashMap<String, String>();
+		headers.put("Authorization", "Client-ID " + FileUtils.readFile(clientIDPath).replaceAll("\n", ""));
+		return (JSONObject)new JSONParser().parse(URLUtils.grab(urlString, headers));
 	}
 
 	public String getHelp(String message)
@@ -56,6 +68,7 @@ public class RandomCuteness extends Module
 	@Override
 	public void onLoad() 
 	{
+		FileUtils.touchFile(clientIDPath);
 	}
 
 	@Override
