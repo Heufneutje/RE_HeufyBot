@@ -21,18 +21,23 @@ import org.w3c.dom.NodeList;
 
 public class URLUtils
 {
-	public static String grab(String urlString)
+	public static String grab(String urlString, HashMap<String, String> headers)
 	{
 		try
 		{
 			URL url = new URL(urlString);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			
 			connection.setRequestProperty("User-Agent", "Mozilla/5.0");
-			BufferedReader bufReader;
+			for(String requestHeader : headers.keySet())
+			{
+				connection.setRequestProperty(requestHeader, headers.get(requestHeader));
+			}
+						
+			BufferedReader bufReader = new BufferedReader( new InputStreamReader(connection.getInputStream()));
 			String line;
 			String data = "";
-		    bufReader = new BufferedReader( new InputStreamReader(connection.getInputStream()));
-		    
+			
 		    while( (line = bufReader.readLine()) != null)
 		    {
 		    	data += line + " ";
@@ -45,6 +50,11 @@ public class URLUtils
 			Logger.error("URL Utilities", "Couldn't grab URL \"" + urlString + "\"");
 			return null;
 		}
+	}
+	
+	public static String grab(String urlString)
+	{
+		return grab(urlString, new HashMap<String, String>());
 	}
 	
 	public static String getFullHostname(String urlString)
