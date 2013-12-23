@@ -43,7 +43,7 @@ public class URLFollow extends Module
 				String fullHostname = URLUtils.getFullHostname(urlstring);
 				if(fullHostname != null)
 				{
-					if(fullHostname.contains("http://www.youtube.com/watch"))
+					if(fullHostname.contains("youtube.com/watch"))
 					{
 						String videoID = "";
 						if(fullHostname.contains("&"))
