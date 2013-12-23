@@ -1,5 +1,7 @@
 package heufybot.modules;
 
+import heufybot.utils.StringUtils;
+
 import java.util.List;
 
 public class Part extends Module
@@ -19,13 +21,15 @@ public class Part extends Module
 		}
 		else
 		{
-			if(params.size() > 2)
+			params.remove(0);
+			if(params.size() > 1)
 			{
-				bot.getIRC().cmdPART(params.get(1), params.get(2));
+				String channel = params.remove(0);
+				bot.getIRC().cmdPART(channel, StringUtils.join(params, " "));
 			}
 			else
 			{
-				bot.getIRC().cmdPART(params.get(1), "");
+				bot.getIRC().cmdPART(params.get(0), "");
 			}
 		}
 	}
