@@ -39,32 +39,26 @@ public class URLFollow extends Module
 		for(String urlstring : urls)
 		{	
 			String fullHostname = URLUtils.getFullHostname(urlstring);
-			if(!urlstring.toLowerCase().matches(".*(jpe?g|gif|png|bmp)"))
+			if(urlstring.toLowerCase().contains("imgur.com"))
+			{
+				
+			}
+			else if(!urlstring.toLowerCase().matches(".*(jpe?g|gif|png|bmp)"))
 			{
 				if(fullHostname != null)
 				{
-					if(fullHostname.contains("youtube.com/watch"))
+					Pattern p = Pattern.compile("youtube.com/watch\\?v=([a-zA-Z0-9_]*)");
+					Matcher m = p.matcher(fullHostname);
+					
+					if(m.find())
 					{
-						String videoID = fullHostname.split("watch\\?v=")[1];
-						if(videoID.contains("&"))
-						{
-							videoID = videoID.substring(0, videoID.indexOf("&"));
-						}
-						if(videoID.contains("#"))
-						{
-							videoID = videoID.substring(0, videoID.indexOf("#"));
-						}
-						bot.getIRC().cmdPRIVMSG(source, followYouTubeURL(videoID));
+						bot.getIRC().cmdPRIVMSG(source, followYouTubeURL(m.group(1)));
 					}
 					else
 					{
 						bot.getIRC().cmdPRIVMSG(source, followNormalURL(urlstring));
 					}
 				}
-			}
-			else
-			{
-				//Pattern pattern = Pattern.compile(".*" + searchString + ".*", Pattern.CASE_INSENSITIVE);
 			}
 		}
 	}
@@ -81,7 +75,7 @@ public class URLFollow extends Module
 
 		Pattern p = Pattern.compile("<title>(.*?)</title>");
 		Matcher m = p.matcher(data);
-		if (m.find() == true)
+		if (m.find())
 		{
 			return "Title: " + m.group(1) + " || At host: " + URLUtils.getHost(urlString);
 		}
