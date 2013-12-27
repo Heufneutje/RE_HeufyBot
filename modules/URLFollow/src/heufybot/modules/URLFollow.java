@@ -37,22 +37,22 @@ public class URLFollow extends Module
 		}
 	  
 		for(String urlstring : urls)
-		{		    
+		{	
+			String fullHostname = URLUtils.getFullHostname(urlstring);
 			if(!urlstring.toLowerCase().matches(".*(jpe?g|gif|png|bmp)"))
 			{
-				String fullHostname = URLUtils.getFullHostname(urlstring);
 				if(fullHostname != null)
 				{
 					if(fullHostname.contains("youtube.com/watch"))
 					{
-						String videoID = "";
-						if(fullHostname.contains("&"))
+						String videoID = fullHostname.split("watch\\?v=")[1];
+						if(videoID.contains("&"))
 						{
-							videoID = fullHostname.split("watch\\?v=")[1].substring(0, fullHostname.split("watch\\?v=")[1].indexOf("&"));
+							videoID = videoID.substring(0, videoID.indexOf("&"));
 						}
-						else
+						if(videoID.contains("#"))
 						{
-							videoID = fullHostname.split("watch\\?v=")[1];
+							videoID = videoID.substring(0, videoID.indexOf("#"));
 						}
 						bot.getIRC().cmdPRIVMSG(source, followYouTubeURL(videoID));
 					}
@@ -61,6 +61,10 @@ public class URLFollow extends Module
 						bot.getIRC().cmdPRIVMSG(source, followNormalURL(urlstring));
 					}
 				}
+			}
+			else
+			{
+				//Pattern pattern = Pattern.compile(".*" + searchString + ".*", Pattern.CASE_INSENSITIVE);
 			}
 		}
 	}
@@ -71,7 +75,7 @@ public class URLFollow extends Module
 		return "Commands: None | Looks up and posts the title of a URL when posted.";
 	}
 	
-	public String followNormalURL(String urlString)
+	private String followNormalURL(String urlString)
 	{
 		String data = URLUtils.grab(urlString);
 
@@ -84,7 +88,7 @@ public class URLFollow extends Module
 		return "No title found || At host: " + URLUtils.getHost(urlString);
 	}
 	
-	public String followYouTubeURL(String videoID)
+	private String followYouTubeURL(String videoID)
 	{
 		String urlString = "https://gdata.youtube.com/feeds/api/videos/" + videoID + "?v=2&alt=json";
 		try
