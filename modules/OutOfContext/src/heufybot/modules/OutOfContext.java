@@ -264,7 +264,7 @@ public class OutOfContext extends Module
 			{
 				quoteID = -1;
 			}
-			else if(quoteID < 1)
+			if(quoteID < 1)
 			{
 				quoteID = (int) (Math.random() * matches.size());
 			}
