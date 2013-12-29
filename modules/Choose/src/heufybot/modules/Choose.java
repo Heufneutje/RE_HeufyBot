@@ -2,7 +2,6 @@ package heufybot.modules;
 
 import heufybot.utils.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Choose extends Module
@@ -23,24 +22,28 @@ public class Choose extends Module
 		else
 		{
 			params.remove(0);
-			List<String> choices;
+			String[] choices = new String[params.size()];
 			
 			if(message.contains(","))
 			{
-				choices = StringUtils.parseStringtoList(StringUtils.join(params, " "), ",");
+				choices = StringUtils.parseStringtoList(StringUtils.join(params, " "), ",").toArray(choices);
 			}
 			else if(message.contains(" "))
 			{
-				choices = params;
+				choices = params.toArray(choices);
 			}
 			else
 			{
-				choices = new ArrayList<String>();
-				choices.add(params.get(0));
+				choices = new String[] { params.get(0) };
+			}
+
+			for(int i = 0; i < choices.length; i++)
+			{
+				choices[i] = choices[i].trim();
 			}
 			
-			int choiceNumber = (int) (Math.random() * choices.size());
-			bot.getIRC().cmdPRIVMSG(source, "Choice: " + choices.get(choiceNumber));
+			int choiceNumber = (int) (Math.random() * choices.length);
+			bot.getIRC().cmdPRIVMSG(source, "Choice: " + choices[choiceNumber]);
 		}
 	}
 
