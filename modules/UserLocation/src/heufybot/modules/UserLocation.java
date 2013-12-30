@@ -58,7 +58,7 @@ public class UserLocation extends Module
 		String result = "";
 		for(String user : userLocations.keySet())
 		{
-			result += user + "=" + userLocations.get(user);
+			result += user + "=" + userLocations.get(user) + "\n";
 		}
 		FileUtils.writeFile(locationsPath, result);
 	}
