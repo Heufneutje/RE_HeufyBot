@@ -770,7 +770,7 @@ public class InputParser
 						channel.parseModeChangeOnUser(user, "" + modeOperator + atPosition);
 						paramNumber++;
 					}
-					else if(irc.getServerInfo().getChannelSetArgsModes().contains(Character.toString(atPosition)))
+					else if(irc.getServerInfo().getChannelListModes().contains(Character.toString(atPosition)))
 					{
 						//This mode is a list mode. It's not important to us. Skip to the next argument.
 						paramNumber++;
