@@ -7,6 +7,7 @@ import java.util.Locale;
 
 import heufybot.core.Logger;
 import heufybot.utils.FileUtils;
+import heufybot.utils.StringUtils;
 import heufybot.utils.URLUtils;
 
 import org.json.simple.JSONArray;
@@ -43,7 +44,7 @@ public class TimeInterface
 		try 
 		{
 			date = dt.parse(localtime);
-			SimpleDateFormat dt1 = new SimpleDateFormat("HH:mm (hh:mm aa) 'on' EEEEEEEE, dd 'of' MMMMMMMMMM, yyyy", Locale.US);
+			SimpleDateFormat dt1 = new SimpleDateFormat("HH:mm (hh:mm aa) 'on' EEEEEEEE, dd'" + getSuffix(StringUtils.tryParseInt(new SimpleDateFormat("dd").format(date))) + " of' MMMMMMMMMM, yyyy", Locale.US);
 			return "Local time is " + dt1.format(date);
 		}
 		catch (java.text.ParseException e) 
@@ -56,5 +57,29 @@ public class TimeInterface
 	private JSONObject getJSON(String urlString) throws ParseException 
 	{
 		return (JSONObject)new JSONParser().parse(URLUtils.grab(urlString));
+	}
+	
+	private String getSuffix(int dayOfMonth)
+	{
+		String suffix = "";
+		switch (dayOfMonth)
+		{
+		    case 1:
+		    case 21:
+		    case 31:
+		        suffix = "st";
+		        break;
+		    case 2:
+		    case 22:
+		        suffix = "nd";
+		        break;
+		    case 3:
+		    case 23:
+		        suffix = "rd";
+		        break;
+		    default:
+		        suffix = "th";
+		}
+		return suffix;
 	}
 }
