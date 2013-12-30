@@ -94,7 +94,7 @@ public class URLFollow extends Module
 		Matcher m = p.matcher(data);
 		if (m.find())
 		{
-			return "Title: " + m.group(1) + " || At host: " + URLUtils.getHost(urlString);
+			return "Title: " + m.group(1).replaceAll("\n", " ").replaceAll("\r", "") + " || At host: " + URLUtils.getHost(urlString);
 		}
 		return "No title found || At host: " + URLUtils.getHost(urlString);
 	}
@@ -112,7 +112,7 @@ public class URLFollow extends Module
 			JSONObject jDuration = (JSONObject) mediagroup.get("yt$duration");
 			
 			String title = jTitle.get("$t").toString();
-		    String description = jDescription.get("$t").toString().replaceAll("\n", " ");
+		    String description = jDescription.get("$t").toString().replaceAll("\n", " ").replaceAll("\r", "");
 		    String duration = jDuration.get("seconds").toString();
 		    
 		    if(description.length() > 149)
