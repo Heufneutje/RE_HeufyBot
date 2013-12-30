@@ -177,7 +177,10 @@ public class URLFollow extends Module
 			
 			if(data.get("nsfw") != null)
 			{
-				imageData.add("NSFW!");
+				if(data.get("nsfw").equals("true"))
+				{
+					imageData.add("NSFW!");
+				}
 			}
 			
 			if(isAlbum)
