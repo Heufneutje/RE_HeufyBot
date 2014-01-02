@@ -66,7 +66,7 @@ public class LoggingInterface extends EventListenerAdapter
 	public void onInvite(InviteEvent event)
 	{
 		User inviter = event.getInviter();
-		Logger.log(inviter.getNickname() + " (" + inviter.getLogin() + "@" + inviter.getHostmask() + ") invites " + event.getInvitee() + " to join " + event.getChannel());
+		Logger.log("-- " + inviter.getNickname() + " (" + inviter.getLogin() + "@" + inviter.getHostmask() + ") invites " + event.getInvitee() + " to join " + event.getChannel());
 	}
 	
 	public void onJoin(JoinEvent event)
@@ -77,7 +77,7 @@ public class LoggingInterface extends EventListenerAdapter
 	
 	public void onKick(KickEvent event)
 	{
-		Logger.log(event.getRecipient().getNickname() + " was kicked from " + event.getChannel().getName() + " by " + event.getKicker().getNickname() + " (" + event.getMessage() + ")", event.getChannel().getName(), bot.getIRC().getServerInfo().getNetwork());
+		Logger.log("-- " + event.getRecipient().getNickname() + " was kicked from " + event.getChannel().getName() + " by " + event.getKicker().getNickname() + " (" + event.getMessage() + ")", event.getChannel().getName(), bot.getIRC().getServerInfo().getNetwork());
 	}
 	
 	public void onMessage(MessageEvent event)
@@ -100,11 +100,11 @@ public class LoggingInterface extends EventListenerAdapter
 	{
 		if(event.getChannel() == null)
 		{
-			Logger.log(event.getSetter() + " sets mode: " + event.getMode());
+			Logger.log("--" + event.getSetter() + " sets mode: " + event.getMode());
 		}
 		else
 		{
-			Logger.log(event.getSetter() + " sets mode: " + event.getMode(), event.getChannel().getName(), bot.getIRC().getServerInfo().getNetwork());
+			Logger.log("--" + event.getSetter() + " sets mode: " + event.getMode(), event.getChannel().getName(), bot.getIRC().getServerInfo().getNetwork());
 		}
 	}
 	
@@ -115,7 +115,7 @@ public class LoggingInterface extends EventListenerAdapter
 			User user = channel.getUser(event.getUser().getNickname());
 			if(user != null)
 			{
-				Logger.log(event.getOldNick() + " is now known as " + event.getNewNick(), channel.getName(), bot.getIRC().getServerInfo().getNetwork());
+				Logger.log("-- " + event.getOldNick() + " is now known as " + event.getNewNick(), channel.getName(), bot.getIRC().getServerInfo().getNetwork());
 			}
 		}
 	}
@@ -158,7 +158,7 @@ public class LoggingInterface extends EventListenerAdapter
 			User user = channel.getUser(event.getUser().getNickname());
 			if(user != null)
 			{
-				Logger.log("<< " + user.getNickname() + " (" + user.getLogin() + "@" + user.getHostmask() + ") Quit (" + event.getMessage() + ")", channel.getName(), bot.getIRC().getServerInfo().getNetwork());
+				Logger.log("<< " + user.getNickname() + " (" + user.getLogin() + "@" + user.getHostmask() + ") has quit IRC (" + event.getMessage() + ")", channel.getName(), bot.getIRC().getServerInfo().getNetwork());
 			}
 		}
 	}
@@ -175,6 +175,6 @@ public class LoggingInterface extends EventListenerAdapter
 	
 	public void onTopicChange(TopicEvent event)
 	{
-		Logger.log(event.getSource() + " changes topic to \'" + event.getMessage() + "\'", event.getChannel().getName(), bot.getIRC().getServerInfo().getNetwork());
+		Logger.log("-- " + event.getSource() + " changes topic to \'" + event.getMessage() + "\'", event.getChannel().getName(), bot.getIRC().getServerInfo().getNetwork());
 	}
 }
