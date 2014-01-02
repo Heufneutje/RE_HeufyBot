@@ -27,10 +27,6 @@ public class Choose extends Module
 			if(message.contains(","))
 			{
 				choices = StringUtils.parseStringtoList(StringUtils.join(params, " "), ",").toArray(choices);
-				for(int i = 0; i < choices.length; i++)
-				{
-					System.out.println(choices[i]);
-				}
 			}
 			else if(message.contains(" "))
 			{
