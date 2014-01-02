@@ -100,11 +100,11 @@ public class LoggingInterface extends EventListenerAdapter
 	{
 		if(event.getChannel() == null)
 		{
-			Logger.log("--" + event.getSetter() + " sets mode: " + event.getMode());
+			Logger.log("-- " + event.getSetter() + " sets mode: " + event.getMode());
 		}
 		else
 		{
-			Logger.log("--" + event.getSetter() + " sets mode: " + event.getMode(), event.getChannel().getName(), bot.getIRC().getServerInfo().getNetwork());
+			Logger.log("-- " + event.getSetter() + " sets mode: " + event.getMode(), event.getChannel().getName(), bot.getIRC().getServerInfo().getNetwork());
 		}
 	}
 	
