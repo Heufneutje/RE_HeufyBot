@@ -22,11 +22,15 @@ public class Choose extends Module
 		else
 		{
 			params.remove(0);
-			String[] choices = new String[params.size()];
+			String[] choices = new String[0];
 			
 			if(message.contains(","))
 			{
 				choices = StringUtils.parseStringtoList(StringUtils.join(params, " "), ",").toArray(choices);
+				for(int i = 0; i < choices.length; i++)
+				{
+					System.out.println(choices[i]);
+				}
 			}
 			else if(message.contains(" "))
 			{
