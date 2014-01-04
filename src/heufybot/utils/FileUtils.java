@@ -8,9 +8,11 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 
 public class FileUtils 
 {
@@ -49,10 +51,10 @@ public class FileUtils
 		{
 			file.delete();
 		}
-		FileWriter writer;
 		try 
 		{
-			writer = new FileWriter(filePath, false);
+			FileOutputStream fos = new FileOutputStream(filePath, false);
+			OutputStreamWriter writer = new OutputStreamWriter(fos, Charset.forName("UTF-8"));
 			BufferedWriter bw = new BufferedWriter(writer);
 			bw.write(text);
 			bw.flush();
@@ -68,10 +70,10 @@ public class FileUtils
 	
 	public static boolean writeFileAppend(String filePath, String text)
 	{
-		FileWriter writer;
 		try 
 		{
-			writer = new FileWriter(filePath, true);
+			FileOutputStream fos = new FileOutputStream(filePath, true);
+			OutputStreamWriter writer = new OutputStreamWriter(fos, Charset.forName("UTF-8"));
 			BufferedWriter bw = new BufferedWriter(writer);
 			bw.write(text);
 			bw.flush();
