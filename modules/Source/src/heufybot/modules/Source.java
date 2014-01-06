@@ -13,7 +13,7 @@ public class Source extends Module
 	@Override
 	public void processEvent(String source, String message, String triggerUser, List<String> params) 
 	{
-		bot.getIRC().cmdPRIVMSG(source, "https://github.com/Heufneutje/RE_HeufyBot/");
+		bot.getIRC().cmdPRIVMSG(source, "https://github.com/Heufneutje/RE_HeufyBot/ | https://github.com/Heufneutje/RE_HeufyBot-AdditionalModules");
 	}
 
 	public String getHelp(String message)
