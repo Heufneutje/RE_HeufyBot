@@ -57,6 +57,7 @@
 - modulesToLoad: 
   - "moduleloader"
   - "help"
+  - "ignore"
   
 #botAdmins: Users that are authorized to use modules that have access level "ops"
 - botAdmins:
