@@ -11,26 +11,7 @@ Recommended modules:
 - Help
 - Ignore
 
-Optional modules:
-
-- Choose
-- Do
-- Join
-- Log
-- Nick
-- OutOfContext
-- Part
-- Quit
-- Say
-- Shorten
-- Source
-- Tell
-- Time
-- Translate
-- TranslationParty
-- UserLocation
-- Weather
-- YouTube
+Optional modules can be found here: https://github.com/Heufneutje/RE_HeufyBot-AdditionalModules
 
 Detials about how to write your own module can be found here: https://github.com/Heufneutje/RE_HeufyBot/blob/master/src/heufybot/modules/Module.java
 
