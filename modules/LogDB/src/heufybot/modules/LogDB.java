@@ -86,7 +86,7 @@ public class LogDB extends Module
 			return;
 		}
 		
-		String url = "http://ec2-54-229-50-128.eu-west-1.compute.amazonaws.com/" + source.replaceAll("#", "%23") + "/" + dateString + ".log";
+		String url = "http://logs.heufneutje.net/" + source.replaceAll("#", "%23") + "/" + dateString + ".log";
 		bot.getIRC().cmdPRIVMSG(source, "Log for " + source + " on " + dateString + ": " + url);
 	}
 
