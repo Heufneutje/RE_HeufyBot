@@ -10,7 +10,7 @@ public class KickEvent implements BotEvent
 	private Channel channel;
 	private String message;
 	
-	public KickEvent(User kicker, User recipient, Channel channel, String message)
+	public KickEvent(User recipient, User kicker, Channel channel, String message)
 	{
 		this.kicker = kicker;
 		this.recipient = recipient;
