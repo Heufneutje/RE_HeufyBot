@@ -76,7 +76,7 @@ public class Tell extends Module
 				params.remove(0);
 				if(params.size() == 1)
 				{
-					bot.getIRC().cmdPRIVMSG(source, "[Tell] What do you want me to tell them?");
+					bot.getIRC().cmdPRIVMSG(source, "What do you want me to tell them?");
 				}
 				else
 				{
@@ -148,7 +148,7 @@ public class Tell extends Module
 						boolean messageFound = false;
 						if(messageToRemove.from.equalsIgnoreCase(triggerUser) && messageToRemove.text.matches(".*" + params.get(1) + ".*"))
 						{
-							bot.getIRC().cmdPRIVMSG(source, "[Tell] Message '" + messageToRemove.text + "' sent to " + user + " on " + messageToRemove.dateSent + " was removed from the message database!");
+							bot.getIRC().cmdPRIVMSG(source, "Message '" + messageToRemove.text + "' sent to " + user + " on " + messageToRemove.dateSent + " was removed from the message database!");
 							iter2.remove();
 							messageFound = true;
 						}
