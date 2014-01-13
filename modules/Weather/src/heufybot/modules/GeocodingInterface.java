@@ -21,6 +21,7 @@ public class GeocodingInterface
 		builder.append(APIAddress);
 		builder.append("latlng=" + latitude + "," + longitude);
 		builder.append("&sensor=false");
+		builder.append("&language=english");
 		JSONObject json = getJSON(builder.toString());
 		Geolocation geo = geolocationFromJson(json);
 		if (geo.success)
