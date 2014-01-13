@@ -94,7 +94,7 @@ public class OutOfContext extends Module
 				    	newQuote = dateString + " " + newQuote;
 				    }
 			    
-				    if(bot.getIRC().getServerInfo().getReverseUserPrefixes().containsKey(toQuote.substring(0, 1)))
+				    if(bot.getIRC().getServerInfo().getReverseUserPrefixes().containsKey(toQuote.substring(0, 1)) || toQuote.substring(0, 1).equals(" "))
 				    {
 				    	newQuote = newQuote.replace(toQuote, toQuote.substring(1));
 				    }
