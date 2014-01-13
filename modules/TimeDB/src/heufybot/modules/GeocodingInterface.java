@@ -95,8 +95,12 @@ public class GeocodingInterface
 
 	public Geolocation getGeolocationForIRCUser(String ircUser) throws ParseException
 	{
-		String userLocation = URLUtils.grab("http://tsukiakariusagi.net/chatmaplookup.php?nick=" + ircUser);		
-		if(userLocation.equals(", "))
+		String userLocation = URLUtils.grab("http://tsukiakariusagi.net/chatmaplookup.php?nick=" + ircUser);
+		if(userLocation == null)
+		{
+			return null;
+		}
+		else if(userLocation.equals(", "))
 		{
 			return null;
 		}

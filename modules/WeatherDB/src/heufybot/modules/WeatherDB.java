@@ -26,7 +26,14 @@ public class WeatherDB extends Module
 
 		if (params.size() == 1)
 		{
-			if(URLUtils.grab("http://tsukiakariusagi.net/chatmaplookup.php?nick=" + triggerUser).equals(", "))
+			String chatmapResult = URLUtils.grab("http://tsukiakariusagi.net/chatmaplookup.php?nick=" + triggerUser);
+			
+			if(chatmapResult == null)
+			{
+				bot.getIRC().cmdPRIVMSG(source, "Chatmap seems to be down right now. Try again later.");
+				return;
+			}
+			else if(chatmapResult.equals(", "))
 			{
 				bot.getIRC().cmdPRIVMSG(source, "You are not registered on the chatmap.");
 				return;
