@@ -11,6 +11,6 @@ The following base modules come with RE_HeufyBot:
 
 Optional modules can be found here: https://github.com/Heufneutje/RE_HeufyBot-AdditionalModules
 
-Detials about how to write your own module can be found here: https://github.com/Heufneutje/RE_HeufyBot/blob/master/src/heufybot/modules/Module.java
+Details on how to write your own module can be found in the documention of the Module class: https://github.com/Heufneutje/RE_HeufyBot/blob/master/src/heufybot/modules/Module.java
 
-To use the bot, copy the settings.yml.example file into settings.yml and edit it. Then run java -jar RE_HeufyBot.jar to run the bot.
+To use the bot, copy the "settings.yml.example" file into "settings.yml" and edit it. Then open a terminal and run `java -jar RE_HeufyBot.jar`
