@@ -1,5 +1,5 @@
 function toggleEventVisibility()
- {
+{
         var link = document.getElementById("eventToggle");
         var newVisibility;
 	var newDisplay;
