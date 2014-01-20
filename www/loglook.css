@@ -1,0 +1,46 @@
+/* CSS almost completely taken from T-M at www.moronic-works.co.uk with slight adaptions*/
+tr:nth-child(odd)
+{
+background: #EEE;
+}
+tr:nth-child(even)
+{
+background: #DDD;
+}
+td
+{
+max-width: 900px;
+}
+.log
+{
+border-collapse: collapse;
+font-family: "monospace";
+font-size: 12px;
+}
+.user
+{
+font-weight: bold;
+}
+.message .user
+{
+text-align: right;
+border-right: 1px solid #000;
+padding-right: 0.5em;
+}
+.spacer
+{
+text-align: right;
+border-right: 1px solid #000;
+padding-right: 0.5em;
+color: #666;
+}
+.text
+{
+word-wrap: break-word;
+padding-left: 0.5em;
+}
+.other .text
+{
+color: #666;
+max-width: 900px;
+}
