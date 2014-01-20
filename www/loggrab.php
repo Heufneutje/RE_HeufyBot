@@ -4,6 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" type="text/css" href="loglook.css">
+<script src="eventsscript.js"></script>
 <title>
 <?php
 if (isset($_GET['channel']) and isset($_GET['date'])) {
@@ -25,7 +26,7 @@ else {
 		unset($filename);
 		$lines = explode("\n", htmlspecialchars($log));
 		unset($log);
-		echo ' <a href="#" id="eventToggle" onclick="toggleEventVisibility(); return false;">Hide events</a>'."\r\n";
+		echo '<p><a href="#" id="eventToggle" onclick="toggleEventVisibility(); return false;">Hide events</a></p>'."\r\n";
 		echo '<table class="log"><tr class="message"> <th class="time">TIME</th> <th class="user">NICK</th> <th class="text">MESSAGE</th></tr>'."\r\n";
 		$timestampLength = 7;
 		foreach ($lines as $line) {
@@ -46,28 +47,5 @@ else {
 	}
 }
 ?>
-<script type="text/javascript">
-function toggleEventVisibility() {
-	var link = document.getElementById("eventToggle");
-	var newVisibility;
-	if (link.eventsVisible === undefined || link.eventsVisible === true) {
-		//hide
-		newVisibility = 'collapse';
-		link.eventsVisible = false;
-		link.innerHTML = link.innerHTML.replace('Hide', 'Show');
-	}
-	else {
-		//show
-		newVisibility = 'visible';
-		link.eventsVisible = true;
-		link.innerHTML = link.innerHTML.replace('Show', 'Hide');
-	}
-	
-	var events = document.getElementsByClassName('other');
-	for (var i = 0; i < events.length; ++i) {
-		events[i].style.visibility = newVisibility;
-	}
-}
-</script>
 </body>
 </html>
