@@ -14,8 +14,8 @@ max-width: 900px;
 .log
 {
 border-collapse: collapse;
-font-family: "monospace";
-font-size: 12px;
+font-family: monospace;
+font-size: large;
 }
 .user
 {
@@ -39,8 +39,11 @@ color: #666;
 word-wrap: break-word;
 padding-left: 0.5em;
 }
+.action .text
+{
+font-style: italic;
+}
 .other .text
 {
 color: #666;
-max-width: 900px;
 }
