@@ -86,7 +86,7 @@ public class LogDB extends Module
 			return;
 		}
 		
-		String url = "http://logs.heufneutje.net/" + source.replaceAll("#", "%23") + "/" + dateString + ".log";
+		String url = "http://logs.heufneutje.net/loggrab.php?channel=" + source.replaceAll("#", "") + "&date=" + dateString;
 		bot.getIRC().cmdPRIVMSG(source, "Log for " + source + " on " + dateString + ": " + url);
 	}
 
