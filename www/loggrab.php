@@ -18,14 +18,13 @@ else echo 'Log Prettifier';
 if (!isset($_GET['channel'])) echo 'No channel name provided!';
 elseif(!isset($_GET['date'])) echo 'No date provided!';
 else {
-	$filename = '%23'.$_GET['channel'].'/'.$_GET['date'].'.log';
+	$filename = '/home/stefan/heufybot-desertbus/logs/DesertBusForHope/#'.$_GET['channel'].'/'.$_GET['date'].'.log';
 	$log = file_get_contents($filename);
 	unset($filename);
 	if ($log === FALSE) echo 'Error while trying to open file "'.$filename.'"';
 	else {
 		$lines = explode("\n", htmlspecialchars($log));
 		unset($log);
-		echo 'Log for #'.$_GET['channel'].' of '.$_GET['date']."\r\n";
 		echo '<table class="log"><tr class="message"> <th class="time">TIME</th> <th class="user">NICK</th> <th class="text">MESSAGE</th></tr>'."\r\n";
 		$timestampLength = 7;
 		foreach ($lines as $line) {
