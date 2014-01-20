@@ -25,6 +25,7 @@ else {
 		unset($filename);
 		$lines = explode("\n", htmlspecialchars($log));
 		unset($log);
+		echo ' <a href="#" id="eventToggle" onclick="toggleEventVisibility(); return false;">Hide events</a>'."\r\n";
 		echo '<table class="log"><tr class="message"> <th class="time">TIME</th> <th class="user">NICK</th> <th class="text">MESSAGE</th></tr>'."\r\n";
 		$timestampLength = 7;
 		foreach ($lines as $line) {
