@@ -77,7 +77,7 @@ public class WeatherInterface
 		String desc = ((JSONObject)((JSONArray)currentCondition.get("weatherDesc")).get(0)).get("value").toString();
 		String humidity = currentCondition.get("humidity").toString();
 		
-		return String.format("Temp: %s°C / %s°F | Weather: %s | Humidity: %s%c | Wind: %s kmph / %s mph %s", tempC, tempF, desc, humidity, '%', windspeedKmph, windspeedMiles, windDir);
+		return String.format("Temp: %s°C/%s°F | Weather: %s | Humidity: %s%c | Wind: %s kmph/%s mph %s", tempC, tempF, desc, humidity, '%', windspeedKmph, windspeedMiles, windDir);
 	}
 	
 	private String parseJSONForForecast(JSONObject object)
