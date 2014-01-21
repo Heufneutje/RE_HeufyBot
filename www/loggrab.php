@@ -8,7 +8,7 @@
 <title>
 <?php
 if (isset($_GET['channel']) and isset($_GET['date'])) {
-	echo 'Log for #'.$_GET['channel'].' of '.$_GET['date'];
+	echo 'Log for #'.$_GET['channel'].' on '.$_GET['date'];
 }
 else echo 'Log Prettifier';
 ?>
