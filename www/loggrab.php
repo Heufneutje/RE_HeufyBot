@@ -40,7 +40,12 @@ else {
 					else $messageType = 'other';
 					$nickType = 'spacer';
 				}
-				echo '<tr class="'.$messageType.'"><td class="time">'.$lineSections[0].'</td><td class="'.$nickType.'">'.$lineSections[1].'</td> <td class="text">'.substr($line, $timestampLength + strlen($lineSections[1])+2).'</td></tr>'."\r\n";
+				$message = substr($line, $timestampLength + strlen($lineSections[1])+2);
+				//Turn URLs into hyperlinks
+				if (strpos($message, 'http') !== FALSE) {
+					$message = preg_replace("/(https?:\/\/[\S]+)/", "<a href=\"$0\">$0</a>", $message);
+				}
+				echo '<tr class="'.$messageType.'"><td class="time">'.$lineSections[0].'</td><td class="'.$nickType.'">'.$lineSections[1].'</td> <td class="text">'.$message.'</td></tr>'."\r\n";
 			}
 		}
 		echo "</table>\r\n";
