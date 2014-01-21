@@ -19,8 +19,7 @@ else echo 'Log Prettifier';
 if (!isset($_GET['channel'])) echo 'No channel name provided!';
 elseif(!isset($_GET['date'])) echo 'No date provided!';
 else {
-	//$filename = '/home/stefan/heufybot-desertbus/logs/DesertBusForHope/#'.$_GET['channel'].'/'.$_GET['date'].'.log';
-	$filename = '%23'.$_GET['channel'].'/'.$_GET['date'].'.log';
+	$filename = '/home/stefan/heufybot-desertbus/logs/DesertBusForHope/#'.$_GET['channel'].'/'.$_GET['date'].'.log';
 	$log = file_get_contents($filename);
 	if ($log === FALSE) echo 'Error while trying to open file "'.$filename.'"';
 	else {
