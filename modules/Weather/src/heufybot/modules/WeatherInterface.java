@@ -28,6 +28,7 @@ public class WeatherInterface
 		builder.append(APIAddress);
 		builder.append("q=" + latitude + "," + longitude);
 		builder.append("&key=" + APIkey);
+		builder.append("&fx=no");
 		builder.append("&format=json");
 		JSONObject object = getJSON(builder.toString());
 		
@@ -46,6 +47,7 @@ public class WeatherInterface
 		builder.append("q=" + latitude + "," + longitude);
 		builder.append("&key=" + APIkey);
 		builder.append("&num_of_days=4");
+		builder.append("&cc=no");
 		builder.append("&format=json");
 		JSONObject object = getJSON(builder.toString());
 		System.out.println(builder.toString());
