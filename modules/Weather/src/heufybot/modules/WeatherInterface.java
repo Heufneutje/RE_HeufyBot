@@ -36,7 +36,7 @@ public class WeatherInterface
 		{
 			return null;
 		}
-		return parsedJSON + " | More info: " + URLUtils.shortenURL(web + latitude + "," + longitude) + " | Current condition updates every 4 hours";
+		return parsedJSON + " | More info: " + URLUtils.shortenURL(web + latitude + "," + longitude);
 	}
 	
 	public String getForecast(float latitude, float longitude) throws ParseException
@@ -77,7 +77,7 @@ public class WeatherInterface
 		String desc = ((JSONObject)((JSONArray)currentCondition.get("weatherDesc")).get(0)).get("value").toString();
 		String humidity = currentCondition.get("humidity").toString();
 		
-		return String.format("Temp: %s°C/%s°F | Weather: %s | Humidity: %s%c | Wind: %s kmph/%s mph %s", tempC, tempF, desc, humidity, '%', windspeedKmph, windspeedMiles, windDir);
+		return String.format("Temp: %s°C / %s°F | Weather: %s | Humidity: %s%c | Wind Speed: %s kmph / %s mph | Wind Direction: %s", tempC, tempF, desc, humidity, '%', windspeedKmph, windspeedMiles, windDir);
 	}
 	
 	private String parseJSONForForecast(JSONObject object)
