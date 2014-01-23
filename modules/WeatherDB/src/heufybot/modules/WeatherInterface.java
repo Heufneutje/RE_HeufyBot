@@ -63,7 +63,7 @@ public class WeatherInterface
 	{
 		JSONObject data = (JSONObject)object.get("data");
 		
-		if((JSONArray)data.get("weather") == null)
+		if((JSONArray)data.get("current_condition") == null)
 		{
 			return null;
 		}
