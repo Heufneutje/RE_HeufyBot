@@ -50,7 +50,6 @@ public class WeatherInterface
 		builder.append("&cc=no");
 		builder.append("&format=json");
 		JSONObject object = getJSON(builder.toString());
-		System.out.println(builder.toString());
 		
 		String parsedJSON = parseJSONForForecast(object);
 		if(parsedJSON == null)
@@ -85,7 +84,7 @@ public class WeatherInterface
 	private String parseJSONForForecast(JSONObject object)
 	{
 		JSONObject data = (JSONObject)object.get("data");
-		if((JSONArray)data.get("current_condition") == null)
+		if((JSONArray)data.get("weather") == null)
 		{
 			return null;
 		}
