@@ -8,7 +8,7 @@
 <title>
 <?php
 if (isset($_GET['channel']) and isset($_GET['date'])) {
-	echo 'Log for #'.$_GET['channel'].' on '.$_GET['date'];
+	echo 'Log for #'.$_GET['channel'].' of '.$_GET['date'];
 }
 else echo 'Log Prettifier';
 ?>
@@ -26,9 +26,11 @@ else {
 		unset($filename);
 		$lines = explode("\n", htmlspecialchars($log));
 		unset($log);
-		echo '<p><a href="#" id="eventToggle" onclick="toggleEventVisibility(); return false;">Hide events</a></p>'."\r\n";
-		echo '<table class="log"><tr class="message"> <th class="time">TIME</th> <th class="user">NICK</th> <th class="text">MESSAGE</th></tr>'."\r\n";
+		echo '<p><a href="#" id="eventToggle" onclick="toggleEventVisibility(true); return false;">Hide events</a></p>'."\r\n";
+		echo '<table class="log" id="log"><tr class="message"> <th class="time">TIME</th> <th class="user">NICK</th> <th class="text">MESSAGE</th></tr>'."\r\n";
 		$timestampLength = 7;
+		$suffixCharactersToRemove = array(')', '.');
+		$rowcount = 1;
 		foreach ($lines as $line) {
 			if (strlen($line) > 0) {
 				$lineSections = explode(' ', $line);
@@ -42,11 +44,30 @@ else {
 				}
 				$message = substr($line, $timestampLength + strlen($lineSections[1])+2);
 				//Turn URLs into hyperlinks
-				if (strpos($message, 'http') !== FALSE) {
-					$message = preg_replace("/(https?:\/\/[\S]+)/", "<a href=\"$0\" target=\"_blank\">$0</a>", $message);
+				if (strpos($message, 'http') !== FALSE or strpos($message, 'www') !== FALSE) {
+					//$message = preg_replace("/(https?:\/\/[\S]+)/", "<a href=\"$0\">$0</a>", $message);
+					preg_match_all("/(https?:\/\/\S+|www\.\S+\.\S+)/", $message, $regexResults);
+					//$message = '['.count($regexResults[0]).'] '.$message;
+					foreach ($regexResults[0] as $urlText) {
+						//Remove some trailing characters that can mess up the url, like periods or parentheses						
+						while (in_array(mb_substr($urlText, -1, 1), $suffixCharactersToRemove)) {
+							$urlText = mb_substr($urlText, 0, -1);
+						}
+						
+						//The display text can be different from the actual link it should be
+						$url = $urlText;	
+						//Make sure the url actually starts with 'http' if there's no protocol specified
+						if (strpos($url, 'http://') !== 0 and strpos($url, 'https://') !== 0 and strpos($url, 'ftp://') !== 0) {
+							$url = 'http://'.$url;
+						}
+						
+						//Finally, actually change the text to a hyperlink
+						$message = str_replace($urlText, '<a href="'.$url.'" target="_blank">'.$urlText.'</a>', $message);
+					}
 				}
-				echo '<tr class="'.$messageType.'"><td class="time">'.$lineSections[0].'</td><td class="'.$nickType.'">'.$lineSections[1].'</td> <td class="text">'.$message.'</td></tr>'."\r\n";
+				echo '<tr class="'.$messageType.'"><td class="time">('.$rowcount.')  '.$lineSections[0].'</td><td class="'.$nickType.'">'.$lineSections[1].'</td> <td class="text">'.$message.'</td></tr>'."\r\n";
 			}
+			$rowcount++;
 		}
 		echo "</table>\r\n";
 	}
