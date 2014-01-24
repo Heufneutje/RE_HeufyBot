@@ -30,7 +30,6 @@ else {
 		echo '<table class="log" id="log"><tr class="message"> <th class="time">TIME</th> <th class="user">NICK</th> <th class="text">MESSAGE</th></tr>'."\r\n";
 		$timestampLength = 7;
 		$suffixCharactersToRemove = array(')', '.');
-		$rowcount = 1;
 		foreach ($lines as $line) {
 			if (strlen($line) > 0) {
 				$lineSections = explode(' ', $line);
@@ -65,9 +64,8 @@ else {
 						$message = str_replace($urlText, '<a href="'.$url.'" target="_blank">'.$urlText.'</a>', $message);
 					}
 				}
-				echo '<tr class="'.$messageType.'"><td class="time">('.$rowcount.')  '.$lineSections[0].'</td><td class="'.$nickType.'">'.$lineSections[1].'</td> <td class="text">'.$message.'</td></tr>'."\r\n";
+				echo '<tr class="'.$messageType.'"><td class="time">'.$lineSections[0].'</td><td class="'.$nickType.'">'.$lineSections[1].'</td> <td class="text">'.$message.'</td></tr>'."\r\n";
 			}
-			$rowcount++;
 		}
 		echo "</table>\r\n";
 	}
