@@ -26,7 +26,7 @@ else {
 		unset($filename);
 		$lines = explode("\n", htmlspecialchars($log));
 		unset($log);
-		echo '<p><a href="#" id="eventToggle" onclick="toggleEventVisibility(true); return false;">Hide events</a></p>'."\r\n";
+		echo '<span><a href="#" id="eventToggle" onclick="toggleEventVisibility(true); return false;">Hide events</a></span>'."\r\n";
 		echo '<table class="log" id="log"><tr class="message"> <th class="time">TIME</th> <th class="user">NICK</th> <th class="text">MESSAGE</th></tr>'."\r\n";
 		$timestampLength = 7;
 		$suffixCharactersToRemove = array(')', '.');
