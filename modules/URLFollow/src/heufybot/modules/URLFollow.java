@@ -66,7 +66,7 @@ public class URLFollow extends Module
 			{
 				if(fullHostname != null)
 				{
-					Pattern p = Pattern.compile("youtube\\.com/watch\\?v=([a-zA-Z0-9_]*)");
+					Pattern p = Pattern.compile("youtube\\.com/watch\\?v=([a-zA-Z0-9_\\-]*)");
 					Matcher m = p.matcher(fullHostname);
 					
 					if(m.find())
@@ -189,7 +189,7 @@ public class URLFollow extends Module
 			}
 			else
 			{
-				if(data.containsKey("is_album") && data.get("is_album") != null)
+				if(data.containsKey("is_album") && data.get("is_album").equals("true"))
 				{
 					JSONArray images = (JSONArray) data.get("images");
 					imageData.add("Album, " + images.size() + " images");
