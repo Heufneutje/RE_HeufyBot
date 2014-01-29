@@ -204,32 +204,32 @@ public class IRC
 				while(true)
 				{
 					String line;
-			             	try
-			             	{
-			            		line = inputReader.readLine();
-			             	}
-			             	catch (InterruptedIOException iioe) 
-			             	{
-			            		cmdPING("" + System.currentTimeMillis() / 1000);
-			            		continue;
-			             	}
-			             	catch (Exception e)
-			             	{
-			            		line = null;
-			            		Logger.log("*** Connection to the server was lost. Trying to reconnect...");
-			            		disconnect(true);
-			             	}
-		
-			             	if (line == null)
-			                	break;
-	
-			             	if(!line.equals(""))
-			             	{
-			            		inputParser.parseLine(line);
-			             	}
-			             	
-			             	if (Thread.interrupted())
-			                	return;
+					try
+					{
+					    line = inputReader.readLine();
+					}
+					catch (InterruptedIOException iioe) 
+					{
+					    cmdPING("" + System.currentTimeMillis() / 1000);
+					    continue;
+					}
+					catch (Exception e)
+					{
+					    line = null;
+					    Logger.log("*** Connection to the server was lost. Trying to reconnect...");
+					    disconnect(true);
+					}
+					
+					if (line == null)
+					break;
+					
+					if(!line.equals(""))
+					{
+					    inputParser.parseLine(line);
+					}
+					
+					if (Thread.interrupted())
+					return;
 				}
 			}
 		});
