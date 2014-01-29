@@ -1,7 +1,7 @@
 RE_HeufyBot
 ===========
 
-A from scratch rewrite of my original HeufyBot project, which was based on PircBotX. By default it just runs the core, which makes the bot idle in one or more channels on a server. It will also log all events in those channels to log files. The bot depends on modules for its actual functionality.
+A from scratch rewrite of my original [HeufyBot](https://github.com/Heufneutje/HeufyBot) project, which was based on PircBotX. By default it just runs the core, which makes the bot idle in one or more channels on a server. It will also log all events in those channels to log files. The bot depends on modules for its actual functionality.
 
 The following base modules come with RE_HeufyBot:
 
