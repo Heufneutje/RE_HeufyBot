@@ -1,5 +1,5 @@
 function toggleEventVisibility(adjustScroll)
- {
+{
  	//Check if a parameter was passed. Use it if so, use default 'true' if not;
  	adjustScroll = typeof adjustScroll !== 'undefined' ? adjustScroll : true;
  	 
