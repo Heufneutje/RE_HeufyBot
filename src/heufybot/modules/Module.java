@@ -57,7 +57,7 @@ public abstract class Module
 	 * What types of events trigger the module.
 	 * Possible triggers are: Message, PM, Action and PMAction
 	 */
-	protected TriggerType triggerType;
+	protected TriggerType[] triggerTypes;
 	
 	public Module()
 	{
@@ -84,9 +84,9 @@ public abstract class Module
 		return authType;
 	}
 	
-	public TriggerType getTriggerType()
+	public TriggerType[] getTriggerType()
 	{
-		return triggerType;
+		return triggerTypes;
 	}
 	
 	public String toString()
