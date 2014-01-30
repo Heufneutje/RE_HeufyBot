@@ -5,6 +5,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import heufybot.core.HeufyBot;
 import heufybot.core.User;
 import heufybot.core.events.EventListenerAdapter;
 import heufybot.core.events.types.*;
+import heufybot.modules.Module.TriggerType;
 import heufybot.utils.StringUtils;
 
 public class ModuleInterface extends EventListenerAdapter
@@ -91,15 +93,25 @@ public class ModuleInterface extends EventListenerAdapter
 	
 	public void onPMMessage(PMMessageEvent event)
 	{
-		handleMessage(event.getUser(), null, event.getMessage());
+		handleMessage(event.getUser(), null, event.getMessage(), TriggerType.PM);
+	}
+	
+	public void onPMAction(PMActionEvent event)
+	{
+		handleMessage(event.getUser(), null, event.getMessage(), TriggerType.PMAction);
 	}
 	
 	public void onMessage(MessageEvent event)
 	{
-		handleMessage(event.getUser(), event.getChannel(), event.getMessage());
+		handleMessage(event.getUser(), event.getChannel(), event.getMessage(), TriggerType.Message);
 	}
 	
-	private void handleMessage(final User user, final Channel channel, final String message)
+	public void onAction(ActionEvent event)
+	{
+		handleMessage(event.getUser(), event.getChannel(), event.getMessage(), TriggerType.Action);
+	}
+	
+	private void handleMessage(final User user, final Channel channel, final String message, TriggerType triggerType)
 	{
 		if(ignores.contains(user.getNickname()))
 		{
@@ -111,7 +123,7 @@ public class ModuleInterface extends EventListenerAdapter
 		for (int l = 0; l < listCopy.length; l++)
 		{
 			final Module module = listCopy[l];
-			if(message.toLowerCase().matches(module.getTrigger()) || module.getTriggerOnEveryMessage())
+			if((message.toLowerCase().matches(module.getTrigger()) && Arrays.asList(module.getTriggerTypes()).contains(triggerType)) || module.getTriggerOnEveryMessage())
 			{
 				final String target;
 				if(channel == null)

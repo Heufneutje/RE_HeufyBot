@@ -84,7 +84,7 @@ public abstract class Module
 		return authType;
 	}
 	
-	public TriggerType[] getTriggerType()
+	public TriggerType[] getTriggerTypes()
 	{
 		return triggerTypes;
 	}
