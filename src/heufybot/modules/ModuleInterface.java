@@ -125,7 +125,7 @@ public class ModuleInterface extends EventListenerAdapter
 					{
 						module.processEvent(target, message, user.getNickname(), StringUtils.parseStringtoList(message, " "));
 					}
-					else if (Thread.activeCount() < 4)
+					else if (Thread.activeCount() < 6)
 					{
 						//Thread limit might have to become a setting in the future
 						Thread thread = new Thread()
