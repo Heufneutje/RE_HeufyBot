@@ -8,8 +8,7 @@ import heufybot.core.HeufyBot;
  * Abstract Module class.
  * All modules must extend this class in order to be loadable.
  * @author Heufneutje
- * @version 0.0.1
- *
+ * @version 1.0
  */
 public abstract class Module 
 {
@@ -17,6 +16,11 @@ public abstract class Module
 	public enum AuthType
 	{
 		Anyone, OPs
+	}
+	
+	public enum TriggerType
+	{
+		Message, PM, Action, PMAction;
 	}
 	
 	/**
@@ -46,9 +50,14 @@ public abstract class Module
 	 * Who can invoke the module.
 	 * If Anyone is used, any IRC user is allowed to invoke the module.
 	 * If OPs is used, only channel operators and bot admins are allowed to invoke the module.
-	 *
 	 */
 	protected AuthType authType;
+	
+	/**
+	 * What types of events trigger the module.
+	 * Possible triggers are: Message, PM, Action and PMAction
+	 */
+	protected TriggerType triggerType;
 	
 	public Module()
 	{
@@ -73,6 +82,11 @@ public abstract class Module
 	public AuthType getAuthType()
 	{
 		return authType;
+	}
+	
+	public TriggerType getTriggerType()
+	{
+		return triggerType;
 	}
 	
 	public String toString()
