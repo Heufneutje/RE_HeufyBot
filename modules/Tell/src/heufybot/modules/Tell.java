@@ -51,6 +51,7 @@ public class Tell extends Module
 	public Tell()
 	{
 		this.authType = AuthType.Anyone;
+		this.triggerTypes = new TriggerType[] { TriggerType.Message, TriggerType.Action };
 		this.trigger = "^" + commandPrefix + "(tell|rtell|senttells)($| .*)";
 		this.triggerOnEveryMessage = true;
 		this.tellsMap = new HashMap<String, ArrayList<Message>>();
