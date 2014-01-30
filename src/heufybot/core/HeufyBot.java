@@ -3,6 +3,7 @@ package heufybot.core;
 import java.util.AbstractMap.SimpleEntry;
 
 import heufybot.core.events.LoggingInterface;
+import heufybot.modules.Module;
 import heufybot.modules.ModuleInterface;
 import heufybot.modules.ModuleInterface.ModuleLoaderResponse;
 import heufybot.utils.FileUtils;
@@ -35,6 +36,41 @@ public class HeufyBot
 		irc.getEventListenerManager().addListener(moduleInterface);
 		irc.getEventListenerManager().addListener(loggingInterface);
 		
+		this.loadModules();
+
+		if(irc.connect(config.getServer(), config.getPort()))
+		{
+			irc.login();
+		}
+	}
+	
+	public void stop(String message)
+	{
+		irc.cmdQUIT(message);
+		irc.disconnect(false);
+	}
+	
+	public void restart()
+	{
+		//Disconnect from the server
+		this.stop("Restarting...");
+		
+		//Reload modules
+		this.unloadModules();
+		this.loadModules();
+
+		//Reload config and reconnect
+		if(config.loadConfigFromFile("settings.yml"))
+		{
+			if(irc.connect(config.getServer(), config.getPort()))
+			{
+				irc.login();
+			}
+		}
+	}
+	
+	public void loadModules()
+	{
 		Logger.log("*** Loading modules...");
 		
 		for(String module : config.getModulesToLoad())
@@ -53,17 +89,33 @@ public class HeufyBot
 				break;
 			}
 		}
-
-		if(irc.connect(config.getServer(), config.getPort()))
-		{
-			irc.login();
-		}
 	}
 	
-	public void stop()
+	public void unloadModules()
 	{
-		irc.cmdQUIT("RE_HeufyBot " + VERSION);
-		irc.disconnect(false);
+		Logger.log("*** Unloading modules...");
+		
+		Module[] loadedModules = new Module[moduleInterface.getModuleList().size()];
+		loadedModules = moduleInterface.getModuleList().toArray(loadedModules);
+		
+		for(int i = 0; i < loadedModules.length; i++)
+		{
+			Module module = loadedModules[i];
+			SimpleEntry<ModuleLoaderResponse, String> result = moduleInterface.unloadModule(module.toString());
+
+			switch (result.getKey()) 
+			{
+			case Success:
+				Logger.log(" -  Module " + result.getValue() + " was unloaded");
+				break;
+			case DoesNotExist:
+				//If for whatever reason a loaded module doesn't exist
+				Logger.error("Module Loader", "Module " + module + " is already unloaded or does not exist");
+				break;
+			default:
+				break;
+			}
+		}
 	}
 	
 	public IRC getIRC()
