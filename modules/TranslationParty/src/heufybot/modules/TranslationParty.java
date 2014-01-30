@@ -15,6 +15,7 @@ public class TranslationParty extends Module
 	public TranslationParty() 
 	{
 		this.authType = AuthType.Anyone;
+		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(tp)($| .*)";
 	}
 

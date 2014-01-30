@@ -13,6 +13,7 @@ public class Uptime extends Module
 	public Uptime()
 	{
 		this.authType = AuthType.Anyone;
+		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(uptime)$";
 	}
 

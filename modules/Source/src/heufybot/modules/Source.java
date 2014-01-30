@@ -7,6 +7,7 @@ public class Source extends Module
 	public Source()
 	{
 		this.authType = Module.AuthType.Anyone;
+		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(source)$";
 	}
 	

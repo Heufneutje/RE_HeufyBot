@@ -9,6 +9,7 @@ public class Shorten extends Module
 	public Shorten()
 	{
 		this.authType = Module.AuthType.Anyone;
+		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(shorten)($| .*)";
 	}
 	

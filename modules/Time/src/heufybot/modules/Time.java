@@ -14,6 +14,7 @@ public class Time extends Module
 	public Time()
 	{
 		this.authType = Module.AuthType.Anyone;
+		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(time)($| .*)";
 	}
 

@@ -22,6 +22,7 @@ public class URLFollow extends Module
 	public URLFollow()
 	{
 		this.authType = AuthType.Anyone;
+		this.triggerTypes = new TriggerType[] { TriggerType.Message, TriggerType.Action };
 		this.trigger = ".*https?://.*";
 	}
 	

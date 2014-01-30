@@ -18,6 +18,7 @@ public class RandomCuteness extends Module
 	public RandomCuteness()
 	{
 		this.authType = Module.AuthType.Anyone;
+		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(aww)($)";
 	}
 	

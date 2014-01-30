@@ -7,6 +7,7 @@ public class Quit extends Module
 	public Quit()
 	{
 		this.authType = Module.AuthType.OPs;
+		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(quit)$";
 	}
 	

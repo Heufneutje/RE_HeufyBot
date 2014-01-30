@@ -17,6 +17,7 @@ public class LogDB extends Module
 	public LogDB()
 	{
 		this.authType = Module.AuthType.Anyone;
+		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(log)($| .*)";
 	}
 

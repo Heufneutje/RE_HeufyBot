@@ -12,6 +12,7 @@ public class WeatherDB extends Module
 	public WeatherDB()
 	{
 		this.authType = Module.AuthType.Anyone;
+		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(weather|forecast)($| .*)";
 	}
 

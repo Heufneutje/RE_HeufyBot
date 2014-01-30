@@ -13,6 +13,7 @@ public class Translate extends Module
 	public Translate() 
 	{
 		this.authType = AuthType.Anyone;
+		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(translate)($| .*)";
 	}
 

@@ -9,6 +9,7 @@ public class Do extends Module
 	public Do()
 	{
 		this.authType = Module.AuthType.Anyone;
+		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(do)($| .*)";
 	}
 	

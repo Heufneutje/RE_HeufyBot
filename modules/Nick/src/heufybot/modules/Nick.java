@@ -7,6 +7,7 @@ public class Nick extends Module
 	public Nick()
 	{
 		this.authType = Module.AuthType.OPs;
+		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(nick)($| .*)";
 	}
 	

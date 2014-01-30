@@ -9,6 +9,7 @@ public class Say extends Module
 	public Say()
 	{
 		this.authType = Module.AuthType.Anyone;
+		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(say)($| .*)";
 	}
 	

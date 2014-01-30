@@ -20,6 +20,7 @@ public class Log extends Module
 	public Log()
 	{
 		this.authType = Module.AuthType.Anyone;
+		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(log)($| .*)";
 	}
 

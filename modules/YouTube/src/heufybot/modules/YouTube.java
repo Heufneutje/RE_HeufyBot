@@ -16,6 +16,7 @@ public class YouTube extends Module
 	public YouTube()
 	{
 		this.authType = AuthType.Anyone;
+		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(youtube)($| .*)";
 	}
 	
@@ -24,7 +25,7 @@ public class YouTube extends Module
 	{
 		if (params.size() == 1)
 		{
-			bot.getIRC().cmdPRIVMSG(source, "What do you want me to look up?");
+			bot.getIRC().cmdPRIVMSG(source, "What video do you want me to look up?");
 		}
 		else
 		{
