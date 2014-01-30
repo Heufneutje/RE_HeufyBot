@@ -1,12 +1,10 @@
 package heufybot.core;
 
+import heufybot.core.IRC.ConnectionState;
 import heufybot.core.cap.CAPException;
 import heufybot.core.cap.CapHandler;
 import heufybot.core.events.types.*;
 import heufybot.utils.StringUtils;
-import heufybot.utils.enums.ConnectionState;
-import heufybot.utils.enums.PasswordType;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -156,7 +154,7 @@ public class InputParser
 			
 			irc.getEventListenerManager().dispatchEvent(new ServerResponseEvent(parsedLine.get(1)));
 			
-			if(irc.getConfig().getPasswordType() == PasswordType.NickServPass)
+			if(irc.getConfig().getPasswordType() == Config.PasswordType.NickServPass)
 			{
 				irc.nickservIdentify(irc.getConfig().getPassword());
 			}

@@ -4,8 +4,8 @@ import java.util.AbstractMap.SimpleEntry;
 
 import heufybot.core.events.LoggingInterface;
 import heufybot.modules.ModuleInterface;
+import heufybot.modules.ModuleInterface.ModuleLoaderResponse;
 import heufybot.utils.FileUtils;
-import heufybot.utils.enums.ModuleLoaderResponse;
 
 public class HeufyBot
 {

@@ -11,10 +11,14 @@ import java.util.Map;
 import org.yaml.snakeyaml.Yaml;
 
 import heufybot.core.cap.*;
-import heufybot.utils.enums.PasswordType;
 
 public class Config 
 {
+	public enum PasswordType 
+	{
+		None, ServerPass, NickServPass, SASL;
+	}
+	
 	private String nickname, username, realname, server, password, commandPrefix;
 	private int port, reconnectAttempts, reconnectInterval;
 	private PasswordType passwordType;

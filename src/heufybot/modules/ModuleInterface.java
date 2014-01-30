@@ -14,13 +14,17 @@ import heufybot.core.User;
 import heufybot.core.events.EventListenerAdapter;
 import heufybot.core.events.types.*;
 import heufybot.utils.StringUtils;
-import heufybot.utils.enums.ModuleLoaderResponse;
 
 public class ModuleInterface extends EventListenerAdapter
 {
 	private ArrayList<Module> modules;
 	private List<String> ignores;
 	private HeufyBot bot;
+	
+	public enum ModuleLoaderResponse
+	{
+		Success, DoesNotExist, AlreadyLoaded
+	}
 	
 	public ModuleInterface(HeufyBot bot)
 	{

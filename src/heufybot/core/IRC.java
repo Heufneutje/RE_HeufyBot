@@ -3,9 +3,6 @@ package heufybot.core;
 import heufybot.core.events.EventListenerManager;
 import heufybot.core.events.types.BotMessageEvent;
 import heufybot.utils.SSLSocketUtils;
-import heufybot.utils.enums.ConnectionState;
-import heufybot.utils.enums.PasswordType;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,6 +22,11 @@ import javax.net.SocketFactory;
 
 public class IRC 
 {
+	public enum ConnectionState 
+	{
+		Initializing, Connected, Disconnected
+	}
+	
 	private static final IRC instance = new IRC();
 	
 	private Config config;
@@ -118,7 +120,7 @@ public class IRC
 	
 	public void login()
 	{
-		if(config.getPasswordType() == PasswordType.ServerPass)
+		if(config.getPasswordType() == Config.PasswordType.ServerPass)
 		{
 			cmdPASS(config.getPassword());
 		}
