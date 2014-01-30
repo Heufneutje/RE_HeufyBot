@@ -1,6 +1,6 @@
 package heufybot.modules;
 
-import heufybot.utils.enums.ModuleLoaderResponse;
+import heufybot.modules.ModuleInterface.ModuleLoaderResponse;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
