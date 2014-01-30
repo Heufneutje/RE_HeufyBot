@@ -10,7 +10,7 @@ import heufybot.utils.FileUtils;
 
 public class HeufyBot
 {
-	public final static String VERSION = "0.3.0";
+	public final static String VERSION = "0.4.0";
 	private Config config;
 	private IRC irc;
 	private ModuleInterface moduleInterface;
