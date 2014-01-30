@@ -8,7 +8,7 @@ import heufybot.core.HeufyBot;
  * Abstract Module class.
  * All modules must extend this class in order to be loadable.
  * @author Heufneutje
- * @version 1.0
+ * @version 0.4.0
  */
 public abstract class Module 
 {

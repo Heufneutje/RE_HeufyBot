@@ -14,6 +14,7 @@ public class Ignore extends Module
 	public Ignore()
 	{
 		this.authType = Module.AuthType.OPs;
+		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(ignore|unignore)($| .*)";
 	}
 	

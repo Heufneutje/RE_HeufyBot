@@ -11,6 +11,7 @@ public class Help extends Module
 	public Help()
 	{
 		this.authType = Module.AuthType.Anyone;
+		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(help)($| .*)";
 	}
 	

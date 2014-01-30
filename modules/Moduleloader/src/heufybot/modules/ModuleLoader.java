@@ -10,6 +10,7 @@ public class ModuleLoader extends Module
 	public ModuleLoader()
 	{
 		this.authType = Module.AuthType.OPs;
+		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(load|unload|reload)($| .*)";
 	}
 
