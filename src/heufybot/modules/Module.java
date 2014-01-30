@@ -20,7 +20,7 @@ public abstract class Module
 	
 	public enum TriggerType
 	{
-		Message, PM, Action, PMAction;
+		Message, Action;
 	}
 	
 	/**

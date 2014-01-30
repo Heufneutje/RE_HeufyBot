@@ -93,12 +93,12 @@ public class ModuleInterface extends EventListenerAdapter
 	
 	public void onPMMessage(PMMessageEvent event)
 	{
-		handleMessage(event.getUser(), null, event.getMessage(), TriggerType.PM);
+		handleMessage(event.getUser(), null, event.getMessage(), TriggerType.Message);
 	}
 	
 	public void onPMAction(PMActionEvent event)
 	{
-		handleMessage(event.getUser(), null, event.getMessage(), TriggerType.PMAction);
+		handleMessage(event.getUser(), null, event.getMessage(), TriggerType.Action);
 	}
 	
 	public void onMessage(MessageEvent event)
@@ -123,7 +123,7 @@ public class ModuleInterface extends EventListenerAdapter
 		for (int l = 0; l < listCopy.length; l++)
 		{
 			final Module module = listCopy[l];
-			if((message.toLowerCase().matches(module.getTrigger()) && Arrays.asList(module.getTriggerTypes()).contains(triggerType)) || module.getTriggerOnEveryMessage())
+			if((message.toLowerCase().matches(module.getTrigger()) || module.getTriggerOnEveryMessage()) && Arrays.asList(module.getTriggerTypes()).contains(triggerType))
 			{
 				final String target;
 				if(channel == null)
