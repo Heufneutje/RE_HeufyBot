@@ -55,7 +55,7 @@ public abstract class Module
 	
 	/**
 	 * What types of events trigger the module.
-	 * Possible triggers are: Message, PM, Action and PMAction
+	 * Possible triggers are: Message and Action
 	 */
 	protected TriggerType[] triggerTypes;
 	
