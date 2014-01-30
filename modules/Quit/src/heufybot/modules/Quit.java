@@ -14,12 +14,12 @@ public class Quit extends Module
 	@Override
 	public void processEvent(String source, String message, String triggerUser, List<String> params) 
 	{
-		bot.getIRC().cmdQUIT("Quit command issued by " + triggerUser);
+		bot.stop("Quit command issued by " + triggerUser);
 	}
 
 	public String getHelp(String message)
 	{
-		return "Commands: " + commandPrefix + "quit | Makes the quit the server.";
+		return "Commands: " + commandPrefix + "quit | Makes the bot quit the server.";
 	}
 
 	@Override
