@@ -14,7 +14,7 @@ $hideEvents = FALSE;
 if ($_GET['hideevents'] === 'true') $hideEvents = TRUE;
 
 if ($channel !== FALSE and $date !== FALSE) {
-	echo 'Log for #'.$channel.' of '.$date;
+	echo 'Log for #'.$channel.' on '.$date;
 	if ($hideEvents) echo ' with events hidden';
 }
 else echo 'Log Prettifier';
@@ -41,7 +41,7 @@ else {
 		}
 		//otherwise, add it on
 		else $eventLinkUrl .= '&hideevents='.($hideEvents?'false':'true');
-		echo '<span><a href="'.$eventLinkUrl.'">'.($hideEvents?'Show':'Hide').' events</a></span>'."\r\n";
+		echo '<p><span><a href="'.$eventLinkUrl.'">'.($hideEvents?'Show':'Hide').' events</a></span></p>'."\r\n";
 		
 		echo '<table class="log" id="log"><tr class="message"> <th class="time">TIME</th> <th class="user">NICK</th> <th class="text">MESSAGE</th></tr>'."\r\n";
 		$timestampLength = 7;
