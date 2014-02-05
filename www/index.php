@@ -28,7 +28,7 @@ elseif($date === FALSE) echo 'No date provided!';
 else {
 	$filename = '/home/stefan/heufybot-desertbus/logs/DesertBusForHope/#'.$channel.'/'.$date.'.log';
 	$log = file_get_contents($filename);
-	if ($log === FALSE) echo 'Error while trying to open file "'.$filename.'"';
+	if ($log === FALSE) echo 'Error while trying to open log file.';
 	else {
 		unset($filename);
 		$lines = explode("\n", htmlspecialchars($log));
