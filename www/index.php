@@ -26,7 +26,7 @@ else echo 'Log Prettifier';
 if ($channel === FALSE) echo 'No channel name provided!';
 elseif($date === FALSE) echo 'No date provided!';
 else {
-	$filename = '/home/stefan/heufybot-desertbus/logs/DesertBusForHope/#'.$channel.'/'.$date.'.log';
+	$filename = '/home/stefan/logs/DesertBusForHope/#'.$channel.'/'.$date.'.log';
 	$log = file_get_contents($filename);
 	if ($log === FALSE) echo 'Error while trying to open log file.';
 	else {
