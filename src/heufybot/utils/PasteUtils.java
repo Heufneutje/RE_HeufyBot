@@ -46,10 +46,7 @@ public class PasteUtils
 	        
 	        JSONObject json = (JSONObject) new JSONParser().parse(result);
 	        JSONObject paste = (JSONObject) json.get("paste");
-	        String raw = paste.get("raw").toString();
-	        
-	        System.out.println(raw);
-	        return raw;
+	        return paste.get("raw").toString();
 	    }
 	    catch (Exception e)
 	    {
