@@ -11,7 +11,7 @@ import java.util.List;
 
 import heufybot.core.Logger;
 import heufybot.utils.FileUtils;
-import heufybot.utils.PastebinUtils;
+import heufybot.utils.PasteUtils;
 import heufybot.utils.RegexUtils;
 import heufybot.utils.StringUtils;
 
@@ -197,18 +197,14 @@ public class Tell extends Module
 						String[] tells = foundTells.split("\n");
 						if(tells.length > 3)
 						{
-							String result = PastebinUtils.post(foundTells, triggerUser + "'s Messages", "10M");
+							String result = PasteUtils.post(foundTells, triggerUser + "'s Messages", "hour");
 							if(result == null)
 							{
 								bot.getIRC().cmdPRIVMSG(source, "Error: Messages could not be posted.");
 							}
-							else if(result.startsWith("http://pastebin.com/"))
-							{
-								bot.getIRC().cmdPRIVMSG(source, "These messages sent by you have not yet been received: " + result  + " (Link expires in 10 minutes)");
-							}
 							else
 							{
-								bot.getIRC().cmdPRIVMSG(source, "Error: " + result);
+								bot.getIRC().cmdPRIVMSG(source, "These messages sent by you have not yet been received: " + result  + " (Link expires in 60 minutes)");
 							}
 						}
 						else
@@ -258,18 +254,14 @@ public class Tell extends Module
 					String[] receivedTells = tells.split("\n");
 					if(receivedTells.length > 3)
 					{
-						String result = PastebinUtils.post(tells, triggerUser + "'s Messages", "1H");
+						String result = PasteUtils.post(tells, triggerUser + "'s Messages", "hour");
 						if(result == null)
 						{
 							bot.getIRC().cmdPRIVMSG(source, "Error: Messages could not be posted.");
 						}
-						else if(result.startsWith("http://pastebin.com/"))
-						{
-							bot.getIRC().cmdPRIVMSG(source, triggerUser + ", you have " + receivedTells.length + " messages. Go here to read them: " + result  + " (Link expires in 60 minutes)");
-						}
 						else
 						{
-							bot.getIRC().cmdPRIVMSG(source, "Error: " + result);
+							bot.getIRC().cmdPRIVMSG(source, triggerUser + ", you have " + receivedTells.length + " messages. Go here to read them: " + result  + " (Link expires in 60 minutes)");
 						}
 					}
 					else

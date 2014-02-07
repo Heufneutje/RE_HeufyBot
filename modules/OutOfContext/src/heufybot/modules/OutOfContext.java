@@ -2,7 +2,7 @@ package heufybot.modules;
 
 import heufybot.core.HeufyBot;
 import heufybot.utils.FileUtils;
-import heufybot.utils.PastebinUtils;
+import heufybot.utils.PasteUtils;
 import heufybot.utils.StringUtils;
 
 import java.text.DateFormat;
@@ -37,18 +37,14 @@ public class OutOfContext extends Module
 			}
 			else
 			{
-				String result = PastebinUtils.post(data, "HeufyBot OutOfContext Log", "10M");
+				String result = PasteUtils.post(data, "HeufyBot OutOfContext Log", "hour");
 				if(result == null)
 				{
 					bot.getIRC().cmdPRIVMSG(source, "Error: OoC Log could not be posted.");
 				}
-				else if(result.startsWith("http://pastebin.com/"))
-				{
-					bot.getIRC().cmdPRIVMSG(source, "OoC Log posted: " + result  + " (Link expires in 10 minutes).");
-				}
 				else
 				{
-					bot.getIRC().cmdPRIVMSG(source, "Error: " + result + ".");
+					bot.getIRC().cmdPRIVMSG(source, "OoC Log posted: " + result  + " (Link expires in 60 minutes).");
 				}
 			}
 		}

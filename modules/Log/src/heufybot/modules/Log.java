@@ -2,7 +2,7 @@ package heufybot.modules;
 
 import heufybot.core.HeufyBot;
 import heufybot.utils.FileUtils;
-import heufybot.utils.PastebinUtils;
+import heufybot.utils.PasteUtils;
 import heufybot.utils.StringUtils;
 
 import java.text.DateFormat;
@@ -93,17 +93,10 @@ public class Log extends Module
 			return;
 		}
 		
-		String result = PastebinUtils.post(FileUtils.readFile(filePath), "Log for " + source + " on " + dateString, "10M");
+		String result = PasteUtils.post(FileUtils.readFile(filePath), "Log for " + source + " on " + dateString, "hour");
 		if(result != null)
 		{
-			if(result.startsWith("http://pastebin.com/"))
-			{
-				bot.getIRC().cmdPRIVMSG(source, "Log for " + source + " on " + dateString + " posted: " + result + " (Link expires in 10 minutes)");
-			}
-			else
-			{
-				bot.getIRC().cmdPRIVMSG(source, "Error: " + result);
-			}
+			bot.getIRC().cmdPRIVMSG(source, "Log for " + source + " on " + dateString + " posted: " + result + " (Link expires in 60 minutes)");
 		}
 		else
 		{
