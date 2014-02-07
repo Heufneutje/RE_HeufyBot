@@ -106,7 +106,7 @@ public class FileUtils
 		File file = new File(filePath);
 		if(!file.exists())
 		{
-			file.mkdir();
+			file.mkdirs();
 		}
 	}
 	

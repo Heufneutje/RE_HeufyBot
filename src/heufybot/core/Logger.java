@@ -1,5 +1,7 @@
 package heufybot.core;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,6 +12,8 @@ public class Logger
 {
 	public static void log(String line, String target, String network)
 	{
+		String baseLogPath = Config.getInstance().getLogPath();
+		
 		//Timestamp line
 		DateFormat dateFormat = new SimpleDateFormat("[HH:mm]");
 		Date date = new Date();
@@ -28,22 +32,22 @@ public class Logger
 		System.out.println(consoleLogLine);
 		
 		//Output to logfile
+		Path path = Paths.get(baseLogPath).toAbsolutePath();
 		if(network == null)
 		{
-			FileUtils.writeFileAppend("logs/server.log", consoleLogLine + "\n");
+			FileUtils.writeFileAppend(path.resolve("server.log").toString(), consoleLogLine + "\n");
 		}
 		else
 		{
-			FileUtils.touchDir("logs/" + network);
-		    FileUtils.touchDir("logs/" + network + "/" + target);
+		    FileUtils.touchDir(path.resolve(network + "/" + target).toString());
 
 		    line = dateFormat.format(date) + " " + line;
 		    
 		    dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		    FileUtils.writeFileAppend("logs/" + network + "/" + target + "/" + dateFormat.format(date) + ".log", line + "\n");
+		    FileUtils.writeFileAppend(path.resolve(network + "/" + target + "/" + dateFormat.format(date) + ".log").toString(), line + "\n");
 		}
 	}
-	
+
 	public static void log(String line)
 	{
 		log(line, null, null);
