@@ -79,7 +79,7 @@ public class LogDB extends Module
 	public void post(String source)
 	{
 		String targetLog = source;
-		String filePath = "logs/" + bot.getIRC().getServerInfo().getNetwork() + "/" + targetLog + "/" + dateString + ".log";
+		String filePath = bot.getConfig().getLogPath() + "/" + bot.getIRC().getServerInfo().getNetwork() + "/" + targetLog + "/" + dateString + ".log";
 		
 		if(!FileUtils.fileExists(filePath))
 		{

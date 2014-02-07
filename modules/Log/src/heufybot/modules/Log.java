@@ -85,7 +85,7 @@ public class Log extends Module
 	public void post(final HeufyBot bot)
 	{
 		String targetLog = source;
-		String filePath = "logs/" + bot.getIRC().getServerInfo().getNetwork() + "/" + targetLog + "/" + dateString + ".log";
+		String filePath = bot.getConfig().getLogPath() + "/" + bot.getIRC().getServerInfo().getNetwork() + "/" + targetLog + "/" + dateString + ".log";
 		
 		if(FileUtils.readFile(filePath) == null)
 		{
