@@ -51,6 +51,8 @@ public class HeufyBot
 		
 		//Unload modules
 		this.unloadModules();
+		
+		Logger.log("*** Stopping...");
 	}
 	
 	public void restart()
