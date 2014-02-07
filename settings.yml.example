@@ -62,6 +62,3 @@
 #botAdmins: Users that are authorized to use modules that have access level "ops"
 - botAdmins:
   - "ExampleNick"
-
-#opAdmins: Whether channel ops are considered bot admins
-- opAdmins: true

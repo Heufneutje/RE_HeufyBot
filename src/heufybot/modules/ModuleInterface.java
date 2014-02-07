@@ -168,25 +168,7 @@ public class ModuleInterface extends EventListenerAdapter
 	
 	public boolean isAuthorized(Module module, Channel channel, User user)
 	{
-		if(module.authType == Module.AuthType.Anyone || bot.getConfig().getBotAdmins().contains(user.getNickname()))
-		{
-			return true;
-		}
-		else
-		{
-			if(channel == null)
-			{
-				return false;
-			}
-			else if(bot.getConfig().isOpAdmins())
-			{
-				return channel.checkOpStatus(user);
-			}
-			else
-			{
-				return false;
-			}
-		}
+		return module.authType == Module.AuthType.Anyone || bot.getConfig().getBotAdmins().contains(user.getNickname());
 	}
 	
 	public boolean isModuleLoaded(String moduleName)
