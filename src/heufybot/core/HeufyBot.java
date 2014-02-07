@@ -48,6 +48,9 @@ public class HeufyBot
 	{
 		irc.cmdQUIT(message);
 		irc.disconnect(false);
+		
+		//Unload modules
+		this.unloadModules();
 	}
 	
 	public void restart()
@@ -56,7 +59,6 @@ public class HeufyBot
 		this.stop("Restarting...");
 		
 		//Reload modules
-		this.unloadModules();
 		this.loadModules();
 
 		//Reload config and reconnect
