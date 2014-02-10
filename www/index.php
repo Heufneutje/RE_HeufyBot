@@ -8,14 +8,14 @@
 <title>
 <?php
 //First and foremost, some input validation
-$server = (isset($_GET['server']) ? htmlspecialchars($_GET['server']) : FALSE);
+$network = (isset($_GET['network']) ? htmlspecialchars($_GET['network']) : FALSE);
 $channel = (isset($_GET['channel']) ? htmlspecialchars($_GET['channel']) : FALSE);
 $date = (preg_match('/\A\d{4}-\d{2}-\d{2}\z/', $_GET['date']) === 1 ? htmlspecialchars($_GET['date']) : FALSE);
 $hideEvents = FALSE;
 if ($_GET['hideevents'] === 'true') $hideEvents = TRUE;
 
-if ($server !== FALSE and $channel !== FALSE and $date !== FALSE) {
-	echo 'Log for #'.$channel.' on server '.$server.' from '.$date;
+if ($network !== FALSE and $channel !== FALSE and $date !== FALSE) {
+	echo 'Log for #'.$channel.' on '.$network.' from '.$date;
 	if ($hideEvents) echo ' with events hidden';
 }
 else echo 'Log Prettifier';
@@ -24,11 +24,11 @@ else echo 'Log Prettifier';
 </head>
 <body>
 <?php
-if ($server === FALSE) echo 'No server name provided!';
+if ($network === FALSE) echo 'No network name provided!';
 elseif ($channel === FALSE) echo 'No channel name provided!';
 elseif($date === FALSE) echo 'No date provided!';
 else {
-	$filename = '/home/stefan/logs/'.$server.'/#'.$channel.'/'.$date.'.log';
+	$filename = '/home/stefan/logs/'.$network.'/#'.$channel.'/'.$date.'.log';
 	$log = file_get_contents($filename);
 	if ($log === FALSE) echo 'Error while trying to open log file.';
 	else {

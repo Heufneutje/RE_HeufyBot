@@ -10,11 +10,11 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-public class LogDB extends Module
+public class LogEC2 extends Module
 {
 	private String dateString;
 
-	public LogDB()
+	public LogEC2()
 	{
 		this.authType = Module.AuthType.Anyone;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
@@ -87,7 +87,9 @@ public class LogDB extends Module
 			return;
 		}
 		
-		String url = "http://logs.heufneutje.net/?channel=" + source.replaceAll("#", "") + "&date=" + dateString;
+		String url = "http://logs.heufneutje.net/?channel=" + source.replaceAll("#", "") +
+				"&network=" + bot.getIRC().getServerInfo().getNetwork() +
+				"&date=" + dateString;
 		bot.getIRC().cmdPRIVMSG(source, "Log for " + source + " on " + dateString + ": " + url);
 	}
 
