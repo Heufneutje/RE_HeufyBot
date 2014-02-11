@@ -286,6 +286,30 @@ public class IRC
 		}
 	}
 	
+	public void sendRawSplit(String prefix, String message, String suffix)
+	{
+		String fullMessage = prefix + message + suffix;
+		if(fullMessage.length() < config.getMaxLineLength() - 2)
+		{
+			sendRaw(fullMessage);
+			return;
+		}
+		
+		int maxLength = config.getMaxLineLength() - 2 - (prefix + suffix).length();
+		int iterations = (int) Math.ceil(message.length() / (double) maxLength);
+		for(int i = 0; i < iterations; i++)
+		{
+			int endPoint = (i != iterations - 1) ? ((i + 1) * maxLength) : message.length();
+			String currentPart = prefix + message.substring(i * maxLength, endPoint) + suffix;
+			sendRaw(currentPart);
+		}
+	}
+	
+	public void sendRawSplit(String prefix, String message)
+	{
+		sendRawSplit(prefix, message, "");
+	}
+	
 	public void cmdNICK(String nick)
 	{
 		sendRawNow("NICK " + nick);
@@ -314,7 +338,7 @@ public class IRC
 	public void cmdPRIVMSG(String target, String message)
 	{
 		eventListenerManager.dispatchEvent(new BotMessageEvent(getUser(nickname), target, message));
-		sendRaw("PRIVMSG " + target + " :" + message);
+		sendRawSplit("PRIVMSG " + target + " :", message);
 	}
 	
 	public void cmdJOIN(String channel, String key)
@@ -344,7 +368,7 @@ public class IRC
 	
 	public void cmdNOTICE(String target, String notice)
 	{
-		sendRaw("NOTICE " + target + " :" + notice);
+		sendRawSplit("NOTICE " + target + " :", notice);
 	}
 	
 	public void cmdCAP(String capCommand, String arguments)
@@ -364,7 +388,7 @@ public class IRC
 	
 	public void ctcpCommand(String target, String command)
 	{
-		cmdPRIVMSG(target, "\u0001" + command + "\u0001");
+		sendRawSplit("PRIVMSG " + target + " :\u0001", command, "\u0001");
 	}
 	
 	public void ctcpReply(String target, String replyType, String reply)

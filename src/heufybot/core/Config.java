@@ -21,11 +21,10 @@ public class Config
 	}
 	
 	private String nickname, username, realname, server, password, commandPrefix, logPath;
-	private int port, reconnectAttempts, reconnectInterval;
+	private int port, reconnectAttempts, reconnectInterval, messageDelay, maxLineLength;
 	private PasswordType passwordType;
 	private boolean autoJoinEnabled, sslEnabled, autoNickChange, autoReconnect;
 	private List<String> autoJoinChannels, modulesToLoad, botAdmins;
-	private long messageDelay;
 	private List<CapHandler> capHandlers;
 	
 	private static final Config instance = new Config();
@@ -33,6 +32,7 @@ public class Config
 	private Config()
 	{
 		this.messageDelay = 500;
+		this.maxLineLength = 512;
 		this.logPath = "logs";
 		this.capHandlers = new ArrayList<CapHandler>();
 		this.capHandlers.add(new EnablingCapHandler("multi-prefix"));
@@ -239,9 +239,14 @@ public class Config
 		return reconnectInterval;
 	}
 
-	public long getMessageDelay()
+	public int getMessageDelay()
 	{
 		return messageDelay;
+	}
+	
+	public int getMaxLineLength()
+	{
+		return maxLineLength;
 	}
 	
 	public List<CapHandler> getCapHandlers()
