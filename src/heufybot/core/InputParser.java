@@ -5,6 +5,7 @@ import heufybot.core.cap.CAPException;
 import heufybot.core.cap.CapHandler;
 import heufybot.core.events.types.*;
 import heufybot.utils.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -27,7 +28,7 @@ public class InputParser
 	
 	public void parseLine(String line)
 	{
-		List<String> parsedLine = StringUtils.tokenizeLine(line);
+		List<String> parsedLine = this.tokenizeLine(line);
 		
 		String senderInfo = "";
 		if (parsedLine.get(0).charAt(0) == ':')
@@ -321,8 +322,8 @@ public class InputParser
 			{
 				String prefixes = rawResponse.split("PREFIX=")[1];
 				prefixes = prefixes.substring(0, prefixes.indexOf(" "));
-				irc.getServerInfo().setUserPrefixes(StringUtils.getUserPrefixes(prefixes));
-				irc.getServerInfo().setReverseUserPrefixes(StringUtils.getReverseUserPrefixes(prefixes));
+				irc.getServerInfo().setUserPrefixes(this.getUserPrefixes(prefixes));
+				irc.getServerInfo().setReverseUserPrefixes(this.getReverseUserPrefixes(prefixes));
 			}
 			if(rawResponse.contains("CHANTYPES="))
 			{
@@ -807,5 +808,61 @@ public class InputParser
 				}
 			}
 		}
+	}
+	
+	private List<String> tokenizeLine(String input)
+	{
+		List<String> retn = new ArrayList<String>();
+
+		if (input == null || input.length() == 0)
+			return retn;
+
+		String temp = input;
+
+		while (true)
+		{
+			if (temp.startsWith(":") && retn.size() > 0) 
+			{
+				retn.add(temp.substring(1));
+
+				return retn;
+			}
+
+			String[] split = temp.split(" ", 2);
+			retn.add(split[0]);
+
+			if (split.length > 1)
+				temp = split[1];
+			else
+				break;
+		}
+
+		return retn;
+	}
+	
+	private LinkedHashMap<String, String> getUserPrefixes(String prefixString)
+	{
+		LinkedHashMap<String, String> prefixes = new LinkedHashMap<String, String>();
+		char[] channelModes = prefixString.substring(1, prefixString.indexOf(")")).toCharArray();
+		char[] userLevels = prefixString.substring(prefixString.indexOf(")") + 1).toCharArray();
+		
+		for(int i = 0; i < channelModes.length; i++)
+		{
+			prefixes.put("" + channelModes[i], "" + userLevels[i]);
+		}
+		return prefixes;
+	}
+	
+	private LinkedHashMap<String, String> getReverseUserPrefixes(String prefixString)
+	{
+		LinkedHashMap<String, String> prefixes = new LinkedHashMap<String, String>();
+		char[] channelModes = prefixString.substring(1, prefixString.indexOf(")")).toCharArray();
+		char[] userLevels = prefixString.substring(prefixString.indexOf(")") + 1).toCharArray();
+		
+		for(int i = 0; i < channelModes.length; i++)
+		{
+			prefixes.put("" + userLevels[i], "" + channelModes[i]);
+		}
+		return prefixes;
 	}
 }
