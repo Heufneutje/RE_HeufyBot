@@ -46,6 +46,9 @@
 #reconnectInteval: The number of seconds the bot should wait between connection attempts
 - reconnectInterval: 10
 
+#logPath: The path where logs will be saved. Default is "logs", which will be created next to the main JAR file
+- logPath: "logs"
+
 #=================#
 #=Module Settings=#
 #=================#
@@ -62,6 +65,3 @@
 #botAdmins: Users that are authorized to use modules that have access level "ops"
 - botAdmins:
   - "ExampleNick"
-
-#opAdmins: Whether channel ops are considered bot admins
-- opAdmins: true

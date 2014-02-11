@@ -21,7 +21,6 @@ public class HeufyBot
 	private HeufyBot()
 	{
 		FileUtils.touchDir("data");
-		FileUtils.touchDir("logs");
 		FileUtils.touchDir("modules");
 		
 		this.config = Config.getInstance();
@@ -48,6 +47,11 @@ public class HeufyBot
 	{
 		irc.cmdQUIT(message);
 		irc.disconnect(false);
+		
+		//Unload modules
+		this.unloadModules();
+		
+		Logger.log("*** Stopping...");
 	}
 	
 	public void restart()
@@ -56,7 +60,6 @@ public class HeufyBot
 		this.stop("Restarting...");
 		
 		//Reload modules
-		this.unloadModules();
 		this.loadModules();
 
 		//Reload config and reconnect

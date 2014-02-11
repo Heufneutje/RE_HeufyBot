@@ -11,6 +11,7 @@ import java.util.Map;
 import org.yaml.snakeyaml.Yaml;
 
 import heufybot.core.cap.*;
+import heufybot.utils.FileUtils;
 
 public class Config 
 {
@@ -19,10 +20,10 @@ public class Config
 		None, ServerPass, NickServPass, SASL;
 	}
 	
-	private String nickname, username, realname, server, password, commandPrefix;
+	private String nickname, username, realname, server, password, commandPrefix, logPath;
 	private int port, reconnectAttempts, reconnectInterval;
 	private PasswordType passwordType;
-	private boolean autoJoinEnabled, sslEnabled, autoNickChange, autoReconnect, opAdmins;
+	private boolean autoJoinEnabled, sslEnabled, autoNickChange, autoReconnect;
 	private List<String> autoJoinChannels, modulesToLoad, botAdmins;
 	private long messageDelay;
 	private List<CapHandler> capHandlers;
@@ -32,6 +33,7 @@ public class Config
 	private Config()
 	{
 		this.messageDelay = 500;
+		this.logPath = "logs";
 		this.capHandlers = new ArrayList<CapHandler>();
 		this.capHandlers.add(new EnablingCapHandler("multi-prefix"));
 	}
@@ -44,8 +46,6 @@ public class Config
 	@SuppressWarnings("unchecked")
 	public boolean loadConfigFromFile(String fileName)
 	{
-		Logger.log("*** Loading settings...");
-		
 		try
 		{
 			InputStream input = new FileInputStream(new File(fileName));
@@ -98,17 +98,17 @@ public class Config
 			Map<String, Integer> intervalSetting = (Map<String, Integer>) readSettings.get(12);
 			this.reconnectInterval = intervalSetting.get("reconnectInterval");
 			
-			Map<String, String> prefixSetting = (Map<String, String>) readSettings.get(13);
+			Map<String, String> logpathSetting = (Map<String, String>) readSettings.get(13);
+			this.logPath = logpathSetting.get("logPath");
+			
+			Map<String, String> prefixSetting = (Map<String, String>) readSettings.get(14);
 			this.commandPrefix = prefixSetting.get("commandPrefix");
 			
-			Map<String, List<String>> modulesSetting = (Map<String, List<String>>) readSettings.get(14);
+			Map<String, List<String>> modulesSetting = (Map<String, List<String>>) readSettings.get(15);
 			this.modulesToLoad = modulesSetting.get("modulesToLoad");
 			
-			Map<String, List<String>> adminSetting = (Map<String, List<String>>) readSettings.get(15);
+			Map<String, List<String>> adminSetting = (Map<String, List<String>>) readSettings.get(16);
 			this.botAdmins = adminSetting.get("botAdmins");
-			
-			Map<String, Boolean> opSetting = (Map<String, Boolean>) readSettings.get(16);
-			this.opAdmins = opSetting.get("opAdmins");
 			
 			if(autoJoinChannels == null)
 			{
@@ -141,6 +141,8 @@ public class Config
 			{
 				this.capHandlers.add(new SASLCapHandler(username, password));
 			}
+			
+			FileUtils.touchDir(logPath);
 			
 			Logger.log("*** Loaded settings successfully");
 			return true;
@@ -247,6 +249,11 @@ public class Config
 		return capHandlers;
 	}
 	
+	public String getLogPath()
+	{
+		return logPath;
+	}
+	
 	public String getCommandPrefix()
 	{
 		return commandPrefix;
@@ -260,10 +267,5 @@ public class Config
 	public List<String> getBotAdmins()
 	{
 		return botAdmins;
-	}
-	
-	public boolean isOpAdmins()
-	{
-		return opAdmins;
 	}
 }
