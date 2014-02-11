@@ -21,7 +21,6 @@ public class HeufyBot
 	private HeufyBot()
 	{
 		FileUtils.touchDir("data");
-		FileUtils.touchDir("logs");
 		FileUtils.touchDir("modules");
 		
 		this.config = Config.getInstance();
