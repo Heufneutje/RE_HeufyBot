@@ -38,12 +38,12 @@ public class URLUtils
 			String line;
 			String data = "";
 			
-		    while( (line = bufReader.readLine()) != null)
-		    {
-		    	data += line + " ";
-		    }
-		    bufReader.close();
-		    return data;
+			while( (line = bufReader.readLine()) != null)
+			{
+			    data += line + " ";
+			}
+			bufReader.close();
+			return data;
 		}
 		catch(Exception e)
 		{
@@ -66,7 +66,7 @@ public class URLUtils
 			while (connection.getResponseCode() / 100 == 3)
 			{
 				urlString = connection.getHeaderField("location");
-			    connection = (HttpURLConnection) new URL(urlString).openConnection();
+				connection = (HttpURLConnection) new URL(urlString).openConnection();
 			}
 			return urlString;
 		}
@@ -108,23 +108,23 @@ public class URLUtils
 			
 			URL url = new URL("https://www.googleapis.com/urlshortener/v1/url");
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-	        connection.setRequestMethod("POST"); 
-	        connection.setRequestProperty("Content-Type", "application/json"); 
-	        connection.setDoOutput(true);
-
-	        OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
-	        out.write(json);
-	        out.close();
-
-	        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-	        String decodedString;
-	        String result = "";
-	        while ((decodedString = in.readLine()) != null)
-	        {
-	        	result += decodedString;
-	        }
-	        in.close();
-	        return result.substring(result.indexOf("http://goo.gl"), result.indexOf("\"", result.indexOf("http://goo.gl")));
+		        connection.setRequestMethod("POST"); 
+		        connection.setRequestProperty("Content-Type", "application/json"); 
+		        connection.setDoOutput(true);
+	
+		        OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
+		        out.write(json);
+		        out.close();
+	
+		        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		        String decodedString;
+		        String result = "";
+		        while ((decodedString = in.readLine()) != null)
+		        {
+		        	result += decodedString;
+		        }
+		        in.close();
+		        return result.substring(result.indexOf("http://goo.gl"), result.indexOf("\"", result.indexOf("http://goo.gl")));
 		}
 		catch(Exception e)
 		{
