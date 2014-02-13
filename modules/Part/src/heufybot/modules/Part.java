@@ -8,7 +8,7 @@ public class Part extends Module
 {
 	public Part()
 	{
-		this.authType = Module.AuthType.Anyone;
+		this.authType = Module.AuthType.OPs;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(part)($| .*)";
 	}
