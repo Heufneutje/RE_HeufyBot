@@ -208,18 +208,18 @@ public class IRC
 					String line;
 					try
 					{
-					    line = inputReader.readLine();
+						line = inputReader.readLine();
 					}
 					catch (InterruptedIOException iioe) 
 					{
-					    cmdPING("" + System.currentTimeMillis() / 1000);
-					    continue;
+						cmdPING("" + System.currentTimeMillis() / 1000);
+						continue;
 					}
 					catch (Exception e)
 					{
-					    line = null;
-					    Logger.log("*** Connection to the server was lost. Trying to reconnect...");
-					    disconnect(true);
+						line = null;
+						Logger.log("*** Connection to the server was lost. Trying to reconnect...");
+						disconnect(true);
 					}
 					
 					if (line == null)
@@ -227,7 +227,7 @@ public class IRC
 					
 					if(!line.equals(""))
 					{
-					    inputParser.parseLine(line);
+						inputParser.parseLine(line);
 					}
 					
 					if (Thread.interrupted())
