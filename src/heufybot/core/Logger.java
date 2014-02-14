@@ -39,12 +39,12 @@ public class Logger
 		}
 		else
 		{
-		    FileUtils.touchDir(path.resolve(network + "/" + target).toString());
-
-		    line = dateFormat.format(date) + " " + line;
-		    
-		    dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		    FileUtils.writeFileAppend(path.resolve(network + "/" + target + "/" + dateFormat.format(date) + ".log").toString(), line + "\n");
+			FileUtils.touchDir(path.resolve(network + "/" + target).toString());
+			
+			line = dateFormat.format(date) + " " + line;
+			
+			dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			FileUtils.writeFileAppend(path.resolve(network + "/" + target + "/" + dateFormat.format(date) + ".log").toString(), line + "\n");
 		}
 	}
 
