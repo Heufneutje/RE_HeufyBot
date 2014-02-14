@@ -40,7 +40,7 @@ public class URLUtils
 			
 			while( (line = bufReader.readLine()) != null)
 			{
-			    data += line + " ";
+				data += line + " ";
 			}
 			bufReader.close();
 			return data;
@@ -155,7 +155,7 @@ public class URLUtils
 			
 			for (int i = 0; i < nodes.getLength(); i++) 
 			{
-			    titles[i] = nodes.item(i).getNodeValue();
+				titles[i] = nodes.item(i).getNodeValue();
 			}
 			
 			expr = xpath.compile("//rss/channel/item/link/text()");
