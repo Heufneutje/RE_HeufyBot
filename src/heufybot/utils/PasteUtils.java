@@ -50,9 +50,9 @@ public class PasteUtils
 		}
 		catch (Exception e)
 		{
-		    e.printStackTrace();
-		    Logger.error("Paste.ee", "Something went wrong while posting to Paste.ee");
-		    return null;
+			e.printStackTrace();
+			Logger.error("Paste.ee", "Something went wrong while posting to Paste.ee");
+			return null;
 		}
 	}	
 }
