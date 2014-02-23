@@ -89,6 +89,6 @@
   - "ignore"
   
 # -botAdmins-
-# Users that are authorized to use modules that have access level "ops"
+# Users that are authorized to use modules that have access level "ops".
 - botAdmins:
   - "ExampleNick"
