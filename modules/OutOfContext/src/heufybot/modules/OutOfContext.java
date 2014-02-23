@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 public class OutOfContext extends Module
@@ -62,7 +63,7 @@ public class OutOfContext extends Module
 			    
 			    String toQuote = "";
 			    
-			    if(newQuote.matches("^<.*>.*") || newQuote.matches("^\\* .*") || newQuote.matches("^\\[.*\\] <.*>.*") || newQuote.matches("^\\[.*\\] \\* .*"))
+			    if(newQuote.matches("^\\[?(.)\\]? <(.)>(.*)") || newQuote.matches("^\\* .*") || newQuote.matches("^\\[.*\\] \\* .*"))
 			    {
 				    if(newQuote.matches("^\\[.*\\] <.*>.*") || newQuote.matches("^\\[.*\\] \\* .*"))
 				    {
@@ -263,7 +264,8 @@ public class OutOfContext extends Module
 			}
 			if(quoteID < 1)
 			{
-				quoteID = (int) (Math.random() * matches.size());
+				Random random = new Random();
+				quoteID = random.nextInt(matches.size());
 			}
 			else
 			{
