@@ -79,10 +79,13 @@ public class IRC
 		}
 		
 		SocketFactory sf;
-		if(config.isSSLEnabled())
+		if(config.isSSLEnabled() && config.trustInvalidCertificateEnabled())
 		{
-			//Trusting all certificates for now. Might make this a setting later
 			sf = new SSLSocketUtils().trustAllCertificates();
+		}
+		else if(config.isSSLEnabled())
+		{
+			sf = new SSLSocketUtils();
 		}
 		else
 		{
