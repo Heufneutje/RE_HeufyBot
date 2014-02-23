@@ -32,7 +32,7 @@ public class ModuleLoader extends Module
 				switch (result.getKey()) 
 				{
 				case Success:
-					bot.getIRC().cmdPRIVMSG(source, "Module \"" + result.getValue() + "\" was successfully loaded.");
+					bot.getIRC().cmdPRIVMSG(source, "Module \"" + result.getValue() + "\" was successfully loaded!");
 					break;
 				case AlreadyLoaded:
 					bot.getIRC().cmdPRIVMSG(source, "Module \"" + moduleName + "\" is already loaded.");
@@ -73,11 +73,11 @@ public class ModuleLoader extends Module
 				}
 				if(successList.size() > 0)
 				{
-					bot.getIRC().cmdPRIVMSG(source, "Module(s) \"" + StringUtils.join(successList, "\", \"") + "\" were successfully loaded.");
+					bot.getIRC().cmdPRIVMSG(source, "Module(s) \"" + StringUtils.join(successList, "\", \"") + "\" were successfully loaded!");
 				}
 				if(alreadyLoadedList.size() > 0)
 				{
-					bot.getIRC().cmdPRIVMSG(source, "Module(s) \"" + StringUtils.join(alreadyLoadedList, "\", \"") + "\" were already loaded.");
+					bot.getIRC().cmdPRIVMSG(source, "Module(s) \"" + StringUtils.join(alreadyLoadedList, "\", \"") + "\" were already loaded!");
 				}
 				if(doesNotExistList.size() > 0)
 				{
@@ -110,13 +110,13 @@ public class ModuleLoader extends Module
 							bot.getModuleInterface().unloadModule(module);
 						}
 					}
-					bot.getIRC().cmdPRIVMSG(source, "All modules have been unloaded.");
+					bot.getIRC().cmdPRIVMSG(source, "All modules have been unloaded!");
 				}
 				else
 				{
 					if(moduleName.equalsIgnoreCase("ModuleLoader"))
 					{
-						bot.getIRC().cmdPRIVMSG(source, "The \"ModuleLoader\" module cannot be unloaded.");
+						bot.getIRC().cmdPRIVMSG(source, "The \"ModuleLoader\" module cannot be unloaded!");
 						return;
 					}
 					SimpleEntry<ModuleLoaderResponse, String> result = bot.getModuleInterface().unloadModule(moduleName);
@@ -124,7 +124,7 @@ public class ModuleLoader extends Module
 					switch (result.getKey()) 
 					{
 					case Success:
-						bot.getIRC().cmdPRIVMSG(source, "Module \"" + result.getValue() + "\" was successfully unloaded.");
+						bot.getIRC().cmdPRIVMSG(source, "Module \"" + result.getValue() + "\" was successfully unloaded!");
 						break;
 					case DoesNotExist:
 						bot.getIRC().cmdPRIVMSG(source, "Module \"" + moduleName + "\" is not loaded or does not exist.");
@@ -160,7 +160,7 @@ public class ModuleLoader extends Module
 				
 				if(successList.size() > 0)
 				{
-					bot.getIRC().cmdPRIVMSG(source, "Module(s) \"" + StringUtils.join(successList, "\", \"") + "\" were successfully unloaded.");
+					bot.getIRC().cmdPRIVMSG(source, "Module(s) \"" + StringUtils.join(successList, "\", \"") + "\" were successfully unloaded!");
 				}
 				if(doesNotExistList.size() > 0)
 				{
@@ -192,7 +192,7 @@ public class ModuleLoader extends Module
 						bot.getModuleInterface().loadModule(moduleName2);
 					}
 					
-					bot.getIRC().cmdPRIVMSG(source, "All modules have been reloaded.");
+					bot.getIRC().cmdPRIVMSG(source, "All modules have been reloaded!");
 				}
 				else
 				{
@@ -204,7 +204,7 @@ public class ModuleLoader extends Module
 					{
 						if(bot.getModuleInterface().loadModule(moduleName).getKey() == ModuleLoaderResponse.Success)
 						{
-							bot.getIRC().cmdPRIVMSG(source, "Module \"" + result.getValue() + "\" was successfully reloaded.");
+							bot.getIRC().cmdPRIVMSG(source, "Module \"" + result.getValue() + "\" was successfully reloaded!");
 						}
 						else
 						{
@@ -255,7 +255,7 @@ public class ModuleLoader extends Module
 				
 				if(successList.size() > 0)
 				{
-					bot.getIRC().cmdPRIVMSG(source, "Module(s) \"" + StringUtils.join(successList, "\", \"") + "\" were successfully reloaded.");
+					bot.getIRC().cmdPRIVMSG(source, "Module(s) \"" + StringUtils.join(successList, "\", \"") + "\" were successfully reloaded!");
 				}
 				if(doesNotExistList.size() > 0)
 				{
