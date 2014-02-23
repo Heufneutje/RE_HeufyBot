@@ -3,6 +3,7 @@ package heufybot.modules;
 import heufybot.utils.StringUtils;
 
 import java.util.List;
+import java.util.Random;
 
 public class Choose extends Module
 {
@@ -10,7 +11,7 @@ public class Choose extends Module
 	{
 		this.authType = Module.AuthType.Anyone;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
-		this.trigger = "^" + commandPrefix + "(choose)($| .*)";
+		this.trigger = "^" + commandPrefix + "(choose|choice)($| .*)";
 	}
 	
 	@Override
@@ -43,7 +44,8 @@ public class Choose extends Module
 				choices[i] = choices[i].trim();
 			}
 			
-			int choiceNumber = (int) (Math.random() * choices.length);
+			Random random = new Random();
+			int choiceNumber = random.nextInt(choices.length);
 			bot.getIRC().cmdPRIVMSG(source, "Choice: " + choices[choiceNumber]);
 		}
 	}
