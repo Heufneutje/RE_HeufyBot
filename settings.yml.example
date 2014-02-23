@@ -2,66 +2,93 @@
 #=Bot Settings=#
 #==============#
 
-#nickname: The nickname the bot will have in chat
+# -nickname-
+# The nickname the bot will have in chat.
 - nickname: "RE_HeufyBot"
 
-#username: The username the bot will log into the server with
+# -username-
+# The username the bot will log into the server with.
 - username: "RE_HeufyBot"
 
-#realname: The bot's real name.
+# -realname-
+# The bot's real name.
 - realname: "My owner did not change this field"
 
 #=================#
 #=Server Settings=#
 #=================#
 
-#server: Address of the server the bot is connecting to
+# -server-
+# Address of the server the bot is connecting to.
 - server: "irc.chatspike.net"
 
-#port: The port on the server the bot is connecting to. Put a "+" in front of the port number for SSL
+# -port-
+# The port on the server the bot is connecting to. Put a "+" in front of
+# the port number for SSL.
 - port: "6667"
 
 #password: Password to login with if needed
 - password: ""
 
-#password type: The kind of password we're using. Possible values are None, ServerPass, NickServPass or SASL
+# -passwordType-
+# The kind of password we're using. Possible values are None, ServerPass, 
+# NickServPass or SASL.
 - passwordType: None 
 
-#autoJoinEnabled: Whether or not the bot should join any channels after connecting
+# -trustInvalidSSLCertificates-
+# Whether or not invalid SSL certificates should be accepted. Unless you
+# absolutely need this to connect, this should not be enabled.
+- trustInvalidSSLCertificates: false
+
+# -autoJoinEnabled-
+# Whether or not the bot should join any channels after connecting.
 - autoJoinEnabled: true
 
-#autoJoinChannels: The channels the bot should join if autojoin is enabled
+# -autoJoinChannels-
+# The channels the bot should join if autojoin is enabled.
 - autoJoinChannels: 
   - "#heufybot"
   
-#autoNickChange: Whether or not the bot should try connecting with a different nickname if the current nickname is taken
+# -autoNickChange-
+# Whether or not the bot should try connecting with a different nickname if the
+# current nickname is taken.
 - autoNickChange: true
 
-#autoReconnect: Whether or not the bot should try to reconnect should it lose connection
+# -autoReconnect-
+# Whether or not the bot should try to reconnect should it lose connection.
 - autoReconnect: true
 
-#reconnectAttempts: The number of times the bot should try to reconnect if autoReconnect is enabled
+# -reconnectAttempts-
+# The number of times the bot should try to reconnect if autoReconnect is
+# enabled.
 - reconnectAttempts: 99
 
-#reconnectInteval: The number of seconds the bot should wait between connection attempts
+# -reconnectInteval-
+# The number of seconds the bot should wait between reconnection attempts.
 - reconnectInterval: 10
 
-#logPath: The path where logs will be saved. Default is "logs", which will be created next to the main JAR file
+# -logPath-
+# The path where logs will be saved.
+# Default is "logs", which will be created next to the main JAR file.
 - logPath: "logs"
 
 #=================#
 #=Module Settings=#
 #=================#
 
-#commandPrefix: The prefix that should be used when a user wants to execute a bot command
+# -commandPrefix-
+# The prefix that should be used when a user wants to execute a bot command.
 - commandPrefix: "~"
 
-#modulesToLoad: The modules that should be loaded at startup. These modules need to be in the "modules" folder. Loading at least ModuleLoader is recommended.
+# -modulesToLoad- 
+# The modules that should be loaded at startup. These modules need to be in the
+# "modules" folder. Loading at least ModuleLoader is recommended.
 - modulesToLoad: 
   - "moduleloader"
   - "help"
   - "ignore"
   
-#botAdmins: Users that are authorized to use modules that have access level "ops"
+# -botAdmins-
+# Users that are authorized to use modules that have access level "ops"
 - botAdmins:
   - "ExampleNick"
