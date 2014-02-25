@@ -63,7 +63,7 @@ public class OutOfContext extends Module
 			    
 			    String toQuote = "";
 			    
-			    if(newQuote.matches("^\\[?(.)\\]? <(.)>(.*)") || newQuote.matches("^\\* .*") || newQuote.matches("^\\[.*\\] \\* .*"))
+			    if(newQuote.matches("^<.*>.*") || newQuote.matches("^\\* .*") || newQuote.matches("^\\[.*\\] <.*>.*") || newQuote.matches("^\\[.*\\] \\* .*"))
 			    {
 				    if(newQuote.matches("^\\[.*\\] <.*>.*") || newQuote.matches("^\\[.*\\] \\* .*"))
 				    {
