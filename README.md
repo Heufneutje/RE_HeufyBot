@@ -7,12 +7,15 @@ The following base modules come with RE_HeufyBot:
 
 - ModuleLoader
   - Will allow you to use the `load`, `unload` and `reload` commands that are needed to interact with the module interface on runtime.
-  
+
+
 - Help
   - Implements the `help` command, which will allow you to get a list of all loaded modules and to call the help method for a module if that module's name is passed as parameter.
 
+
 - Ignore
   - Implements the `ignore` and `unignore` commands, which allow you to add certain users to the bot's ignore list. Any commands from any user on this list will be ignored by the bot.
+
 
 Optional modules can be found in the [RE_HeufyBot-AdditionalModules](https://github.com/Heufneutje/RE_HeufyBot-AdditionalModules) repository.
 
