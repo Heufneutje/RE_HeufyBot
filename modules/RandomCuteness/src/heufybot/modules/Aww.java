@@ -11,11 +11,11 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-public class RandomCuteness extends Module
+public class Aww extends Module
 {
 	private final String clientIDPath = "data/imgurclientid.txt";
 	
-	public RandomCuteness()
+	public Aww()
 	{
 		this.authType = Module.AuthType.Anyone;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
