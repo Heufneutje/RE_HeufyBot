@@ -12,7 +12,9 @@ $network = (isset($_GET['network']) ? htmlspecialchars($_GET['network']) : FALSE
 $channel = (isset($_GET['channel']) ? htmlspecialchars($_GET['channel']) : FALSE);
 $date = (preg_match('/\A\d{4}-\d{2}-\d{2}\z/', $_GET['date']) === 1 ? htmlspecialchars($_GET['date']) : FALSE);
 $hideEvents = FALSE;
-if ($_GET['hideevents'] === 'true') $hideEvents = TRUE;
+if (isset($_GET['hideevents']) and $_GET['hideevents'] === 'true') {
+	$hideEvents = TRUE;
+}
 
 if ($network !== FALSE and $channel !== FALSE and $date !== FALSE) {
 	echo 'Log for #'.$channel.' on '.$network.' from '.$date;
@@ -48,9 +50,10 @@ else {
 		echo '<table class="log" id="log"><tr class="message"> <th class="time">TIME</th> <th class="user">NICK</th> <th class="text">MESSAGE</th></tr>'."\r\n";
 		$timestampLength = 7;
 		$suffixCharactersToRemove = array(')', '.');
-		foreach ($lines as $line) {
-			if (strlen($line) > 0) {
-				$lineSections = explode(' ', $line);
+		$linecount = count($lines);
+		for ($i = 0; $i < $linecount; $i++) {
+			if (strlen($lines[$i]) > 0) {
+				$lineSections = explode(' ', $lines[$i]);
 				$messageType = 'message';
 				$nickType = 'user';
 				//if there isn't both a < and a >, it's not a nick but an action or join/quit message. Change how that looks
@@ -63,7 +66,7 @@ else {
 				if ($hideEvents and $messageType === 'other') {
 					continue;
 				}
-				$message = substr($line, $timestampLength + strlen($lineSections[1])+2);
+				$message = substr($lines[$i], $timestampLength + strlen($lineSections[1])+2);
 				//Turn URLs into hyperlinks
 				if (strpos($message, 'http') !== FALSE or strpos($message, 'www') !== FALSE) {
 					preg_match_all("/(https?:\/\/\S+|www\.\S+\.\S+)/", $message, $regexResults);
@@ -84,7 +87,12 @@ else {
 						$message = str_replace($urlText, '<a href="'.$url.'" target="_blank">'.$urlText.'</a>', $message);
 					}
 				}
-				echo '<tr class="'.$messageType.'"><td class="time">'.$lineSections[0].'</td><td class="'.$nickType.'">'.$lineSections[1].'</td> <td class="text">'.$message.'</td></tr>'."\r\n";
+				
+				echo '<tr class="'.$messageType.'">';
+				echo '<td class="time"><a id="line'.$i.'" href="#line'.$i.'">'.$lineSections[0].'</a></td>';
+				echo '<td class="'.$nickType.'">'.$lineSections[1].'</td> ';
+				echo '<td class="text">'.$message.'</td>';
+				echo "</tr>\r\n";
 			}
 		}
 		echo "</table>\r\n";
