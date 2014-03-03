@@ -95,9 +95,17 @@ public class URLFollow extends Module
 		Matcher m = p.matcher(data);
 		if (m.find())
 		{
-			return "Title: " + m.group(1).replaceAll("\n", " ").replaceAll("\r", "") + " || At host: " + URLUtils.getHost(urlString);
+			String title = m.group(1);
+			//Strip new lines
+			title = title.replaceAll("\n", " ").replaceAll("\r", "");
+			//Unescape HTML characters
+			title = HtmlEscaper.decode(title);
+			// Strip text-direction character entities
+            title = title.replaceAll("&#x202[ac]", "");
+            
+			return "Title: " + title + " (at host: " + URLUtils.getHost(urlString) + ")";
 		}
-		return "No title found || At host: " + URLUtils.getHost(urlString);
+		return "No title found (at host: " + URLUtils.getHost(urlString) + ")";
 	}
 	
 	private String followYouTubeURL(String videoID)
