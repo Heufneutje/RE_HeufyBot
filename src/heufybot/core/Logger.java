@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import heufybot.utils.FileUtils;
+import heufybot.utils.StringUtils;
 
 public class Logger 
 {
@@ -28,6 +29,8 @@ public class Logger
 		{
 			consoleLogLine = dateFormat.format(date) + " " + target + " - " + line;
 		}
+		
+		consoleLogLine = StringUtils.toValid3ByteUTF8String(consoleLogLine);
 		
 		System.out.println(consoleLogLine);
 		

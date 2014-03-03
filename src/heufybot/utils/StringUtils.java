@@ -49,6 +49,34 @@ public class StringUtils
 				replaceAll("\\~", "").
 				replaceAll(" ", "");
 	}
+
+	public static String toValid3ByteUTF8String(String s)  
+	{
+	    int length = s.length();
+	    StringBuilder b = new StringBuilder(length);
+	    for (int offset = 0; offset < length; )
+	    {
+	       final int codepoint = s.codePointAt(offset);
+
+	       if (codepoint > new String("\uFFFF").codePointAt(0)) 
+	       {
+	           b.append("\uFFFD");
+	       }
+	       else 
+	       {
+	           if (Character.isValidCodePoint(codepoint))
+	           {
+	               b.appendCodePoint(codepoint);
+	           } 
+	           else 
+	           {
+	               b.append("\uFFFD");
+	           }
+	       }
+	       offset += Character.charCount(codepoint);
+	    }
+	    return b.toString();
+	}
 	
 	public static String removeColors(String line)
 	{
