@@ -11,6 +11,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import heufybot.utils.FileUtils;
 import heufybot.utils.StringUtils;
 import heufybot.utils.URLUtils;
@@ -96,12 +98,14 @@ public class URLFollow extends Module
 		if (m.find())
 		{
 			String title = m.group(1);
-			//Strip new lines
-			title = title.replaceAll("\n", " ").replaceAll("\r", "");
+			//Strip new lines and tabs
+			title = title.replaceAll("\n", " ").replaceAll("\r", "").replaceAll("\t", "");
 			//Unescape HTML characters
-			title = HtmlEscaper.decode(title);
+			title = StringEscapeUtils.unescapeHtml4(title);
 			// Strip text-direction character entities
             title = title.replaceAll("&#x202[ac]", "");
+            // Strip double spaces
+            title = title.replaceAll(" +", " ");
             
 			return "Title: " + title + " (at host: " + URLUtils.getHost(urlString) + ")";
 		}
