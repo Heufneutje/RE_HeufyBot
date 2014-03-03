@@ -33,6 +33,23 @@ public class StringUtils
 		return list;
 	}
 	
+	public static String escapeRegex(String regex)
+	{
+		return regex.replaceAll("\\*", "\\*").
+				replaceAll("\\+", "\\\\+").
+				replaceAll("\\|", "\\\\|").
+				replaceAll("\\{", "\\\\{").
+				replaceAll("\\[", "\\\\[").
+				replaceAll("\\(", "\\\\(").
+				replaceAll("\\)", "\\\\)").
+				replaceAll("\\^", "\\\\^").
+				replaceAll("\\$", "\\\\$").
+				replaceAll("\\.", "\\\\.").
+				replaceAll("\\#", "\\\\#").
+				replaceAll("\\~", "").
+				replaceAll(" ", "");
+	}
+	
 	public static String removeColors(String line)
 	{
 		int length = line.length();
