@@ -79,13 +79,10 @@ public class IRC
 		}
 		
 		SocketFactory sf;
-		if(config.isSSLEnabled() && config.trustInvalidCertificateEnabled())
+		if(config.isSSLEnabled())
 		{
+			//Trust all certificates, since making Java recognize a valid certificate is annoying.
 			sf = new SSLSocketUtils().trustAllCertificates();
-		}
-		else if(config.isSSLEnabled())
-		{
-			sf = new SSLSocketUtils();
 		}
 		else
 		{
@@ -281,6 +278,7 @@ public class IRC
 		}
 		catch (IOException e)
 		{
+			e.printStackTrace();
 			Logger.error("IRC Output", "Error sending line");
 		} 
 		finally

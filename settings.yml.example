@@ -35,11 +35,6 @@
 # NickServPass or SASL.
 - passwordType: None 
 
-# -trustInvalidSSLCertificates-
-# Whether or not invalid SSL certificates should be accepted. Unless you
-# absolutely need this to connect, this should not be enabled.
-- trustInvalidSSLCertificates: false
-
 # -autoJoinEnabled-
 # Whether or not the bot should join any channels after connecting.
 - autoJoinEnabled: true

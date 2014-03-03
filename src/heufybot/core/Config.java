@@ -23,7 +23,7 @@ public class Config
 	private String nickname, username, realname, server, password, commandPrefix, logPath;
 	private int port, reconnectAttempts, reconnectInterval, messageDelay, maxLineLength;
 	private PasswordType passwordType;
-	private boolean trustInvalidCertificateEnabled, autoJoinEnabled, sslEnabled, autoNickChange, autoReconnect;
+	private boolean autoJoinEnabled, sslEnabled, autoNickChange, autoReconnect;
 	private List<String> autoJoinChannels, modulesToLoad, botAdmins;
 	private List<CapHandler> capHandlers;
 	
@@ -80,37 +80,34 @@ public class Config
 			Map<String, String> passTypeSetting = (Map<String, String>) readSettings.get(6);
 			this.passwordType = PasswordType.valueOf(passTypeSetting.get("passwordType"));
 			
-			Map<String, Boolean> trustingSSLSetting = (Map<String, Boolean>) readSettings.get(7);
-			this.trustInvalidCertificateEnabled = trustingSSLSetting.get("trustInvalidSSLCertificates");
-			
-			Map<String, Boolean> autojoinSetting = (Map<String, Boolean>) readSettings.get(8);
+			Map<String, Boolean> autojoinSetting = (Map<String, Boolean>) readSettings.get(7);
 			this.autoJoinEnabled = autojoinSetting.get("autoJoinEnabled");
 			
-			Map<String, List<String>> joinChannelSetting = (Map<String, List<String>>) readSettings.get(9);
+			Map<String, List<String>> joinChannelSetting = (Map<String, List<String>>) readSettings.get(8);
 			this.autoJoinChannels = joinChannelSetting.get("autoJoinChannels");
 			
-			Map<String, Boolean> nickChangeSetting = (Map<String, Boolean>) readSettings.get(10);
+			Map<String, Boolean> nickChangeSetting = (Map<String, Boolean>) readSettings.get(9);
 			this.autoNickChange = nickChangeSetting.get("autoNickChange");
 			
-			Map<String, Boolean> reconnectSetting = (Map<String, Boolean>) readSettings.get(11);
+			Map<String, Boolean> reconnectSetting = (Map<String, Boolean>) readSettings.get(10);
 			this.autoReconnect = reconnectSetting.get("autoReconnect");
 			
-			Map<String, Integer> attemptsSetting = (Map<String, Integer>) readSettings.get(12);
+			Map<String, Integer> attemptsSetting = (Map<String, Integer>) readSettings.get(11);
 			this.reconnectAttempts = attemptsSetting.get("reconnectAttempts");
 			
-			Map<String, Integer> intervalSetting = (Map<String, Integer>) readSettings.get(13);
+			Map<String, Integer> intervalSetting = (Map<String, Integer>) readSettings.get(12);
 			this.reconnectInterval = intervalSetting.get("reconnectInterval");
 			
-			Map<String, String> logpathSetting = (Map<String, String>) readSettings.get(14);
+			Map<String, String> logpathSetting = (Map<String, String>) readSettings.get(13);
 			this.logPath = logpathSetting.get("logPath");
 			
-			Map<String, String> prefixSetting = (Map<String, String>) readSettings.get(15);
+			Map<String, String> prefixSetting = (Map<String, String>) readSettings.get(14);
 			this.commandPrefix = prefixSetting.get("commandPrefix");
 			
-			Map<String, List<String>> modulesSetting = (Map<String, List<String>>) readSettings.get(16);
+			Map<String, List<String>> modulesSetting = (Map<String, List<String>>) readSettings.get(15);
 			this.modulesToLoad = modulesSetting.get("modulesToLoad");
 			
-			Map<String, List<String>> adminSetting = (Map<String, List<String>>) readSettings.get(17);
+			Map<String, List<String>> adminSetting = (Map<String, List<String>>) readSettings.get(16);
 			this.botAdmins = adminSetting.get("botAdmins");
 			
 			if(autoJoinChannels == null)
@@ -210,11 +207,6 @@ public class Config
 	public PasswordType getPasswordType()
 	{
 		return passwordType;
-	}
-	
-	public boolean trustInvalidCertificateEnabled()
-	{
-		return trustInvalidCertificateEnabled;
 	}
 	
 	public boolean getAutoJoinEnabled()
