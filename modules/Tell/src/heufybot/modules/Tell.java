@@ -12,7 +12,6 @@ import java.util.List;
 import heufybot.core.Logger;
 import heufybot.utils.FileUtils;
 import heufybot.utils.PasteUtils;
-import heufybot.utils.RegexUtils;
 import heufybot.utils.StringUtils;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -447,7 +446,7 @@ public class Tell extends Module
 	
 	private String fixRegex(String regex)
 	{
-		return "^" + RegexUtils.escapeRegex(regex).
+		return "^" + StringUtils.escapeRegex(regex).
 				replaceAll("\\*", ".*").
 				replaceAll("\\?", ".").
 				replaceAll("\\(", "(").
