@@ -9,6 +9,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
@@ -133,11 +135,11 @@ public class URLUtils
 		}
 	}
 	
-	public static HashMap<String, String> grabRSSFeed(String url)
+	public static LinkedHashMap<String, String> grabRSSFeed(String url)
 	{
 		try
 		{
-			HashMap<String, String> elements = new HashMap<String, String>();
+			LinkedHashMap<String, String> elements = new LinkedHashMap<String, String>();
 			
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
