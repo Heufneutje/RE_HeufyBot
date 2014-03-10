@@ -103,9 +103,9 @@ public class URLFollow extends Module
 			//Unescape HTML characters
 			title = StringEscapeUtils.unescapeHtml4(title);
 			// Strip text-direction character entities
-            title = title.replaceAll("&#x202[ac]", "");
-            // Strip double spaces
-            title = title.replaceAll(" +", " ");
+			title = title.replaceAll("&#x202[ac]", "");
+			// Strip double spaces
+			title = title.replaceAll(" +", " ");
             
 			return "Title: " + title + " (at host: " + URLUtils.getHost(urlString) + ")";
 		}
