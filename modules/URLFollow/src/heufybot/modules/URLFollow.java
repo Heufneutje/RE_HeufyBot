@@ -11,6 +11,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import heufybot.utils.FileUtils;
 import heufybot.utils.StringUtils;
 import heufybot.utils.URLUtils;
@@ -95,9 +97,19 @@ public class URLFollow extends Module
 		Matcher m = p.matcher(data);
 		if (m.find())
 		{
-			return "Title: " + m.group(1).replaceAll("\n", " ").replaceAll("\r", "") + " || At host: " + URLUtils.getHost(urlString);
+			String title = m.group(1);
+			//Strip new lines and tabs
+			title = title.replaceAll("\n", " ").replaceAll("\r", "").replaceAll("\t", "");
+			//Unescape HTML characters
+			title = StringEscapeUtils.unescapeHtml4(title);
+			// Strip text-direction character entities
+            title = title.replaceAll("&#x202[ac]", "");
+            // Strip double spaces
+            title = title.replaceAll(" +", " ");
+            
+			return "Title: " + title + " (at host: " + URLUtils.getHost(urlString) + ")";
 		}
-		return "No title found || At host: " + URLUtils.getHost(urlString);
+		return "No title found (at host: " + URLUtils.getHost(urlString) + ")";
 	}
 	
 	private String followYouTubeURL(String videoID)
