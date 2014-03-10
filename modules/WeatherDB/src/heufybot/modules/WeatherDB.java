@@ -162,6 +162,10 @@ public class WeatherDB extends Module
 	{
 		WeatherInterface weatherInterface = new WeatherInterface();
 		String weather = weatherInterface.getWeather(location.latitude, location.longitude);
+		if(weather == null)
+		{
+			return "Weather for this location could not be retrieved.";
+		}
 		return weather;
 	}
 	
@@ -169,6 +173,10 @@ public class WeatherDB extends Module
 	{
 		WeatherInterface weatherInterface = new WeatherInterface();
 		String forecast = weatherInterface.getForecast(location.latitude, location.longitude);
+		if(forecast == null)
+		{
+			return "Weather for this location could not be retrieved.";
+		}
 		return forecast;
 	}
 
