@@ -32,7 +32,7 @@ public class OutOfContext extends Module
 		if(params.size() == 1)
 		{
 			String data = FileUtils.readFile(dataPath);
-			if(data.equals(""))
+			if(data.equalsIgnoreCase(""))
 			{
 				bot.getIRC().cmdPRIVMSG(source, "No quotes to be posted.");
 			}
@@ -53,7 +53,7 @@ public class OutOfContext extends Module
 		{
 			params.remove(0);
 			String subCommand = params.remove(0).toLowerCase();
-			if(subCommand.equals("add"))
+			if(subCommand.equalsIgnoreCase("add"))
 			{
 				String newQuote = StringUtils.removeFormattingAndColors(StringUtils.join(params, " "));
 				
@@ -92,7 +92,7 @@ public class OutOfContext extends Module
 				    	newQuote = dateString + " " + newQuote;
 				    }
 			    
-				    if(bot.getIRC().getServerInfo().getReverseUserPrefixes().containsKey(toQuote.substring(0, 1)) || toQuote.substring(0, 1).equals(" "))
+				    if(bot.getIRC().getServerInfo().getReverseUserPrefixes().containsKey(toQuote.substring(0, 1)) || toQuote.substring(0, 1).equalsIgnoreCase(" "))
 				    {
 				    	newQuote = newQuote.replace(toQuote, toQuote.substring(1));
 				    }
@@ -114,7 +114,7 @@ public class OutOfContext extends Module
 			    	bot.getIRC().cmdPRIVMSG(source, "No nickname was found in this quote.");
 			    }
 			}
-			else if(subCommand.equals("searchnick"))
+			else if(subCommand.equalsIgnoreCase("searchnick"))
 			{
 				if(params.size() == 0)
 				{
@@ -129,15 +129,15 @@ public class OutOfContext extends Module
 					bot.getIRC().cmdPRIVMSG(source, search(params.get(0), false, -1));
 				}
 			}
-			else if(subCommand.equals("search"))
+			else if(subCommand.equalsIgnoreCase("search"))
 			{
 				bot.getIRC().cmdPRIVMSG(source, search(StringUtils.join(params, " "), true, -1));
 			}
-			else if(subCommand.equals("random"))
+			else if(subCommand.equalsIgnoreCase("random"))
 			{
 				bot.getIRC().cmdPRIVMSG(source, search(".*", true, -1));
 			}
-			else if(subCommand.equals("id"))
+			else if(subCommand.equalsIgnoreCase("id"))
 			{
 				if(params.size() == 0)
 				{
@@ -152,7 +152,7 @@ public class OutOfContext extends Module
 					bot.getIRC().cmdPRIVMSG(source, search(".*", true, StringUtils.tryParseInt(params.get(0))));
 				}
 			}
-			else if(subCommand.equals("remove"))
+			else if(subCommand.equalsIgnoreCase("remove"))
 			{
 				String search = StringUtils.join(params, " ");
 				ArrayList<String> matches = new ArrayList<String>();

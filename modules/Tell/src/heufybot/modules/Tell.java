@@ -66,7 +66,7 @@ public class Tell extends Module
 	@Override
 	public void processEvent(String source, String message, String triggerUser, List<String> params)
 	{
-		if(message.matches("^" + commandPrefix + "tell.*"))
+		if(message.toLowerCase().matches("^" + commandPrefix + "tell.*"))
 		{
 			if(params.size() == 1)
 			{
@@ -132,7 +132,7 @@ public class Tell extends Module
 				}
 			}
 		}
-		else if(message.matches("^" + commandPrefix + "rtell.*"))
+		else if(message.toLowerCase().matches("^" + commandPrefix + "rtell.*"))
 		{
 			if(params.size() == 1)
 			{
@@ -163,7 +163,7 @@ public class Tell extends Module
 				}
 			}
 		}
-		if(message.matches("^" + commandPrefix + "senttells.*"))
+		if(message.toLowerCase().matches("^" + commandPrefix + "senttells.*"))
 		{
 			if(params.size() == 1)
 			{

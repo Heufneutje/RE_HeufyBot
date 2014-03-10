@@ -55,12 +55,12 @@ public class WeatherDB extends Module
 				Geolocation location = geo.getGeolocationForLatLng(latitude, longitude);
 				String prefix = location.success ? "Location: " + location.locality : "City: " + latitude + "," + longitude;
 				
-				if(message.matches("^" + commandPrefix + "weather.*"))
+				if(message.toLowerCase().matches("^" + commandPrefix + "weather.*"))
 				{
 					String weather = getWeatherFromGeolocation(location);
 					bot.getIRC().cmdPRIVMSG(source, String.format("%s | %s", prefix, weather));
 				}
-				else if(message.matches("^" + commandPrefix + "forecast.*"))
+				else if(message.toLowerCase().matches("^" + commandPrefix + "forecast.*"))
 				{
 					String forecast = getForecastFromGeolocation(location);
 					bot.getIRC().cmdPRIVMSG(source, String.format("%s | %s", prefix, forecast));
@@ -93,7 +93,7 @@ public class WeatherDB extends Module
 					loc = "Unknown";
 				}
 				
-				if(message.matches("^" + commandPrefix + "weather.*"))
+				if(message.toLowerCase().matches("^" + commandPrefix + "weather.*"))
 				{
 					String weather = getWeatherFromGeolocation(location);
 					if(weather == null)
@@ -102,7 +102,7 @@ public class WeatherDB extends Module
 					}
 					bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s | %s", loc, weather));
 				}
-				else if(message.matches("^" + commandPrefix + "forecast.*"))
+				else if(message.toLowerCase().matches("^" + commandPrefix + "forecast.*"))
 				{
 					String forecast = getForecastFromGeolocation(location);
 					if(forecast == null)
@@ -130,7 +130,7 @@ public class WeatherDB extends Module
 				return;
 			}
 			
-			if(message.matches("^" + commandPrefix + "weather.*"))
+			if(message.toLowerCase().matches("^" + commandPrefix + "weather.*"))
 			{
 				String weather = getWeatherFromGeolocation(location);
 				if(weather == null)
@@ -139,7 +139,7 @@ public class WeatherDB extends Module
 				}
 				bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s | %s", location.locality, weather));
 			}
-			else if(message.matches("^" + commandPrefix + "forecast.*"))
+			else if(message.toLowerCase().matches("^" + commandPrefix + "forecast.*"))
 			{
 				String forecast = getForecastFromGeolocation(location);
 				if(forecast == null)
