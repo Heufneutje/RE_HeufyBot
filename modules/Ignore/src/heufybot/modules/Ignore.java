@@ -21,7 +21,7 @@ public class Ignore extends Module
 	@Override
 	public void processEvent(String source, String message, String triggerUser, List<String> params) 
 	{
-		if(message.matches("^" + commandPrefix + "ignore.*"))
+		if(message.toLowerCase().matches("^" + commandPrefix + "ignore.*"))
 		{
 			if(params.size() == 1)
 			{
@@ -51,7 +51,7 @@ public class Ignore extends Module
 	  	  		}
 			}
 		}
-		else if(message.matches("^" + commandPrefix + "unignore.*"))
+		else if(message.toLowerCase().matches("^" + commandPrefix + "unignore.*"))
 		{
 			if(params.size() == 1)
 			{

@@ -18,7 +18,7 @@ public class ModuleLoader extends Module
 
 	public void processEvent(String source, String message, String triggerUser, List<String> params)
 	{
-		if(message.matches("^" + commandPrefix + "load.*"))
+		if(message.toLowerCase().matches("^" + commandPrefix + "load.*"))
 		{
 			if (params.size() == 1)
 			{
@@ -85,7 +85,7 @@ public class ModuleLoader extends Module
 				}
 			}
 		}
-		else if(message.matches("^" + commandPrefix + "unload.*"))
+		else if(message.toLowerCase().matches("^" + commandPrefix + "unload.*"))
 		{
 			if (params.size() == 1)
 			{
@@ -268,15 +268,15 @@ public class ModuleLoader extends Module
 	@Override
 	public String getHelp(String message)
 	{
-		if(message.matches("load.*"))
+		if(message.toLowerCase().matches("load.*"))
 		{
 			return "Commands: " + commandPrefix + "load <module> | Load one or more modules. Seperate module names by spaces if more.";
 		}
-		else if(message.matches("unload.*"))
+		else if(message.toLowerCase().matches("unload.*"))
 		{
 			return "Commands: " + commandPrefix + "unload <module> | Unload one or more modules. Seperate module names by spaces if more.";
 		}
-		else if(message.matches("reload.*"))
+		else if(message.toLowerCase().matches("reload.*"))
 		{
 			return "Commands: " + commandPrefix + "reload <module> | Reload one or more modules. Seperate module names by spaces if more.";
 		}
