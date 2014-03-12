@@ -364,6 +364,16 @@ public class IRC
 		sendRaw("WHO " + target);
 	}
 	
+	public void cmdWHOIS(String target)
+	{
+		sendRaw("WHOIS " + target);
+	}
+	
+	public void cmdWHOWAS(String target)
+	{
+		sendRaw("WHOWAS " + target);
+	}
+	
 	public void cmdMODE(String target, String mode)
 	{
 		sendRaw("MODE " + target + " " + mode);

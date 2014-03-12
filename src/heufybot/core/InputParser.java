@@ -571,6 +571,11 @@ public class InputParser
 		else if(command.equals("PRIVMSG"))
 		{
 			//Private message
+			if(source.getHostmask().equals(""))
+			{
+				//We don't this user yet, so send a WHOIS
+				irc.cmdWHOIS(sourceNick);
+			}
 			irc.getEventListenerManager().dispatchEvent(new PMMessageEvent(source, message));
 		}
 		else if(command.equals("JOIN"))
