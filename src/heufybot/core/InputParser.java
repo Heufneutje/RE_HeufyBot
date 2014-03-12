@@ -432,20 +432,16 @@ public class InputParser
 		{
 			//352 RPL_WHOREPLY			
 			Channel channel = irc.getChannel(parsedLine.get(1));
-			User user = channel.getUser(parsedLine.get(5));
-			if(user == null)
-			{
-				user = irc.getUser(parsedLine.get(5));
-				if(user == null)
-				{
-					user = new User(parsedLine.get(5));
-				}
-			}
+			User user = irc.getUser(parsedLine.get(5));
+
 			user.setLogin(parsedLine.get(2));
 			user.setHostmask(parsedLine.get(3));
 			user.setServer(parsedLine.get(4));
 			
-			channel.addUser(user);
+			if(channel.getUser(user.getNickname()) == null)
+			{
+				channel.addUser(user);
+			}
 			
 			String modes = parsedLine.get(6);
 			if(modes.substring(1).contains("*"))
@@ -490,11 +486,10 @@ public class InputParser
 				}
 				
 				User user = irc.getUser(nickname);
-				if(user == null)
+				if(channel.getUser(user.getNickname()) == null)
 				{
-					user = new User(nickname);
+					channel.addUser(user);
 				}
-				channel.addUser(user);
 				channel.parseModeChangeOnUser(user, "+" + prefixes);
 			}
 		}
@@ -595,15 +590,10 @@ public class InputParser
 			else
 			{
 				//Someone else is joining the channel
-				if(source != null)
-				{
-					channel.addUser(source);
-				}
-				else
-				{
-					source = new User(sourceNick, sourceLogin, sourceHostname);
-					channel.addUser(source);
-				}
+				source.setLogin(sourceLogin);
+				source.setHostmask(sourceHostname);
+
+				channel.addUser(source);
 			}
 			irc.getEventListenerManager().dispatchEvent(new JoinEvent(source, channel));
 		}
@@ -667,6 +657,9 @@ public class InputParser
 						channel2.removeUser(source);
 					}
 				}
+				
+				//Remove the user who quit from the users list
+				irc.getUsers().remove(source);
 			}
 			else
 			{

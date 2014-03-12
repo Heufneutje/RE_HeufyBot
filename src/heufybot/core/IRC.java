@@ -38,6 +38,7 @@ public class IRC
 	private InputParser inputParser;
 	private ConnectionState connectionState;
 	private ArrayList<Channel> channels;
+	private ArrayList<User> users;
 	private ServerInfo serverInfo;
 	private List<String> userModes;
 	private List<String> enabledCapabilities;
@@ -55,7 +56,10 @@ public class IRC
 		this.socket = new Socket();
 		this.inputParser = new InputParser(this);
 		this.connectionState = ConnectionState.Initializing;
+		
 		this.channels = new ArrayList<Channel>();
+		this.users = new ArrayList<User>();
+		
 		this.serverInfo = ServerInfo.getInstance();
 		this.enabledCapabilities = new ArrayList<String>();
 		this.eventListenerManager = new EventListenerManager();
@@ -148,6 +152,9 @@ public class IRC
 			this.outputWriter.flush();
 			this.outputWriter.close();
 			this.socket.close();
+			
+			channels.clear();
+			users.clear();
 		} 
 		catch (IOException e) 
 		{
@@ -156,12 +163,7 @@ public class IRC
 		
 		if(reconnect && config.autoReconnect())
 		{
-			channels.clear();
 			reconnect();
-		}
-		else
-		{
-			channels.clear();
 		}
 	}
 	
@@ -423,15 +425,17 @@ public class IRC
 	
 	public User getUser(String nickname)
 	{
-		for(Channel channel : channels)
+		for(User user : users)
 		{
-			User user = channel.getUser(nickname);
-			if(user != null)
+			if(user.getNickname().equalsIgnoreCase(nickname))
 			{
 				return user;
 			}
 		}
-		return null;
+
+		User user = new User(nickname);
+		users.add(user);
+		return user;
 	}
 	
 	public Config getConfig()
@@ -467,6 +471,11 @@ public class IRC
 	public ArrayList<Channel> getChannels()
 	{
 		return channels;
+	}
+	
+	public ArrayList<User> getUsers()
+	{
+		return users;
 	}
 	
 	public ServerInfo getServerInfo()
