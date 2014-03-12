@@ -66,13 +66,13 @@ public class LoggingInterface extends EventListenerAdapter
 	public void onInvite(InviteEvent event)
 	{
 		User inviter = event.getInviter();
-		Logger.log("-- " + inviter.getNickname() + " (" + inviter.getLogin() + "@" + inviter.getHostmask() + ") invites " + event.getInvitee() + " to join " + event.getChannel());
+		Logger.log("-- " + inviter.getNickname() + " (" + inviter.getLogin() + "@" + inviter.getHostname() + ") invites " + event.getInvitee() + " to join " + event.getChannel());
 	}
 	
 	public void onJoin(JoinEvent event)
 	{
 		User user = event.getUser();
-		Logger.log(">> " + user.getNickname() + " (" + user.getLogin() + "@" + user.getHostmask() + ") has joined " + event.getChannel().getName(), event.getChannel().getName(), bot.getIRC().getServerInfo().getNetwork());
+		Logger.log(">> " + user.getNickname() + " (" + user.getLogin() + "@" + user.getHostname() + ") has joined " + event.getChannel().getName(), event.getChannel().getName(), bot.getIRC().getServerInfo().getNetwork());
 	}
 	
 	public void onKick(KickEvent event)
@@ -132,11 +132,11 @@ public class LoggingInterface extends EventListenerAdapter
 		
 		if(event.getMessage().equals(""))
 		{
-			Logger.log("<< " + user.getNickname() + " (" + user.getLogin() + "@" + user.getHostmask() + ") has left " + channel, channel, bot.getIRC().getServerInfo().getNetwork());
+			Logger.log("<< " + user.getNickname() + " (" + user.getLogin() + "@" + user.getHostname() + ") has left " + channel, channel, bot.getIRC().getServerInfo().getNetwork());
 		}
 		else
 		{
-			Logger.log("<< " + user.getNickname() + " (" + user.getLogin() + "@" + user.getHostmask() + ") has left " + channel + " (" + event.getMessage() + ")", channel, bot.getIRC().getServerInfo().getNetwork());
+			Logger.log("<< " + user.getNickname() + " (" + user.getLogin() + "@" + user.getHostname() + ") has left " + channel + " (" + event.getMessage() + ")", channel, bot.getIRC().getServerInfo().getNetwork());
 		}
 	}
 	
@@ -158,7 +158,7 @@ public class LoggingInterface extends EventListenerAdapter
 			User user = channel.getUser(event.getUser().getNickname());
 			if(user != null)
 			{
-				Logger.log("<< " + user.getNickname() + " (" + user.getLogin() + "@" + user.getHostmask() + ") has quit IRC (" + event.getMessage() + ")", channel.getName(), bot.getIRC().getServerInfo().getNetwork());
+				Logger.log("<< " + user.getNickname() + " (" + user.getLogin() + "@" + user.getHostname() + ") has quit IRC (" + event.getMessage() + ")", channel.getName(), bot.getIRC().getServerInfo().getNetwork());
 			}
 		}
 	}

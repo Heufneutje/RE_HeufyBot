@@ -4,18 +4,18 @@ public class User
 {
 	private String nickname;
 	private String login = "";
-	private String hostmask = "";
+	private String hostname = "";
 	private String realname = "";
 	private String server = "";
 	private int hops;
 	private boolean isOper;
 	private boolean isAway;
 	
-	public User(String nickname, String login, String hostmask)
+	public User(String nickname, String login, String hostname)
 	{
 		this.nickname = nickname;
 		this.login = login;
-		this.hostmask = hostmask;
+		this.hostname = hostname;
 	}
 	
 	public User(String nickname)
@@ -33,9 +33,9 @@ public class User
 		return login;
 	}
 	
-	public String getHostmask()
+	public String getHostname()
 	{
-		return hostmask;
+		return hostname;
 	}
 	
 	public void setNickname(String nickname)
@@ -48,9 +48,9 @@ public class User
 		this.login = login;
 	}
 	
-	public void setHostmask(String hostmask)
+	public void setHostname(String hostname)
 	{
-		this.hostmask = hostmask;
+		this.hostname = hostname;
 	}
 
 	public String getRealname()

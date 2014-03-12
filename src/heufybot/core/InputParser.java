@@ -436,7 +436,7 @@ public class InputParser
 			User user = irc.getUser(parsedLine.get(5));
 
 			user.setLogin(parsedLine.get(2));
-			user.setHostmask(parsedLine.get(3));
+			user.setHostname(parsedLine.get(3));
 			user.setServer(parsedLine.get(4));
 			
 			if(channel.getUser(user.getNickname()) == null)
@@ -575,7 +575,7 @@ public class InputParser
 		else if(command.equals("PRIVMSG"))
 		{
 			//Private message
-			if(source.getHostmask().equals(""))
+			if(source.getHostname().equals(""))
 			{
 				//We don't this user yet, so send a WHOIS
 				irc.cmdWHOIS(sourceNick);
@@ -600,7 +600,7 @@ public class InputParser
 			{
 				//Someone else is joining the channel
 				source.setLogin(sourceLogin);
-				source.setHostmask(sourceHostname);
+				source.setHostname(sourceHostname);
 
 				channel.addUser(source);
 			}
