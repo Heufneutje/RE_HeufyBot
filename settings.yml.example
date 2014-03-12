@@ -67,6 +67,10 @@
 # Default is "logs", which will be created next to the main JAR file.
 - logPath: "logs"
 
+# -logPMs-
+# Whether or not PMs should be logged. This defaults to false for privacy reasons.
+- logPMs: false
+
 #=================#
 #=Module Settings=#
 #=================#

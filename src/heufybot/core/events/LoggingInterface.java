@@ -146,13 +146,19 @@ public class LoggingInterface extends EventListenerAdapter
 	
 	public void onPMAction(PMActionEvent event)
 	{
-		Logger.log("* " + event.getUser().getNickname() + " " + event.getMessage(), event.getUser().getNickname(), bot.getIRC().getServerInfo().getNetwork());
+		if(bot.getConfig().getLogPMs())
+		{
+			Logger.log("* " + event.getUser().getNickname() + " " + event.getMessage(), event.getUser().getNickname(), bot.getIRC().getServerInfo().getNetwork());
+		}
 	}
 	
 	public void onPMMessage(PMMessageEvent event)
 	{
-		String sourceNick = event.getUser().getNickname();
-		Logger.log("<" + sourceNick + "> " + event.getMessage(), sourceNick, bot.getIRC().getServerInfo().getNetwork());
+		if(bot.getConfig().getLogPMs())
+		{
+			String sourceNick = event.getUser().getNickname();
+			Logger.log("<" + sourceNick + "> " + event.getMessage(), sourceNick, bot.getIRC().getServerInfo().getNetwork());
+		}
 	}
 	
 	public void onQuit(QuitEvent event)

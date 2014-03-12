@@ -23,7 +23,7 @@ public class Config
 	private String nickname, username, realname, server, password, commandPrefix, logPath;
 	private int port, reconnectAttempts, reconnectInterval, messageDelay, maxLineLength;
 	private PasswordType passwordType;
-	private boolean autoJoinEnabled, sslEnabled, autoNickChange, autoReconnect;
+	private boolean autoJoinEnabled, sslEnabled, autoNickChange, autoReconnect, logPMs;
 	private List<String> autoJoinChannels, modulesToLoad, botAdmins;
 	private List<CapHandler> capHandlers;
 	
@@ -101,13 +101,16 @@ public class Config
 			Map<String, String> logpathSetting = (Map<String, String>) readSettings.get(13);
 			this.logPath = logpathSetting.get("logPath");
 			
-			Map<String, String> prefixSetting = (Map<String, String>) readSettings.get(14);
+			Map<String, Boolean> logPMSetting = (Map<String, Boolean>) readSettings.get(14);
+			this.logPMs = logPMSetting.get("logPMs");
+			
+			Map<String, String> prefixSetting = (Map<String, String>) readSettings.get(15);
 			this.commandPrefix = prefixSetting.get("commandPrefix");
 			
-			Map<String, List<String>> modulesSetting = (Map<String, List<String>>) readSettings.get(15);
+			Map<String, List<String>> modulesSetting = (Map<String, List<String>>) readSettings.get(16);
 			this.modulesToLoad = modulesSetting.get("modulesToLoad");
 			
-			Map<String, List<String>> adminSetting = (Map<String, List<String>>) readSettings.get(16);
+			Map<String, List<String>> adminSetting = (Map<String, List<String>>) readSettings.get(17);
 			this.botAdmins = adminSetting.get("botAdmins");
 			
 			if(autoJoinChannels == null)
@@ -257,6 +260,11 @@ public class Config
 	public String getLogPath()
 	{
 		return logPath;
+	}
+	
+	public boolean getLogPMs()
+	{
+		return logPMs;
 	}
 	
 	public String getCommandPrefix()
