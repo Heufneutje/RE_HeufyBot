@@ -1,10 +1,14 @@
 package heufybot.core.events;
 
+import java.util.Date;
+
 import heufybot.core.Channel;
 import heufybot.core.HeufyBot;
 import heufybot.core.Logger;
 import heufybot.core.User;
 import heufybot.core.events.types.*;
+import heufybot.utils.StringUtils;
+import heufybot.utils.WhoisBuilder;
 
 public class LoggingInterface extends EventListenerAdapter
 {
@@ -176,5 +180,30 @@ public class LoggingInterface extends EventListenerAdapter
 	public void onTopicChange(TopicEvent event)
 	{
 		Logger.log("-- " + event.getSource() + " changes topic to \'" + event.getMessage() + "\'", event.getChannel().getName(), bot.getIRC().getServerInfo().getNetwork());
+	}
+	
+	public void onWhois(WhoisEvent event)
+	{
+		WhoisBuilder builder = event.getWhoisBuilder();
+		
+		Logger.log("-- Start of /WHOIS");
+		Logger.log(builder.getNickname() + " is " + builder.getNickname() + "!" + builder.getLogin() + "@" + builder.getHostname());
+		Logger.log(builder.getNickname() + "'s real name is " + builder.getRealname());
+		Logger.log(builder.getNickname() + "'s channels: " + StringUtils.join(builder.getChannels(), ", "));
+		Logger.log(builder.getNickname() + "'s server is " + builder.getServer() + " - " + builder.getServerInfo());
+		
+		if(builder.getOperPrivs() != null)
+		{
+			Logger.log(builder.getNickname() + " " + builder.getOperPrivs());
+		}
+		
+		Logger.log(builder.getNickname() + "'s idle time is " + builder.getIdleSeconds() + " seconds");
+		
+		if(builder.getSignOnTime() != -1)
+		{
+			Logger.log(builder.getNickname() + "'s sign on time is " + new Date(builder.getSignOnTime() * 1000));
+		}
+		
+		Logger.log("-- End of /WHOIS");
 	}
 }
