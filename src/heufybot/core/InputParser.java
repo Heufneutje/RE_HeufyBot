@@ -609,6 +609,21 @@ public class InputParser
 				//Someone else is leaving the channel
 				irc.getChannel(target).removeUser(source);
 			}
+			
+			boolean noCommonChannels = true;
+			for(Channel channel2 : irc.getChannels())
+			{
+				if(channel2.getUser(sourceNick) != null)
+				{
+					noCommonChannels = false;
+				}
+			}
+			
+			if(noCommonChannels)
+			{
+				irc.getUsers().remove(source);
+			}
+			
 			irc.getEventListenerManager().dispatchEvent(new PartEvent(source, channel, message));
 		}
 		else if(command.equals("NICK"))
