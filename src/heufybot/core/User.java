@@ -9,6 +9,7 @@ public class User
 	private String server = "";
 	private int hops;
 	private boolean isOper;
+	private boolean isAway;
 	
 	public User(String nickname, String login, String hostmask)
 	{
@@ -66,10 +67,20 @@ public class User
 	{
 		return isOper;
 	}
+	
+	public boolean isAway()
+	{
+		return isAway;
+	}
 
 	public void setOper(boolean isOper)
 	{
 		this.isOper = isOper;
+	}
+	
+	public void setAway(boolean isAway)
+	{
+		this.isAway = isAway;
 	}
 
 	public int getHops()

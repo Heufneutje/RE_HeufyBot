@@ -50,6 +50,7 @@ public class InputParser
 			String errorMessage = parsedLine.get(0).toLowerCase();
 			irc.getEventListenerManager().dispatchEvent(new ErrorEvent(parsedLine.get(0)));
 			
+			//I really need to clean up this piece of code some time :|
 			if(errorMessage.contains("[killed:") || errorMessage.contains("lined") || errorMessage.contains("[quit:"))
 			{
 				irc.disconnect(false);
@@ -443,16 +444,19 @@ public class InputParser
 				channel.addUser(user);
 			}
 			
-			String modes = parsedLine.get(6);
-			if(modes.substring(1).contains("*"))
+			List<String> flags = StringUtils.parseStringtoList(parsedLine.get(6), "");
+			flags.remove(0);
+			
+			if(flags.remove(0).equals("G"))
+			{
+				user.setAway(true);
+			}
+			if(flags.size() > 0 && flags.remove(0).equals("*"))
 			{
 				user.setOper(true);
-				modes = modes.substring(2);
 			}
-			else
-			{
-				modes = modes.substring(1);
-			}
+			
+			String modes = StringUtils.join(flags, "");
 			
 			for(int i = 0; i < modes.length(); i++)
 			{
