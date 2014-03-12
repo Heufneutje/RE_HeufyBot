@@ -5,6 +5,7 @@ import heufybot.core.cap.CAPException;
 import heufybot.core.cap.CapHandler;
 import heufybot.core.events.types.*;
 import heufybot.utils.StringUtils;
+import heufybot.utils.WhoisBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,12 +19,14 @@ public class InputParser
 	private int nickSuffix;
 	private boolean capEndSent;
 	private List<CapHandler> finishedHandlers;
+	private WhoisBuilder whoisBuilder;
 	
 	public InputParser(IRC irc)
 	{
 		this.irc = irc;
 		this.nickSuffix = 1;
 		this.finishedHandlers = new ArrayList<CapHandler>();
+		this.whoisBuilder = new WhoisBuilder();
 	}
 	
 	public void parseLine(String line)
