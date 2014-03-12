@@ -88,6 +88,14 @@ public abstract class EventListenerAdapter implements EventListener
 		{
 			onTopicChange((TopicEvent) event);
 		}
+		else if(event instanceof WhoisEvent)
+		{
+			onWhois((WhoisEvent) event);
+		}
+		else if(event instanceof WhowasEvent)
+		{
+			onWhowas((WhowasEvent) event);
+		}
 	}
 
 	public void onAction(ActionEvent event)
@@ -186,6 +194,16 @@ public abstract class EventListenerAdapter implements EventListener
 	}
 	
 	public void onTopicChange(TopicEvent event)
+	{
+		
+	}
+	
+	public void onWhois(WhoisEvent event)
+	{
+		
+	}
+	
+	public void onWhowas(WhowasEvent event)
 	{
 		
 	}
