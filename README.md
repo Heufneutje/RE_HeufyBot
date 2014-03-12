@@ -17,7 +17,7 @@ The following recommended modules come with the bot:
 - Ignore
   - Implements the `ignore` and `unignore` commands, which allow you to add certain users to the bot's ignore list. Any commands from any user on this list will be ignored by the bot.
 
-Other modules can be found in the [RE_HeufyBot-AdditionalModules](https://github.com/Heufneutje/RE_HeufyBot-AdditionalModules) repository. Details on how to write your own module can be found in the [documention](http://logs.heufneutje.net/reheufybotdocs/) (I should add more documentation).
+Other modules can be found in the [RE_HeufyBot-AdditionalModules](https://github.com/Heufneutje/RE_HeufyBot-AdditionalModules) repository. Details on how to write your own module can be found in the [documention](http:www.heufneutje.net/reheufybotdocs/) (I should add more documentation).
 
 Running
 =======
