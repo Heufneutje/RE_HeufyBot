@@ -40,13 +40,13 @@ import java.util.Arrays;
  * the input is known and it hasn't bee tampered with.<br><br>
  *
  * If you find the code useful or you find a bug, please send me a note at base64
- * @ miginfocom . com.
+ * miginfocom . com.
  *
  * Licence (BSD):
  * ==============
  *
  * Copyright (c) 2004, Mikael Grev, MiG InfoCom AB. (base64
- * @ miginfocom . com)
+ * miginfocom . com)
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,

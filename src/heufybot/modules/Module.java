@@ -5,10 +5,9 @@ import java.util.List;
 import heufybot.core.HeufyBot;
 
 /**
- * Abstract Module class.
+ * This abstract class provides an interface for any module used by the bot.
  * All modules must extend this class in order to be loadable.
- * @author Heufneutje
- * @version 0.4.0
+ * @author Stefan "Heufneutje" Frijters
  */
 public abstract class Module 
 {
@@ -49,7 +48,7 @@ public abstract class Module
 	/**
 	 * Who can invoke the module.
 	 * If Anyone is used, any IRC user is allowed to invoke the module.
-	 * If OPs is used, only channel operators and bot admins are allowed to invoke the module.
+	 * If OPs is used, only bot admins are allowed to invoke the module.
 	 */
 	protected AuthType authType;
 	
@@ -74,21 +73,30 @@ public abstract class Module
 	 */
 	public abstract void processEvent(String source, String message, String triggerUser, List<String> params);
 	
+	/**
+	 * @return The trigger for this module
+	 */
 	public String getTrigger()
 	{
 		return this.trigger;
 	}
 	
+	/**
+	 * @return The module's authentication type (Anyone or OPs)
+	 */
 	public AuthType getAuthType()
 	{
 		return authType;
 	}
 	
+	/**
+	 * @return An array with all trigger types this module supports
+	 */
 	public TriggerType[] getTriggerTypes()
 	{
 		return triggerTypes;
 	}
-	
+
 	public String toString()
 	{
 		return this.getClass().getSimpleName();
@@ -102,17 +110,20 @@ public abstract class Module
 	public abstract String getHelp(String message);
 	
 	/**
-	 * Gets called when the module is loaded.
+	 * Automatic method that gets called by the ModuleInterface when the module is being loaded.
 	 * Use this to make sure any necessary resources exist, such as folders or files.
 	 */
 	public abstract void onLoad();
 	
 	/**
-	 * Use this to destroy any resources no longer needed after the module is unloaded.
-	 * Do not use this to destroy resources that would be recreated by onLoad().
+	 * Automatic method that gets called by the ModuleInterface when the module is being loaded.
+	 * It is typically used to save resources used by the module to a file.
 	 */
 	public abstract void onUnload();
 	
+	/**
+	 * @return Whether or not this module will be triggered on any message
+	 */
 	public boolean getTriggerOnEveryMessage()
 	{
 		return triggerOnEveryMessage;

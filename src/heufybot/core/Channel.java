@@ -3,6 +3,10 @@ package heufybot.core;
 import java.util.HashMap;
 import java.util.Set;
 
+/**
+ * This class represents a joined channel on the IRC server the bot is connected to.
+ * @author Stefan "Heufneutje" Frijters
+ */
 public class Channel
 {
 	private String name;
@@ -21,11 +25,18 @@ public class Channel
 		this.modes = new HashMap<String, String>();
 	}
 	
+	/**
+	 * @return The name of the channel (prefixed by a channel type, most commonly #).
+	 */
 	public String getName()
 	{
 		return name;
 	}
 	
+	/**
+	 * Parses a string of mode changes that are being set or unset on this channel.
+	 * @param modeChange The string of modes that is to be parsed.
+	 */
 	public void parseModeChange(String modeChange)
 	{
 		boolean adding = true;
@@ -58,6 +69,11 @@ public class Channel
 		}
 	}
 	
+	/**
+	 * Parses status modes that are being set or unset on users in the channel. 
+	 * @param user The user that these status mode changes affect.
+	 * @param modeChange The string of modes that is to be set on the user.
+	 */
 	public void parseModeChangeOnUser(User user, String modeChange)
 	{
 		String modesOnUser = usersInChannel.get(user);
@@ -89,21 +105,38 @@ public class Channel
 		usersInChannel.put(user, modesOnUser);
 	}
 	
+	/**
+	 * Adds a user to this channel.
+	 * @param user The user to be added.
+	 */
 	public void addUser(User user)
 	{
 		usersInChannel.put(user, "");
 	}
 	
+	/**
+	 * Removes a user from this channel.
+	 * @param user The user to be removed.
+	 */
 	public void removeUser(User user)
 	{
 		usersInChannel.remove(user);
 	}
 	
+	/**
+	 * Gets all status modes set on a given user in the channel.
+	 * @param user The user status modes need to be retrieved from.
+	 * @return A string of status modes set on the given user.
+	 */
 	public String getModesOnUser(User user)
 	{
 		return usersInChannel.get(user);
 	}
 	
+	/**
+	 * Used to show all users that are currently in this channel.
+	 * @return An array of all current users in the channel.
+	 */
 	public User[] getUsers()
 	{
 		Set<User> userSet = usersInChannel.keySet();
@@ -111,6 +144,11 @@ public class Channel
 		return userSet.toArray(userArray);
 	}
 	
+	/**
+	 * This is mainly used to see whether a user is currently in this channel.
+	 * @param nickname The nickname of the user to be checked.
+	 * @return The user that the given nickname belongs to if they are in the channel, otherwise null.
+	 */
 	public User getUser(String nickname)
 	{
 		for(User user : usersInChannel.keySet())
@@ -122,42 +160,75 @@ public class Channel
 		}
 		return null;
 	}
-
+	
+	/**
+	 * Used to get the channel's current topic.
+	 * @return The current topic.
+	 */
 	public String getTopic()
 	{
 		return topic;
 	}
-
+	
+	/**
+	 * Changes the channel's topic
+	 * @param topic The new topic to be set
+	 */
 	public void setTopic(String topic) 
 	{
 		this.topic = topic;
 	}
-
+	
+	/**
+	 * Returns the nickname of the user that set the channel's topic.
+	 * @return The topic setter.
+	 */
 	public String getTopicSetter() 
 	{
 		return topicSetter;
 	}
 
+	/**
+	 * Changes the last person who set the channel's topic. Generally called when setting a new topic.
+	 * @param topicSetter The new topic setter.
+	 */
 	public void setTopicSetter(String topicSetter) 
 	{
 		this.topicSetter = topicSetter;
 	}
 
+	/**
+	 * Returns a timestamp of the date when this channel's topic was set.
+	 * @return The topic timestamp.
+	 */
 	public long getTopicSetTimestamp() 
 	{
 		return topicSetTimestamp;
 	}
 
+	/**
+	 * Changes the timestamp of when the channel's topic was set. Generally called when setting a new topic.
+	 * @param topicSetTimestamp
+	 */
 	public void setTopicSetTimestamp(long topicSetTimestamp) 
 	{
 		this.topicSetTimestamp = topicSetTimestamp;
 	}
 
+	/**
+	 * Returns all modes set on the channel.
+	 * @return A HashMap of all set modes. The keys are the mode characters. The values are the mode parameters that go with them.
+	 */
 	public HashMap<String, String> getModes() 
 	{
 		return modes;
 	}
 	
+	/**
+	 * Check whether a given user is an operator in this channel.
+	 * @param user The user to be checked.
+	 * @return A boolean containing the result of this check. Halfop and up will make this return true.
+	 */
 	public boolean checkOpStatus(User user)
 	{
 		String modes = usersInChannel.get(user);
