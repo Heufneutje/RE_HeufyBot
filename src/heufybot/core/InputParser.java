@@ -396,10 +396,48 @@ public class InputParser
 			//396 RPL_HOSTHIDDEN
 			irc.getEventListenerManager().dispatchEvent(new ServerResponseEvent(parsedLine.get(1) + " " + parsedLine.get(2)));
 		}
+		else if(code.equals("311"))
+		{
+			//311 RPL_WHOISUSER
+			whoisBuilder.setNickname(parsedLine.get(1));
+			whoisBuilder.setLogin(parsedLine.get(2));
+			whoisBuilder.setHostname(parsedLine.get(3));
+			whoisBuilder.setRealname(parsedLine.get(5));	
+		}
+		else if(code.equals("312"))
+		{
+			//312 RPL_WHOISSERVER
+			whoisBuilder.setServer(parsedLine.get(2));
+			whoisBuilder.setServerInfo(parsedLine.get(3));
+		}
+		else if(code.equals("313"))
+		{
+			//313 RPL_WHOISOPERATOR
+			whoisBuilder.setOperPrivs(parsedLine.get(2));
+		}
 		else if(code.equals("315"))
 		{
 			//315 RPL_ENDOFWHO
 			//No action required
+		}
+		else if(code.equals("317"))
+		{
+			//317 RPL_WHOISIDLE
+			whoisBuilder.setIdleSeconds(StringUtils.tryParseLong(parsedLine.get(2)));
+			
+			//Sign-on time is not in the RFC, but most deamons support this nowadays anyway
+			whoisBuilder.setSignOnTime(StringUtils.tryParseLong(parsedLine.get(3)));
+		}
+		else if(code.equals("318"))
+		{
+			//318 RPL_ENDOFWHOIS
+			irc.getEventListenerManager().dispatchEvent(new WhoisEvent(whoisBuilder));
+			whoisBuilder = new WhoisBuilder();
+		}
+		else if(code.equals("319"))
+		{
+			//319 RPL_WHOISCHANNELS
+			whoisBuilder.setChannels(StringUtils.parseStringtoList(parsedLine.get(2), " "));
 		}
 		else if(code.equals("324"))
 		{
@@ -572,7 +610,7 @@ public class InputParser
 		}
 		else if(command.equals("PRIVMSG") && channel != null)
 		{
-			//Message to the channel			
+			//Message to the channel
 			irc.getEventListenerManager().dispatchEvent(new MessageEvent(source, channel, message));
 		}
 		else if(command.equals("PRIVMSG"))

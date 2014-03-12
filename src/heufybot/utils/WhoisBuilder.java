@@ -1,11 +1,11 @@
 package heufybot.utils;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class WhoisBuilder 
 {
-	private String nickname, login, hostname, realname, server, serverInfo;
-	private ArrayList<String> channels;
+	private String nickname, login, hostname, realname, server, serverInfo, operPrivs;
+	private List<String> channels;
 	private long idleSeconds, signOnTime;
 	
 	public String getNickname()
@@ -67,12 +67,12 @@ public class WhoisBuilder
 		this.serverInfo = serverInfo;
 	}
 	
-	public ArrayList<String> getChannels()
+	public List<String> getChannels()
 	{
 		return channels;
 	}
 	
-	public void setChannels(ArrayList<String> channels) 
+	public void setChannels(List<String> channels) 
 	{
 		this.channels = channels;
 	}
@@ -95,5 +95,15 @@ public class WhoisBuilder
 	public void setSignOnTime(long signOnTime) 
 	{
 		this.signOnTime = signOnTime;
+	}
+	
+	public String getOperPrivs()
+	{
+		return operPrivs;
+	}
+	
+	public void setOperPrivs(String operPrivs) 
+	{
+		this.operPrivs = operPrivs;
 	}
 }

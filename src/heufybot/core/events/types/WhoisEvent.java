@@ -1,18 +1,23 @@
 package heufybot.core.events.types;
 
-import heufybot.core.User;
+import heufybot.utils.WhoisBuilder;
 
 public class WhoisEvent implements BotEvent
 {
-	private User user;
+	private WhoisBuilder builder;
 	
-	public WhoisEvent(User user)
+	public WhoisEvent(WhoisBuilder builder)
 	{
-		this.user = user;
+		this.builder = builder;
 	}
 	
-	public User getUser()
+	public WhoisBuilder getWhoisBuilder()
 	{
-		return user;
+		return builder;
+	}
+	
+	public String toString()
+	{
+		return "WhoisEvent";
 	}
 }
