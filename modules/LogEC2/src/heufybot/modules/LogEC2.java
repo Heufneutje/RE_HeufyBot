@@ -87,7 +87,7 @@ public class LogEC2 extends Module
 			return;
 		}
 		
-		String url = "http://logs.heufneutje.net/?channel=" + source.replaceAll("#", "") +
+		String url = "http://heufneutje.net/logs/?channel=" + source.replaceAll("#", "") +
 				"&network=" + bot.getIRC().getServerInfo().getNetwork() +
 				"&date=" + dateString;
 		bot.getIRC().cmdPRIVMSG(source, "Log for " + source + " on " + dateString + ": " + url);
