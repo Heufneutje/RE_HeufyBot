@@ -147,36 +147,34 @@ public class Tell extends Module
 			}
 			
 			params.remove(0);
-			
+			String searchString = StringUtils.join(params, " ");
 			boolean matchFound = false;
 			for(Iterator<String> iter = tellsMap.keySet().iterator(); iter.hasNext() && !matchFound;)
 			{
 				String user = iter.next();
-				if(triggerUser.toLowerCase().matches(user.toLowerCase()))
+				ArrayList<Message> sentMessages = tellsMap.get(user);
+				for(Iterator<Message> iter2 = sentMessages.iterator(); iter2.hasNext() && !matchFound;)
 				{
-					ArrayList<Message> sentMessages = tellsMap.get(user);
-					for(Iterator<Message> iter2 = sentMessages.iterator(); iter2.hasNext() && !matchFound;)
+					Message sentMessage = iter2.next();
+					if(sentMessage.from.equalsIgnoreCase(triggerUser) && sentMessage.text.matches(searchString))
 					{
-						Message sentMessage = iter2.next();
-						if(sentMessage.from.equalsIgnoreCase(triggerUser) && sentMessage.text.matches(StringUtils.join(params, " ")))
+						String messageString = "Message \"" + sentMessage.text + "\" sent to " + user + " on " + sentMessage.dateSent + " was removed from the message database!";
+						if(sentMessage.messageSource.equals("PM"))
 						{
-							String messageString = "Message '" + sentMessage.text + "' sent to " + user + " on " + sentMessage.dateSent + " was removed from the message database!";
-							if(sentMessage.messageSource.equals("PM"))
-							{
-								bot.getIRC().cmdNOTICE(triggerUser, messageString);
-							}
-							else
-							{
-								bot.getIRC().cmdPRIVMSG(source, messageString);
-							}
-							iter2.remove();
-							matchFound = true;
+							bot.getIRC().cmdNOTICE(triggerUser, messageString);
 						}
+						else
+						{
+							bot.getIRC().cmdPRIVMSG(source, messageString);
+						}
+						iter2.remove();
+						writeMessages();
+						matchFound = true;
 					}
-					if(sentMessages.size() == 0)
-					{
-						tellsMap.remove(user);
-					}
+				}
+				if(sentMessages.size() == 0)
+				{
+					tellsMap.remove(user);
 				}
 			}
 		}
@@ -188,32 +186,28 @@ public class Tell extends Module
 			}
 			
 			ArrayList<Message> foundMessages = new ArrayList<Message>();
-			
 			for(Iterator<String> iter = tellsMap.keySet().iterator(); iter.hasNext();)
 			{
 				String user = iter.next();
-				if(triggerUser.toLowerCase().matches(user.toLowerCase()))
+				ArrayList<Message> sentMessages = tellsMap.get(user);
+				for(Iterator<Message> iter2 = sentMessages.iterator(); iter2.hasNext();)
 				{
-					ArrayList<Message> sentMessages = tellsMap.get(user);
-					for(Iterator<Message> iter2 = sentMessages.iterator(); iter2.hasNext();)
+					Message sentMessage = iter2.next();
+					if(sentMessage.from.equalsIgnoreCase(triggerUser))
 					{
-						Message sentMessage = iter2.next();
-						if(sentMessage.from.equalsIgnoreCase(triggerUser))
-						{
-							foundMessages.add(sentMessage);
-						}
+						foundMessages.add(sentMessage);
 					}
-					
-					if(foundMessages.size() == 0)
+				}
+				
+				if(foundMessages.size() == 0)
+				{
+					bot.getIRC().cmdNOTICE(triggerUser, "There are no messages sent by you that have not been received yet.");
+				}
+				else
+				{
+					for(Message sentMessage : foundMessages)
 					{
-						bot.getIRC().cmdNOTICE(triggerUser, "There are no messages sent by you that have not been received yet.");
-					}
-					else
-					{
-						for(Message sentMessage : foundMessages)
-						{
-							bot.getIRC().cmdNOTICE(source, sentMessage.text + " < Sent to " + user + " on " + sentMessage.dateSent);
-						}
+						bot.getIRC().cmdNOTICE(source, sentMessage.text + " < Sent to " + user + " on " + sentMessage.dateSent);
 					}
 				}
 			}
