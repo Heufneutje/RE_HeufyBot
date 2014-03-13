@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.json.simple.JSONArray;
@@ -33,7 +34,7 @@ public class Tell extends Module
 			this.messageSource = messageSource;
 		}
 	}
-	private HashMap<String, ArrayList<Message>> tellsMap;
+	private LinkedHashMap<String, ArrayList<Message>> tellsMap;
 	private HashMap<String, Date> tellers;
 	
 	private String databasePath = "data/tells.json";
@@ -45,7 +46,7 @@ public class Tell extends Module
 		this.trigger = "^" + commandPrefix + "(tell|rtell|senttells)($| .*)";
 		this.triggerOnEveryMessage = true;
 		
-		this.tellsMap = new HashMap<String, ArrayList<Message>>();
+		this.tellsMap = new LinkedHashMap<String, ArrayList<Message>>();
 		this.tellers = new HashMap<String, Date>();
 	}
 
@@ -143,6 +144,8 @@ public class Tell extends Module
 		{
 			
 		}
+		
+		//Automatic stuff
 	}
 
 	@Override
@@ -212,7 +215,6 @@ public class Tell extends Module
 			recepientObject.put("messages", messages);
 			recepients.add(recepientObject);
 		}
-		System.out.println(recepients.toJSONString());
 		FileUtils.writeFile(databasePath, recepients.toJSONString());
 	}
 	
