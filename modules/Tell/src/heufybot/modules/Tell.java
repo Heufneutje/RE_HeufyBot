@@ -77,10 +77,11 @@ public class Tell extends Module
 			Date timestamp = tellers.get(triggerUser);
 			if(timestamp != null)
 			{
-				int timeStampDifference =  timestamp.compareTo(new Date());
-				if(timeStampDifference > 100)
+				long timeStampDifference = (new Date().getTime() - timestamp.getTime()) / 1000;
+				System.out.println(timeStampDifference);
+				if(timeStampDifference < 60)
 				{
-					bot.getIRC().cmdPRIVMSG(source, "Calm down, " + triggerUser + "! You just sent a message " + timestamp.compareTo(new Date()) + " ago!");
+					bot.getIRC().cmdPRIVMSG(source, "Calm down, " + triggerUser + "! You just sent a message " + timeStampDifference + " seconds ago! You have to wait " + (60 - timeStampDifference) + " more seconds.");
 					return;
 				}
 			}
@@ -139,7 +140,45 @@ public class Tell extends Module
 		}
 		else if(message.toLowerCase().matches("^" + commandPrefix + "r(emove)?tell.*"))
 		{
+			if(params.size() == 1)
+			{
+				bot.getIRC().cmdPRIVMSG(source, "Remove what?");
+				return;
+			}
 			
+			params.remove(0);
+			
+			boolean matchFound = false;
+			for(Iterator<String> iter = tellsMap.keySet().iterator(); iter.hasNext() && !matchFound;)
+			{
+				String user = iter.next();
+				if(triggerUser.toLowerCase().matches(user.toLowerCase()))
+				{
+					ArrayList<Message> sentMessages = tellsMap.get(user);
+					for(Iterator<Message> iter2 = sentMessages.iterator(); iter2.hasNext() && !matchFound;)
+					{
+						Message sentMessage = iter2.next();
+						if(sentMessage.from.equalsIgnoreCase(triggerUser) && sentMessage.text.matches(StringUtils.join(params, " ")))
+						{
+							String messageString = "Message '" + sentMessage.text + "' sent to " + user + " on " + sentMessage.dateSent + " was removed from the message database!";
+							if(sentMessage.messageSource.equals("PM"))
+							{
+								bot.getIRC().cmdNOTICE(triggerUser, messageString);
+							}
+							else
+							{
+								bot.getIRC().cmdPRIVMSG(source, messageString);
+							}
+							iter2.remove();
+							matchFound = true;
+						}
+					}
+					if(sentMessages.size() == 0)
+					{
+						tellsMap.remove(user);
+					}
+				}
+			}
 		}
 		else if(message.toLowerCase().matches("^" + commandPrefix + "s(ent)tells.*"))
 		{
