@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -146,6 +147,34 @@ public class Tell extends Module
 		}
 		
 		//Automatic stuff
+		int messageCount = 0;
+		for(Iterator<String> iter = tellsMap.keySet().iterator(); iter.hasNext();)
+		{
+			String user = iter.next();
+			if(triggerUser.toLowerCase().matches(user.toLowerCase()))
+			{
+				ArrayList<Message> sentMessages = tellsMap.get(user);
+				for(Iterator<Message> iter2 = sentMessages.iterator(); iter2.hasNext() && messageCount < 3; messageCount++)
+				{
+					Message sentMessage = iter2.next();
+					String messageString = sentMessage.text + " < From " + sentMessage.from + " on " + sentMessage.dateSent;
+					if(sentMessage.messageSource.equals("PM"))
+					{
+						bot.getIRC().cmdNOTICE(triggerUser, messageString);
+					}
+					else
+					{
+						bot.getIRC().cmdPRIVMSG(source, messageString);
+					}
+					iter2.remove();
+				}
+				if(sentMessages.size() == 0)
+				{
+					tellsMap.remove(user);
+				}
+			}
+		}
+		writeMessages();
 	}
 
 	@Override
