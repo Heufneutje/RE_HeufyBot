@@ -182,7 +182,7 @@ public class Tell extends Module
 				}
 			}
 		}
-		else if(message.toLowerCase().matches("^" + commandPrefix + "s(ent)tells.*"))
+		else if(message.toLowerCase().matches("^" + commandPrefix + "s(ent)?tells.*"))
 		{
 			if(params.size() > 1)
 			{
