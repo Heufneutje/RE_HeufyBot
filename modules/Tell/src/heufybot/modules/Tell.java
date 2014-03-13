@@ -176,6 +176,10 @@ public class Tell extends Module
 				{
 					tellsMap.remove(user);
 				}
+				if(!matchFound)
+				{
+					bot.getIRC().cmdPRIVMSG(source, "No message matching \"" + searchString + "\" was found.");
+				}
 			}
 		}
 		else if(message.toLowerCase().matches("^" + commandPrefix + "s(ent)tells.*"))
