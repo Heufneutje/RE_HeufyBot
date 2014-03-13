@@ -156,7 +156,7 @@ public class Tell extends Module
 				for(Iterator<Message> iter2 = sentMessages.iterator(); iter2.hasNext() && !matchFound;)
 				{
 					Message sentMessage = iter2.next();
-					if(sentMessage.from.equalsIgnoreCase(triggerUser) && sentMessage.text.matches(searchString))
+					if(sentMessage.from.equalsIgnoreCase(triggerUser) && sentMessage.text.matches(".*" + searchString + ".*"))
 					{
 						String messageString = "Message \"" + sentMessage.text + "\" sent to " + user + " on " + sentMessage.dateSent + " was removed from the message database!";
 						if(sentMessage.messageSource.equals("PM"))
