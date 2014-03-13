@@ -182,7 +182,41 @@ public class Tell extends Module
 		}
 		else if(message.toLowerCase().matches("^" + commandPrefix + "s(ent)tells.*"))
 		{
+			if(params.size() > 1)
+			{
+				return;
+			}
 			
+			ArrayList<Message> foundMessages = new ArrayList<Message>();
+			
+			for(Iterator<String> iter = tellsMap.keySet().iterator(); iter.hasNext();)
+			{
+				String user = iter.next();
+				if(triggerUser.toLowerCase().matches(user.toLowerCase()))
+				{
+					ArrayList<Message> sentMessages = tellsMap.get(user);
+					for(Iterator<Message> iter2 = sentMessages.iterator(); iter2.hasNext();)
+					{
+						Message sentMessage = iter2.next();
+						if(sentMessage.from.equalsIgnoreCase(triggerUser))
+						{
+							foundMessages.add(sentMessage);
+						}
+					}
+					
+					if(foundMessages.size() == 0)
+					{
+						bot.getIRC().cmdNOTICE(triggerUser, "There are no messages sent by you that have not been received yet.");
+					}
+					else
+					{
+						for(Message sentMessage : foundMessages)
+						{
+							bot.getIRC().cmdNOTICE(source, sentMessage.text + " < Sent to " + user + " on " + sentMessage.dateSent);
+						}
+					}
+				}
+			}
 		}
 		
 		//Automatic stuff
