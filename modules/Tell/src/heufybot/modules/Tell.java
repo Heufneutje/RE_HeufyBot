@@ -147,7 +147,7 @@ public class Tell extends Module
 			}
 			
 			params.remove(0);
-			String searchString = StringUtils.join(params, " ");
+			String searchString = fixRegex(StringUtils.join(params, " "));
 			boolean matchFound = false;
 			for(Iterator<String> iter = tellsMap.keySet().iterator(); iter.hasNext() && !matchFound;)
 			{
