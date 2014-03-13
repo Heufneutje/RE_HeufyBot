@@ -44,7 +44,7 @@ public class Tell extends Module
 	{
 		this.authType = AuthType.Anyone;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message, TriggerType.Action };
-		this.trigger = "^" + commandPrefix + "(tell|rtell|senttells)($| .*)";
+		this.trigger = "^" + commandPrefix + "(tell|r(emove)?tell|s(ent)?tells)($| .*)";
 		this.triggerOnEveryMessage = true;
 		
 		this.tellsMap = new LinkedHashMap<String, ArrayList<Message>>();
@@ -137,11 +137,11 @@ public class Tell extends Module
 				bot.getIRC().cmdPRIVMSG(source, "Okay, I'll tell " + recepients[i] + " that next time they speak.");
 			}
 		}
-		else if(message.toLowerCase().matches("^" + commandPrefix + "rtell.*"))
+		else if(message.toLowerCase().matches("^" + commandPrefix + "r(emove)?tell.*"))
 		{
 			
 		}
-		else if(message.toLowerCase().matches("^" + commandPrefix + "senttells.*"))
+		else if(message.toLowerCase().matches("^" + commandPrefix + "s(ent)tells.*"))
 		{
 			
 		}
