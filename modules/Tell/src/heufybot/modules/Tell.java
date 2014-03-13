@@ -104,7 +104,7 @@ public class Tell extends Module
 				}
 				else if(recepients[i].equalsIgnoreCase(bot.getIRC().getNickname()))
 				{
-					bot.getIRC().cmdPRIVMSG(source, "Thanks for telling me that " + triggerUser + ".");
+					bot.getIRC().cmdPRIVMSG(source, "Thanks for telling me that, " + triggerUser + ".");
 					return;
 				}
 
