@@ -228,7 +228,7 @@ public class Tell extends Module
 				for(Iterator<Message> iter2 = sentMessages.iterator(); iter2.hasNext() && messageCount < 3; messageCount++)
 				{
 					Message sentMessage = iter2.next();
-					String messageString = sentMessage.text + " < From " + sentMessage.from + " on " + sentMessage.dateSent;
+					String messageString = triggerUser + ": " + sentMessage.text + " < From " + sentMessage.from + " on " + sentMessage.dateSent;
 					if(sentMessage.messageSource.equals("PM"))
 					{
 						bot.getIRC().cmdNOTICE(triggerUser, messageString);
