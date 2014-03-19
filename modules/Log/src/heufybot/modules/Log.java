@@ -89,7 +89,7 @@ public class Log extends Module
 		
 		if(FileUtils.readFile(filePath) == null)
 		{
-			bot.getIRC().cmdPRIVMSG(source, "[Log] I do not have that log");
+			bot.getIRC().cmdPRIVMSG(source, "I do not have that log");
 			return;
 		}
 		
