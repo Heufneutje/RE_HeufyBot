@@ -83,7 +83,7 @@ public class LogEC2 extends Module
 		
 		if(!FileUtils.fileExists(filePath))
 		{
-			bot.getIRC().cmdPRIVMSG(source, "[Log] I do not have that log");
+			bot.getIRC().cmdPRIVMSG(source, "I do not have that log");
 			return;
 		}
 		
