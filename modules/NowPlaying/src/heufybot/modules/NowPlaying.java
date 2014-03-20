@@ -79,6 +79,10 @@ public class NowPlaying extends Module
 			{
 				bot.getIRC().cmdPRIVMSG(source, "No user with the name \"" + name + "\" could be found on LastFM.");
 			}
+			else if(results.size() == 0)
+			{
+				bot.getIRC().cmdPRIVMSG(source, "No recently played tracks for user \"" + name + "\" could be found on LastFM.");
+			}
 			else
 			{
 				String[] titles = new String[results.keySet().size()];
