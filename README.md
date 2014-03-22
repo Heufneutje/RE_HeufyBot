@@ -3,7 +3,7 @@ RE_HeufyBot-AdditionalModules
 
 Some of the additional modules that can be used with [RE_HeufyBot](https://github.com/Heufneutje/RE_HeufyBot).
 
-Avaiable in this package:
+Available in this package:
 
 - Choose
 - Do
