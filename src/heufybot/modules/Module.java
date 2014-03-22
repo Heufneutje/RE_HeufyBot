@@ -14,7 +14,7 @@ public abstract class Module
 	
 	public enum AuthType
 	{
-		Anyone, OPs
+		Anyone, BotAdmins
 	}
 	
 	public enum TriggerType
@@ -58,6 +58,12 @@ public abstract class Module
 	 */
 	protected TriggerType[] triggerTypes;
 	
+	/**
+	 * The module API version this module is using.
+	 * This must match up with the bot's module API version for the module to be loadable.
+	 */
+	protected String apiVersion = "0.0.0";
+	
 	public Module()
 	{
 		bot = HeufyBot.getInstance();
@@ -72,6 +78,14 @@ public abstract class Module
 	 * @param params The same as message, split at " ". The first index can be checked for the trigger.
 	 */
 	public abstract void processEvent(String source, String message, String triggerUser, List<String> params);
+	
+	/**
+	 * @return The module API version this module is using
+	 */
+	public String getAPIVersion()
+	{
+		return apiVersion;
+	}
 	
 	/**
 	 * @return The trigger for this module

@@ -25,7 +25,7 @@ public class ModuleInterface extends EventListenerAdapter
 	
 	public enum ModuleLoaderResponse
 	{
-		Success, DoesNotExist, AlreadyLoaded
+		Success, DoesNotExist, AlreadyLoaded, APIVersionDoesNotMatch
 	}
 	
 	public ModuleInterface(HeufyBot bot)
@@ -61,6 +61,11 @@ public class ModuleInterface extends EventListenerAdapter
 					
 					Class<?> moduleClass = Class.forName("heufybot.modules." + moduleName, true, loader);
 					Module module = (Module) moduleClass.newInstance();
+					
+					if(!module.getAPIVersion().equals(HeufyBot.MODULE_API_VERSION))
+					{
+						return new SimpleEntry<ModuleLoaderResponse, String>(ModuleLoaderResponse.APIVersionDoesNotMatch, HeufyBot.MODULE_API_VERSION + " " + module.getAPIVersion());
+					}
 					
 					modules.add(module);
 					module.onLoad();
