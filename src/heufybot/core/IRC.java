@@ -96,7 +96,9 @@ public class IRC
 		
 		try 
 		{
-			for (InetAddress curAddress : InetAddress.getAllByName(server))
+			InetAddress[] foundIPs = InetAddress.getAllByName(server);
+			Logger.log("*** Hostname was resolved, " + foundIPs.length + " IPs found.");
+			for (InetAddress curAddress : foundIPs)
 			{
 				try
 				{
