@@ -13,7 +13,8 @@ public class Time extends Module
 	
 	public Time()
 	{
-		this.authType = Module.AuthType.Anyone;
+		this.authType = AuthType.Anyone;
+		this.apiVersion = "0.5.0";
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(time)($| .*)";
 	}

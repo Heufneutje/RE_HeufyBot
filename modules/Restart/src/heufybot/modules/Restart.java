@@ -6,7 +6,8 @@ public class Restart extends Module
 {
 	public Restart()
 	{
-		this.authType = Module.AuthType.OPs;
+		this.authType = AuthType.BotAdmins;
+		this.apiVersion = "0.5.0";
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(restart)$";
 	}

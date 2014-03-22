@@ -43,6 +43,7 @@ public class Tell extends Module
 	public Tell()
 	{
 		this.authType = AuthType.Anyone;
+		this.apiVersion = "0.5.0";
 		this.triggerTypes = new TriggerType[] { TriggerType.Message, TriggerType.Action };
 		this.trigger = "^" + commandPrefix + "(tell|r(emove)?tell|s(ent)?tells)($| .*)";
 		this.triggerOnEveryMessage = true;
