@@ -97,7 +97,7 @@ public class IRC
 		try 
 		{
 			InetAddress[] foundIPs = InetAddress.getAllByName(server);
-			Logger.log("*** Hostname was resolved, " + foundIPs.length + " IPs found.");
+			Logger.log("*** " + foundIPs.length + " IP(s) found for host " + server + ".");
 			for (InetAddress curAddress : foundIPs)
 			{
 				try
@@ -342,8 +342,8 @@ public class IRC
 	
 	public void cmdPRIVMSG(String target, String message)
 	{
-		eventListenerManager.dispatchEvent(new BotMessageEvent(getUser(nickname), target, message));
 		sendRawSplit("PRIVMSG " + target + " :", message);
+		eventListenerManager.dispatchEvent(new BotMessageEvent(getUser(nickname), target, message));
 	}
 	
 	public void cmdJOIN(String channel, String key)

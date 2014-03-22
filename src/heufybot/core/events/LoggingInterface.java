@@ -29,14 +29,9 @@ public class LoggingInterface extends EventListenerAdapter
 		User user = event.getUser();
 		Channel channel = bot.getIRC().getChannel(event.getTarget());
 		
-		if(channel == null && event.getUser() == null)
+		if(channel == null && user.getNickname().equalsIgnoreCase("nickserv") && user.getNickname().equalsIgnoreCase("chanserv"))
 		{
-			//Don't log this. It was probably a message to an authentication service
-			return;
-		}
-		else if(channel == null)
-		{
-			String sourceNick = event.getUser().getNickname();
+			String sourceNick = user.getNickname();
 			Logger.log("<" + sourceNick + "> " + event.getMessage(), event.getTarget(), bot.getIRC().getServerInfo().getNetwork());
 			return;
 		}
