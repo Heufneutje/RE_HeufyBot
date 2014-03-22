@@ -585,6 +585,8 @@ public class InputParser
 			else if(request.toUpperCase().startsWith("ACTION "))
 			{
 				// ACTION request in a PM
+				//We don't this user yet, so send a WHOIS
+				irc.cmdWHOIS(sourceNick);
 				irc.getEventListenerManager().dispatchEvent(new PMActionEvent(source, request.substring(7)));
 			}
 			else if(request.toUpperCase().startsWith("PING "))
