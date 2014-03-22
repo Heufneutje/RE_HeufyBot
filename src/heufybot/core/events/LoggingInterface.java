@@ -31,7 +31,7 @@ public class LoggingInterface extends EventListenerAdapter
 		
 		if(channel == null)
 		{
-			if(user.getNickname().equalsIgnoreCase("nickserv") && user.getNickname().equalsIgnoreCase("chanserv"))
+			if(event.getTarget().equalsIgnoreCase("nickserv") && event.getTarget().equalsIgnoreCase("chanserv"))
 			{
 				return;
 			}
