@@ -12,6 +12,7 @@ public class ModuleLoader extends Module
 	public ModuleLoader()
 	{
 		this.authType = AuthType.BotAdmins;
+		this.apiVersion = "0.5.0";
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(load|unload|reload)($| .*)";
 	}
@@ -39,6 +40,11 @@ public class ModuleLoader extends Module
 					break;
 				case DoesNotExist:
 					bot.getIRC().cmdPRIVMSG(source, "Module \"" + moduleName + "\" does not exist.");
+					break;
+				case APIVersionDoesNotMatch: 
+					String moduleVersion = result.getValue().split(" ")[0];
+					String apiVersion = result.getValue().split(" ")[1];
+					bot.getIRC().cmdPRIVMSG(source, "Module \"" + moduleName + "\" could not be loaded. Its module API version (" + moduleVersion + ") does not match the bot's API version (" + apiVersion + ")");
 					break;
 				default:
 					break;
@@ -202,13 +208,24 @@ public class ModuleLoader extends Module
 					{
 					case Success:
 					{
-						if(bot.getModuleInterface().loadModule(moduleName).getKey() == ModuleLoaderResponse.Success)
+						switch (result.getKey()) 
 						{
-							bot.getIRC().cmdPRIVMSG(source, "Module \"" + result.getValue() + "\" was successfully reloaded!");
-						}
-						else
-						{
+						case Success:
+							bot.getIRC().cmdPRIVMSG(source, "Module \"" + result.getValue() + "\" was successfully loaded!");
+							break;
+						case AlreadyLoaded:
+							bot.getIRC().cmdPRIVMSG(source, "Module \"" + moduleName + "\" is already loaded.");
+							break;
+						case DoesNotExist:
 							bot.getIRC().cmdPRIVMSG(source, "Module \"" + moduleName + "\" does not exist.");
+							break;
+						case APIVersionDoesNotMatch: 
+							String moduleVersion = result.getValue().split(" ")[0];
+							String apiVersion = result.getValue().split(" ")[1];
+							bot.getIRC().cmdPRIVMSG(source, "Module \"" + moduleName + "\" could not be loaded. Its module API version (" + moduleVersion + ") does not match the bot's API version (" + apiVersion + ")");
+							break;
+						default:
+							break;
 						}
 						break;
 					}

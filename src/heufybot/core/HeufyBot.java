@@ -10,7 +10,7 @@ import heufybot.utils.FileUtils;
 
 public class HeufyBot
 {
-	public final static String VERSION = "0.4.1";
+	public final static String VERSION = "0.5.0";
 	public final static String MODULE_API_VERSION = "0.5.0";
 	
 	private Config config;
@@ -94,6 +94,7 @@ public class HeufyBot
 				String moduleVersion = result.getValue().split(" ")[0];
 				String apiVersion = result.getValue().split(" ")[1];
 				Logger.error("Module Loader", "Module \"" + module + "\" could not be loaded. Its module API version (" + moduleVersion + ") does not match the bot's API version (" + apiVersion + ")");
+				break;
 			default:
 				break;
 			}
