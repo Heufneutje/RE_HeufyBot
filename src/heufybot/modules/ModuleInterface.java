@@ -64,7 +64,7 @@ public class ModuleInterface extends EventListenerAdapter
 					
 					if(!module.getAPIVersion().equals(HeufyBot.MODULE_API_VERSION))
 					{
-						return new SimpleEntry<ModuleLoaderResponse, String>(ModuleLoaderResponse.APIVersionDoesNotMatch, HeufyBot.MODULE_API_VERSION + " " + module.getAPIVersion());
+						return new SimpleEntry<ModuleLoaderResponse, String>(ModuleLoaderResponse.APIVersionDoesNotMatch, module.getAPIVersion() + " " + HeufyBot.MODULE_API_VERSION);
 					}
 					
 					modules.add(module);

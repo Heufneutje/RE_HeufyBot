@@ -84,12 +84,16 @@ public class HeufyBot
 			
 			switch(result.getKey())
 			{
-			case Success: Logger.log(" -  Module " + result.getValue() + " was loaded");
+			case Success: Logger.log(" -  Module \"" + result.getValue() + "\" was loaded");
 				break;
-			case AlreadyLoaded: Logger.error("Module Loader", "Module " + module + " is already loaded");
+			case AlreadyLoaded: Logger.error("Module Loader", "Module \"" + module + "\" is already loaded");
 				break;
-			case DoesNotExist: Logger.error("Module Loader", "Module " + module + " does not exist");
+			case DoesNotExist: Logger.error("Module Loader", "Module \"" + module + "\" does not exist");
 				break;
+			case APIVersionDoesNotMatch: 
+				String moduleVersion = result.getValue().split(" ")[0];
+				String apiVersion = result.getValue().split(" ")[1];
+				Logger.error("Module Loader", "Module \"" + module + "\" could not be loaded. Its module API version (" + moduleVersion + ") does not match the bot's API version (" + apiVersion + ")");
 			default:
 				break;
 			}
