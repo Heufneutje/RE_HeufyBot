@@ -35,7 +35,6 @@ public class Config
 		this.maxLineLength = 512;
 		this.logPath = "logs";
 		this.capHandlers = new ArrayList<CapHandler>();
-		this.capHandlers.add(new EnablingCapHandler("multi-prefix"));
 	}
 	
 	public static Config getInstance()
@@ -140,6 +139,9 @@ public class Config
 				realname = "Unknown";
 			}
 			
+			// CAP handlers
+			this.capHandlers.clear();
+			this.capHandlers.add(new EnablingCapHandler("multi-prefix"));
 			if(passwordType == PasswordType.SASL)
 			{
 				this.capHandlers.add(new SASLCapHandler(username, password));

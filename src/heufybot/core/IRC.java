@@ -143,12 +143,12 @@ public class IRC
 	{
 		connectionState = ConnectionState.Disconnected;
 		this.nickname = "";
+		serverInfo.clear();
+		enabledCapabilities.clear();
+		userModes.clear();
 		
 		try 
 		{
-			serverInfo.clear();
-			enabledCapabilities.clear();
-			userModes.clear();
 			this.inputThread.interrupt();
 			this.inputReader.close();
 			this.outputWriter.flush();
