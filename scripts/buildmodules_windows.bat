@@ -1,29 +1,56 @@
-cd ..\modules
-jar cvf Aww.jar Aww\bin\*
-jar cvf Choose.jar Choose\bin\*
-jar cvf Do.jar Do\bin\*
-jar cvf Join.jar Join\bin\*
-jar cvf Log.jar Log\bin\*
-jar cvf LogEC2.jar LogEC2\bin\*
-jar cvf Nick.jar Nick\bin\*
-jar cvf NowPlaying.jar NowPlaying\bin\*
-jar cvf OutOfContext.jar OutOfContext\bin\*
-jar cvf Part.jar Part\bin\*
-jar cvf Quit.jar Quit\bin\*
-jar cvf Restart.jar Restart\bin\*
-jar cvf Say.jar Say\bin\*
-jar cvf Shorten.jar Shorten\bin\*
-jar cvf Source.jar Source\bin\*
-jar cvf Tell.jar Tell\bin\*
-jar cvf Time.jar Time\bin\*
-jar cvf TimeDB.jar TimeDB\bin\*
-jar cvf Translate.jar Translate\bin\*
-jar cvf TranslationParty.jar TranslationParty\bin\*
-jar cvf Uptime.jar Uptime\bin\*
-jar cvf URLFollow.jar URLFollow\bin\*
-jar cvf UserLocation.jar UserLocation\bin\*
-jar cvf Weather.jar Weather\bin\*
-jar cvf WeatherDB.jar WeatherDB\bin\*
-jar cvf YouTube.jar YouTube\bin\*
+cd ..\modules\Aww\bin
+jar cvf ..\..\Aww.jar *
+cd ..\..\Choose\bin
+jar cvf ..\..\Choose.jar *
+cd ..\..\Do\bin
+jar cvf ..\..\Do.jar *
+cd ..\..\Event\bin
+jar cvf ..\..\Event.jar *
+cd ..\..\Join\bin
+jar cvf ..\..\Join.jar *
+cd ..\..\Log\bin
+jar cvf ..\..\Log.jar *
+cd ..\..\LogEC2\bin
+jar cvf ..\..\LogEC2.jar *
+cd ..\..\Nick\bin
+jar cvf ..\..\Nick.jar *
+cd ..\..\NowPlaying\bin
+jar cvf ..\..\NowPlaying.jar *
+cd ..\..\OutOfContext\bin
+jar cvf ..\..\OutOfContext.jar *
+cd ..\..\Part\bin
+jar cvf ..\..\Part.jar *
+cd ..\..\Quit\bin
+jar cvf ..\..\Quit.jar *
+cd ..\..\Restart\bin
+jar cvf ..\..\Restart.jar *
+cd ..\..\Say\bin
+jar cvf ..\..\Say.jar *
+cd ..\..\Shorten\bin
+jar cvf ..\..\Shorten.jar *
+cd ..\..\Source\bin
+jar cvf ..\..\Source.jar *
+cd ..\..\Tell\bin
+jar cvf ..\..\Tell.jar *
+cd ..\..\Time\bin
+jar cvf ..\..\Time.jar *
+cd ..\..\TimeDB\bin
+jar cvf ..\..\TimeDB.jar *
+cd ..\..\Translate\bin
+jar cvf ..\..\Translate.jar *
+cd ..\..\TranslationParty\bin
+jar cvf ..\..\TranslationParty.jar *
+cd ..\..\Uptime\bin
+jar cvf ..\..\Uptime.jar *
+cd ..\..\URLFollow\bin
+jar cvf ..\..\URLFollow.jar *
+cd ..\..\UserLocation\bin
+jar cvf ..\..\UserLocation.jar *
+cd ..\..\Weather\bin
+jar cvf ..\..\Weather.jar *
+cd ..\..\WeatherDB\bin
+jar cvf ..\..\WeatherDB.jar *
+cd ..\..\YouTube\bin
+jar cvf ..\..\YouTube.jar *
 pause
 exit
