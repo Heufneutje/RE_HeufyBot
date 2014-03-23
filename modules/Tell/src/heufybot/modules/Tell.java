@@ -20,21 +20,6 @@ import org.json.simple.parser.ParseException;
 
 public class Tell extends Module
 {
-	private class Message
-	{
-		public String from;
-		public String text;
-		public String dateSent;
-		public String messageSource;
-		
-		Message(String from, String text, String dateSent, String messageSource)
-		{
-			this.from = from;
-			this.text = text;
-			this.dateSent = dateSent;
-			this.messageSource = messageSource;
-		}
-	}
 	private LinkedHashMap<String, ArrayList<Message>> tellsMap;
 	private HashMap<String, Date> tellers;
 	
@@ -157,10 +142,10 @@ public class Tell extends Module
 				for(Iterator<Message> iter2 = sentMessages.iterator(); iter2.hasNext() && !matchFound;)
 				{
 					Message sentMessage = iter2.next();
-					if(sentMessage.from.equalsIgnoreCase(triggerUser) && sentMessage.text.matches(".*" + searchString + ".*"))
+					if(sentMessage.getFrom().equalsIgnoreCase(triggerUser) && sentMessage.getText().matches(".*" + searchString + ".*"))
 					{
-						String messageString = "Message \"" + sentMessage.text + "\" sent to " + user + " on " + sentMessage.dateSent + " was removed from the message database!";
-						if(sentMessage.messageSource.equals("PM"))
+						String messageString = "Message \"" + sentMessage.getText() + "\" sent to " + user + " on " + sentMessage.getDateSent() + " was removed from the message database!";
+						if(sentMessage.getMessageSource().equals("PM"))
 						{
 							bot.getIRC().cmdNOTICE(triggerUser, messageString);
 						}
@@ -198,7 +183,7 @@ public class Tell extends Module
 				for(Iterator<Message> iter2 = sentMessages.iterator(); iter2.hasNext();)
 				{
 					Message sentMessage = iter2.next();
-					if(sentMessage.from.equalsIgnoreCase(triggerUser))
+					if(sentMessage.getFrom().equalsIgnoreCase(triggerUser))
 					{
 						foundMessages.add(sentMessage);
 					}
@@ -212,7 +197,7 @@ public class Tell extends Module
 				{
 					for(Message sentMessage : foundMessages)
 					{
-						bot.getIRC().cmdNOTICE(source, sentMessage.text + " < Sent to " + user + " on " + sentMessage.dateSent);
+						bot.getIRC().cmdNOTICE(source, sentMessage.getText() + " < Sent to " + user + " on " + sentMessage.getDateSent());
 					}
 				}
 			}
@@ -229,8 +214,8 @@ public class Tell extends Module
 				for(Iterator<Message> iter2 = sentMessages.iterator(); iter2.hasNext() && messageCount < 3; messageCount++)
 				{
 					Message sentMessage = iter2.next();
-					String messageString = triggerUser + ": " + sentMessage.text + " < From " + sentMessage.from + " on " + sentMessage.dateSent;
-					if(sentMessage.messageSource.equals("PM"))
+					String messageString = triggerUser + ": " + sentMessage.getText() + " < From " + sentMessage.getFrom() + " on " + sentMessage.getDateSent();
+					if(sentMessage.getMessageSource().equals("PM"))
 					{
 						bot.getIRC().cmdNOTICE(triggerUser, messageString);
 					}
@@ -304,10 +289,10 @@ public class Tell extends Module
 			for(Message message : tellsMap.get(recepient))
 			{
 				JSONObject messageObject = new JSONObject();
-				messageObject.put("from", message.from);
-				messageObject.put("text", message.text);
-				messageObject.put("dateSent", message.dateSent);
-				messageObject.put("messageSource", message.messageSource);
+				messageObject.put("from", message.getFrom());
+				messageObject.put("text", message.getText());
+				messageObject.put("dateSent", message.getDateSent());
+				messageObject.put("messageSource", message.getMessageSource());
 				
 				messages.add(messageObject);
 			}
