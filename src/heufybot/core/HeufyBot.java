@@ -10,7 +10,7 @@ import heufybot.utils.FileUtils;
 
 public class HeufyBot
 {
-	public final static String VERSION = "0.5.0";
+	public final static String VERSION = "0.5.1";
 	public final static String MODULE_API_VERSION = "0.5.0";
 	
 	private Config config;
