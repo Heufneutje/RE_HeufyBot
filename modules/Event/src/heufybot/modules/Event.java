@@ -74,7 +74,17 @@ public class Event extends Module
 				}
 				
 				MyEvent event = new MyEvent(eventDate, StringUtils.join(params, " "));
-				events.add(event);
+				
+				int latestDateIndex = 0;
+				for(int i = 0; i < events.size(); i++)
+				{
+					if(eventDate.after(events.get(i).getDate()))
+					{
+						latestDateIndex = i + 1;
+					}
+				}
+				
+				events.add(latestDateIndex, event);
 				writeEvents();
 				
 				bot.getIRC().cmdPRIVMSG(source, "Event \"" + event.getEventString() + "\" on the date " + event.getFormattedDate() + " (UTC) was added to the events database!");
