@@ -7,13 +7,25 @@ import java.util.Date;
 
 public class MyEvent 
 {
+	private String user;
 	private Date date;
 	private String eventString;
 	
-	public MyEvent(Date date, String eventString)
+	public MyEvent(String user, Date date, String eventString)
 	{
+		this.setUser(user);
 		this.date = date;
 		this.eventString = eventString;
+	}
+
+	public String getUser() 
+	{
+		return user;
+	}
+
+	public void setUser(String user) 
+	{
+		this.user = user;
 	}
 
 	public Date getDate() 

@@ -73,7 +73,7 @@ public class Event extends Module
 					}
 				}
 				
-				MyEvent event = new MyEvent(eventDate, StringUtils.join(params, " "));
+				MyEvent event = new MyEvent(triggerUser, eventDate, StringUtils.join(params, " "));
 				
 				int latestDateIndex = 0;
 				for(int i = 0; i < events.size(); i++)
@@ -155,7 +155,10 @@ public class Event extends Module
 			for(int i = 0; i < eventsArray.size(); i++)
 			{
 				JSONObject eventObject = (JSONObject) eventsArray.get(i);
-				MyEvent event = new MyEvent(MyEvent.formatDate(eventObject.get("date").toString()), eventObject.get("event").toString());
+				String user = eventObject.get("user").toString();
+				Date date = MyEvent.formatDate(eventObject.get("date").toString());
+				String eventString = eventObject.get("event").toString();
+				MyEvent event = new MyEvent(user, date, eventString);
 				events.add(event);
 			}
 		} 
@@ -172,6 +175,7 @@ public class Event extends Module
 		for(MyEvent event : events)
 		{
 			JSONObject eventObject = new JSONObject();
+			eventObject.put("user", event.getUser());
 			eventObject.put("date", event.getFormattedDate());
 			eventObject.put("event", event.getEventString());
 			eventsArray.add(eventObject);
