@@ -24,6 +24,6 @@ jar cvf URLFollow.jar URLFollow\bin\*
 jar cvf UserLocation.jar UserLocation\bin\*
 jar cvf Weather.jar Weather\bin\*
 jar cvf WeatherDB.jar WeatherDB\bin\*
-jar cvf Youtube.jar YouTube\bin\*
+jar cvf YouTube.jar YouTube\bin\*
 pause
 exit
