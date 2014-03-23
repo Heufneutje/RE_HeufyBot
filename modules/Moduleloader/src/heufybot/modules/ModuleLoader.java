@@ -208,10 +208,12 @@ public class ModuleLoader extends Module
 					{
 					case Success:
 					{
-						switch (result.getKey()) 
+						SimpleEntry<ModuleLoaderResponse, String> result2 = bot.getModuleInterface().loadModule(moduleName);
+						
+						switch (result2.getKey()) 
 						{
 						case Success:
-							bot.getIRC().cmdPRIVMSG(source, "Module \"" + result.getValue() + "\" was successfully loaded!");
+							bot.getIRC().cmdPRIVMSG(source, "Module \"" + result2.getValue() + "\" was successfully reloaded!");
 							break;
 						case AlreadyLoaded:
 							bot.getIRC().cmdPRIVMSG(source, "Module \"" + moduleName + "\" is already loaded.");
@@ -220,8 +222,8 @@ public class ModuleLoader extends Module
 							bot.getIRC().cmdPRIVMSG(source, "Module \"" + moduleName + "\" does not exist.");
 							break;
 						case APIVersionDoesNotMatch: 
-							String moduleVersion = result.getValue().split(" ")[0];
-							String apiVersion = result.getValue().split(" ")[1];
+							String moduleVersion = result2.getValue().split(" ")[0];
+							String apiVersion = result2.getValue().split(" ")[1];
 							bot.getIRC().cmdPRIVMSG(source, "Module \"" + moduleName + "\" could not be loaded. Its module API version (" + moduleVersion + ") does not match the bot's API version (" + apiVersion + ")");
 							break;
 						default:
