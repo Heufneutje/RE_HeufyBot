@@ -26,7 +26,7 @@ public class Event extends Module
 		this.authType = AuthType.Anyone;
 		this.apiVersion = "0.5.0";
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
-		this.trigger = "^" + commandPrefix + "(event|timetill)($| .*)";
+		this.trigger = "^" + commandPrefix + "(event|timetill|timesince|r(emove)?event)($| .*)";
 		
 		this.events = new ArrayList<MyEvent>();
 	}
@@ -89,6 +89,10 @@ public class Event extends Module
 			
 			bot.getIRC().cmdPRIVMSG(source, "Event \"" + event.getEventString() + "\" on the date " + event.getFormattedDate() + " (UTC) was added to the events database!");
 		}
+		else if(message.toLowerCase().matches("^" + commandPrefix + "r(emove)?event.*"))
+		{
+			
+		}
 		else if(message.toLowerCase().matches("^" + commandPrefix + "timetill.*"))
 		{
 			if(params.size() == 1)
@@ -105,9 +109,33 @@ public class Event extends Module
 				if(event.getEventString().toLowerCase().matches(".*" + search.toLowerCase() + ".*") && event.getDate().after(now))
 				{
 					String timeDifference = getTimeDifferenceString(now, event.getDate());
-					bot.getIRC().cmdPRIVMSG(source, "Event \"" + event.getEventString() + "\" will occur in " + timeDifference + ".");
+					bot.getIRC().cmdPRIVMSG(source, event.getUser() + "'s event \"" + event.getEventString() + "\" will occur in " + timeDifference + ".");
+					return;
 				}
 			}
+			bot.getIRC().cmdPRIVMSG(source, "No event matching \"" + search + "\" was found in the events database.");
+		}
+		else if(message.toLowerCase().matches("^" + commandPrefix + "timesince.*"))
+		{
+			if(params.size() == 1)
+			{
+				bot.getIRC().cmdPRIVMSG(source, "You didn't specify an event.");
+				return;
+			}
+			
+			params.remove(0);
+			String search = StringUtils.join(params, " ");
+			for(MyEvent event : events)
+			{
+				Date now = new Date();
+				if(event.getEventString().toLowerCase().matches(".*" + search.toLowerCase() + ".*") && event.getDate().before(now))
+				{
+					String timeDifference = getTimeDifferenceString(event.getDate(), now);
+					bot.getIRC().cmdPRIVMSG(source, event.getUser() + "'s event \"" + event.getEventString() + "\" occurred " + timeDifference + " ago.");
+					return;
+				}
+			}
+			bot.getIRC().cmdPRIVMSG(source, "No event matching \"" + search + "\" was found in the events database.");
 		}
 	}
 
@@ -161,7 +189,7 @@ public class Event extends Module
 		elapsed[2] = (int) (end.getTimeInMillis() - clone.getTimeInMillis()) / 60000;
 		clone.add(Calendar.MINUTE, elapsed[2]);
 		
-		return elapsed[0] + " day(s), " + elapsed[1] + " hour(s) and " + elapsed[2] + " minute(s))";
+		return elapsed[0] + " day(s), " + elapsed[1] + " hour(s) and " + elapsed[2] + " minute(s)";
 	}
 	
 	private void readEvents()
