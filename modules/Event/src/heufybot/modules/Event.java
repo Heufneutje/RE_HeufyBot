@@ -103,7 +103,7 @@ public class Event extends Module
 			for(Iterator<MyEvent> iter = events.iterator(); iter.hasNext();)
 			{
 				MyEvent event = iter.next();
-				if(event.getEventString().toLowerCase().matches(".*" + search.toLowerCase() + ".*"))
+				if(event.getEventString().toLowerCase().matches(".*" + search.toLowerCase() + ".*") && triggerUser.equalsIgnoreCase(event.getUser()))
 				{
 					bot.getIRC().cmdPRIVMSG(source, event.getUser() + "'s event \"" + event.getEventString() + " on date " + event.getFormattedDate() + " has been removed from the events database.");
 					iter.remove();
@@ -111,7 +111,7 @@ public class Event extends Module
 					return;
 				}
 			}
-			bot.getIRC().cmdPRIVMSG(source, "No event matching \"" + search + "\" was found in the events database.");
+			bot.getIRC().cmdPRIVMSG(source, "No event added by you matching \"" + search + "\" was found in the events database.");
 		}
 		else if(message.toLowerCase().matches("^" + commandPrefix + "timetill.*"))
 		{
