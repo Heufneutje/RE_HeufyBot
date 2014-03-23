@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.json.simple.JSONArray;
@@ -91,7 +92,26 @@ public class Event extends Module
 		}
 		else if(message.toLowerCase().matches("^" + commandPrefix + "r(emove)?event.*"))
 		{
+			if(params.size() == 1)
+			{
+				bot.getIRC().cmdPRIVMSG(source, "You didn't specify an event.");
+				return;
+			}
 			
+			params.remove(0);
+			String search = StringUtils.join(params, " ");
+			for(Iterator<MyEvent> iter = events.iterator(); iter.hasNext();)
+			{
+				MyEvent event = iter.next();
+				if(event.getEventString().toLowerCase().matches(".*" + search.toLowerCase() + ".*"))
+				{
+					bot.getIRC().cmdPRIVMSG(source, event.getUser() + "'s event \"" + event.getEventString() + " on date " + event.getFormattedDate() + " has been removed from the events database.");
+					iter.remove();
+					writeEvents();
+					return;
+				}
+			}
+			bot.getIRC().cmdPRIVMSG(source, "No event matching \"" + search + "\" was found in the events database.");
 		}
 		else if(message.toLowerCase().matches("^" + commandPrefix + "timetill.*"))
 		{
