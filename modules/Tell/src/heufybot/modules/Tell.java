@@ -217,7 +217,7 @@ public class Tell extends Module
 					String messageString = triggerUser + ": " + sentMessage.getText() + " < From " + sentMessage.getFrom() + " on " + sentMessage.getDateSent();
 					if(sentMessage.getMessageSource().equals("PM"))
 					{
-						bot.getIRC().cmdNOTICE(triggerUser, messageString);
+						bot.getIRC().cmdPRIVMSG(triggerUser, messageString);
 					}
 					else
 					{
