@@ -27,14 +27,14 @@ public class Event extends Module
 		this.authType = AuthType.Anyone;
 		this.apiVersion = "0.5.0";
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
-		this.trigger = "^" + commandPrefix + "(event|timetill|timesince|r(emove)?event)($| .*)";
+		this.trigger = "^" + commandPrefix + "(event|timetill|timesince|r(emove)?event|events|dateof)($| .*)";
 		
 		this.events = new ArrayList<MyEvent>();
 	}
 
 	public void processEvent(String source, String message, String triggerUser, List<String> params)
 	{
-		if(message.toLowerCase().matches("^" + commandPrefix + "event.*"))
+		if(message.toLowerCase().matches("^" + commandPrefix + "event($| .*)"))
 		{
 			if(params.size() < 3)
 			{
@@ -157,12 +157,90 @@ public class Event extends Module
 			}
 			bot.getIRC().cmdPRIVMSG(source, "No event matching \"" + search + "\" was found in the events database.");
 		}
+		else if(message.toLowerCase().matches("^" + commandPrefix + "events.*"))
+		{
+			int numberOfDays = 0;
+			if(params.size() > 1)
+			{
+				numberOfDays = StringUtils.tryParseInt(params.get(1));
+			}
+			if(numberOfDays < 1 || numberOfDays > 100)
+			{
+				numberOfDays = 7;
+			}
+			
+			List<String> occurringEvents = new ArrayList<String>();
+			Calendar start = Calendar.getInstance();
+			start.setTime(new Date());
+			for(MyEvent event : events)
+			{
+				Calendar end = Calendar.getInstance();
+				end.setTime(event.getDate());
+				if(elapsed(start, end, Calendar.DATE) <= numberOfDays)
+				{
+					occurringEvents.add(event.getEventString());
+				}
+			}
+			
+			if(occurringEvents.size() == 0)
+			{
+				bot.getIRC().cmdPRIVMSG(source, "No events occurring in the next " + numberOfDays + " day(s).");
+			}
+			else
+			{
+				bot.getIRC().cmdPRIVMSG(source, "Event(s) occurring in the next " + numberOfDays + " day(s): " + StringUtils.join(occurringEvents, ", "));
+			}
+		}
+		else if(message.toLowerCase().matches("^" + commandPrefix + "dateof.*"))
+		{
+			if(params.size() == 1)
+			{
+				bot.getIRC().cmdPRIVMSG(source, "You didn't specify an event.");
+				return;
+			}
+			
+			params.remove(0);
+			String search = StringUtils.join(params, " ");
+			for(MyEvent event : events)
+			{
+				Date now = new Date();
+				if(event.getEventString().toLowerCase().matches(".*" + search.toLowerCase() + ".*") && event.getDate().after(now))
+				{
+					bot.getIRC().cmdPRIVMSG(source, event.getUser() + "'s event \"" + event.getEventString() + "\" will occur on " + event.getFormattedDate() + " (UTC).");
+					return;
+				}
+			}
+			bot.getIRC().cmdPRIVMSG(source, "No event matching \"" + search + "\" was found in the events database.");
+		}
 	}
 
 	@Override
 	public String getHelp(String message) 
 	{
-		return "Commands: " + commandPrefix + "uptime | Shows how long the bot has been running.";
+		if(message.matches("event$"))
+		{
+			return "Commands: " + commandPrefix + "event <yyyy-MM-dd (HH:mm)> <event> | Add an event to the events database.";
+		}
+		else if(message.matches("timetill"))
+		{
+			return "Commands: " + commandPrefix + "timetill <event> | Tells you the amount of time until the specified event.";
+		}
+		else if(message.matches("timesince"))
+		{
+			return "Commands: " + commandPrefix + "timesince <event> | Tells you how long ago the specified event occurred.";
+		}
+		else if(message.matches("r(emove)?event"))
+		{
+			return "Commands: " + commandPrefix + "r(emove)event | Removes the specified event (added by you) from the list of events.";
+		}
+		else if(message.matches("events"))
+		{
+			return "Commands: " + commandPrefix + "events (<numberofdays>) | Tells you all of the events coming up within the specified number of days. Without a parameter this will give you all events that will occur within a week.";
+		}
+		else
+		{
+			return "Commands: " + commandPrefix + "dateof <event> | Tells you the date of the specified event.";
+		}
 	}
 	
 	@Override
