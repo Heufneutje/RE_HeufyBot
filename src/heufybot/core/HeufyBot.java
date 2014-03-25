@@ -36,7 +36,7 @@ public class HeufyBot
 		moduleInterface = new ModuleInterface(this);
 		loggingInterface = new LoggingInterface(this);
 		
-		this.loadModules();
+		//this.loadModules();
 		
 		for(IRCServer server : servers.values())
 		{
@@ -59,7 +59,7 @@ public class HeufyBot
 		}
 		
 		//Unload modules
-		this.unloadModules();
+		//this.unloadModules();
 		
 		Logger.log("*** Stopping...");
 	}
@@ -70,7 +70,7 @@ public class HeufyBot
 		this.stop("Restarting...");
 		
 		//Reload modules
-		this.loadModules();
+		//this.loadModules();
 		
 		//Reload config and reconnect
 		if(config.loadConfigFromFile("settings.yml"))
@@ -139,9 +139,9 @@ public class HeufyBot
 		}
 	}
 	
-	public IRCServer getIRC()
+	public IRCServer getServer(String name)
 	{
-		return servers.get("Test");
+		return servers.get(name);
 	}
 	
 	public ModuleInterface getModuleInterface()

@@ -4,15 +4,20 @@ import heufybot.core.IRCChannel;
 
 public class ModeEvent implements BotEvent
 {
-	private String setter;
+	private String serverName, setter, mode;
 	private IRCChannel channel;
-	private String mode;
 	
-	public ModeEvent(String setter, IRCChannel channel, String mode)
+	public ModeEvent(String serverName, String setter, IRCChannel channel, String mode)
 	{
+		this.serverName = serverName;
 		this.setter = setter;
 		this.channel = channel;
 		this.mode = mode;
+	}
+	
+	public String getServerName()
+	{
+		return serverName;
 	}
 	
 	public String getMode()

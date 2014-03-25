@@ -160,12 +160,12 @@ public class ModuleInterface extends EventListenerAdapter
 					}
 					else
 					{
-						bot.getIRC().cmdPRIVMSG(target, "Calm down, " + user.getNickname() + "! Can't you see I'm busy?");
+						bot.getServer().cmdPRIVMSG(target, "Calm down, " + user.getNickname() + "! Can't you see I'm busy?");
 					}
 				}
 				else
 				{
-					bot.getIRC().cmdPRIVMSG(target, "You are not authorized to use the \"" + module.toString() + "\" module!");
+					bot.getServer().cmdPRIVMSG(target, "You are not authorized to use the \"" + module.toString() + "\" module!");
 				}
 			}
 		}

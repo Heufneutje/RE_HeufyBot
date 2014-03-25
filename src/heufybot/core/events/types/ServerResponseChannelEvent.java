@@ -4,13 +4,19 @@ import heufybot.core.IRCChannel;
 
 public class ServerResponseChannelEvent implements BotEvent
 {
-	private String line;
+	private String serverName, line;
 	private IRCChannel channel;
 	
-	public ServerResponseChannelEvent(IRCChannel channel, String line)
+	public ServerResponseChannelEvent(String serverName, IRCChannel channel, String line)
 	{
+		this.serverName = serverName;
 		this.line = line;
 		this.channel = channel;
+	}
+	
+	public String getServerName()
+	{
+		return serverName;
 	}
 	
 	public String getLine()

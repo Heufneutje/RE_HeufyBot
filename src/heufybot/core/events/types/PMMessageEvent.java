@@ -5,12 +5,18 @@ import heufybot.core.IRCUser;
 public class PMMessageEvent implements BotEvent
 {
 	private IRCUser user;
-	private String message;
+	private String serverName, message;
 	
-	public PMMessageEvent(IRCUser user, String message)
+	public PMMessageEvent(String serverName, IRCUser user, String message)
 	{
+		this.serverName = serverName;
 		this.user = user;
 		this.message = message;
+	}
+	
+	public String getServerName()
+	{
+		return serverName;
 	}
 	
 	public String getMessage()

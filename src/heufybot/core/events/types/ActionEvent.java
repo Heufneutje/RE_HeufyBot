@@ -7,13 +7,19 @@ public class ActionEvent implements BotEvent
 {
 	private IRCUser user;
 	private IRCChannel channel;
-	private String message;
+	private String serverName, message;
 	
-	public ActionEvent(IRCUser user, IRCChannel channel, String message)
+	public ActionEvent(String serverName, IRCUser user, IRCChannel channel, String message)
 	{
+		this.serverName = serverName;
 		this.user = user;
 		this.channel = channel;
 		this.message = message;
+	}
+	
+	public String getServerName()
+	{
+		return serverName;
 	}
 	
 	public String getMessage()
