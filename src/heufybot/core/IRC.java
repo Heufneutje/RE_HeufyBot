@@ -27,8 +27,6 @@ public class IRC
 		Initializing, Connected, Disconnected
 	}
 	
-	private static final IRC instance = new IRC();
-	
 	private Config config;
 	
 	private Socket socket;
@@ -51,7 +49,7 @@ public class IRC
 
 	private String nickname;
 	
-	private IRC()
+	public IRC()
 	{
 		this.socket = new Socket();
 		this.inputParser = new InputParser(this);
@@ -66,12 +64,6 @@ public class IRC
 		this.userModes = new ArrayList<String>();
 		
 		this.nickname = "";
-	}
-	
-	//Singleton stuff
-	public static IRC getInstance()
-	{
-		return instance;
 	}
 	
 	public boolean connect(String server, int port)

@@ -26,7 +26,7 @@ public class HeufyBot
 		FileUtils.touchDir("modules");
 		
 		this.config = Config.getInstance();
-		this.irc = IRC.getInstance();
+		this.irc = new IRC();
 		irc.setConfig(config);
 	}
 	
