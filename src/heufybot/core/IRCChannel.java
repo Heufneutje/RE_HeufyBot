@@ -232,7 +232,8 @@ public class IRCChannel
 	public boolean checkOpStatus(IRCUser user)
 	{
 		String modes = usersInChannel.get(user);
-		ServerInfo info = ServerInfo.getInstance();
+		HeufyBot bot = HeufyBot.getInstance();
+		ServerInfo info = bot.getIRC().getServerInfo();
 		
 		for(char modeChar : modes.toCharArray())
 		{

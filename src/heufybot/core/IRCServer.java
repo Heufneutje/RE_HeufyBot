@@ -58,7 +58,7 @@ public class IRCServer
 		this.channels = new ArrayList<IRCChannel>();
 		this.users = new ArrayList<IRCUser>();
 		
-		this.serverInfo = ServerInfo.getInstance();
+		this.serverInfo = new ServerInfo();
 		this.enabledCapabilities = new ArrayList<String>();
 		this.eventListenerManager = new EventListenerManager();
 		this.userModes = new ArrayList<String>();

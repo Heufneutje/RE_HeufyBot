@@ -12,16 +12,9 @@ public class ServerInfo
 	private LinkedHashMap<String, String> reverseUserPrefixes;
 	private List<String> channelListModes, channelSetArgsModes, channelSetUnsetArgsModes, channelNoArgsModes, userModes;
 	
-	private static final ServerInfo instance = new ServerInfo();
-	
-	private ServerInfo()
+	public ServerInfo()
 	{
 		clear();
-	}
-	
-	public static ServerInfo getInstance()
-	{
-		return instance;
 	}
 	
 	public void clear()
