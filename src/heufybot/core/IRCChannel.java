@@ -223,25 +223,4 @@ public class IRCChannel
 	{
 		return modes;
 	}
-	
-	/**
-	 * Check whether a given user is an operator in this channel.
-	 * @param user The user to be checked.
-	 * @return A boolean containing the result of this check. Halfop and up will make this return true.
-	 */
-	public boolean checkOpStatus(IRCUser user)
-	{
-		String modes = usersInChannel.get(user);
-		HeufyBot bot = HeufyBot.getInstance();
-		ServerInfo info = bot.getIRC().getServerInfo();
-		
-		for(char modeChar : modes.toCharArray())
-		{
-			if(modeChar != 'v' && info.getUserPrefixes().containsKey(Character.toString(modeChar)))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
 }
