@@ -49,7 +49,7 @@ public class IRCServer
 
 	private String nickname;
 	
-	public IRCServer()
+	public IRCServer(Config config)
 	{
 		this.socket = new Socket();
 		this.inputParser = new InputParser(this);
@@ -63,6 +63,7 @@ public class IRCServer
 		this.eventListenerManager = new EventListenerManager();
 		this.userModes = new ArrayList<String>();
 		
+		this.config = config;
 		this.nickname = "";
 	}
 	
@@ -445,11 +446,6 @@ public class IRCServer
 	public Config getConfig()
 	{
 		return config;
-	}
-	
-	public void setConfig(Config config)
-	{
-		this.config = config;
 	}
 	
 	public ConnectionState getConnectionState() 

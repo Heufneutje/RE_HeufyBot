@@ -1,6 +1,7 @@
 package heufybot.core;
 
 import java.util.AbstractMap.SimpleEntry;
+import java.util.HashMap;
 
 import heufybot.core.events.LoggingInterface;
 import heufybot.modules.Module;
@@ -14,7 +15,7 @@ public class HeufyBot
 	public final static String MODULE_API_VERSION = "0.5.0";
 	
 	private Config config;
-	private IRCServer irc;
+	private HashMap<String, IRCServer> servers;
 	private ModuleInterface moduleInterface;
 	private LoggingInterface loggingInterface;
 	
@@ -26,29 +27,36 @@ public class HeufyBot
 		FileUtils.touchDir("modules");
 		
 		this.config = Config.getInstance();
-		this.irc = new IRCServer();
-		irc.setConfig(config);
+		this.servers = new HashMap<String, IRCServer>();
+		this.servers.put("Test", new IRCServer(config));
 	}
 	
 	public void start()
 	{
 		moduleInterface = new ModuleInterface(this);
 		loggingInterface = new LoggingInterface(this);
-		irc.getEventListenerManager().addListener(moduleInterface);
-		irc.getEventListenerManager().addListener(loggingInterface);
 		
 		this.loadModules();
-
-		if(irc.connect(config.getServer(), config.getPort()))
+		
+		for(IRCServer server : servers.values())
 		{
-			irc.login();
+			server.getEventListenerManager().addListener(moduleInterface);
+			server.getEventListenerManager().addListener(loggingInterface);
+		
+			if(server.connect(config.getServer(), config.getPort()))
+			{
+				server.login();
+			}
 		}
 	}
 	
 	public void stop(String message)
 	{
-		irc.cmdQUIT(message);
-		irc.disconnect(false);
+		for(IRCServer server : servers.values())
+		{
+			server.cmdQUIT(message);
+			server.disconnect(false);
+		}
 		
 		//Unload modules
 		this.unloadModules();
@@ -63,13 +71,16 @@ public class HeufyBot
 		
 		//Reload modules
 		this.loadModules();
-
+		
 		//Reload config and reconnect
 		if(config.loadConfigFromFile("settings.yml"))
 		{
-			if(irc.connect(config.getServer(), config.getPort()))
+			for(IRCServer server : servers.values())
 			{
-				irc.login();
+				if(server.connect(config.getServer(), config.getPort()))
+				{
+					server.login();
+				}
 			}
 		}
 	}
@@ -130,7 +141,7 @@ public class HeufyBot
 	
 	public IRCServer getIRC()
 	{
-		return irc;
+		return servers.get("Test");
 	}
 	
 	public ModuleInterface getModuleInterface()
