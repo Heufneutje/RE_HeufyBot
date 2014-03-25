@@ -28,7 +28,7 @@ public class HeufyBot
 		
 		this.config = Config.getInstance();
 		this.servers = new HashMap<String, IRCServer>();
-		this.servers.put("Test", new IRCServer(config));
+		this.servers.put("Test", new IRCServer("Test", config));
 	}
 	
 	public void start()

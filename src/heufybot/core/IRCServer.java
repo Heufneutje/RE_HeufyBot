@@ -27,6 +27,7 @@ public class IRCServer
 		Initializing, Connected, Disconnected
 	}
 	
+	private String name;
 	private Config config;
 	
 	private Socket socket;
@@ -49,7 +50,7 @@ public class IRCServer
 
 	private String nickname;
 	
-	public IRCServer(Config config)
+	public IRCServer(String name, Config config)
 	{
 		this.socket = new Socket();
 		this.inputParser = new InputParser(this);
@@ -63,6 +64,7 @@ public class IRCServer
 		this.eventListenerManager = new EventListenerManager();
 		this.userModes = new ArrayList<String>();
 		
+		this.name = name;
 		this.config = config;
 		this.nickname = "";
 	}
@@ -336,7 +338,7 @@ public class IRCServer
 	public void cmdPRIVMSG(String target, String message)
 	{
 		sendRawSplit("PRIVMSG " + target + " :", message);
-		eventListenerManager.dispatchEvent(new BotMessageEvent(getUser(nickname), target, message));
+		eventListenerManager.dispatchEvent(new BotMessageEvent(name, getUser(nickname), target, message));
 	}
 	
 	public void cmdJOIN(String channel, String key)
@@ -441,6 +443,11 @@ public class IRCServer
 		IRCUser user = new IRCUser(nickname);
 		users.add(user);
 		return user;
+	}
+	
+	public String getName()
+	{
+		return name;
 	}
 	
 	public Config getConfig()
