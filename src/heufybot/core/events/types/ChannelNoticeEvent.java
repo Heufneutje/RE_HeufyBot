@@ -1,14 +1,14 @@
 package heufybot.core.events.types;
 
-import heufybot.core.Channel;
+import heufybot.core.IRCChannel;
 
 public class ChannelNoticeEvent implements BotEvent
 {
 	private String source;
-	private Channel channel;
+	private IRCChannel channel;
 	private String message;
 	
-	public ChannelNoticeEvent(String source, Channel channel, String message)
+	public ChannelNoticeEvent(String source, IRCChannel channel, String message)
 	{
 		this.source = source;
 		this.channel = channel;
@@ -25,7 +25,7 @@ public class ChannelNoticeEvent implements BotEvent
 		return source;
 	}
 	
-	public Channel getChannel()
+	public IRCChannel getChannel()
 	{
 		return channel;
 	}

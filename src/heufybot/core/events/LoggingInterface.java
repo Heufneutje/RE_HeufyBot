@@ -2,10 +2,10 @@ package heufybot.core.events;
 
 import java.util.Date;
 
-import heufybot.core.Channel;
+import heufybot.core.IRCChannel;
 import heufybot.core.HeufyBot;
 import heufybot.core.Logger;
-import heufybot.core.User;
+import heufybot.core.IRCUser;
 import heufybot.core.events.types.*;
 import heufybot.utils.StringUtils;
 import heufybot.utils.WhoisBuilder;
@@ -26,8 +26,8 @@ public class LoggingInterface extends EventListenerAdapter
 	
 	public void onBotMessage(BotMessageEvent event) 
 	{
-		User user = event.getUser();
-		Channel channel = bot.getIRC().getChannel(event.getTarget());
+		IRCUser user = event.getUser();
+		IRCChannel channel = bot.getIRC().getChannel(event.getTarget());
 		
 		if(channel == null)
 		{
@@ -69,13 +69,13 @@ public class LoggingInterface extends EventListenerAdapter
 	
 	public void onInvite(InviteEvent event)
 	{
-		User inviter = event.getInviter();
+		IRCUser inviter = event.getInviter();
 		Logger.log("-- " + inviter.getNickname() + " (" + inviter.getLogin() + "@" + inviter.getHostname() + ") invites " + event.getInvitee() + " to join " + event.getChannel());
 	}
 	
 	public void onJoin(JoinEvent event)
 	{
-		User user = event.getUser();
+		IRCUser user = event.getUser();
 		Logger.log(">> " + user.getNickname() + " (" + user.getLogin() + "@" + user.getHostname() + ") has joined " + event.getChannel().getName(), event.getChannel().getName(), bot.getIRC().getServerInfo().getNetwork());
 	}
 	
@@ -86,8 +86,8 @@ public class LoggingInterface extends EventListenerAdapter
 	
 	public void onMessage(MessageEvent event)
 	{
-		User user = event.getUser();
-		Channel channel = event.getChannel();
+		IRCUser user = event.getUser();
+		IRCChannel channel = event.getChannel();
 		
 		String modes = channel.getModesOnUser(user);
 		if(!modes.equals(""))
@@ -114,9 +114,9 @@ public class LoggingInterface extends EventListenerAdapter
 	
 	public void onNickChange(NickChangeEvent event)
 	{
-		for(Channel channel : bot.getIRC().getChannels())
+		for(IRCChannel channel : bot.getIRC().getChannels())
 		{
-			User user = channel.getUser(event.getUser().getNickname());
+			IRCUser user = channel.getUser(event.getUser().getNickname());
 			if(user != null)
 			{
 				Logger.log("-- " + event.getOldNick() + " is now known as " + event.getNewNick(), channel.getName(), bot.getIRC().getServerInfo().getNetwork());
@@ -131,7 +131,7 @@ public class LoggingInterface extends EventListenerAdapter
 	
 	public void onPart(PartEvent event)
 	{
-		User user = event.getUser();
+		IRCUser user = event.getUser();
 		String channel = event.getChannel().getName();
 		
 		if(event.getMessage().equals(""))
@@ -163,9 +163,9 @@ public class LoggingInterface extends EventListenerAdapter
 	
 	public void onQuit(QuitEvent event)
 	{
-		for(Channel channel : bot.getIRC().getChannels())
+		for(IRCChannel channel : bot.getIRC().getChannels())
 		{
-			User user = channel.getUser(event.getUser().getNickname());
+			IRCUser user = channel.getUser(event.getUser().getNickname());
 			if(user != null)
 			{
 				Logger.log("<< " + user.getNickname() + " (" + user.getLogin() + "@" + user.getHostname() + ") has quit IRC (" + event.getMessage() + ")", channel.getName(), bot.getIRC().getServerInfo().getNetwork());

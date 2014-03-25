@@ -9,9 +9,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import heufybot.core.Channel;
+import heufybot.core.IRCChannel;
 import heufybot.core.HeufyBot;
-import heufybot.core.User;
+import heufybot.core.IRCUser;
 import heufybot.core.events.EventListenerAdapter;
 import heufybot.core.events.types.*;
 import heufybot.modules.Module.TriggerType;
@@ -116,7 +116,7 @@ public class ModuleInterface extends EventListenerAdapter
 		handleMessage(event.getUser(), event.getChannel(), event.getMessage(), TriggerType.Action);
 	}
 	
-	private void handleMessage(final User user, final Channel channel, final String message, TriggerType triggerType)
+	private void handleMessage(final IRCUser user, final IRCChannel channel, final String message, TriggerType triggerType)
 	{
 		if(ignores.contains(user.getNickname()))
 		{
@@ -171,7 +171,7 @@ public class ModuleInterface extends EventListenerAdapter
 		}
 	}
 	
-	public boolean isAuthorized(Module module, Channel channel, User user)
+	public boolean isAuthorized(Module module, IRCChannel channel, IRCUser user)
 	{
 		return module.authType == Module.AuthType.Anyone || bot.getConfig().getBotAdmins().contains(user.getNickname());
 	}

@@ -1,21 +1,21 @@
 package heufybot.core.events.types;
 
-import heufybot.core.User;
+import heufybot.core.IRCUser;
 
 public class InviteEvent implements BotEvent
 {
-	private User inviter;
+	private IRCUser inviter;
 	private String invitee;
 	private String channel;
 	
-	public InviteEvent(User inviter, String invitee, String channel)
+	public InviteEvent(IRCUser inviter, String invitee, String channel)
 	{
 		this.inviter = inviter;
 		this.invitee = invitee;
 		this.channel = channel;
 	}
 	
-	public User getInviter()
+	public IRCUser getInviter()
 	{
 		return inviter;
 	}

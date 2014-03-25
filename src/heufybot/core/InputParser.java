@@ -1,6 +1,6 @@
 package heufybot.core;
 
-import heufybot.core.IRC.ConnectionState;
+import heufybot.core.IRCServer.ConnectionState;
 import heufybot.core.cap.CAPException;
 import heufybot.core.cap.CapHandler;
 import heufybot.core.events.types.*;
@@ -15,13 +15,13 @@ import java.util.List;
 
 public class InputParser 
 {
-	private IRC irc;
+	private IRCServer irc;
 	private int nickSuffix;
 	private boolean capEndSent;
 	private List<CapHandler> finishedHandlers;
 	private WhoisBuilder whoisBuilder;
 	
-	public InputParser(IRC irc)
+	public InputParser(IRCServer irc)
 	{
 		this.irc = irc;
 		this.nickSuffix = 1;
@@ -442,27 +442,27 @@ public class InputParser
 		else if(code.equals("324"))
 		{
 			//324 RPL_CHANNELMODEIS 
-			Channel channel = irc.getChannel(parsedLine.get(1));
+			IRCChannel channel = irc.getChannel(parsedLine.get(1));
 			handleMode("", channel.getName(), parsedLine.get(2));
 			irc.getEventListenerManager().dispatchEvent(new ServerResponseChannelEvent(channel, "Channel modes currently set: " + parsedLine.get(2)));
 		}
 		else if(code.equals("329"))
 		{
 			//329 RPL_CREATIONTIME
-			Channel channel = irc.getChannel(parsedLine.get(1));
+			IRCChannel channel = irc.getChannel(parsedLine.get(1));
 			irc.getEventListenerManager().dispatchEvent(new ServerResponseChannelEvent(channel, "Channel was created on " + new Date(StringUtils.tryParseLong(parsedLine.get(2)) * 1000)));
 		}
 		else if(code.equals("332"))
 		{
 			//332 RPL_TOPIC
-			Channel channel = irc.getChannel(parsedLine.get(1));
+			IRCChannel channel = irc.getChannel(parsedLine.get(1));
 			channel.setTopic(parsedLine.get(2));
 			irc.getEventListenerManager().dispatchEvent(new ServerResponseChannelEvent(channel, "Topic is \'" + parsedLine.get(2) + "\'"));
 		}
 		else if(code.equals("333"))
 		{
 			//333 RPL_TOPICWHOTIME
-			Channel channel = irc.getChannel(parsedLine.get(1));
+			IRCChannel channel = irc.getChannel(parsedLine.get(1));
 			channel.setTopicSetter(parsedLine.get(2));
 			
 			long topicTimestamp = StringUtils.tryParseLong(parsedLine.get(3));
@@ -473,8 +473,8 @@ public class InputParser
 		else if(code.equals("352"))
 		{
 			//352 RPL_WHOREPLY			
-			Channel channel = irc.getChannel(parsedLine.get(1));
-			User user = irc.getUser(parsedLine.get(5));
+			IRCChannel channel = irc.getChannel(parsedLine.get(1));
+			IRCUser user = irc.getUser(parsedLine.get(5));
 
 			user.setLogin(parsedLine.get(2));
 			user.setHostname(parsedLine.get(3));
@@ -512,7 +512,7 @@ public class InputParser
 		else if(code.equals("353"))
 		{
 			//353 RPL_NAMREPLY
-			Channel channel = irc.getChannel(parsedLine.get(2));
+			IRCChannel channel = irc.getChannel(parsedLine.get(2));
 			String[] users = parsedLine.get(3).split(" ");
 			
 			for(int i = 0; i < users.length; i++)
@@ -530,7 +530,7 @@ public class InputParser
 					}
 				}
 				
-				User user = irc.getUser(nickname);
+				IRCUser user = irc.getUser(nickname);
 				if(channel.getUser(user.getNickname()) == null)
 				{
 					channel.addUser(user);
@@ -569,8 +569,8 @@ public class InputParser
 	
 	private void handleCommand(String line, List<String> parsedLine, String sourceNick, String sourceLogin, String sourceHostname, String command, String target)
 	{
-		User source = irc.getUser(sourceNick);
-		Channel channel = irc.getChannel(target);
+		IRCUser source = irc.getUser(sourceNick);
+		IRCChannel channel = irc.getChannel(target);
 		String message = parsedLine.size() >= 2 ? parsedLine.get(1) : "";
 		
 		if (command.equals("PRIVMSG") && message.startsWith("\u0001") && message.endsWith("\u0001"))
@@ -631,13 +631,13 @@ public class InputParser
 			if(sourceNick.equalsIgnoreCase(irc.getNickname()))
 			{
 				//The bot is joining the channel, do setup
-				channel = new Channel(target);
+				channel = new IRCChannel(target);
 				irc.getChannels().add(channel);
 				
 				irc.cmdWHO(channel.getName());
 				irc.cmdMODE(channel.getName(), "");
 				
-				source = new User(sourceNick, sourceLogin, sourceHostname);
+				source = new IRCUser(sourceNick, sourceLogin, sourceHostname);
 			}
 			else
 			{
@@ -663,7 +663,7 @@ public class InputParser
 			}
 			
 			boolean noCommonChannels = true;
-			for(Channel channel2 : irc.getChannels())
+			for(IRCChannel channel2 : irc.getChannels())
 			{
 				if(channel2.getUser(sourceNick) != null)
 				{
@@ -683,9 +683,9 @@ public class InputParser
 			//Someone is changing their nick
 			String newNick = target;
 			
-			for(Channel channel2 : irc.getChannels())
+			for(IRCChannel channel2 : irc.getChannels())
 			{
-				User user = channel2.getUser(sourceNick);
+				IRCUser user = channel2.getUser(sourceNick);
 				if(user != null)
 				{
 					user.setNickname(newNick);
@@ -717,7 +717,7 @@ public class InputParser
 			if(!sourceNick.equalsIgnoreCase(irc.getNickname()))
 			{
 				irc.getEventListenerManager().dispatchEvent(new QuitEvent(source, target));
-				for(Channel channel2 : irc.getChannels())
+				for(IRCChannel channel2 : irc.getChannels())
 				{
 					if(channel2.getUser(sourceNick) != null)
 					{
@@ -737,7 +737,7 @@ public class InputParser
 		else if(command.equals("KICK"))
 		{
 			//Someone is being kicked
-			User recipient = irc.getUser(message);
+			IRCUser recipient = irc.getUser(message);
 			if(message.equalsIgnoreCase(irc.getNickname()))
 			{
 				//The bot just got kicked
@@ -801,7 +801,7 @@ public class InputParser
 		}
 		else
 		{
-			Channel channel = irc.getChannel(target);
+			IRCChannel channel = irc.getChannel(target);
 			if(!mode.contains(" "))
 			{
 				//This mode change does not contain any arguments
@@ -825,7 +825,7 @@ public class InputParser
 					else if(irc.getServerInfo().getUserPrefixes().containsKey(Character.toString(atPosition)))
 					{
 						//This mode is changing a user's access level in the channel
-						User user = channel.getUser(params.get(paramNumber));
+						IRCUser user = channel.getUser(params.get(paramNumber));
 						channel.parseModeChangeOnUser(user, "" + modeOperator + atPosition);
 						paramNumber++;
 					}

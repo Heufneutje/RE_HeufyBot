@@ -7,19 +7,19 @@ import java.util.Set;
  * This class represents a joined channel on the IRC server the bot is connected to.
  * @author Stefan "Heufneutje" Frijters
  */
-public class Channel
+public class IRCChannel
 {
 	private String name;
-	private HashMap<User, String> usersInChannel;
+	private HashMap<IRCUser, String> usersInChannel;
 	private String topic;
 	private String topicSetter;
 	private long topicSetTimestamp;
 	private HashMap<String, String> modes;
 	
-	public Channel(String name)
+	public IRCChannel(String name)
 	{
 		this.name = name;
-		this.usersInChannel = new HashMap<User, String>();
+		this.usersInChannel = new HashMap<IRCUser, String>();
 		this.topic = "";
 		this.topicSetter = "";
 		this.modes = new HashMap<String, String>();
@@ -74,7 +74,7 @@ public class Channel
 	 * @param user The user that these status mode changes affect.
 	 * @param modeChange The string of modes that is to be set on the user.
 	 */
-	public void parseModeChangeOnUser(User user, String modeChange)
+	public void parseModeChangeOnUser(IRCUser user, String modeChange)
 	{
 		String modesOnUser = usersInChannel.get(user);
 		
@@ -109,7 +109,7 @@ public class Channel
 	 * Adds a user to this channel.
 	 * @param user The user to be added.
 	 */
-	public void addUser(User user)
+	public void addUser(IRCUser user)
 	{
 		usersInChannel.put(user, "");
 	}
@@ -118,7 +118,7 @@ public class Channel
 	 * Removes a user from this channel.
 	 * @param user The user to be removed.
 	 */
-	public void removeUser(User user)
+	public void removeUser(IRCUser user)
 	{
 		usersInChannel.remove(user);
 	}
@@ -128,7 +128,7 @@ public class Channel
 	 * @param user The user status modes need to be retrieved from.
 	 * @return A string of status modes set on the given user.
 	 */
-	public String getModesOnUser(User user)
+	public String getModesOnUser(IRCUser user)
 	{
 		return usersInChannel.get(user);
 	}
@@ -137,10 +137,10 @@ public class Channel
 	 * Used to show all users that are currently in this channel.
 	 * @return An array of all current users in the channel.
 	 */
-	public User[] getUsers()
+	public IRCUser[] getUsers()
 	{
-		Set<User> userSet = usersInChannel.keySet();
-		User[] userArray = new User[userSet.size()];
+		Set<IRCUser> userSet = usersInChannel.keySet();
+		IRCUser[] userArray = new IRCUser[userSet.size()];
 		return userSet.toArray(userArray);
 	}
 	
@@ -149,9 +149,9 @@ public class Channel
 	 * @param nickname The nickname of the user to be checked.
 	 * @return The user that the given nickname belongs to if they are in the channel, otherwise null.
 	 */
-	public User getUser(String nickname)
+	public IRCUser getUser(String nickname)
 	{
-		for(User user : usersInChannel.keySet())
+		for(IRCUser user : usersInChannel.keySet())
 		{
 			if(user.getNickname().equalsIgnoreCase(nickname))
 			{
@@ -229,7 +229,7 @@ public class Channel
 	 * @param user The user to be checked.
 	 * @return A boolean containing the result of this check. Halfop and up will make this return true.
 	 */
-	public boolean checkOpStatus(User user)
+	public boolean checkOpStatus(IRCUser user)
 	{
 		String modes = usersInChannel.get(user);
 		ServerInfo info = ServerInfo.getInstance();

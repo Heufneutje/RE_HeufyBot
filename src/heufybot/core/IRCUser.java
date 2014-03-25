@@ -1,6 +1,6 @@
 package heufybot.core;
 
-public class User 
+public class IRCUser 
 {
 	private String nickname;
 	private String login = "";
@@ -11,14 +11,14 @@ public class User
 	private boolean isOper;
 	private boolean isAway;
 	
-	public User(String nickname, String login, String hostname)
+	public IRCUser(String nickname, String login, String hostname)
 	{
 		this.nickname = nickname;
 		this.login = login;
 		this.hostname = hostname;
 	}
 	
-	public User(String nickname)
+	public IRCUser(String nickname)
 	{
 		this.nickname = nickname;
 	}

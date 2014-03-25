@@ -1,14 +1,14 @@
 package heufybot.core.events.types;
 
-import heufybot.core.Channel;
+import heufybot.core.IRCChannel;
 
 public class ModeEvent implements BotEvent
 {
 	private String setter;
-	private Channel channel;
+	private IRCChannel channel;
 	private String mode;
 	
-	public ModeEvent(String setter, Channel channel, String mode)
+	public ModeEvent(String setter, IRCChannel channel, String mode)
 	{
 		this.setter = setter;
 		this.channel = channel;
@@ -25,7 +25,7 @@ public class ModeEvent implements BotEvent
 		return setter;
 	}
 	
-	public Channel getChannel()
+	public IRCChannel getChannel()
 	{
 		return channel;
 	}

@@ -20,7 +20,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.net.SocketFactory;
 
-public class IRC 
+public class IRCServer 
 {
 	public enum ConnectionState 
 	{
@@ -35,8 +35,8 @@ public class IRC
 	private Thread inputThread;
 	private InputParser inputParser;
 	private ConnectionState connectionState;
-	private ArrayList<Channel> channels;
-	private ArrayList<User> users;
+	private ArrayList<IRCChannel> channels;
+	private ArrayList<IRCUser> users;
 	private ServerInfo serverInfo;
 	private List<String> userModes;
 	private List<String> enabledCapabilities;
@@ -49,14 +49,14 @@ public class IRC
 
 	private String nickname;
 	
-	public IRC()
+	public IRCServer()
 	{
 		this.socket = new Socket();
 		this.inputParser = new InputParser(this);
 		this.connectionState = ConnectionState.Initializing;
 		
-		this.channels = new ArrayList<Channel>();
-		this.users = new ArrayList<User>();
+		this.channels = new ArrayList<IRCChannel>();
+		this.users = new ArrayList<IRCUser>();
 		
 		this.serverInfo = ServerInfo.getInstance();
 		this.enabledCapabilities = new ArrayList<String>();
@@ -403,7 +403,7 @@ public class IRC
 		cmdNOTICE(target, "\u0001" + replyType + " " + reply + "\u0001");
 	}
 	
-	public String getAccessLevelOnUser(Channel channel, User user)
+	public String getAccessLevelOnUser(IRCChannel channel, IRCUser user)
 	{
 		for(String accessLevel : serverInfo.getUserPrefixes().keySet())
 		{
@@ -415,9 +415,9 @@ public class IRC
 		return "";
 	}
 	
-	public Channel getChannel(String channelName)
+	public IRCChannel getChannel(String channelName)
 	{
-		for(Channel channel : channels)
+		for(IRCChannel channel : channels)
 		{
 			if(channel.getName().equalsIgnoreCase(channelName))
 			{
@@ -427,9 +427,9 @@ public class IRC
 		return null;
 	}
 	
-	public User getUser(String nickname)
+	public IRCUser getUser(String nickname)
 	{
-		for(User user : users)
+		for(IRCUser user : users)
 		{
 			if(user.getNickname().equalsIgnoreCase(nickname))
 			{
@@ -437,7 +437,7 @@ public class IRC
 			}
 		}
 
-		User user = new User(nickname);
+		IRCUser user = new IRCUser(nickname);
 		users.add(user);
 		return user;
 	}
@@ -472,12 +472,12 @@ public class IRC
 		this.nickname = nickname;
 	}
 	
-	public ArrayList<Channel> getChannels()
+	public ArrayList<IRCChannel> getChannels()
 	{
 		return channels;
 	}
 	
-	public ArrayList<User> getUsers()
+	public ArrayList<IRCUser> getUsers()
 	{
 		return users;
 	}

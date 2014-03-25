@@ -1,27 +1,27 @@
 package heufybot.core.events.types;
 
-import heufybot.core.Channel;
-import heufybot.core.User;
+import heufybot.core.IRCChannel;
+import heufybot.core.IRCUser;
 
 public class PartEvent implements BotEvent
 {
-	private User user;
-	private Channel channel;
+	private IRCUser user;
+	private IRCChannel channel;
 	private String message;
 	
-	public PartEvent(User user, Channel channel, String message)
+	public PartEvent(IRCUser user, IRCChannel channel, String message)
 	{
 		this.user = user;
 		this.channel = channel;
 		this.message = message;
 	}
 	
-	public User getUser()
+	public IRCUser getUser()
 	{
 		return user;
 	}
 	
-	public Channel getChannel()
+	public IRCChannel getChannel()
 	{
 		return channel;
 	}

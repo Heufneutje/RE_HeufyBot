@@ -1,16 +1,16 @@
 package heufybot.core.events.types;
 
-import heufybot.core.Channel;
-import heufybot.core.User;
+import heufybot.core.IRCChannel;
+import heufybot.core.IRCUser;
 
 public class KickEvent implements BotEvent
 {
-	private User kicker;
-	private User recipient;
-	private Channel channel;
+	private IRCUser kicker;
+	private IRCUser recipient;
+	private IRCChannel channel;
 	private String message;
 	
-	public KickEvent(User recipient, User kicker, Channel channel, String message)
+	public KickEvent(IRCUser recipient, IRCUser kicker, IRCChannel channel, String message)
 	{
 		this.kicker = kicker;
 		this.recipient = recipient;
@@ -18,17 +18,17 @@ public class KickEvent implements BotEvent
 		this.message = message;
 	}
 	
-	public User getKicker()
+	public IRCUser getKicker()
 	{
 		return kicker;
 	}
 	
-	public User getRecipient()
+	public IRCUser getRecipient()
 	{
 		return recipient;
 	}
 	
-	public Channel getChannel()
+	public IRCChannel getChannel()
 	{
 		return channel;
 	}

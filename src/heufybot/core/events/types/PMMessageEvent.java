@@ -1,13 +1,13 @@
 package heufybot.core.events.types;
 
-import heufybot.core.User;
+import heufybot.core.IRCUser;
 
 public class PMMessageEvent implements BotEvent
 {
-	private User user;
+	private IRCUser user;
 	private String message;
 	
-	public PMMessageEvent(User user, String message)
+	public PMMessageEvent(IRCUser user, String message)
 	{
 		this.user = user;
 		this.message = message;
@@ -18,7 +18,7 @@ public class PMMessageEvent implements BotEvent
 		return message;
 	}
 	
-	public User getUser()
+	public IRCUser getUser()
 	{
 		return user;
 	}

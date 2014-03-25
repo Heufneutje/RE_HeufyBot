@@ -14,7 +14,7 @@ public class HeufyBot
 	public final static String MODULE_API_VERSION = "0.5.0";
 	
 	private Config config;
-	private IRC irc;
+	private IRCServer irc;
 	private ModuleInterface moduleInterface;
 	private LoggingInterface loggingInterface;
 	
@@ -26,7 +26,7 @@ public class HeufyBot
 		FileUtils.touchDir("modules");
 		
 		this.config = Config.getInstance();
-		this.irc = new IRC();
+		this.irc = new IRCServer();
 		irc.setConfig(config);
 	}
 	
@@ -128,7 +128,7 @@ public class HeufyBot
 		}
 	}
 	
-	public IRC getIRC()
+	public IRCServer getIRC()
 	{
 		return irc;
 	}

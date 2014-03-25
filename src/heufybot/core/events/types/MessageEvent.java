@@ -1,15 +1,15 @@
 package heufybot.core.events.types;
 
-import heufybot.core.Channel;
-import heufybot.core.User;
+import heufybot.core.IRCChannel;
+import heufybot.core.IRCUser;
 
 public class MessageEvent implements BotEvent
 {
-	private User user;
-	private Channel channel;
+	private IRCUser user;
+	private IRCChannel channel;
 	private String message;
 	
-	public MessageEvent(User user, Channel channel, String message)
+	public MessageEvent(IRCUser user, IRCChannel channel, String message)
 	{
 		this.user = user;
 		this.channel = channel;
@@ -21,12 +21,12 @@ public class MessageEvent implements BotEvent
 		return message;
 	}
 	
-	public User getUser()
+	public IRCUser getUser()
 	{
 		return user;
 	}
 	
-	public Channel getChannel()
+	public IRCChannel getChannel()
 	{
 		return channel;
 	}
