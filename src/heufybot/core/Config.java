@@ -27,19 +27,12 @@ public class Config
 	private List<String> autoJoinChannels, modulesToLoad, botAdmins;
 	private List<CapHandler> capHandlers;
 	
-	private static final Config instance = new Config();
-	
-	private Config()
+	public Config()
 	{
 		this.messageDelay = 500;
 		this.maxLineLength = 512;
 		this.logPath = "logs";
 		this.capHandlers = new ArrayList<CapHandler>();
-	}
-	
-	public static Config getInstance()
-	{
-		return instance;
 	}
 	
 	@SuppressWarnings("unchecked")

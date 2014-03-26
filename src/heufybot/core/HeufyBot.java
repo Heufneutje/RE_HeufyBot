@@ -26,7 +26,7 @@ public class HeufyBot
 		FileUtils.touchDir("data");
 		FileUtils.touchDir("modules");
 		
-		this.config = Config.getInstance();
+		this.config = new Config();
 		this.servers = new HashMap<String, IRCServer>();
 		this.servers.put("Test", new IRCServer("Test", config));
 	}

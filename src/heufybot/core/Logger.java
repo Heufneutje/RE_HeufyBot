@@ -13,7 +13,7 @@ public class Logger
 {
 	public static void log(String line, String target, String network)
 	{
-		String baseLogPath = Config.getInstance().getLogPath();
+		String baseLogPath = HeufyBot.getInstance().getConfig().getLogPath();
 		
 		//Timestamp line
 		DateFormat dateFormat = new SimpleDateFormat("[HH:mm]");
