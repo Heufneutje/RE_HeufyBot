@@ -27,7 +27,7 @@ public class Logger
 		}
 		else
 		{
-			consoleLogLine = dateFormat.format(date) + " " + target + " - " + line;
+			consoleLogLine = dateFormat.format(date) + " " + target + "@" + network + " - " + line;
 		}
 		
 		consoleLogLine = StringUtils.toValid3ByteUTF8String(consoleLogLine);
