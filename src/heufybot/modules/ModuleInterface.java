@@ -98,25 +98,25 @@ public class ModuleInterface extends EventListenerAdapter
 	
 	public void onPMMessage(PMMessageEvent event)
 	{
-		handleMessage(event.getUser(), null, event.getMessage(), TriggerType.Message);
+		handleMessage(event.getServerName(), event.getUser(), null, event.getMessage(), TriggerType.Message);
 	}
 	
 	public void onPMAction(PMActionEvent event)
 	{
-		handleMessage(event.getUser(), null, event.getMessage(), TriggerType.Action);
+		handleMessage(event.getServerName(), event.getUser(), null, event.getMessage(), TriggerType.Action);
 	}
 	
 	public void onMessage(MessageEvent event)
 	{
-		handleMessage(event.getUser(), event.getChannel(), event.getMessage(), TriggerType.Message);
+		handleMessage(event.getServerName(), event.getUser(), event.getChannel(), event.getMessage(), TriggerType.Message);
 	}
 	
 	public void onAction(ActionEvent event)
 	{
-		handleMessage(event.getUser(), event.getChannel(), event.getMessage(), TriggerType.Action);
+		handleMessage(event.getServerName(), event.getUser(), event.getChannel(), event.getMessage(), TriggerType.Action);
 	}
 	
-	private void handleMessage(final IRCUser user, final IRCChannel channel, final String message, TriggerType triggerType)
+	private void handleMessage(String serverName, final IRCUser user, final IRCChannel channel, final String message, TriggerType triggerType)
 	{
 		if(ignores.contains(user.getNickname()))
 		{
@@ -160,12 +160,12 @@ public class ModuleInterface extends EventListenerAdapter
 					}
 					else
 					{
-						bot.getServer().cmdPRIVMSG(target, "Calm down, " + user.getNickname() + "! Can't you see I'm busy?");
+						bot.getServer(serverName).cmdPRIVMSG(target, "Calm down, " + user.getNickname() + "! Can't you see I'm busy?");
 					}
 				}
 				else
 				{
-					bot.getServer().cmdPRIVMSG(target, "You are not authorized to use the \"" + module.toString() + "\" module!");
+					bot.getServer(serverName).cmdPRIVMSG(target, "You are not authorized to use the \"" + module.toString() + "\" module!");
 				}
 			}
 		}
