@@ -52,12 +52,12 @@ public class HeufyBot
 					if(serverConfig.loadServerConfig(file.getPath(), serverConfig))
 					{
 						int serverID = 1;
-						while(servers.containsKey(serverConfig.getSettingWithDefault("server" + serverID, "unknown")))
+						while(servers.containsKey(serverConfig.getSettingWithDefault("server" + serverID, "irc.foo.bar")))
 						{
 							serverID++;
 						}
 						
-						String serverName = serverConfig.getSettingWithDefault("server" + serverID, "unknown");
+						String serverName = serverConfig.getSettingWithDefault("server" + serverID, "irc.foo.bar");
 						IRCServer server = new IRCServer(serverName, serverConfig);
 						servers.put(serverName, server);
 					}
@@ -77,8 +77,8 @@ public class HeufyBot
 		{
 			//server.getEventListenerManager().addListener(moduleInterface);
 			server.getEventListenerManager().addListener(loggingInterface);
-		
-			if(server.connect(config.getSettingWithDefault("server", "none"), config.getSettingWithDefault("port", 6667)))
+			
+			if(server.connect(server.getConfig().getSettingWithDefault("server", "irc.foo.bar"), server.getConfig().getSettingWithDefault("port", 6667)))
 			{
 				server.login();
 			}
