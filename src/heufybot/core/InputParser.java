@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import config.GlobalConfig;
+import config.GlobalConfig.PasswordType;
 
 public class InputParser 
 {
@@ -145,11 +145,18 @@ public class InputParser
 	
 	private void handleConnect(String line, List<String> parsedLine, String code)
 	{
+		String nickname = server.getConfig().getSettingWithDefault("nickname", "RE_HeufyBot");
+		String password = server.getConfig().getSettingWithDefault("password", "");
+		PasswordType passwordType = server.getConfig().getSettingWithDefault("passwordType", PasswordType.None);
+		boolean autoJoin = server.getConfig().getSettingWithDefault("autoJoin", false);
+		boolean autoNickChange = server.getConfig().getSettingWithDefault("autoNickChange", true);
+		ArrayList<String> autoJoinChannels = server.getConfig().getSettingWithDefault("autoJoinChannels", new ArrayList<String>());
+		
 		if(code.equals("001"))
 		{
 			//001 RPL_WELCOME
 			server.setConnectionState(ConnectionState.Connected);
-			server.setLoggedInNick(server.getConfig().getNickname() + (nickSuffix == 1 ? "" : nickSuffix));
+			server.setLoggedInNick(nickname + (nickSuffix == 1 ? "" : nickSuffix));
 			
 			nickSuffix = 1;
 			
@@ -161,14 +168,14 @@ public class InputParser
 			
 			server.getEventListenerManager().dispatchEvent(new ServerResponseEvent(server.getName(), parsedLine.get(1)));
 			
-			if(server.getConfig().getPasswordType() == GlobalConfig.PasswordType.NickServPass)
+			if(passwordType == PasswordType.NickServPass)
 			{
-				server.nickservIdentify(server.getConfig().getPassword());
+				server.nickservIdentify(password);
 			}
 			
-			if(server.getConfig().getAutoJoinEnabled() && server.getConfig().getAutoJoinChannels().size() > 0)
+			if(autoJoin && autoJoinChannels.size() > 0)
 			{
-				for(String channelName : server.getConfig().getAutoJoinChannels())
+				for(String channelName : autoJoinChannels)
 				{
 					String[] channel = channelName.split(" ");
 					if(channel.length > 1)
@@ -187,13 +194,13 @@ public class InputParser
 		else if(code.equals("433"))
 		{
 			//443 ERR_NICKNAMEINUSE
-			if(server.getConfig().getAutoNickChange())
+			if(autoNickChange)
 			{
 				//Try a different nickname
 				String usedNick = parsedLine.get(1);
 				nickSuffix++;
-				Logger.log("*** Nickname " + usedNick + " was already taken. Trying " + server.getConfig().getNickname() + nickSuffix + "...");
-				server.cmdNICK(server.getConfig().getNickname() + nickSuffix);
+				Logger.log("*** Nickname " + usedNick + " was already taken. Trying " + nickname + nickSuffix + "...");
+				server.cmdNICK(nickname + nickSuffix);
 			}
 			else
 			{
