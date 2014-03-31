@@ -5,7 +5,9 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
 
 import config.GlobalConfig;
+import config.GlobalConfig.PasswordType;
 import config.ServerConfig;
+import heufybot.core.cap.SASLCapHandler;
 import heufybot.core.events.LoggingInterface;
 import heufybot.modules.Module;
 import heufybot.modules.ModuleInterface;
@@ -29,7 +31,6 @@ public class HeufyBot
 		FileUtils.touchDir("data");
 		FileUtils.touchDir("modules");
 		
-		this.config = new GlobalConfig();
 		this.servers = new HashMap<String, IRCServer>();
 		
 		this.loadConfigs();
@@ -38,6 +39,7 @@ public class HeufyBot
 	
 	public void loadConfigs()
 	{
+		this.config = new GlobalConfig();
 		if(config.loadGlobalConfig("config/globalconfig.yml"))
 		{
 			//Loaded global config file successfully
@@ -78,7 +80,15 @@ public class HeufyBot
 			//server.getEventListenerManager().addListener(moduleInterface);
 			server.getEventListenerManager().addListener(loggingInterface);
 			
-			if(server.connect(server.getConfig().getSettingWithDefault("server", "irc.foo.bar"), server.getConfig().getSettingWithDefault("port", 6667)))
+			ServerConfig sConfig = server.getConfig();
+			
+			if(sConfig.getSettingWithDefault("passwordType", PasswordType.None) == PasswordType.SASL)
+			{
+				SASLCapHandler handler = new SASLCapHandler(sConfig.getSettingWithDefault("username", "RE_HeufyBot"), sConfig.getSettingWithDefault("password", ""));
+				server.getConfig().getCapHandlers().add(handler);
+			}
+			
+			if(server.connect(sConfig.getSettingWithDefault("server", "irc.foo.bar"), sConfig.getSettingWithDefault("port", 6667)))
 			{
 				server.login();
 			}
