@@ -27,6 +27,9 @@ import config.ServerConfig;
 
 public class IRCServer 
 {
+	//Not sure what to do with this one since the RFC doesn't specify it. Assume 512 until documentation states otherwise.
+	private final int MAX_LINE_LENGTH = 512;
+	
 	public enum ConnectionState 
 	{
 		Initializing, Connected, Disconnected
@@ -127,15 +130,21 @@ public class IRCServer
 	
 	public void login()
 	{
-		if(config.getPasswordType() == PasswordType.ServerPass)
+		String nickname = config.getSettingWithDefault("nickname", "RE_HeufyBot");
+		String password = config.getSettingWithDefault("password", "");
+		String username = config.getSettingWithDefault("username", "RE_HeufyBot");
+		String realname = config.getSettingWithDefault("realname", "RE_HeufyBot IRC Bot");
+		PasswordType passwordType = config.getSettingWithDefault("passwordType", PasswordType.None);
+		
+		if(passwordType == PasswordType.ServerPass)
 		{
-			cmdPASS(config.getPassword());
+			cmdPASS(password);
 		}
 		
 		cmdCAP("LS", "");
 		
-		cmdNICK(config.getNickname());
-		cmdUSER(config.getUsername(), config.getRealname());
+		cmdNICK(nickname);
+		cmdUSER(username, realname);
 		
 		startProcessing();
 	}
@@ -164,7 +173,7 @@ public class IRCServer
 			Logger.error("IRC Disconnect", "Error closing connection");
 		}
 		
-		if(reconnect && config.autoReconnect())
+		if(reconnect && config.getSettingWithDefault("autoReconnect", true));
 		{
 			reconnect();
 		}
@@ -172,12 +181,18 @@ public class IRCServer
 	
 	public void reconnect()
 	{
+		//TODO This code needs a major overhaul, because it doesn't work properly and multiserver will break it even more
+		int reconnectAttempts = config.getSettingWithDefault("reconnectAttempts", 3);
+		int reconnectInterval = config.getSettingWithDefault("reconnectInterval", 600);
+		String server = config.getSettingWithDefault("server", "irc.foo.bar");
+		int port = config.getSettingWithDefault("port", 6667);
+		
 		int reconnects = 0;
-		while(reconnects < config.getReconnectAttempts())
+		while(reconnects < reconnectAttempts)
 		{
 			reconnects++;
 			Logger.log("*** Reconnection attempt #" + reconnects + "...");
-			boolean success = connect(config.getServer(), config.getPort());
+			boolean success = connect(server, port);
 			if(success)
 			{
 				login();
@@ -185,12 +200,12 @@ public class IRCServer
 			}
 			else
 			{
-				if(reconnects < config.getReconnectAttempts())
+				if(reconnects < reconnectAttempts)
 				{
-					Logger.log("*** Connection failed. Trying again in " + config.getReconnectInterval() + " second(s)...");
+					Logger.log("*** Connection failed. Trying again in " + reconnectInterval + " second(s)...");
 					try
 					{
-						Thread.sleep(config.getReconnectInterval() * 1000);
+						Thread.sleep(reconnectInterval * 1000);
 					} 
 					catch (InterruptedException e) 
 					{
@@ -245,13 +260,15 @@ public class IRCServer
 	
 	public void sendRaw(String line)
 	{
+		int messageDelay = config.getSettingWithDefault("messageDelay", 500);
+		
 		writeLock.lock();
 		try
 		{
 			long currentNanos = System.nanoTime();
-			while(lastSentLine + config.getMessageDelay() * 1000000 > currentNanos)
+			while(lastSentLine + messageDelay * 1000000 > currentNanos)
 			{
-				writeNowCondition.await(lastSentLine + config.getMessageDelay() * 1000000 - currentNanos, TimeUnit.NANOSECONDS);
+				writeNowCondition.await(lastSentLine + messageDelay * 1000000 - currentNanos, TimeUnit.NANOSECONDS);
 				currentNanos = System.nanoTime();
 			}
 			lastSentLine = System.nanoTime();
@@ -295,13 +312,13 @@ public class IRCServer
 	public void sendRawSplit(String prefix, String message, String suffix)
 	{
 		String fullMessage = prefix + message + suffix;
-		if(fullMessage.length() < config.getMaxLineLength() - 2)
+		if(fullMessage.length() < MAX_LINE_LENGTH - 2)
 		{
 			sendRaw(fullMessage);
 			return;
 		}
 		
-		int maxLength = config.getMaxLineLength() - 2 - (prefix + suffix).length();
+		int maxLength = MAX_LINE_LENGTH - 2 - (prefix + suffix).length();
 		int iterations = (int) Math.ceil(message.length() / (double) maxLength);
 		for(int i = 0; i < iterations; i++)
 		{
