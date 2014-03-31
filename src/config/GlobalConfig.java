@@ -51,7 +51,7 @@ public class GlobalConfig
 			settings.put("autoJoin", false);
 			settings.put("autoJoinChannels", new ArrayList<String>());
 			settings.put("autoNickChange", true);
-			settings.put("autoReconnect", true);
+			settings.put("autoReconnect", false);
 			settings.put("reconnectAttempts", 3);
 			settings.put("reconnectInterval", 600);
 			settings.put("messageDelay", 500);
