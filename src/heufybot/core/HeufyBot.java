@@ -32,9 +32,6 @@ public class HeufyBot
 		FileUtils.touchDir("modules");
 		
 		this.servers = new HashMap<String, IRCServer>();
-		
-		this.loadConfigs();
-		this.start();
 	}
 	
 	public void loadConfigs()
@@ -44,28 +41,44 @@ public class HeufyBot
 		FileUtils.touchDir(config.getSettingWithDefault("logPath", "logs"));
 
 		File[] folder = new File("config").listFiles();
+		
+		int foundServerConfigs = 0;
 		for(int i = 0; i < folder.length; i++)
 		{
 			File file = folder[i];
 			if(!file.getName().equals("globalconfig.yml") && file.getName().endsWith(".yml"))
 			{
 				//We found a config file. Assume it's a server config
+				foundServerConfigs++;
+				
 				ServerConfig serverConfig = new ServerConfig();
 				serverConfig.loadServerConfig(file.getPath(), serverConfig.getSettings());
 				
-				int serverID = 1;
-				while(servers.containsKey(serverConfig.getSettingWithDefault("server" + serverID, "irc.foo.bar")))
-				{
-					serverID++;
-				}
-				
-				String serverName = serverConfig.getSettingWithDefault("server" + serverID, "irc.foo.bar");
-				IRCServer server = new IRCServer(serverName, serverConfig);
-				servers.put(serverName, server);
-				
-				FileUtils.touchDir(serverConfig.getSettingWithDefault("logPath", "logs"));
+				this.addServer(serverConfig);
 			}
 		}
+		
+		if(foundServerConfigs == 0)
+		{
+			ServerConfig serverConfig = new ServerConfig();
+			serverConfig.loadServerConfig(null, config.getSettings());
+			this.addServer(serverConfig);
+		}
+	}
+	
+	public void addServer(ServerConfig config)
+	{
+		int serverID = 1;
+		while(servers.containsKey(config.getSettingWithDefault("server" + serverID, "irc.foo.bar")))
+		{
+			serverID++;
+		}
+		
+		String serverName = config.getSettingWithDefault("server" + serverID, "irc.foo.bar");
+		IRCServer server = new IRCServer(serverName, config);
+		servers.put(serverName, server);
+		
+		FileUtils.touchDir(config.getSettingWithDefault("logPath", "logs"));
 	}
 	
 	public void start()

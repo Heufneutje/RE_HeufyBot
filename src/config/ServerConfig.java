@@ -1,5 +1,6 @@
 package config;
 
+import heufybot.core.Logger;
 import heufybot.utils.FileUtils;
 
 import java.util.HashMap;
@@ -12,6 +13,11 @@ public class ServerConfig extends GlobalConfig
 	public void loadServerConfig(String fileName, HashMap<String, Object> globalSettings)
 	{
 		this.settings = globalSettings;
+		if(fileName == null)
+		{
+			Logger.error("Config", "No seperate server configs found. Using the settings from the global config instead.");
+			return;
+		}
 		
 		Yaml yaml = new Yaml();
 		String settingsYaml = FileUtils.readFile(fileName);

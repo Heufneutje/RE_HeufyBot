@@ -6,6 +6,8 @@ public class HeufyBotInit
 {
 	public static void main(String[] args)
 	{
-		HeufyBot.getInstance();
+		HeufyBot bot = HeufyBot.getInstance();
+		bot.loadConfigs();
+		bot.start();
 	}
 }
