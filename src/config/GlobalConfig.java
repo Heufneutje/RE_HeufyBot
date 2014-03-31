@@ -94,6 +94,18 @@ public class GlobalConfig
 		return defaultValue;
 	}
 	
+	public PasswordType getSettingWithDefault(String setting, PasswordType defaultValue)
+	{
+		if(settings.containsKey(setting))
+		{
+			if(settings.get(setting) instanceof PasswordType)
+			{
+				return (PasswordType) settings.get(setting);
+			}
+		}
+		return defaultValue;
+	}
+	
 	public HashMap<String, Object> getSettings()
 	{
 		return settings;
