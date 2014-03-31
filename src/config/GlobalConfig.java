@@ -138,9 +138,4 @@ public class GlobalConfig
 	{
 		return capHandlers;
 	}
-
-	public void setCapHandlers(List<CapHandler> capHandlers)
-	{
-		this.capHandlers = capHandlers;
-	}
 }

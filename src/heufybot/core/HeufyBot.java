@@ -2,6 +2,7 @@ package heufybot.core;
 
 import java.io.File;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import config.GlobalConfig;
@@ -10,7 +11,6 @@ import config.ServerConfig;
 import heufybot.core.cap.SASLCapHandler;
 import heufybot.core.events.LoggingInterface;
 import heufybot.modules.Module;
-import heufybot.modules.ModuleInterface;
 import heufybot.modules.ModuleInterface.ModuleLoaderResponse;
 import heufybot.utils.FileUtils;
 
@@ -118,25 +118,17 @@ public class HeufyBot
 		//this.loadModules();
 		
 		//Reload config and reconnect
-		if(config.loadGlobalConfig("settings.yml"))
-		{
-			for(IRCServer server : servers.values())
-			{
-				if(server.connect(config.getServer(), config.getPort()))
-				{
-					server.login();
-				}
-			}
-		}
+		this.loadConfigs();
+		this.start();
 	}
 	
-	public void loadModules()
+	public void loadModules(IRCServer server)
 	{
 		Logger.log("*** Loading modules...");
 		
-		for(String module : config.getModulesToLoad())
+		for(String module : server.getConfig().getSettingWithDefault("modules", new ArrayList<String>()))
 		{
-			SimpleEntry<ModuleLoaderResponse, String> result = moduleInterface.loadModule(module);
+			SimpleEntry<ModuleLoaderResponse, String> result = server.getModuleInterface().loadModule(module);
 			
 			switch(result.getKey())
 			{
@@ -157,17 +149,17 @@ public class HeufyBot
 		}
 	}
 	
-	public void unloadModules()
+	public void unloadModules(IRCServer server)
 	{
 		Logger.log("*** Unloading modules...");
 		
-		Module[] loadedModules = new Module[moduleInterface.getModuleList().size()];
-		loadedModules = moduleInterface.getModuleList().toArray(loadedModules);
+		Module[] loadedModules = new Module[server.getModuleInterface().getModuleList().size()];
+		loadedModules = server.getModuleInterface().getModuleList().toArray(loadedModules);
 		
 		for(int i = 0; i < loadedModules.length; i++)
 		{
 			Module module = loadedModules[i];
-			SimpleEntry<ModuleLoaderResponse, String> result = moduleInterface.unloadModule(module.toString());
+			SimpleEntry<ModuleLoaderResponse, String> result = server.getModuleInterface().unloadModule(module.toString());
 
 			switch (result.getKey()) 
 			{
@@ -187,11 +179,6 @@ public class HeufyBot
 	public IRCServer getServer(String name)
 	{
 		return servers.get(name);
-	}
-	
-	public ModuleInterface getModuleInterface()
-	{
-		return moduleInterface;
 	}
 	
 	public static HeufyBot getInstance()
