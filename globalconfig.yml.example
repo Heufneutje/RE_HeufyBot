@@ -67,7 +67,7 @@ passwordType: None
 
 # -autoJoin-
 # Whether or not the bot should join any channels after connecting.
-autoJoin: true
+autoJoin: false
 
 # -autoJoinChannels-
 # The channels the bot should join if autojoin is enabled.
