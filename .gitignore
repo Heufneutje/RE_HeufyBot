@@ -12,6 +12,7 @@
 /logs
 /data
 /doc
+/config
 
 *.log
 *.gitignore
