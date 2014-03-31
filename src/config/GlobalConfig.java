@@ -47,7 +47,7 @@ public class GlobalConfig
 			settings.put("port", 6667);
 			settings.put("ssl", false);
 			settings.put("password", "");
-			settings.put("passwordType", PasswordType.None);
+			settings.put("passwordType", "None");
 			settings.put("autoJoin", false);
 			settings.put("autoJoinChannels", new ArrayList<String>());
 			settings.put("autoNickChange", true);
@@ -135,11 +135,14 @@ public class GlobalConfig
 	{
 		if(settings.containsKey(setting))
 		{
-			if(settings.get(setting) instanceof PasswordType)
+			try
 			{
-				return (PasswordType) settings.get(setting);
+				return PasswordType.valueOf( (String) settings.get(setting));
 			}
-			Logger.error("Config", "The setting \"" + setting + "\" was invalid! Using the default value \"" + defaultValue + "\" instead.");
+			catch (IllegalArgumentException e)
+			{
+				Logger.error("Config", "The setting \"" + setting + "\" was invalid! Using the default value \"" + defaultValue + "\" instead.");
+			}
 		}
 		else
 		{
