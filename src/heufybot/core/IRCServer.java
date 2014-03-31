@@ -173,7 +173,7 @@ public class IRCServer
 			Logger.error("IRC Disconnect", "Error closing connection");
 		}
 		
-		if(reconnect && config.getSettingWithDefault("autoReconnect", false));
+		if(reconnect && config.getSettingWithDefault("autoReconnect", false))
 		{
 			reconnect();
 		}
