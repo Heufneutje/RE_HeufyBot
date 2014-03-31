@@ -51,20 +51,19 @@ public class HeufyBot
 			{
 				//We found a config file. Assume it's a server config
 				ServerConfig serverConfig = new ServerConfig();
-				if(serverConfig.loadServerConfig(file.getPath(), serverConfig))
+				serverConfig.loadServerConfig(file.getPath(), serverConfig.getSettings());
+				
+				int serverID = 1;
+				while(servers.containsKey(serverConfig.getSettingWithDefault("server" + serverID, "irc.foo.bar")))
 				{
-					int serverID = 1;
-					while(servers.containsKey(serverConfig.getSettingWithDefault("server" + serverID, "irc.foo.bar")))
-					{
-						serverID++;
-					}
-					
-					String serverName = serverConfig.getSettingWithDefault("server" + serverID, "irc.foo.bar");
-					IRCServer server = new IRCServer(serverName, serverConfig);
-					servers.put(serverName, server);
-					
-					FileUtils.touchDir(serverConfig.getSettingWithDefault("logPath", "logs"));
+					serverID++;
 				}
+				
+				String serverName = serverConfig.getSettingWithDefault("server" + serverID, "irc.foo.bar");
+				IRCServer server = new IRCServer(serverName, serverConfig);
+				servers.put(serverName, server);
+				
+				FileUtils.touchDir(serverConfig.getSettingWithDefault("logPath", "logs"));
 			}
 		}
 	}
