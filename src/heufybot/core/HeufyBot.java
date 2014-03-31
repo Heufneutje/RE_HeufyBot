@@ -71,13 +71,13 @@ public class HeufyBot
 		String serverName = config.getSettingWithDefault("server", "irc.foo.bar");
 		
 		int serverID = 1;
-		while(servers.containsKey(serverName + serverID))
+		while(servers.containsKey(serverName + "-" + serverID))
 		{
 			serverID++;
 		}
 		
-		IRCServer server = new IRCServer(serverName, config);
-		servers.put(serverName + serverID, server);
+		IRCServer server = new IRCServer(serverName + "-" + serverID, config);
+		servers.put(serverName + "-" + serverID, server);
 		
 		FileUtils.touchDir(config.getSettingWithDefault("logPath", "logs"));
 	}
