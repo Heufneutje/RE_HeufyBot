@@ -52,7 +52,7 @@ public class HeufyBot
 				foundServerConfigs++;
 				
 				ServerConfig serverConfig = new ServerConfig();
-				serverConfig.loadServerConfig(file.getPath(), serverConfig.getSettings());
+				serverConfig.loadServerConfig(file.getPath(), config.getSettings());
 				
 				this.addServer(serverConfig);
 			}
