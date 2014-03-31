@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.yaml.snakeyaml.Yaml;
 
+import heufybot.core.Logger;
 import heufybot.core.cap.*;
 
 public class GlobalConfig 
@@ -41,6 +42,7 @@ public class GlobalConfig
 		} 
 		catch (FileNotFoundException e) 
 		{
+			//TODO Create a default config when none is found
 			return false;
 		}
 	}
@@ -53,6 +55,7 @@ public class GlobalConfig
 		}
 		else
 		{
+			Logger.error("Config", "The setting \"" + setting + "\" was not found in your global and local configs! Using the default value \"" + defaultValue + "\" instead.");
 			return defaultValue;
 		}
 	}
@@ -65,6 +68,11 @@ public class GlobalConfig
 			{
 				return (Integer) settings.get(setting);
 			}
+			Logger.error("Config", "The setting \"" + setting + "\" was invalid! Using the default value \"" + defaultValue + "\" instead.");
+		}
+		else
+		{
+			Logger.error("Config", "The setting \"" + setting + "\" was not found in your global and local configs! Using the default value \"" + defaultValue + "\" instead.");
 		}
 		return defaultValue;
 	}
@@ -77,6 +85,11 @@ public class GlobalConfig
 			{
 				return (Boolean) settings.get(setting);
 			}
+			Logger.error("Config", "The setting \"" + setting + "\" was invalid! Using the default value \"" + defaultValue + "\" instead.");
+		}
+		else
+		{
+			Logger.error("Config", "The setting \"" + setting + "\" was not found in your global and local configs! Using the default value \"" + defaultValue + "\" instead.");
 		}
 		return defaultValue;
 	}
@@ -90,6 +103,11 @@ public class GlobalConfig
 			{
 				return (ArrayList<String>) settings.get(setting);
 			}
+			Logger.error("Config", "The setting \"" + setting + "\" was invalid! Using the default value \"" + defaultValue + "\" instead.");
+		}
+		else
+		{
+			Logger.error("Config", "The setting \"" + setting + "\" was not found in your global and local configs! Using the default value \"" + defaultValue + "\" instead.");
 		}
 		return defaultValue;
 	}
@@ -102,6 +120,11 @@ public class GlobalConfig
 			{
 				return (PasswordType) settings.get(setting);
 			}
+			Logger.error("Config", "The setting \"" + setting + "\" was invalid! Using the default value \"" + defaultValue + "\" instead.");
+		}
+		else
+		{
+			Logger.error("Config", "The setting \"" + setting + "\" was not found in your global and local configs! Using the default value \"" + defaultValue + "\" instead.");
 		}
 		return defaultValue;
 	}
