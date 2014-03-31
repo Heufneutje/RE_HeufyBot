@@ -40,32 +40,30 @@ public class HeufyBot
 	public void loadConfigs()
 	{
 		this.config = new GlobalConfig();
-		if(config.loadGlobalConfig("config/globalconfig.yml"))
+		config.loadGlobalConfig("config/globalconfig.yml");
+		FileUtils.touchDir(config.getSettingWithDefault("logPath", "logs"));
+
+		File[] folder = new File("config").listFiles();
+		for(int i = 0; i < folder.length; i++)
 		{
-			FileUtils.touchDir(config.getSettingWithDefault("logPath", "logs"));
-			//Loaded global config file successfully
-			File[] folder = new File("config").listFiles();
-			for(int i = 0; i < folder.length; i++)
+			File file = folder[i];
+			if(!file.getName().equals("globalconfig.yml") && file.getName().endsWith(".yml"))
 			{
-				File file = folder[i];
-				if(!file.getName().equals("globalconfig.yml") && file.getName().endsWith(".yml"))
+				//We found a config file. Assume it's a server config
+				ServerConfig serverConfig = new ServerConfig();
+				if(serverConfig.loadServerConfig(file.getPath(), serverConfig))
 				{
-					//We found a config file. Assume it's a server config
-					ServerConfig serverConfig = new ServerConfig();
-					if(serverConfig.loadServerConfig(file.getPath(), serverConfig))
+					int serverID = 1;
+					while(servers.containsKey(serverConfig.getSettingWithDefault("server" + serverID, "irc.foo.bar")))
 					{
-						int serverID = 1;
-						while(servers.containsKey(serverConfig.getSettingWithDefault("server" + serverID, "irc.foo.bar")))
-						{
-							serverID++;
-						}
-						
-						String serverName = serverConfig.getSettingWithDefault("server" + serverID, "irc.foo.bar");
-						IRCServer server = new IRCServer(serverName, serverConfig);
-						servers.put(serverName, server);
-						
-						FileUtils.touchDir(serverConfig.getSettingWithDefault("logPath", "logs"));
+						serverID++;
 					}
+					
+					String serverName = serverConfig.getSettingWithDefault("server" + serverID, "irc.foo.bar");
+					IRCServer server = new IRCServer(serverName, serverConfig);
+					servers.put(serverName, server);
+					
+					FileUtils.touchDir(serverConfig.getSettingWithDefault("logPath", "logs"));
 				}
 			}
 		}

@@ -1,9 +1,5 @@
 package config;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +8,7 @@ import org.yaml.snakeyaml.Yaml;
 
 import heufybot.core.Logger;
 import heufybot.core.cap.*;
+import heufybot.utils.FileUtils;
 
 public class GlobalConfig 
 {
@@ -30,20 +27,42 @@ public class GlobalConfig
 	}
 	
 	@SuppressWarnings("unchecked")
-	public boolean loadGlobalConfig(String fileName)
+	public void loadGlobalConfig(String fileName)
 	{
-		try 
+		Yaml yaml = new Yaml();
+		if(FileUtils.fileExists(fileName)) 
 		{
-			InputStream input = new FileInputStream(new File(fileName));
-			Yaml yaml = new Yaml();
-			settings = (HashMap<String, Object>) yaml.load(input);
-			
-			return true;
+			String settingsYaml = FileUtils.readFile(fileName);
+			settings = (HashMap<String, Object>) yaml.load(settingsYaml);
 		} 
-		catch (FileNotFoundException e) 
+		else
 		{
-			//TODO Create a default config when none is found
-			return false;
+			Logger.error("Config", "Config file \"" + fileName + "\" could not be found. Generating default config...");
+			
+			settings = new HashMap<String, Object>();
+			settings.put("nickname", "RE_HeufyBot");
+			settings.put("username", "RE_HeufyBot");
+			settings.put("realname", "RE_HeufyBot IRC Bot");
+			settings.put("server", "irc.foo.bar");
+			settings.put("port", 6667);
+			settings.put("ssl", false);
+			settings.put("password", "");
+			settings.put("passwordType", PasswordType.None);
+			settings.put("autoJoin", false);
+			settings.put("autoJoinChannels", new ArrayList<String>());
+			settings.put("autoNickChange", true);
+			settings.put("autoReconnect", true);
+			settings.put("reconnectAttempts", 3);
+			settings.put("reconnectInterval", 600);
+			settings.put("messageDelay", 500);
+			settings.put("logPath", "logs");
+			settings.put("logPMs", false);
+			settings.put("commandPrefix", "~");
+			settings.put("modules", new ArrayList<String>());
+			settings.put("botAdmins", new ArrayList<String>());
+			
+			String settingsYaml = yaml.dump(settings);
+			FileUtils.writeFile(fileName, settingsYaml);
 		}
 	}
 	

@@ -87,7 +87,7 @@ public class IRCServer
 		}
 		
 		SocketFactory sf;
-		if(config.getSettingWithDefault("sslEnabled", false))
+		if(config.getSettingWithDefault("ssl", false))
 		{
 			//Trust all certificates, since making Java recognize a valid certificate is annoying.
 			sf = new SSLSocketUtils().trustAllCertificates();

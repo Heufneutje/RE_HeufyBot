@@ -32,11 +32,6 @@ public abstract class Module
 	 */
 	protected String trigger;
 	/**
-	 * This is set by the abstract constructor, and must be used in the trigger.
-	 * It is what users will input before a command in order for the bot to recognize it as a command.
-	 */
-	protected String commandPrefix;
-	/**
 	 * This determines whether or not the module should be triggered on every message.
 	 * This is useful for automatic commands, like checking when a certain person talks.
 	 */
@@ -67,7 +62,6 @@ public abstract class Module
 	public Module()
 	{
 		bot = HeufyBot.getInstance();
-		commandPrefix = bot.getGlobalConfig().getCommandPrefix();
 	}
 	
 	/**
