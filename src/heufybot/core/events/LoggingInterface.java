@@ -146,7 +146,7 @@ public class LoggingInterface extends EventListenerAdapter
 	
 	public void onPMAction(PMActionEvent event)
 	{
-		if(bot.getGlobalConfig().getLogPMs())
+		if(bot.getGlobalConfig().getSettingWithDefault("logPMs", false));
 		{
 			Logger.log("* " + event.getUser().getNickname() + " " + event.getMessage(), event.getUser().getNickname(), bot.getServer(event.getServerName()).getServerInfo().getNetwork());
 		}
@@ -154,7 +154,7 @@ public class LoggingInterface extends EventListenerAdapter
 	
 	public void onPMMessage(PMMessageEvent event)
 	{
-		if(bot.getGlobalConfig().getLogPMs())
+		if(bot.getGlobalConfig().getSettingWithDefault("logPMs", false))
 		{
 			String sourceNick = event.getUser().getNickname();
 			Logger.log("<" + sourceNick + "> " + event.getMessage(), sourceNick, bot.getServer(event.getServerName()).getServerInfo().getNetwork());
