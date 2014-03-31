@@ -68,15 +68,16 @@ public class HeufyBot
 	
 	public void addServer(ServerConfig config)
 	{
+		String serverName = config.getSettingWithDefault("server", "irc.foo.bar");
+		
 		int serverID = 1;
-		while(servers.containsKey(config.getSettingWithDefault("server" + serverID, "irc.foo.bar")))
+		while(servers.containsKey(serverName + serverID))
 		{
 			serverID++;
 		}
 		
-		String serverName = config.getSettingWithDefault("server" + serverID, "irc.foo.bar");
 		IRCServer server = new IRCServer(serverName, config);
-		servers.put(serverName, server);
+		servers.put(serverName + serverID, server);
 		
 		FileUtils.touchDir(config.getSettingWithDefault("logPath", "logs"));
 	}
