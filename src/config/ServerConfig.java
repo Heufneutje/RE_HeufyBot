@@ -12,7 +12,7 @@ public class ServerConfig extends GlobalConfig
 	@SuppressWarnings("unchecked")
 	public void loadServerConfig(String fileName, HashMap<String, Object> globalSettings)
 	{
-		this.settings = globalSettings;
+		this.settings = (HashMap<String, Object>) globalSettings.clone();
 		if(fileName == null)
 		{
 			Logger.error("Config", "No seperate server configs found. Using the settings from the global config instead.");
