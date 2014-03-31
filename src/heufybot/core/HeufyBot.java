@@ -42,6 +42,7 @@ public class HeufyBot
 		this.config = new GlobalConfig();
 		if(config.loadGlobalConfig("config/globalconfig.yml"))
 		{
+			FileUtils.touchDir(config.getSettingWithDefault("logPath", "logs"));
 			//Loaded global config file successfully
 			File[] folder = new File("config").listFiles();
 			for(int i = 0; i < folder.length; i++)
@@ -62,6 +63,8 @@ public class HeufyBot
 						String serverName = serverConfig.getSettingWithDefault("server" + serverID, "irc.foo.bar");
 						IRCServer server = new IRCServer(serverName, serverConfig);
 						servers.put(serverName, server);
+						
+						FileUtils.touchDir(serverConfig.getSettingWithDefault("logPath", "logs"));
 					}
 				}
 			}
