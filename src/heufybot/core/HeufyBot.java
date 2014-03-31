@@ -1,8 +1,11 @@
 package heufybot.core;
 
+import java.io.File;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
 
+import config.GlobalConfig;
+import config.ServerConfig;
 import heufybot.core.events.LoggingInterface;
 import heufybot.modules.Module;
 import heufybot.modules.ModuleInterface;
@@ -14,36 +17,68 @@ public class HeufyBot
 	public final static String VERSION = "0.5.1";
 	public final static String MODULE_API_VERSION = "0.5.0";
 	
-	private Config config;
+	private GlobalConfig config;
 	private HashMap<String, IRCServer> servers;
-	private ModuleInterface moduleInterface;
 	private LoggingInterface loggingInterface;
 	
 	private static final HeufyBot instance = new HeufyBot();
 	
 	private HeufyBot()
 	{
+		FileUtils.touchDir("config");
 		FileUtils.touchDir("data");
 		FileUtils.touchDir("modules");
 		
-		this.config = new Config();
+		this.config = new GlobalConfig();
 		this.servers = new HashMap<String, IRCServer>();
-		this.servers.put("Test", new IRCServer("Test", config));
+		
+		this.loadConfigs();
+		this.start();
+	}
+	
+	public void loadConfigs()
+	{
+		if(config.loadGlobalConfig("config/globalconfig.yml"))
+		{
+			//Loaded global config file successfully
+			File[] folder = new File("config").listFiles();
+			for(int i = 0; i < folder.length; i++)
+			{
+				File file = folder[i];
+				if(!file.getName().equals("globalconfig.yml") && file.getName().endsWith(".yml"))
+				{
+					//We found a config file. Assume it's a server config
+					ServerConfig serverConfig = new ServerConfig();
+					if(serverConfig.loadServerConfig(file.getPath(), serverConfig))
+					{
+						int serverID = 1;
+						while(servers.containsKey(serverConfig.getSettingWithDefault("server" + serverID, "unknown")))
+						{
+							serverID++;
+						}
+						
+						String serverName = serverConfig.getSettingWithDefault("server" + serverID, "unknown");
+						IRCServer server = new IRCServer(serverName, serverConfig);
+						servers.put(serverName, server);
+					}
+				}
+			}
+		}
 	}
 	
 	public void start()
 	{
-		moduleInterface = new ModuleInterface(this);
+		//moduleInterface = new ModuleInterface(this);
 		loggingInterface = new LoggingInterface(this);
 		
 		//this.loadModules();
 		
 		for(IRCServer server : servers.values())
 		{
-			server.getEventListenerManager().addListener(moduleInterface);
+			//server.getEventListenerManager().addListener(moduleInterface);
 			server.getEventListenerManager().addListener(loggingInterface);
 		
-			if(server.connect(config.getServer(), config.getPort()))
+			if(server.connect(config.getSettingWithDefault("server", "none"), config.getSettingWithDefault("port", 6667)))
 			{
 				server.login();
 			}
@@ -73,7 +108,7 @@ public class HeufyBot
 		//this.loadModules();
 		
 		//Reload config and reconnect
-		if(config.loadConfigFromFile("settings.yml"))
+		if(config.loadGlobalConfig("settings.yml"))
 		{
 			for(IRCServer server : servers.values())
 			{
@@ -154,7 +189,7 @@ public class HeufyBot
 		return instance;
 	}
 	
-	public Config getConfig()
+	public GlobalConfig getGlobalConfig()
 	{
 		return config;
 	}

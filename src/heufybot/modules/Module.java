@@ -67,7 +67,7 @@ public abstract class Module
 	public Module()
 	{
 		bot = HeufyBot.getInstance();
-		commandPrefix = bot.getConfig().getCommandPrefix();
+		commandPrefix = bot.getGlobalConfig().getCommandPrefix();
 	}
 	
 	/**

@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import config.ServerConfig;
 import heufybot.core.IRCChannel;
 import heufybot.core.HeufyBot;
 import heufybot.core.IRCUser;
@@ -22,17 +23,19 @@ public class ModuleInterface extends EventListenerAdapter
 	private ArrayList<Module> modules;
 	private List<String> ignores;
 	private HeufyBot bot;
+	private ServerConfig config;
 	
 	public enum ModuleLoaderResponse
 	{
 		Success, DoesNotExist, AlreadyLoaded, APIVersionDoesNotMatch
 	}
 	
-	public ModuleInterface(HeufyBot bot)
+	public ModuleInterface(HeufyBot bot, ServerConfig config)
 	{
 		this.modules = new ArrayList<Module>();
 		this.setIgnores(new ArrayList<String>());
 		this.bot = bot;
+		this.config = config;
 	}
 	
 	public SimpleEntry<ModuleLoaderResponse, String> loadModule(String moduleName)
@@ -173,7 +176,7 @@ public class ModuleInterface extends EventListenerAdapter
 	
 	public boolean isAuthorized(Module module, IRCChannel channel, IRCUser user)
 	{
-		return module.authType == Module.AuthType.Anyone || bot.getConfig().getBotAdmins().contains(user.getNickname());
+		return module.authType == Module.AuthType.Anyone || config.getSettingWithDefault("botAdmins", new ArrayList<String>()).contains(user.getNickname());
 	}
 	
 	public boolean isModuleLoaded(String moduleName)
@@ -193,7 +196,7 @@ public class ModuleInterface extends EventListenerAdapter
 		for(Module module : modules)
 		{
 			String moduleTrigger = module.getTrigger();
-			String commandPrefix = bot.getConfig().getCommandPrefix();
+			String commandPrefix = config.getSettingWithDefault("commandPrefix", "~");
 			
 			if(moduleTrigger.startsWith("^" + commandPrefix))
 			{

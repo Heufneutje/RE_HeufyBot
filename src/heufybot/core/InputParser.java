@@ -13,6 +13,8 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import config.GlobalConfig;
+
 public class InputParser 
 {
 	private IRCServer server;
@@ -159,7 +161,7 @@ public class InputParser
 			
 			server.getEventListenerManager().dispatchEvent(new ServerResponseEvent(server.getName(), parsedLine.get(1)));
 			
-			if(server.getConfig().getPasswordType() == Config.PasswordType.NickServPass)
+			if(server.getConfig().getPasswordType() == GlobalConfig.PasswordType.NickServPass)
 			{
 				server.nickservIdentify(server.getConfig().getPassword());
 			}

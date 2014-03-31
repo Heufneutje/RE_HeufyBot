@@ -2,7 +2,9 @@ package heufybot.core;
 
 import heufybot.core.events.EventListenerManager;
 import heufybot.core.events.types.BotMessageEvent;
+import heufybot.modules.ModuleInterface;
 import heufybot.utils.SSLSocketUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,6 +22,9 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.net.SocketFactory;
 
+import config.GlobalConfig.PasswordType;
+import config.ServerConfig;
+
 public class IRCServer 
 {
 	public enum ConnectionState 
@@ -28,7 +33,8 @@ public class IRCServer
 	}
 	
 	private String name;
-	private Config config;
+	private ServerConfig config;
+	private ModuleInterface moduleInterface;
 	
 	private Socket socket;
 	private BufferedReader inputReader;
@@ -50,7 +56,7 @@ public class IRCServer
 
 	private String nickname;
 	
-	public IRCServer(String name, Config config)
+	public IRCServer(String name, ServerConfig config)
 	{
 		this.socket = new Socket();
 		this.inputParser = new InputParser(this);
@@ -78,7 +84,7 @@ public class IRCServer
 		}
 		
 		SocketFactory sf;
-		if(config.isSSLEnabled())
+		if(config.getSettingWithDefault("sslEnabled", false))
 		{
 			//Trust all certificates, since making Java recognize a valid certificate is annoying.
 			sf = new SSLSocketUtils().trustAllCertificates();
@@ -121,7 +127,7 @@ public class IRCServer
 	
 	public void login()
 	{
-		if(config.getPasswordType() == Config.PasswordType.ServerPass)
+		if(config.getPasswordType() == PasswordType.ServerPass)
 		{
 			cmdPASS(config.getPassword());
 		}
@@ -450,9 +456,14 @@ public class IRCServer
 		return name;
 	}
 	
-	public Config getConfig()
+	public ServerConfig getConfig()
 	{
 		return config;
+	}
+	
+	public ModuleInterface getModuleInterface()
+	{
+		return moduleInterface;
 	}
 	
 	public ConnectionState getConnectionState() 
