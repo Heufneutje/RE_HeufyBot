@@ -119,7 +119,7 @@ public class ModuleInterface extends EventListenerAdapter
 		handleMessage(event.getServerName(), event.getUser(), event.getChannel(), event.getMessage(), TriggerType.Action);
 	}
 	
-	private void handleMessage(String serverName, final IRCUser user, final IRCChannel channel, final String message, TriggerType triggerType)
+	private void handleMessage(final String serverName, final IRCUser user, final IRCChannel channel, final String message, TriggerType triggerType)
 	{
 		if(ignores.contains(user.getNickname()))
 		{
@@ -147,7 +147,7 @@ public class ModuleInterface extends EventListenerAdapter
 				{
 					if(module.getTriggerOnEveryMessage())
 					{
-						module.processEvent(target, message, user.getNickname(), StringUtils.parseStringtoList(message, " "));
+						module.processEvent(serverName, target, message, user.getNickname(), StringUtils.parseStringtoList(message, " "));
 					}
 					else if (Thread.activeCount() < 6)
 					{
@@ -156,7 +156,7 @@ public class ModuleInterface extends EventListenerAdapter
 						{
 							public void run()
 							{
-								module.processEvent(target, message, user.getNickname(), StringUtils.parseStringtoList(message, " "));
+								module.processEvent(serverName, target, message, user.getNickname(), StringUtils.parseStringtoList(message, " "));
 							}
 						};
 						thread.start();

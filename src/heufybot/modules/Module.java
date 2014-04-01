@@ -74,7 +74,7 @@ public abstract class Module
 	 * @param triggerUser The IRC username that entered the command
 	 * @param params The same as message, split at " ". The first index can be checked for the trigger.
 	 */
-	public abstract void processEvent(String source, String message, String triggerUser, List<String> params);
+	public abstract void processEvent(String server, String source, String message, String triggerUser, List<String> params);
 	
 	/**
 	 * @return The module API version this module is using
