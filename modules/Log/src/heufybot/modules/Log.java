@@ -17,10 +17,12 @@ public class Log extends Module
 	private String source;
 	private String dateString;
 
-	public Log()
+	public Log(String server)
 	{
+		super(server);
+		
 		this.authType = AuthType.Anyone;
-		this.apiVersion = "0.5.0";
+		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(log)($| .*)";
 	}
@@ -55,7 +57,7 @@ public class Log extends Module
 				}
 				catch (Exception e)
 				{
-					bot.getIRC().cmdPRIVMSG(source, "Parser Error: Make sure the format is: log -<numberofdays>");
+					bot.getServer(server).cmdPRIVMSG(source, "Parser Error: Make sure the format is: log -<numberofdays>");
 				}
 			}
 			else
@@ -77,7 +79,7 @@ public class Log extends Module
 		    	}
 				catch (Exception e)
 				{
-					bot.getIRC().cmdPRIVMSG(source, "Parser Error: Make sure the date format for the log is: yyyy-mm-dd");
+					bot.getServer(server).cmdPRIVMSG(source, "Parser Error: Make sure the date format for the log is: yyyy-mm-dd");
 				}
 			}
 		}
@@ -86,22 +88,24 @@ public class Log extends Module
 	public void post(final HeufyBot bot)
 	{
 		String targetLog = source;
-		String filePath = bot.getConfig().getLogPath() + "/" + bot.getIRC().getServerInfo().getNetwork() + "/" + targetLog + "/" + dateString + ".log";
+		String logsPath = bot.getServer(server).getConfig().getSettingWithDefault("logPath", "logs");
+		String network = bot.getServer(server).getServerInfo().getNetwork();
+		String filePath = logsPath + "/" + network + "/" + targetLog + "/" + dateString + ".log";
 		
 		if(FileUtils.readFile(filePath) == null)
 		{
-			bot.getIRC().cmdPRIVMSG(source, "I do not have that log");
+			bot.getServer(server).cmdPRIVMSG(source, "I do not have that log");
 			return;
 		}
 		
 		String result = PasteUtils.post(FileUtils.readFile(filePath), "Log for " + source + " on " + dateString, "hour");
 		if(result != null)
 		{
-			bot.getIRC().cmdPRIVMSG(source, "Log for " + source + " on " + dateString + " posted: " + result + " (Link expires in 60 minutes)");
+			bot.getServer(server).cmdPRIVMSG(source, "Log for " + source + " on " + dateString + " posted: " + result + " (Link expires in 60 minutes)");
 		}
 		else
 		{
-			bot.getIRC().cmdPRIVMSG(source, "Error: Log could not be posted");
+			bot.getServer(server).cmdPRIVMSG(source, "Error: Log could not be posted");
 		}
 	}
 

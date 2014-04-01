@@ -4,10 +4,12 @@ import java.util.List;
 
 public class Join extends Module
 {
-	public Join()
+	public Join(String server)
 	{
+		super(server);
+		
 		this.authType = AuthType.Anyone;
-		this.apiVersion = "0.5.0";
+		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(join)($| .*)";
 	}
@@ -17,17 +19,17 @@ public class Join extends Module
 	{
 		if (params.size() == 1)
 		{
-			bot.getIRC().cmdPRIVMSG(source, "Join what?");
+			bot.getServer(server).cmdPRIVMSG(source, "Join what?");
 		}
 		else
 		{
 			if(params.size() > 2)
 			{
-				bot.getIRC().cmdJOIN(params.get(1), params.get(2));
+				bot.getServer(server).cmdJOIN(params.get(1), params.get(2));
 			}
 			else
 			{
-				bot.getIRC().cmdJOIN(params.get(1), "");
+				bot.getServer(server).cmdJOIN(params.get(1), "");
 			}
 		}
 	}

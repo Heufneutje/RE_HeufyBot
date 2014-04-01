@@ -16,15 +16,19 @@ import java.util.regex.Pattern;
 
 public class OutOfContext extends Module
 {
-	private String dataPath = "data/ooclog.txt";
+	private String dataPath;
 	private List<String> quoteLog;
 	
-	public OutOfContext()
+	public OutOfContext(String server)
 	{
+		super(server);
+		
 		this.authType = AuthType.Anyone;
-		this.apiVersion = "0.5.0";
+		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(ooc)($| .*)";
+		
+		this.dataPath = "data/" + bot.getServer(server).getServerInfo().getNetwork() + "/ooclog.txt";
 	}
 
 	public void processEvent(final String source, String message, String triggerUser, List<String> params)
@@ -35,18 +39,18 @@ public class OutOfContext extends Module
 			String data = FileUtils.readFile(dataPath);
 			if(data.equalsIgnoreCase(""))
 			{
-				bot.getIRC().cmdPRIVMSG(source, "No quotes to be posted.");
+				bot.getServer(server).cmdPRIVMSG(source, "No quotes to be posted.");
 			}
 			else
 			{
 				String result = PasteUtils.post(data, "HeufyBot OutOfContext Log", "hour");
 				if(result == null)
 				{
-					bot.getIRC().cmdPRIVMSG(source, "Error: OoC Log could not be posted.");
+					bot.getServer(server).cmdPRIVMSG(source, "Error: OoC Log could not be posted.");
 				}
 				else
 				{
-					bot.getIRC().cmdPRIVMSG(source, "OoC Log posted: " + result  + " (Link expires in 60 minutes).");
+					bot.getServer(server).cmdPRIVMSG(source, "OoC Log posted: " + result  + " (Link expires in 60 minutes).");
 				}
 			}
 		}
@@ -93,7 +97,7 @@ public class OutOfContext extends Module
 				    	newQuote = dateString + " " + newQuote;
 				    }
 			    
-				    if(bot.getIRC().getServerInfo().getReverseUserPrefixes().containsKey(toQuote.substring(0, 1)) || toQuote.substring(0, 1).equalsIgnoreCase(" "))
+				    if(bot.getServer(server).getServerInfo().getReverseUserPrefixes().containsKey(toQuote.substring(0, 1)) || toQuote.substring(0, 1).equalsIgnoreCase(" "))
 				    {
 				    	newQuote = newQuote.replace(toQuote, toQuote.substring(1));
 				    }
@@ -102,55 +106,55 @@ public class OutOfContext extends Module
 				    {
 				    	if(quote.substring(21).equalsIgnoreCase(newQuote.substring(21)))
 				    	{
-				    		bot.getIRC().cmdPRIVMSG(source, "This quote is already in the log.");
+				    		bot.getServer(server).cmdPRIVMSG(source, "This quote is already in the log.");
 				    		return;
 				    	}
 				    }
 				    quoteLog.add(newQuote);
 				    FileUtils.writeFileAppend(dataPath, newQuote + "\n");
-				    bot.getIRC().cmdPRIVMSG(source, "Quote \"" + newQuote + "\" was added to the log!");
+				    bot.getServer(server).cmdPRIVMSG(source, "Quote \"" + newQuote + "\" was added to the log!");
 			    }
 			    else
 			    {
-			    	bot.getIRC().cmdPRIVMSG(source, "No nickname was found in this quote.");
+			    	bot.getServer(server).cmdPRIVMSG(source, "No nickname was found in this quote.");
 			    }
 			}
 			else if(subCommand.equalsIgnoreCase("searchnick"))
 			{
 				if(params.size() == 0)
 				{
-					bot.getIRC().cmdPRIVMSG(source, search(triggerUser, false, -1));
+					bot.getServer(server).cmdPRIVMSG(source, search(triggerUser, false, -1));
 				}
 				else if(params.size() > 1)
 				{
-					bot.getIRC().cmdPRIVMSG(source, search(params.get(0), false, StringUtils.tryParseInt(params.get(1))));
+					bot.getServer(server).cmdPRIVMSG(source, search(params.get(0), false, StringUtils.tryParseInt(params.get(1))));
 				}
 				else
 				{
-					bot.getIRC().cmdPRIVMSG(source, search(params.get(0), false, -1));
+					bot.getServer(server).cmdPRIVMSG(source, search(params.get(0), false, -1));
 				}
 			}
 			else if(subCommand.equalsIgnoreCase("search"))
 			{
-				bot.getIRC().cmdPRIVMSG(source, search(StringUtils.join(params, " "), true, -1));
+				bot.getServer(server).cmdPRIVMSG(source, search(StringUtils.join(params, " "), true, -1));
 			}
 			else if(subCommand.equalsIgnoreCase("random"))
 			{
-				bot.getIRC().cmdPRIVMSG(source, search(".*", true, -1));
+				bot.getServer(server).cmdPRIVMSG(source, search(".*", true, -1));
 			}
 			else if(subCommand.equalsIgnoreCase("id"))
 			{
 				if(params.size() == 0)
 				{
-					bot.getIRC().cmdPRIVMSG(source, "You didn't give a quote ID.");
+					bot.getServer(server).cmdPRIVMSG(source, "You didn't give a quote ID.");
 				}
 				else if(StringUtils.tryParseInt(params.get(0)) == -1)
 				{
-					bot.getIRC().cmdPRIVMSG(source, "That is not a valid quote ID.");
+					bot.getServer(server).cmdPRIVMSG(source, "That is not a valid quote ID.");
 				}
 				else
 				{
-					bot.getIRC().cmdPRIVMSG(source, search(".*", true, StringUtils.tryParseInt(params.get(0))));
+					bot.getServer(server).cmdPRIVMSG(source, search(".*", true, StringUtils.tryParseInt(params.get(0))));
 				}
 			}
 			else if(subCommand.equalsIgnoreCase("remove"))
@@ -161,7 +165,7 @@ public class OutOfContext extends Module
 				
 				if(quoteLog.get(0).length() < 21)
 				{
-					bot.getIRC().cmdPRIVMSG(source, "No quotes in the log.");
+					bot.getServer(server).cmdPRIVMSG(source, "No quotes in the log.");
 				}
 				else
 				{
@@ -174,11 +178,11 @@ public class OutOfContext extends Module
 					}
 					if(matches.size() == 0)
 					{
-						bot.getIRC().cmdPRIVMSG(source, "No matches for '" + search + "' found.");
+						bot.getServer(server).cmdPRIVMSG(source, "No matches for '" + search + "' found.");
 					}
 					else if(matches.size() > 1)
 					{
-						bot.getIRC().cmdPRIVMSG(source, "Unable to remove quote, " + matches.size() + " matches were found.");
+						bot.getServer(server).cmdPRIVMSG(source, "Unable to remove quote, " + matches.size() + " matches were found.");
 					}
 					else
 					{
@@ -191,13 +195,13 @@ public class OutOfContext extends Module
 			  	  			}
 			  	  		}
 						writeLog();
-			  	  		bot.getIRC().cmdPRIVMSG(source, "Quote '" + matches.get(0) + "' was removed from the log!");
+			  	  		bot.getServer(server).cmdPRIVMSG(source, "Quote '" + matches.get(0) + "' was removed from the log!");
 					}
 				}
 			}
 			else
 			{
-				bot.getIRC().cmdPRIVMSG(source, "Invalid subcommand. Subcommands are add/remove/search/searchnick/random/id.");
+				bot.getServer(server).cmdPRIVMSG(source, "Invalid subcommand. Subcommands are add/remove/search/searchnick/random/id.");
 			}
 		}
 	}

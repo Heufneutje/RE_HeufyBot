@@ -19,17 +19,20 @@ import org.json.simple.parser.ParseException;
 
 public class Event extends Module
 {
-	private String eventsPath = "data/events.json";
+	private String eventsPath;
 	private List<MyEvent> events;
 	
-	public Event()
+	public Event(String server)
 	{
+		super(server);
+		
 		this.authType = AuthType.Anyone;
-		this.apiVersion = "0.5.0";
+		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(event|timetill|timesince|r(emove)?event|events|dateof)($| .*)";
 		
 		this.events = new ArrayList<MyEvent>();
+		this.eventsPath = "data/" + bot.getServer(server).getServerInfo().getNetwork() + "/events.json";
 	}
 
 	public void processEvent(String source, String message, String triggerUser, List<String> params)
@@ -38,7 +41,7 @@ public class Event extends Module
 		{
 			if(params.size() < 3)
 			{
-				bot.getIRC().cmdPRIVMSG(source, "You didn't specify an event.");
+				bot.getServer(server).cmdPRIVMSG(source, "You didn't specify an event.");
 				return;
 			}
 			
@@ -52,7 +55,7 @@ public class Event extends Module
 				
 				if(params.size() < 3)
 				{
-					bot.getIRC().cmdPRIVMSG(source, "You didn't specify an event.");
+					bot.getServer(server).cmdPRIVMSG(source, "You didn't specify an event.");
 					return;
 				}
 				
@@ -69,7 +72,7 @@ public class Event extends Module
 				} 
 				catch (java.text.ParseException e1) 
 				{
-					bot.getIRC().cmdPRIVMSG(source, "The date you specified is invalid. Use \"yyyy-MM-dd\" or \"yyyy-MM-dd HH:mm\" as the format.");
+					bot.getServer(server).cmdPRIVMSG(source, "The date you specified is invalid. Use \"yyyy-MM-dd\" or \"yyyy-MM-dd HH:mm\" as the format.");
 					return;
 				}
 			}
@@ -88,13 +91,13 @@ public class Event extends Module
 			events.add(latestDateIndex, event);
 			writeEvents();
 			
-			bot.getIRC().cmdPRIVMSG(source, "Event \"" + event.getEventString() + "\" on the date " + event.getFormattedDate() + " (UTC) was added to the events database!");
+			bot.getServer(server).cmdPRIVMSG(source, "Event \"" + event.getEventString() + "\" on the date " + event.getFormattedDate() + " (UTC) was added to the events database!");
 		}
 		else if(message.toLowerCase().matches("^" + commandPrefix + "r(emove)?event.*"))
 		{
 			if(params.size() == 1)
 			{
-				bot.getIRC().cmdPRIVMSG(source, "You didn't specify an event.");
+				bot.getServer(server).cmdPRIVMSG(source, "You didn't specify an event.");
 				return;
 			}
 			
@@ -105,19 +108,19 @@ public class Event extends Module
 				MyEvent event = iter.next();
 				if(event.getEventString().toLowerCase().matches(".*" + search.toLowerCase() + ".*") && triggerUser.equalsIgnoreCase(event.getUser()))
 				{
-					bot.getIRC().cmdPRIVMSG(source, event.getUser() + "'s event \"" + event.getEventString() + " on date " + event.getFormattedDate() + " has been removed from the events database.");
+					bot.getServer(server).cmdPRIVMSG(source, event.getUser() + "'s event \"" + event.getEventString() + " on date " + event.getFormattedDate() + " has been removed from the events database.");
 					iter.remove();
 					writeEvents();
 					return;
 				}
 			}
-			bot.getIRC().cmdPRIVMSG(source, "No event added by you matching \"" + search + "\" was found in the events database.");
+			bot.getServer(server).cmdPRIVMSG(source, "No event added by you matching \"" + search + "\" was found in the events database.");
 		}
 		else if(message.toLowerCase().matches("^" + commandPrefix + "timetill.*"))
 		{
 			if(params.size() == 1)
 			{
-				bot.getIRC().cmdPRIVMSG(source, "You didn't specify an event.");
+				bot.getServer(server).cmdPRIVMSG(source, "You didn't specify an event.");
 				return;
 			}
 			
@@ -129,17 +132,17 @@ public class Event extends Module
 				if(event.getEventString().toLowerCase().matches(".*" + search.toLowerCase() + ".*") && event.getDate().after(now))
 				{
 					String timeDifference = getTimeDifferenceString(now, event.getDate());
-					bot.getIRC().cmdPRIVMSG(source, event.getUser() + "'s event \"" + event.getEventString() + "\" will occur in " + timeDifference + ".");
+					bot.getServer(server).cmdPRIVMSG(source, event.getUser() + "'s event \"" + event.getEventString() + "\" will occur in " + timeDifference + ".");
 					return;
 				}
 			}
-			bot.getIRC().cmdPRIVMSG(source, "No event matching \"" + search + "\" was found in the events database.");
+			bot.getServer(server).cmdPRIVMSG(source, "No event matching \"" + search + "\" was found in the events database.");
 		}
 		else if(message.toLowerCase().matches("^" + commandPrefix + "timesince.*"))
 		{
 			if(params.size() == 1)
 			{
-				bot.getIRC().cmdPRIVMSG(source, "You didn't specify an event.");
+				bot.getServer(server).cmdPRIVMSG(source, "You didn't specify an event.");
 				return;
 			}
 			
@@ -151,11 +154,11 @@ public class Event extends Module
 				if(event.getEventString().toLowerCase().matches(".*" + search.toLowerCase() + ".*") && event.getDate().before(now))
 				{
 					String timeDifference = getTimeDifferenceString(event.getDate(), now);
-					bot.getIRC().cmdPRIVMSG(source, event.getUser() + "'s event \"" + event.getEventString() + "\" occurred " + timeDifference + " ago.");
+					bot.getServer(server).cmdPRIVMSG(source, event.getUser() + "'s event \"" + event.getEventString() + "\" occurred " + timeDifference + " ago.");
 					return;
 				}
 			}
-			bot.getIRC().cmdPRIVMSG(source, "No event matching \"" + search + "\" was found in the events database.");
+			bot.getServer(server).cmdPRIVMSG(source, "No event matching \"" + search + "\" was found in the events database.");
 		}
 		else if(message.toLowerCase().matches("^" + commandPrefix + "events.*"))
 		{
@@ -184,18 +187,18 @@ public class Event extends Module
 			
 			if(occurringEvents.size() == 0)
 			{
-				bot.getIRC().cmdPRIVMSG(source, "No events occurring in the next " + numberOfDays + " day(s).");
+				bot.getServer(server).cmdPRIVMSG(source, "No events occurring in the next " + numberOfDays + " day(s).");
 			}
 			else
 			{
-				bot.getIRC().cmdPRIVMSG(source, "Event(s) occurring in the next " + numberOfDays + " day(s): " + StringUtils.join(occurringEvents, ", "));
+				bot.getServer(server).cmdPRIVMSG(source, "Event(s) occurring in the next " + numberOfDays + " day(s): " + StringUtils.join(occurringEvents, ", "));
 			}
 		}
 		else if(message.toLowerCase().matches("^" + commandPrefix + "dateof.*"))
 		{
 			if(params.size() == 1)
 			{
-				bot.getIRC().cmdPRIVMSG(source, "You didn't specify an event.");
+				bot.getServer(server).cmdPRIVMSG(source, "You didn't specify an event.");
 				return;
 			}
 			
@@ -206,11 +209,11 @@ public class Event extends Module
 				Date now = new Date();
 				if(event.getEventString().toLowerCase().matches(".*" + search.toLowerCase() + ".*") && event.getDate().after(now))
 				{
-					bot.getIRC().cmdPRIVMSG(source, event.getUser() + "'s event \"" + event.getEventString() + "\" will occur on " + event.getFormattedDate() + " (UTC).");
+					bot.getServer(server).cmdPRIVMSG(source, event.getUser() + "'s event \"" + event.getEventString() + "\" will occur on " + event.getFormattedDate() + " (UTC).");
 					return;
 				}
 			}
-			bot.getIRC().cmdPRIVMSG(source, "No event matching \"" + search + "\" was found in the events database.");
+			bot.getServer(server).cmdPRIVMSG(source, "No event matching \"" + search + "\" was found in the events database.");
 		}
 	}
 

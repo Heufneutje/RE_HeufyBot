@@ -15,10 +15,12 @@ public class Aww extends Module
 {
 	private final String clientIDPath = "data/imgurclientid.txt";
 	
-	public Aww()
+	public Aww(String server)
 	{
+		super(server);
+		
 		this.authType = AuthType.Anyone;
-		this.apiVersion = "0.5.0";
+		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(aww)($)";
 	}
@@ -30,7 +32,7 @@ public class Aww extends Module
 		{
 			if(FileUtils.readFile(clientIDPath).equals(""))
 			{
-				bot.getIRC().cmdPRIVMSG(source, "No Imgur client ID found.");
+				bot.getServer(server).cmdPRIVMSG(source, "No Imgur client ID found.");
 				return;
 			}
 			
@@ -43,15 +45,15 @@ public class Aww extends Module
 			
 			if(url.equals(""))
 			{
-				bot.getIRC().cmdPRIVMSG(source, "Something went wrong while trying to get an image. Most likely the Imgur API is down.");
+				bot.getServer(server).cmdPRIVMSG(source, "Something went wrong while trying to get an image. Most likely the Imgur API is down.");
 				return;
 			}
 			
-			bot.getIRC().cmdPRIVMSG(source, title + " | " + url);
+			bot.getServer(server).cmdPRIVMSG(source, title + " | " + url);
 		} 
 		catch (ParseException e) 
 		{
-			bot.getIRC().cmdPRIVMSG(source, "Something went wrong while trying to read the data.");
+			bot.getServer(server).cmdPRIVMSG(source, "Something went wrong while trying to read the data.");
 		}
 	}
 	

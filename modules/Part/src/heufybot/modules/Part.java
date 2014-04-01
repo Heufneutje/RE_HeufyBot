@@ -6,10 +6,12 @@ import java.util.List;
 
 public class Part extends Module
 {
-	public Part()
+	public Part(String server)
 	{
+		super(server);
+		
 		this.authType = AuthType.BotAdmins;
-		this.apiVersion = "0.5.0";
+		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(part)($| .*)";
 	}
@@ -19,7 +21,7 @@ public class Part extends Module
 	{
 		if (params.size() == 1)
 		{
-			bot.getIRC().cmdPART(source, "");
+			bot.getServer(server).cmdPART(source, "");
 		}
 		else
 		{
@@ -27,11 +29,11 @@ public class Part extends Module
 			if(params.size() > 1)
 			{
 				String channel = params.remove(0);
-				bot.getIRC().cmdPART(channel, StringUtils.join(params, " "));
+				bot.getServer(server).cmdPART(channel, StringUtils.join(params, " "));
 			}
 			else
 			{
-				bot.getIRC().cmdPART(params.get(0), "");
+				bot.getServer(server).cmdPART(params.get(0), "");
 			}
 		}
 	}

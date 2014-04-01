@@ -7,10 +7,12 @@ import java.util.Random;
 
 public class Choose extends Module
 {
-	public Choose()
+	public Choose(String server)
 	{
+		super(server);
+		
 		this.authType = AuthType.Anyone;
-		this.apiVersion = "0.5.0";
+		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(choose|choice)($| .*)";
 	}
@@ -20,7 +22,7 @@ public class Choose extends Module
 	{
 		if (params.size() == 1)
 		{
-			bot.getIRC().cmdPRIVMSG(source, "Choose what?");
+			bot.getServer(server).cmdPRIVMSG(source, "Choose what?");
 		}
 		else
 		{
@@ -47,7 +49,7 @@ public class Choose extends Module
 			
 			Random random = new Random();
 			int choiceNumber = random.nextInt(choices.length);
-			bot.getIRC().cmdPRIVMSG(source, "Choice: " + choices[choiceNumber]);
+			bot.getServer(server).cmdPRIVMSG(source, "Choice: " + choices[choiceNumber]);
 		}
 	}
 

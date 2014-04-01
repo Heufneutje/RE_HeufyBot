@@ -4,10 +4,12 @@ import java.util.List;
 
 public class Nick extends Module
 {
-	public Nick()
+	public Nick(String server)
 	{
+		super(server);
+		
 		this.authType = AuthType.BotAdmins;
-		this.apiVersion = "0.5.0";
+		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(nick)($| .*)";
 	}
@@ -17,11 +19,11 @@ public class Nick extends Module
 	{
 		if (params.size() == 1)
 		{
-			bot.getIRC().cmdPRIVMSG(source, "Change my nick to what?");
+			bot.getServer(server).cmdPRIVMSG(source, "Change my nick to what?");
 		}
 		else
 		{
-			bot.getIRC().cmdNICK(params.get(1));
+			bot.getServer(server).cmdNICK(params.get(1));
 		}
 	}
 

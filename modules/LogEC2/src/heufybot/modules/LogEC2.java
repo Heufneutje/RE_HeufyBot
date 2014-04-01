@@ -14,10 +14,12 @@ public class LogEC2 extends Module
 {
 	private String dateString;
 
-	public LogEC2()
+	public LogEC2(String server)
 	{
+		super(server);
+		
 		this.authType = AuthType.Anyone;
-		this.apiVersion = "0.5.0";
+		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(log)($| .*)";
 	}
@@ -49,7 +51,7 @@ public class LogEC2 extends Module
 				}
 				catch (Exception e)
 				{
-					bot.getIRC().cmdPRIVMSG(source, "Parser Error: Make sure the format is: log -<numberofdays>");
+					bot.getServer(server).cmdPRIVMSG(source, "Parser Error: Make sure the format is: log -<numberofdays>");
 				}
 			}
 			else
@@ -71,7 +73,7 @@ public class LogEC2 extends Module
 		    	}
 				catch (Exception e)
 				{
-					bot.getIRC().cmdPRIVMSG(source, "Parser Error: Make sure the date format for the log is: yyyy-mm-dd");
+					bot.getServer(server).cmdPRIVMSG(source, "Parser Error: Make sure the date format for the log is: yyyy-mm-dd");
 				}
 			}
 		}
@@ -80,18 +82,20 @@ public class LogEC2 extends Module
 	public void post(String source)
 	{
 		String targetLog = source;
-		String filePath = bot.getConfig().getLogPath() + "/" + bot.getIRC().getServerInfo().getNetwork() + "/" + targetLog + "/" + dateString + ".log";
+		String logsPath = bot.getServer(server).getConfig().getSettingWithDefault("logPath", "logs");
+		String network = bot.getServer(server).getServerInfo().getNetwork();
+		String filePath = logsPath + "/" + network + "/" + targetLog + "/" + dateString + ".log";
 		
 		if(!FileUtils.fileExists(filePath))
 		{
-			bot.getIRC().cmdPRIVMSG(source, "I do not have that log");
+			bot.getServer(server).cmdPRIVMSG(source, "I do not have that log");
 			return;
 		}
 		
 		String url = "http://heufneutje.net/logs/?channel=" + source.replaceAll("#", "") +
-				"&network=" + bot.getIRC().getServerInfo().getNetwork() +
+				"&network=" + bot.getServer(server).getServerInfo().getNetwork() +
 				"&date=" + dateString;
-		bot.getIRC().cmdPRIVMSG(source, "Log for " + source + " on " + dateString + ": " + url);
+		bot.getServer(server).cmdPRIVMSG(source, "Log for " + source + " on " + dateString + ": " + url);
 	}
 
 	@Override

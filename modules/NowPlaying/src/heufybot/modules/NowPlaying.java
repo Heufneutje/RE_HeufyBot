@@ -11,16 +11,19 @@ import heufybot.utils.URLUtils;
 public class NowPlaying extends Module
 {
 	private HashMap<String, String> userLinks;
-	private final String linksPath = "data/nplinks.txt";
+	private String linksPath;
 	
-	public NowPlaying()
+	public NowPlaying(String server)
 	{
+		super(server);
+		
 		this.authType = AuthType.Anyone;
-		this.apiVersion = "0.5.0";
+		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(np|nowplaying|nplink)($| .*)";
 		
 		this.userLinks = new HashMap<String, String>();
+		this.linksPath = "data/" + bot.getServer(server).getServerInfo().getNetwork() + "/nplinks.txt";
 	}
 	
 	@Override
@@ -28,24 +31,24 @@ public class NowPlaying extends Module
 	{
 		if(message.matches("np"))
 		{
-			return bot.getConfig().getCommandPrefix() + "np (<user>) | Returns your currently playing music (from LastFM). You can also supply a specific username to check.";
+			return commandPrefix + "np (<user>) | Returns your currently playing music (from LastFM). You can also supply a specific username to check.";
 		}
 		else if(message.matches("nplink"))
 		{
-			return bot.getConfig().getCommandPrefix() + "nplink <LastFM name> - Links the specified LastFM account name to your IRC name.";
+			return commandPrefix + "nplink <LastFM name> - Links the specified LastFM account name to your IRC name.";
 		}
 		
-		return bot.getConfig().getCommandPrefix() + "np (<user>), " + bot.getConfig().getCommandPrefix() + "nplink <LastFM name> | Returns your or someone else's currently playing music (from LastFM) or link your nickname to a LastFM name.";
+		return commandPrefix + "np (<user>), " + commandPrefix + "nplink <LastFM name> | Returns your or someone else's currently playing music (from LastFM) or link your nickname to a LastFM name.";
 	}
 
 	@Override
 	public void processEvent(String source, String message, String triggerUser, List<String> params) 
 	{
-		if(message.toLowerCase().matches("^" + bot.getConfig().getCommandPrefix() + "nplink.*"))
+		if(message.toLowerCase().matches("^" + commandPrefix + "nplink.*"))
 		{
 			if(params.size() == 1)
 			{
-				bot.getIRC().cmdPRIVMSG(source, "You must provide a LastFM name to link to your nickname.");
+				bot.getServer(server).cmdPRIVMSG(source, "You must provide a LastFM name to link to your nickname.");
 			}
 			else
 			{
@@ -53,10 +56,10 @@ public class NowPlaying extends Module
 				userLinks.put(triggerUser.toLowerCase(), link);
 				writeLinks();
 				
-				bot.getIRC().cmdPRIVMSG(source, "The nickname \"" + triggerUser + "\" is now linked to LastFM name \"" + link + "\".");
+				bot.getServer(server).cmdPRIVMSG(source, "The nickname \"" + triggerUser + "\" is now linked to LastFM name \"" + link + "\".");
 			}
 		}
-		else if(message.toLowerCase().matches("^" + bot.getConfig().getCommandPrefix() + "(np|nowplaying).*"))
+		else if(message.toLowerCase().matches("^" + commandPrefix + "(np|nowplaying).*"))
 		{
 			String name = "";
 			if(params.size() == 1)
@@ -78,11 +81,11 @@ public class NowPlaying extends Module
 			
 			if(results == null)
 			{
-				bot.getIRC().cmdPRIVMSG(source, "No user with the name \"" + name + "\" could be found on LastFM.");
+				bot.getServer(server).cmdPRIVMSG(source, "No user with the name \"" + name + "\" could be found on LastFM.");
 			}
 			else if(results.size() == 0)
 			{
-				bot.getIRC().cmdPRIVMSG(source, "No recently played tracks for user \"" + name + "\" could be found on LastFM.");
+				bot.getServer(server).cmdPRIVMSG(source, "No recently played tracks for user \"" + name + "\" could be found on LastFM.");
 			}
 			else
 			{
@@ -97,7 +100,7 @@ public class NowPlaying extends Module
 				String song = splittedTitle[1].trim();
 				String link = URLUtils.shortenURL(lastEntryLink);
 				
-				bot.getIRC().cmdPRIVMSG(source, "\"" + song + "\" by " + artist + " | " + link);
+				bot.getServer(server).cmdPRIVMSG(source, "\"" + song + "\" by " + artist + " | " + link);
 			}
 		}
 	}
