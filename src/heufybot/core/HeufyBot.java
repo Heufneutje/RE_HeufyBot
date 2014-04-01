@@ -122,6 +122,7 @@ public class HeufyBot
 			
 			this.unloadModules(server);
 		}
+		servers.clear();
 		Logger.log("*** Stopping...");
 	}
 	
