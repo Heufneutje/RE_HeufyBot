@@ -17,7 +17,7 @@ import heufybot.utils.FileUtils;
 
 public class HeufyBot
 {
-	public final static String VERSION = "0.5.1";
+	public final static String VERSION = "0.6.0";
 	public final static int MODULE_API_VERSION = 60;
 	
 	private GlobalConfig config;
