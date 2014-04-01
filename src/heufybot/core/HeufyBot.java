@@ -81,13 +81,13 @@ public class HeufyBot
 		IRCServer server = new IRCServer(serverName, config);
 		servers.put(serverName, server);
 		
+		FileUtils.touchDir(config.getSettingWithDefault("logPath", "logs"));
+		FileUtils.touchDir("data/" + serverName);
+		
 		ModuleInterface moduleInterface = new ModuleInterface(this, serverName);
 		server.getEventListenerManager().addListener(moduleInterface);
 		server.setModuleInterface(moduleInterface);
 		this.loadModules(server);
-		
-		FileUtils.touchDir(config.getSettingWithDefault("logPath", "logs"));
-		FileUtils.touchDir("data/" + serverName);
 	}
 	
 	public void start()
