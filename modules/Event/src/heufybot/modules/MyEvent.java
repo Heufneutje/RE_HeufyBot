@@ -5,7 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MyEvent 
+public class MyEvent
 {
 	private String user;
 	private Date date;
@@ -17,18 +17,18 @@ public class MyEvent
 		this.date = date;
 		this.eventString = eventString;
 	}
-
-	public String getUser() 
+	
+	public String getUser()
 	{
 		return user;
 	}
-
-	public void setUser(String user) 
+	
+	public void setUser(String user)
 	{
 		this.user = user;
 	}
-
-	public Date getDate() 
+	
+	public Date getDate()
 	{
 		return date;
 	}
@@ -38,17 +38,17 @@ public class MyEvent
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		return dateFormat.format(date);
 	}
-
+	
 	public void setDate(Date date)
 	{
 		this.date = date;
 	}
-
-	public String getEventString() 
+	
+	public String getEventString()
 	{
 		return eventString;
 	}
-
+	
 	public void setEventString(String eventString)
 	{
 		this.eventString = eventString;
@@ -57,11 +57,11 @@ public class MyEvent
 	public static Date formatDate(String dateString)
 	{
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		try 
+		try
 		{
 			return dateFormat.parse(dateString);
-		} 
-		catch (ParseException e) 
+		}
+		catch (ParseException e)
 		{
 			return null;
 		}
