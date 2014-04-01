@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import config.ServerConfig;
+import heufybot.config.ServerConfig;
 import heufybot.core.IRCChannel;
 import heufybot.core.HeufyBot;
 import heufybot.core.IRCUser;
