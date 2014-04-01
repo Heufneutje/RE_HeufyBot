@@ -105,7 +105,7 @@ public class Event extends Module
 				MyEvent event = iter.next();
 				if(event.getEventString().toLowerCase().matches(".*" + search.toLowerCase() + ".*") && triggerUser.equalsIgnoreCase(event.getUser()))
 				{
-					bot.getIRC().cmdPRIVMSG(source, event.getUser() + "'s event \"" + event.getEventString() + " on date " + event.getFormattedDate() + " has been removed from the events database.");
+					bot.getIRC().cmdPRIVMSG(source, event.getUser() + "'s event \"" + event.getEventString() + "\" on date " + event.getFormattedDate() + " has been removed from the events database.");
 					iter.remove();
 					writeEvents();
 					return;
