@@ -87,6 +87,7 @@ public class HeufyBot
 		this.loadModules(server);
 		
 		FileUtils.touchDir(config.getSettingWithDefault("logPath", "logs"));
+		FileUtils.touchDir("data/" + serverName);
 	}
 	
 	public void start()
