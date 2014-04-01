@@ -59,7 +59,7 @@ public abstract class Module
 	 * The module API version this module is using.
 	 * This must match up with the bot's module API version for the module to be loadable.
 	 */
-	protected String apiVersion = "0.0.0";
+	protected int apiVersion = 0;
 	
 	public Module()
 	{
@@ -79,7 +79,7 @@ public abstract class Module
 	/**
 	 * @return The module API version this module is using
 	 */
-	public String getAPIVersion()
+	public int getAPIVersion()
 	{
 		return apiVersion;
 	}

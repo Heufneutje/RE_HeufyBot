@@ -11,13 +11,14 @@ import heufybot.config.ServerConfig;
 import heufybot.core.cap.SASLCapHandler;
 import heufybot.core.events.LoggingInterface;
 import heufybot.modules.Module;
+import heufybot.modules.ModuleInterface;
 import heufybot.modules.ModuleInterface.ModuleLoaderResponse;
 import heufybot.utils.FileUtils;
 
 public class HeufyBot
 {
 	public final static String VERSION = "0.5.1";
-	public final static String MODULE_API_VERSION = "0.5.0";
+	public final static int MODULE_API_VERSION = 60;
 	
 	private GlobalConfig config;
 	private HashMap<String, IRCServer> servers;
@@ -84,14 +85,10 @@ public class HeufyBot
 	
 	public void start()
 	{
-		//moduleInterface = new ModuleInterface(this);
 		loggingInterface = new LoggingInterface(this);
-		
-		//this.loadModules();
 		
 		for(IRCServer server : servers.values())
 		{
-			//server.getEventListenerManager().addListener(moduleInterface);
 			server.getEventListenerManager().addListener(loggingInterface);
 			
 			ServerConfig sConfig = server.getConfig();
@@ -101,6 +98,10 @@ public class HeufyBot
 				SASLCapHandler handler = new SASLCapHandler(sConfig.getSettingWithDefault("username", "RE_HeufyBot"), sConfig.getSettingWithDefault("password", ""));
 				server.getConfig().getCapHandlers().add(handler);
 			}
+			
+			ModuleInterface moduleInterface = new ModuleInterface(this, sConfig);
+			server.getEventListenerManager().addListener(moduleInterface);
+			this.loadModules(server);
 			
 			if(server.connect(sConfig.getSettingWithDefault("server", "irc.foo.bar"), sConfig.getSettingWithDefault("port", 6667)))
 			{
@@ -115,11 +116,9 @@ public class HeufyBot
 		{
 			server.cmdQUIT(message);
 			server.disconnect(false);
+			
+			this.unloadModules(server);
 		}
-		
-		//Unload modules
-		//this.unloadModules();
-		
 		Logger.log("*** Stopping...");
 	}
 	
@@ -127,9 +126,6 @@ public class HeufyBot
 	{
 		//Disconnect from the server
 		this.stop("Restarting...");
-		
-		//Reload modules
-		//this.loadModules();
 		
 		//Reload config and reconnect
 		this.loadConfigs();
