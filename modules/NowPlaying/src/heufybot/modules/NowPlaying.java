@@ -23,7 +23,7 @@ public class NowPlaying extends Module
 		this.trigger = "^" + commandPrefix + "(np|nowplaying|nplink)($| .*)";
 		
 		this.userLinks = new HashMap<String, String>();
-		this.linksPath = "data/" + bot.getServer(server).getServerInfo().getNetwork() + "/nplinks.txt";
+		this.linksPath = "data/" + server + "/nplinks.txt";
 	}
 	
 	@Override

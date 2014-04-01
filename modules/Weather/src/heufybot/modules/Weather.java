@@ -20,7 +20,7 @@ public class Weather extends Module
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(weather|forecast)($| .*)";
 		
-		this.locationsPath = "data/" + bot.getServer(server).getServerInfo().getNetwork() + "/userlocations.txt";
+		this.locationsPath = "data/" + server + "/userlocations.txt";
 	}
 
 	@Override

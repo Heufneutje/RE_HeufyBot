@@ -21,7 +21,7 @@ public class UserLocation extends Module
 		this.trigger = "^" + commandPrefix + "(registerloc)($| .*)";
 		
 		this.userLocations = new HashMap<String, String>();
-		this.locationsPath = "data/" + bot.getServer(server).getServerInfo().getNetwork() + "/userlocations.txt";
+		this.locationsPath = "data/" + server + "/userlocations.txt";
 	}
 	
 	@Override

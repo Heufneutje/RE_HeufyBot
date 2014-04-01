@@ -32,7 +32,7 @@ public class Event extends Module
 		this.trigger = "^" + commandPrefix + "(event|timetill|timesince|r(emove)?event|events|dateof)($| .*)";
 		
 		this.events = new ArrayList<MyEvent>();
-		this.eventsPath = "data/" + bot.getServer(server).getServerInfo().getNetwork() + "/events.json";
+		this.eventsPath = "data/" + server + "/events.json";
 	}
 
 	public void processEvent(String source, String message, String triggerUser, List<String> params)

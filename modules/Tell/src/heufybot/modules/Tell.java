@@ -36,7 +36,7 @@ public class Tell extends Module
 		
 		this.tellsMap = new LinkedHashMap<String, ArrayList<Message>>();
 		this.tellers = new HashMap<String, Date>();
-		this.databasePath = "data/" + bot.getServer(server).getServerInfo().getNetwork() + "/tells.json";
+		this.databasePath = "data/" + server + "/tells.json";
 	}
 
 	@Override

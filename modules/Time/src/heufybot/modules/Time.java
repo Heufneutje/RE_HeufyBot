@@ -9,7 +9,7 @@ import org.json.simple.parser.ParseException;
 
 public class Time extends Module 
 {
-	private final String locationsPath = "data/userlocations.txt";
+	private String locationsPath;
 	
 	public Time(String server)
 	{
@@ -19,6 +19,8 @@ public class Time extends Module
 		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(time)($| .*)";
+		
+		this.locationsPath = "data/" + server + "/userlocations.txt";
 	}
 
 	@Override

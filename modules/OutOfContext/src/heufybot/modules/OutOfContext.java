@@ -28,7 +28,7 @@ public class OutOfContext extends Module
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(ooc)($| .*)";
 		
-		this.dataPath = "data/" + bot.getServer(server).getServerInfo().getNetwork() + "/ooclog.txt";
+		this.dataPath = "data/" + server + "/ooclog.txt";
 	}
 
 	public void processEvent(final String source, String message, String triggerUser, List<String> params)
