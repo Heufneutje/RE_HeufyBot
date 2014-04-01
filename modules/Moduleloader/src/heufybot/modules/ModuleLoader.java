@@ -9,8 +9,10 @@ import java.util.List;
 
 public class ModuleLoader extends Module
 {
-	public ModuleLoader()
+	public ModuleLoader(String server)
 	{
+		super(server);
+		
 		this.authType = AuthType.BotAdmins;
 		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };

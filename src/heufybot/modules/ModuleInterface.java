@@ -1,6 +1,7 @@
 package heufybot.modules;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.AbstractMap.SimpleEntry;
@@ -9,7 +10,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import heufybot.config.ServerConfig;
 import heufybot.core.IRCChannel;
 import heufybot.core.HeufyBot;
 import heufybot.core.IRCUser;
@@ -23,19 +23,19 @@ public class ModuleInterface extends EventListenerAdapter
 	private ArrayList<Module> modules;
 	private List<String> ignores;
 	private HeufyBot bot;
-	private ServerConfig config;
+	private String server;
 	
 	public enum ModuleLoaderResponse
 	{
 		Success, DoesNotExist, AlreadyLoaded, APIVersionDoesNotMatch
 	}
 	
-	public ModuleInterface(HeufyBot bot, ServerConfig config)
+	public ModuleInterface(HeufyBot bot, String server)
 	{
 		this.modules = new ArrayList<Module>();
 		this.setIgnores(new ArrayList<String>());
 		this.bot = bot;
-		this.config = config;
+		this.server = server;
 	}
 	
 	public SimpleEntry<ModuleLoaderResponse, String> loadModule(String moduleName)
@@ -63,7 +63,9 @@ public class ModuleInterface extends EventListenerAdapter
 					ClassLoader loader = URLClassLoader.newInstance(urls, getClass().getClassLoader());
 					
 					Class<?> moduleClass = Class.forName("heufybot.modules." + moduleName, true, loader);
-					Module module = (Module) moduleClass.newInstance();
+					Class<?>[] argTypes = { String.class };
+					Constructor<?> ctor = moduleClass.getDeclaredConstructor(argTypes);
+					Module module = (Module) ctor.newInstance(server);
 					
 					if(module.getAPIVersion() != HeufyBot.MODULE_API_VERSION)
 					{
@@ -147,7 +149,7 @@ public class ModuleInterface extends EventListenerAdapter
 				{
 					if(module.getTriggerOnEveryMessage())
 					{
-						module.processEvent(serverName, target, message, user.getNickname(), StringUtils.parseStringtoList(message, " "));
+						module.processEvent(target, message, user.getNickname(), StringUtils.parseStringtoList(message, " "));
 					}
 					else if (Thread.activeCount() < 6)
 					{
@@ -156,7 +158,7 @@ public class ModuleInterface extends EventListenerAdapter
 						{
 							public void run()
 							{
-								module.processEvent(serverName, target, message, user.getNickname(), StringUtils.parseStringtoList(message, " "));
+								module.processEvent(target, message, user.getNickname(), StringUtils.parseStringtoList(message, " "));
 							}
 						};
 						thread.start();
@@ -176,7 +178,7 @@ public class ModuleInterface extends EventListenerAdapter
 	
 	public boolean isAuthorized(Module module, IRCChannel channel, IRCUser user)
 	{
-		return module.authType == Module.AuthType.Anyone || config.getSettingWithDefault("botAdmins", new ArrayList<String>()).contains(user.getNickname());
+		return module.authType == Module.AuthType.Anyone || bot.getServer(server).getConfig().getSettingWithDefault("botAdmins", new ArrayList<String>()).contains(user.getNickname());
 	}
 	
 	public boolean isModuleLoaded(String moduleName)
@@ -196,7 +198,7 @@ public class ModuleInterface extends EventListenerAdapter
 		for(Module module : modules)
 		{
 			String moduleTrigger = module.getTrigger();
-			String commandPrefix = config.getSettingWithDefault("commandPrefix", "~");
+			String commandPrefix = bot.getServer(server).getConfig().getSettingWithDefault("commandPrefix", "~");
 			
 			if(moduleTrigger.startsWith("^" + commandPrefix))
 			{

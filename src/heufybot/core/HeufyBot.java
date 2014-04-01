@@ -77,8 +77,14 @@ public class HeufyBot
 			serverID++;
 		}
 		
-		IRCServer server = new IRCServer(serverName + "-" + serverID, config);
-		servers.put(serverName + "-" + serverID, server);
+		serverName = serverName + "-" + serverID;
+		IRCServer server = new IRCServer(serverName, config);
+		servers.put(serverName, server);
+		
+		ModuleInterface moduleInterface = new ModuleInterface(this, serverName);
+		server.getEventListenerManager().addListener(moduleInterface);
+		server.setModuleInterface(moduleInterface);
+		this.loadModules(server);
 		
 		FileUtils.touchDir(config.getSettingWithDefault("logPath", "logs"));
 	}
@@ -98,11 +104,6 @@ public class HeufyBot
 				SASLCapHandler handler = new SASLCapHandler(sConfig.getSettingWithDefault("username", "RE_HeufyBot"), sConfig.getSettingWithDefault("password", ""));
 				server.getConfig().getCapHandlers().add(handler);
 			}
-			
-			ModuleInterface moduleInterface = new ModuleInterface(this, sConfig);
-			server.getEventListenerManager().addListener(moduleInterface);
-			server.setModuleInterface(moduleInterface);
-			this.loadModules(server);
 			
 			if(server.connect(sConfig.getSettingWithDefault("server", "irc.foo.bar"), sConfig.getSettingWithDefault("port", 6667)))
 			{

@@ -48,6 +48,7 @@ public abstract class Module
 	protected AuthType authType;
 	
 	protected String commandPrefix;
+	protected String server;
 	
 	/**
 	 * What types of events trigger the module.
@@ -61,10 +62,11 @@ public abstract class Module
 	 */
 	protected int apiVersion = 0;
 	
-	public Module()
+	public Module(String server)
 	{
 		this.bot = HeufyBot.getInstance();
-		this.commandPrefix = bot.getGlobalConfig().getSettingWithDefault("commandPrefix", "~");
+		this.server = server;
+		this.commandPrefix = bot.getServer(server).getConfig().getSettingWithDefault("commandPrefix", "~");
 	}
 	
 	/**
@@ -74,7 +76,7 @@ public abstract class Module
 	 * @param triggerUser The IRC username that entered the command
 	 * @param params The same as message, split at " ". The first index can be checked for the trigger.
 	 */
-	public abstract void processEvent(String server, String source, String message, String triggerUser, List<String> params);
+	public abstract void processEvent(String source, String message, String triggerUser, List<String> params);
 	
 	/**
 	 * @return The module API version this module is using

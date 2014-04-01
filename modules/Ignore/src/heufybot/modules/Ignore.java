@@ -11,22 +11,24 @@ public class Ignore extends Module
 	private List<String> ignoreList;
 	private final String ignoreListPath = "data/ignorelist.txt";
 	
-	public Ignore()
+	public Ignore(String server)
 	{
+		super(server);
+		
 		this.authType = AuthType.BotAdmins;
-		this.apiVersion = "0.5.0";
+		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(ignore|unignore)($| .*)";
 	}
 	
 	@Override
-	public void processEvent(String source, String message, String triggerUser, List<String> params) 
+	public void processEvent(String server, String source, String message, String triggerUser, List<String> params) 
 	{
 		if(message.toLowerCase().matches("^" + commandPrefix + "ignore.*"))
 		{
 			if(params.size() == 1)
 			{
-				bot.getIRC().cmdPRIVMSG(source, "Users currently ignored: " + StringUtils.join(ignoreList, ", "));
+				bot.getServer(server).cmdPRIVMSG(source, "Users currently ignored: " + StringUtils.join(ignoreList, ", "));
 			}
 			else
 			{
@@ -42,13 +44,13 @@ public class Ignore extends Module
 	  	  		}
 	  	  		if(match)
 	  	  		{
-	  	  			bot.getIRC().cmdPRIVMSG(source, nick + " is already on the ignore list!");
+	  	  			bot.getServer(server).cmdPRIVMSG(source, nick + " is already on the ignore list!");
 	  	  		}
 	  	  		else
 	  	  		{
 	  	  			ignoreList.add(nick);
 	  	  			FileUtils.writeFileAppend(ignoreListPath, nick + "\n");
-	  	  			bot.getIRC().cmdPRIVMSG(source, nick + " was added to the ignore list.");
+	  	  			bot.getServer(server).cmdPRIVMSG(source, nick + " was added to the ignore list.");
 	  	  		}
 			}
 		}
@@ -56,7 +58,7 @@ public class Ignore extends Module
 		{
 			if(params.size() == 1)
 			{
-				bot.getIRC().cmdPRIVMSG(source, "Who do you want me to unignore?");
+				bot.getServer(server).cmdPRIVMSG(source, "Who do you want me to unignore?");
 			}
 			else
 			{
@@ -81,11 +83,11 @@ public class Ignore extends Module
 		  	  			FileUtils.writeFileAppend(ignoreListPath, ignore + "\n");
 		  	  		}
 		  	  		//bot.setIgnoreList(ignoreList);
-		  	  		bot.getIRC().cmdPRIVMSG(source, nick + " was removed from the ignore list.");
+		  	  		bot.getServer(server).cmdPRIVMSG(source, nick + " was removed from the ignore list.");
 	  	  		}
 	  	  		else
 	  	  		{
-	  	  			bot.getIRC().cmdPRIVMSG(source, nick + " is not on the ignore list!");
+	  	  			bot.getServer(server).cmdPRIVMSG(source, nick + " is not on the ignore list!");
 	  	  		}
 			}
 		}
@@ -101,7 +103,7 @@ public class Ignore extends Module
 	{
 		FileUtils.touchFile(ignoreListPath);
 		ignoreList = StringUtils.parseStringtoList(FileUtils.readFile(ignoreListPath), "\n");
-		bot.getModuleInterface().setIgnores(ignoreList);
+		bot.getServer(server).getModuleInterface().setIgnores(ignoreList);
 	}
 
 	@Override
