@@ -2,11 +2,17 @@ package heufybot.core.events.types;
 
 public class PingEvent implements BotEvent
 {
-	private String message;
+	private String serverName, message;
 	
-	public PingEvent(String message)
+	public PingEvent(String serverName, String message)
 	{
+		this.serverName = serverName;
 		this.message = message;
+	}
+	
+	public String getServerName()
+	{
+		return serverName;
 	}
 	
 	public String getMessage()

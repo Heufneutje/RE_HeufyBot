@@ -1,18 +1,23 @@
 package heufybot.core.events.types;
 
-import heufybot.core.Channel;
+import heufybot.core.IRCChannel;
 
 public class TopicEvent implements BotEvent
 {
-	private String source;
-	private Channel channel;
-	private String topic;
+	private String serverName, source, topic;
+	private IRCChannel channel;
 	
-	public TopicEvent(String source, Channel channel, String topic)
+	public TopicEvent(String serverName, String source, IRCChannel channel, String topic)
 	{
+		this.serverName = serverName;
 		this.source = source;
 		this.channel = channel;
 		this.topic = topic;
+	}
+	
+	public String getServerName()
+	{
+		return serverName;
 	}
 	
 	public String getMessage()
@@ -25,7 +30,7 @@ public class TopicEvent implements BotEvent
 		return source;
 	}
 	
-	public Channel getChannel()
+	public IRCChannel getChannel()
 	{
 		return channel;
 	}

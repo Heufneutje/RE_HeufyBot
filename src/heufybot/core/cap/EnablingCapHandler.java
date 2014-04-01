@@ -1,6 +1,6 @@
 package heufybot.core.cap;
 
-import heufybot.core.IRC;
+import heufybot.core.IRCServer;
 import heufybot.core.Logger;
 import heufybot.utils.StringUtils;
 
@@ -17,7 +17,7 @@ public class EnablingCapHandler implements CapHandler
 	}
 
 	@Override
-	public boolean handleLS(IRC irc, List<String> capabilities) throws CAPException
+	public boolean handleLS(IRCServer irc, List<String> capabilities) throws CAPException
 	{
 		if(capabilities.contains(cap))
 		{
@@ -33,13 +33,13 @@ public class EnablingCapHandler implements CapHandler
 	}
 
 	@Override
-	public boolean handleACK(IRC irc, List<String> capabilities) throws CAPException
+	public boolean handleACK(IRCServer irc, List<String> capabilities) throws CAPException
 	{
 		return capabilities.contains(cap);
 	}
 
 	@Override
-	public boolean handleNAK(IRC irc, List<String> capabilities) throws CAPException
+	public boolean handleNAK(IRCServer irc, List<String> capabilities) throws CAPException
 	{
 		if(capabilities.contains(cap))
 		{
@@ -50,7 +50,7 @@ public class EnablingCapHandler implements CapHandler
 	}
 
 	@Override
-	public boolean handleUnknown(IRC irc, String line) throws CAPException 
+	public boolean handleUnknown(IRCServer irc, String line) throws CAPException 
 	{
 		return false;
 	}

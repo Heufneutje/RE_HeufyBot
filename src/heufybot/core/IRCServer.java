@@ -2,7 +2,9 @@ package heufybot.core;
 
 import heufybot.core.events.EventListenerManager;
 import heufybot.core.events.types.BotMessageEvent;
+import heufybot.modules.ModuleInterface;
 import heufybot.utils.SSLSocketUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,16 +22,22 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.net.SocketFactory;
 
-public class IRC 
+import heufybot.config.GlobalConfig.PasswordType;
+import heufybot.config.ServerConfig;
+
+public class IRCServer 
 {
+	//Not sure what to do with this one since the RFC doesn't specify it. Assume 512 until documentation states otherwise.
+	private final int MAX_LINE_LENGTH = 512;
+	
 	public enum ConnectionState 
 	{
 		Initializing, Connected, Disconnected
 	}
 	
-	private static final IRC instance = new IRC();
-	
-	private Config config;
+	private String name;
+	private ServerConfig config;
+	private ModuleInterface moduleInterface;
 	
 	private Socket socket;
 	private BufferedReader inputReader;
@@ -37,8 +45,8 @@ public class IRC
 	private Thread inputThread;
 	private InputParser inputParser;
 	private ConnectionState connectionState;
-	private ArrayList<Channel> channels;
-	private ArrayList<User> users;
+	private ArrayList<IRCChannel> channels;
+	private ArrayList<IRCUser> users;
 	private ServerInfo serverInfo;
 	private List<String> userModes;
 	private List<String> enabledCapabilities;
@@ -51,27 +59,23 @@ public class IRC
 
 	private String nickname;
 	
-	private IRC()
+	public IRCServer(String name, ServerConfig config)
 	{
 		this.socket = new Socket();
 		this.inputParser = new InputParser(this);
 		this.connectionState = ConnectionState.Initializing;
 		
-		this.channels = new ArrayList<Channel>();
-		this.users = new ArrayList<User>();
+		this.channels = new ArrayList<IRCChannel>();
+		this.users = new ArrayList<IRCUser>();
 		
-		this.serverInfo = ServerInfo.getInstance();
+		this.serverInfo = new ServerInfo();
 		this.enabledCapabilities = new ArrayList<String>();
 		this.eventListenerManager = new EventListenerManager();
 		this.userModes = new ArrayList<String>();
 		
+		this.name = name;
+		this.config = config;
 		this.nickname = "";
-	}
-	
-	//Singleton stuff
-	public static IRC getInstance()
-	{
-		return instance;
 	}
 	
 	public boolean connect(String server, int port)
@@ -83,7 +87,7 @@ public class IRC
 		}
 		
 		SocketFactory sf;
-		if(config.isSSLEnabled())
+		if(config.getSettingWithDefault("ssl", false))
 		{
 			//Trust all certificates, since making Java recognize a valid certificate is annoying.
 			sf = new SSLSocketUtils().trustAllCertificates();
@@ -126,15 +130,21 @@ public class IRC
 	
 	public void login()
 	{
-		if(config.getPasswordType() == Config.PasswordType.ServerPass)
+		String nickname = config.getSettingWithDefault("nickname", "RE_HeufyBot");
+		String password = config.getSettingWithDefault("password", "");
+		String username = config.getSettingWithDefault("username", "RE_HeufyBot");
+		String realname = config.getSettingWithDefault("realname", "RE_HeufyBot IRC Bot");
+		PasswordType passwordType = config.getSettingWithDefault("passwordType", PasswordType.None);
+		
+		if(passwordType == PasswordType.ServerPass)
 		{
-			cmdPASS(config.getPassword());
+			cmdPASS(password);
 		}
 		
 		cmdCAP("LS", "");
 		
-		cmdNICK(config.getNickname());
-		cmdUSER(config.getUsername(), config.getRealname());
+		cmdNICK(nickname);
+		cmdUSER(username, realname);
 		
 		startProcessing();
 	}
@@ -163,7 +173,7 @@ public class IRC
 			Logger.error("IRC Disconnect", "Error closing connection");
 		}
 		
-		if(reconnect && config.autoReconnect())
+		if(reconnect && config.getSettingWithDefault("autoReconnect", false))
 		{
 			reconnect();
 		}
@@ -171,12 +181,18 @@ public class IRC
 	
 	public void reconnect()
 	{
+		//TODO This code needs a major overhaul, because it doesn't work properly and multiserver will break it even more
+		int reconnectAttempts = config.getSettingWithDefault("reconnectAttempts", 3);
+		int reconnectInterval = config.getSettingWithDefault("reconnectInterval", 600);
+		String server = config.getSettingWithDefault("server", "irc.foo.bar");
+		int port = config.getSettingWithDefault("port", 6667);
+		
 		int reconnects = 0;
-		while(reconnects < config.getReconnectAttempts())
+		while(reconnects < reconnectAttempts)
 		{
 			reconnects++;
 			Logger.log("*** Reconnection attempt #" + reconnects + "...");
-			boolean success = connect(config.getServer(), config.getPort());
+			boolean success = connect(server, port);
 			if(success)
 			{
 				login();
@@ -184,12 +200,12 @@ public class IRC
 			}
 			else
 			{
-				if(reconnects < config.getReconnectAttempts())
+				if(reconnects < reconnectAttempts)
 				{
-					Logger.log("*** Connection failed. Trying again in " + config.getReconnectInterval() + " second(s)...");
+					Logger.log("*** Connection failed. Trying again in " + reconnectInterval + " second(s)...");
 					try
 					{
-						Thread.sleep(config.getReconnectInterval() * 1000);
+						Thread.sleep(reconnectInterval * 1000);
 					} 
 					catch (InterruptedException e) 
 					{
@@ -244,13 +260,15 @@ public class IRC
 	
 	public void sendRaw(String line)
 	{
+		int messageDelay = config.getSettingWithDefault("messageDelay", 500);
+		
 		writeLock.lock();
 		try
 		{
 			long currentNanos = System.nanoTime();
-			while(lastSentLine + config.getMessageDelay() * 1000000 > currentNanos)
+			while(lastSentLine + messageDelay * 1000000 > currentNanos)
 			{
-				writeNowCondition.await(lastSentLine + config.getMessageDelay() * 1000000 - currentNanos, TimeUnit.NANOSECONDS);
+				writeNowCondition.await(lastSentLine + messageDelay * 1000000 - currentNanos, TimeUnit.NANOSECONDS);
 				currentNanos = System.nanoTime();
 			}
 			lastSentLine = System.nanoTime();
@@ -294,13 +312,13 @@ public class IRC
 	public void sendRawSplit(String prefix, String message, String suffix)
 	{
 		String fullMessage = prefix + message + suffix;
-		if(fullMessage.length() < config.getMaxLineLength() - 2)
+		if(fullMessage.length() < MAX_LINE_LENGTH - 2)
 		{
 			sendRaw(fullMessage);
 			return;
 		}
 		
-		int maxLength = config.getMaxLineLength() - 2 - (prefix + suffix).length();
+		int maxLength = MAX_LINE_LENGTH - 2 - (prefix + suffix).length();
 		int iterations = (int) Math.ceil(message.length() / (double) maxLength);
 		for(int i = 0; i < iterations; i++)
 		{
@@ -343,7 +361,7 @@ public class IRC
 	public void cmdPRIVMSG(String target, String message)
 	{
 		sendRawSplit("PRIVMSG " + target + " :", message);
-		eventListenerManager.dispatchEvent(new BotMessageEvent(getUser(nickname), target, message));
+		eventListenerManager.dispatchEvent(new BotMessageEvent(name, getUser(nickname), target, message));
 	}
 	
 	public void cmdJOIN(String channel, String key)
@@ -411,7 +429,7 @@ public class IRC
 		cmdNOTICE(target, "\u0001" + replyType + " " + reply + "\u0001");
 	}
 	
-	public String getAccessLevelOnUser(Channel channel, User user)
+	public String getAccessLevelOnUser(IRCChannel channel, IRCUser user)
 	{
 		for(String accessLevel : serverInfo.getUserPrefixes().keySet())
 		{
@@ -423,9 +441,9 @@ public class IRC
 		return "";
 	}
 	
-	public Channel getChannel(String channelName)
+	public IRCChannel getChannel(String channelName)
 	{
-		for(Channel channel : channels)
+		for(IRCChannel channel : channels)
 		{
 			if(channel.getName().equalsIgnoreCase(channelName))
 			{
@@ -435,9 +453,9 @@ public class IRC
 		return null;
 	}
 	
-	public User getUser(String nickname)
+	public IRCUser getUser(String nickname)
 	{
-		for(User user : users)
+		for(IRCUser user : users)
 		{
 			if(user.getNickname().equalsIgnoreCase(nickname))
 			{
@@ -445,19 +463,29 @@ public class IRC
 			}
 		}
 
-		User user = new User(nickname);
+		IRCUser user = new IRCUser(nickname);
 		users.add(user);
 		return user;
 	}
 	
-	public Config getConfig()
+	public String getName()
+	{
+		return name;
+	}
+	
+	public ServerConfig getConfig()
 	{
 		return config;
 	}
 	
-	public void setConfig(Config config)
+	public ModuleInterface getModuleInterface()
 	{
-		this.config = config;
+		return moduleInterface;
+	}
+	
+	public void setModuleInterface(ModuleInterface moduleInterface)
+	{
+		this.moduleInterface = moduleInterface;
 	}
 	
 	public ConnectionState getConnectionState() 
@@ -480,12 +508,12 @@ public class IRC
 		this.nickname = nickname;
 	}
 	
-	public ArrayList<Channel> getChannels()
+	public ArrayList<IRCChannel> getChannels()
 	{
 		return channels;
 	}
 	
-	public ArrayList<User> getUsers()
+	public ArrayList<IRCUser> getUsers()
 	{
 		return users;
 	}

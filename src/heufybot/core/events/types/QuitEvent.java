@@ -1,19 +1,25 @@
 package heufybot.core.events.types;
 
-import heufybot.core.User;
+import heufybot.core.IRCUser;
 
 public class QuitEvent implements BotEvent
 {
-	private User user;
-	private String message;
+	private IRCUser user;
+	private String serverName, message;
 	
-	public QuitEvent(User user, String message)
+	public QuitEvent(String serverName, IRCUser user, String message)
 	{
+		this.serverName = serverName;
 		this.user = user;
 		this.message = message;
 	}
 	
-	public User getUser()
+	public String getServerName()
+	{
+		return serverName;
+	}
+	
+	public IRCUser getUser()
 	{
 		return user;
 	}

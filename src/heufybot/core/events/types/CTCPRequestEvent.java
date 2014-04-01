@@ -1,16 +1,23 @@
 package heufybot.core.events.types;
 
-import heufybot.core.User;
+import heufybot.core.IRCUser;
 
 public class CTCPRequestEvent implements BotEvent
 {
-	private User user;
+	private String serverName;
+	private IRCUser user;
 	private String type;
 	
-	public CTCPRequestEvent(User user, String type)
+	public CTCPRequestEvent(String serverName, IRCUser user, String type)
 	{
+		this.serverName = serverName;
 		this.user = user;
 		this.type = type;
+	}
+	
+	public String getServerName()
+	{
+		return serverName;
 	}
 	
 	public String getType()
@@ -18,7 +25,7 @@ public class CTCPRequestEvent implements BotEvent
 		return type;
 	}
 	
-	public User getUser()
+	public IRCUser getUser()
 	{
 		return user;
 	}

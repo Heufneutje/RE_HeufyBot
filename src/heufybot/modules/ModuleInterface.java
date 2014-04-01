@@ -1,6 +1,7 @@
 package heufybot.modules;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.AbstractMap.SimpleEntry;
@@ -9,9 +10,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import heufybot.core.Channel;
+import heufybot.core.IRCChannel;
 import heufybot.core.HeufyBot;
-import heufybot.core.User;
+import heufybot.core.IRCUser;
 import heufybot.core.events.EventListenerAdapter;
 import heufybot.core.events.types.*;
 import heufybot.modules.Module.TriggerType;
@@ -22,17 +23,19 @@ public class ModuleInterface extends EventListenerAdapter
 	private ArrayList<Module> modules;
 	private List<String> ignores;
 	private HeufyBot bot;
+	private String server;
 	
 	public enum ModuleLoaderResponse
 	{
 		Success, DoesNotExist, AlreadyLoaded, APIVersionDoesNotMatch
 	}
 	
-	public ModuleInterface(HeufyBot bot)
+	public ModuleInterface(HeufyBot bot, String server)
 	{
 		this.modules = new ArrayList<Module>();
 		this.setIgnores(new ArrayList<String>());
 		this.bot = bot;
+		this.server = server;
 	}
 	
 	public SimpleEntry<ModuleLoaderResponse, String> loadModule(String moduleName)
@@ -60,9 +63,11 @@ public class ModuleInterface extends EventListenerAdapter
 					ClassLoader loader = URLClassLoader.newInstance(urls, getClass().getClassLoader());
 					
 					Class<?> moduleClass = Class.forName("heufybot.modules." + moduleName, true, loader);
-					Module module = (Module) moduleClass.newInstance();
+					Class<?>[] argTypes = { String.class };
+					Constructor<?> ctor = moduleClass.getDeclaredConstructor(argTypes);
+					Module module = (Module) ctor.newInstance(server);
 					
-					if(!module.getAPIVersion().equals(HeufyBot.MODULE_API_VERSION))
+					if(module.getAPIVersion() != HeufyBot.MODULE_API_VERSION)
 					{
 						return new SimpleEntry<ModuleLoaderResponse, String>(ModuleLoaderResponse.APIVersionDoesNotMatch, module.getAPIVersion() + " " + HeufyBot.MODULE_API_VERSION);
 					}
@@ -98,25 +103,25 @@ public class ModuleInterface extends EventListenerAdapter
 	
 	public void onPMMessage(PMMessageEvent event)
 	{
-		handleMessage(event.getUser(), null, event.getMessage(), TriggerType.Message);
+		handleMessage(event.getServerName(), event.getUser(), null, event.getMessage(), TriggerType.Message);
 	}
 	
 	public void onPMAction(PMActionEvent event)
 	{
-		handleMessage(event.getUser(), null, event.getMessage(), TriggerType.Action);
+		handleMessage(event.getServerName(), event.getUser(), null, event.getMessage(), TriggerType.Action);
 	}
 	
 	public void onMessage(MessageEvent event)
 	{
-		handleMessage(event.getUser(), event.getChannel(), event.getMessage(), TriggerType.Message);
+		handleMessage(event.getServerName(), event.getUser(), event.getChannel(), event.getMessage(), TriggerType.Message);
 	}
 	
 	public void onAction(ActionEvent event)
 	{
-		handleMessage(event.getUser(), event.getChannel(), event.getMessage(), TriggerType.Action);
+		handleMessage(event.getServerName(), event.getUser(), event.getChannel(), event.getMessage(), TriggerType.Action);
 	}
 	
-	private void handleMessage(final User user, final Channel channel, final String message, TriggerType triggerType)
+	private void handleMessage(final String serverName, final IRCUser user, final IRCChannel channel, final String message, TriggerType triggerType)
 	{
 		if(ignores.contains(user.getNickname()))
 		{
@@ -160,20 +165,20 @@ public class ModuleInterface extends EventListenerAdapter
 					}
 					else
 					{
-						bot.getIRC().cmdPRIVMSG(target, "Calm down, " + user.getNickname() + "! Can't you see I'm busy?");
+						bot.getServer(serverName).cmdPRIVMSG(target, "Calm down, " + user.getNickname() + "! Can't you see I'm busy?");
 					}
 				}
 				else
 				{
-					bot.getIRC().cmdPRIVMSG(target, "You are not authorized to use the \"" + module.toString() + "\" module!");
+					bot.getServer(serverName).cmdPRIVMSG(target, "You are not authorized to use the \"" + module.toString() + "\" module!");
 				}
 			}
 		}
 	}
 	
-	public boolean isAuthorized(Module module, Channel channel, User user)
+	public boolean isAuthorized(Module module, IRCChannel channel, IRCUser user)
 	{
-		return module.authType == Module.AuthType.Anyone || bot.getConfig().getBotAdmins().contains(user.getNickname());
+		return module.authType == Module.AuthType.Anyone || bot.getServer(server).getConfig().getSettingWithDefault("botAdmins", new ArrayList<String>()).contains(user.getNickname());
 	}
 	
 	public boolean isModuleLoaded(String moduleName)
@@ -193,7 +198,7 @@ public class ModuleInterface extends EventListenerAdapter
 		for(Module module : modules)
 		{
 			String moduleTrigger = module.getTrigger();
-			String commandPrefix = bot.getConfig().getCommandPrefix();
+			String commandPrefix = bot.getServer(server).getConfig().getSettingWithDefault("commandPrefix", "~");
 			
 			if(moduleTrigger.startsWith("^" + commandPrefix))
 			{

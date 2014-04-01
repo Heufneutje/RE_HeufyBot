@@ -13,7 +13,7 @@ public class Logger
 {
 	public static void log(String line, String target, String network)
 	{
-		String baseLogPath = Config.getInstance().getLogPath();
+		String baseLogPath = HeufyBot.getInstance().getGlobalConfig().getSettingWithDefault("logPath", "logs");
 		
 		//Timestamp line
 		DateFormat dateFormat = new SimpleDateFormat("[HH:mm]");
@@ -27,7 +27,7 @@ public class Logger
 		}
 		else
 		{
-			consoleLogLine = dateFormat.format(date) + " " + target + " - " + line;
+			consoleLogLine = dateFormat.format(date) + " " + target + "@" + network + " - " + line;
 		}
 		
 		consoleLogLine = StringUtils.toValid3ByteUTF8String(consoleLogLine);

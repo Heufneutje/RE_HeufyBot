@@ -1,6 +1,6 @@
 package heufybot.core;
 
-import heufybot.core.IRC.ConnectionState;
+import heufybot.core.IRCServer.ConnectionState;
 import heufybot.core.cap.CAPException;
 import heufybot.core.cap.CapHandler;
 import heufybot.core.events.types.*;
@@ -13,17 +13,19 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import heufybot.config.GlobalConfig.PasswordType;
+
 public class InputParser 
 {
-	private IRC irc;
+	private IRCServer server;
 	private int nickSuffix;
 	private boolean capEndSent;
 	private List<CapHandler> finishedHandlers;
 	private WhoisBuilder whoisBuilder;
 	
-	public InputParser(IRC irc)
+	public InputParser(IRCServer server)
 	{
-		this.irc = irc;
+		this.server = server;
 		this.nickSuffix = 1;
 		this.finishedHandlers = new ArrayList<CapHandler>();
 		this.whoisBuilder = new WhoisBuilder();
@@ -43,24 +45,24 @@ public class InputParser
 		
 		if (command.equals("PING"))
 		{
-			irc.cmdPONG(parsedLine.get(0));
-			irc.getEventListenerManager().dispatchEvent(new PingEvent(parsedLine.get(0)));
+			server.cmdPONG(parsedLine.get(0));
+			server.getEventListenerManager().dispatchEvent(new PingEvent(server.getName(), parsedLine.get(0)));
 			return;
 		}
 		else if(command.startsWith("ERROR"))
 		{
 			//Connection closed by server
 			String errorMessage = parsedLine.get(0).toLowerCase();
-			irc.getEventListenerManager().dispatchEvent(new ErrorEvent(parsedLine.get(0)));
+			server.getEventListenerManager().dispatchEvent(new ErrorEvent(server.getName(), parsedLine.get(0)));
 			
 			//I really need to clean up this piece of code some time :|
 			if(errorMessage.contains("[killed:") || errorMessage.contains("lined") || errorMessage.contains("[quit:"))
 			{
-				irc.disconnect(false);
+				server.disconnect(false);
 			}
 			else
 			{
-				irc.disconnect(true);
+				server.disconnect(true);
 			}
 			return;
 		}
@@ -93,7 +95,7 @@ public class InputParser
 				int code = StringUtils.tryParseInt(command);
 				if(code != -1)
 				{
-					if(irc.getConnectionState() != ConnectionState.Connected)
+					if(server.getConnectionState() != ConnectionState.Connected)
 					{
 						handleConnect(line, parsedLine, command);
 					}
@@ -113,11 +115,11 @@ public class InputParser
 		else
 		{
 			//No idea what this is, pass it to the CAP handlers
-			if(irc.getConnectionState() != ConnectionState.Connected)
+			if(server.getConnectionState() != ConnectionState.Connected)
 			{
-				for(CapHandler currentHandler : irc.getConfig().getCapHandlers())
+				for(CapHandler currentHandler : server.getConfig().getCapHandlers())
 				{
-					if(currentHandler.handleUnknown(irc, line))
+					if(currentHandler.handleUnknown(server, line))
 					{
 						finishedHandlers.add(currentHandler);
 					}
@@ -131,7 +133,7 @@ public class InputParser
 			sourceNick = sourceNick.substring(1);
 		}
 		
-		if(irc.getConnectionState() != ConnectionState.Connected && command.equals("CAP"))
+		if(server.getConnectionState() != ConnectionState.Connected && command.equals("CAP"))
 		{
 			handleConnect(line, parsedLine, command);
 		}
@@ -143,11 +145,18 @@ public class InputParser
 	
 	private void handleConnect(String line, List<String> parsedLine, String code)
 	{
+		String nickname = server.getConfig().getSettingWithDefault("nickname", "RE_HeufyBot");
+		String password = server.getConfig().getSettingWithDefault("password", "");
+		PasswordType passwordType = server.getConfig().getSettingWithDefault("passwordType", PasswordType.None);
+		boolean autoJoin = server.getConfig().getSettingWithDefault("autoJoin", false);
+		boolean autoNickChange = server.getConfig().getSettingWithDefault("autoNickChange", true);
+		ArrayList<String> autoJoinChannels = server.getConfig().getSettingWithDefault("autoJoinChannels", new ArrayList<String>());
+		
 		if(code.equals("001"))
 		{
 			//001 RPL_WELCOME
-			irc.setConnectionState(ConnectionState.Connected);
-			irc.setLoggedInNick(irc.getConfig().getNickname() + (nickSuffix == 1 ? "" : nickSuffix));
+			server.setConnectionState(ConnectionState.Connected);
+			server.setLoggedInNick(nickname + (nickSuffix == 1 ? "" : nickSuffix));
 			
 			nickSuffix = 1;
 			
@@ -157,27 +166,27 @@ public class InputParser
 			capEndSent = false;
 			finishedHandlers.clear();
 			
-			irc.getEventListenerManager().dispatchEvent(new ServerResponseEvent(parsedLine.get(1)));
+			server.getEventListenerManager().dispatchEvent(new ServerResponseEvent(server.getName(), parsedLine.get(1)));
 			
-			if(irc.getConfig().getPasswordType() == Config.PasswordType.NickServPass)
+			if(passwordType == PasswordType.NickServPass)
 			{
-				irc.nickservIdentify(irc.getConfig().getPassword());
+				server.nickservIdentify(password);
 			}
 			
-			if(irc.getConfig().getAutoJoinEnabled() && irc.getConfig().getAutoJoinChannels().size() > 0)
+			if(autoJoin && autoJoinChannels.size() > 0)
 			{
-				for(String channelName : irc.getConfig().getAutoJoinChannels())
+				for(String channelName : autoJoinChannels)
 				{
 					String[] channel = channelName.split(" ");
 					if(channel.length > 1)
 					{
 						//This channel has a key
-						irc.cmdJOIN(channel[0], channel[1]);
+						server.cmdJOIN(channel[0], channel[1]);
 					}
 					else
 					{
 						//This channel doesn't need a key
-						irc.cmdJOIN(channel[0], "");
+						server.cmdJOIN(channel[0], "");
 					}
 				}
 			}
@@ -185,19 +194,19 @@ public class InputParser
 		else if(code.equals("433"))
 		{
 			//443 ERR_NICKNAMEINUSE
-			if(irc.getConfig().getAutoNickChange())
+			if(autoNickChange)
 			{
 				//Try a different nickname
 				String usedNick = parsedLine.get(1);
 				nickSuffix++;
-				Logger.log("*** Nickname " + usedNick + " was already taken. Trying " + irc.getConfig().getNickname() + nickSuffix + "...");
-				irc.cmdNICK(irc.getConfig().getNickname() + nickSuffix);
+				Logger.log("*** Nickname " + usedNick + " was already taken. Trying " + nickname + nickSuffix + "...");
+				server.cmdNICK(nickname + nickSuffix);
 			}
 			else
 			{
 				//Give up
 				Logger.error("IRC Login", "Login failed. Nickname was already taken");
-				irc.disconnect(false);
+				server.disconnect(false);
 			}
 		}
 		else if(code.equals("451"))
@@ -210,7 +219,7 @@ public class InputParser
 			//439 ERR_TARGETTOOFAST : No action required
 			//Couldn't login. Disconnect.
 			Logger.error("IRC Login", "Login failed.");
-			irc.disconnect(false);
+			server.disconnect(false);
 		}
 		else if(code.equals("CAP"))
 		{
@@ -219,11 +228,11 @@ public class InputParser
 			if(capCommand.equals("LS"))
 			{
 				Logger.log("*** Supported capabilities: " + StringUtils.join(capParams, ", "));
-				for(CapHandler currentCapHandler : irc.getConfig().getCapHandlers())
+				for(CapHandler currentCapHandler : server.getConfig().getCapHandlers())
 				{
 					try
 					{
-						if(currentCapHandler.handleLS(irc, capParams))
+						if(currentCapHandler.handleLS(server, capParams))
 						{
 							finishedHandlers.add(currentCapHandler);
 						}
@@ -237,9 +246,9 @@ public class InputParser
 			}
 			else if(capCommand.equals("ACK"))
 			{
-				for(CapHandler currentCapHandler : irc.getConfig().getCapHandlers())
+				for(CapHandler currentCapHandler : server.getConfig().getCapHandlers())
 				{
-					if(currentCapHandler.handleACK(irc, capParams))
+					if(currentCapHandler.handleACK(server, capParams))
 					{
 						finishedHandlers.add(currentCapHandler);
 					}
@@ -247,11 +256,11 @@ public class InputParser
 			}
 			else if(capCommand.equals("NAK"))
 			{
-				for(CapHandler currentCapHandler : irc.getConfig().getCapHandlers())
+				for(CapHandler currentCapHandler : server.getConfig().getCapHandlers())
 				{
 					try
 					{
-						if(currentCapHandler.handleNAK(irc, capParams))
+						if(currentCapHandler.handleNAK(server, capParams))
 						{
 							finishedHandlers.add(currentCapHandler);
 						}
@@ -264,9 +273,9 @@ public class InputParser
 			}
 			else
 			{
-				for(CapHandler currentHandler : irc.getConfig().getCapHandlers())
+				for(CapHandler currentHandler : server.getConfig().getCapHandlers())
 				{
-					if(currentHandler.handleUnknown(irc, line))
+					if(currentHandler.handleUnknown(server, line))
 					{
 						finishedHandlers.add(currentHandler);
 					}
@@ -275,19 +284,19 @@ public class InputParser
 		}
 		else
 		{
-			for(CapHandler currentHandler : irc.getConfig().getCapHandlers())
+			for(CapHandler currentHandler : server.getConfig().getCapHandlers())
 			{
-				if(currentHandler.handleUnknown(irc, line))
+				if(currentHandler.handleUnknown(server, line))
 				{
 					finishedHandlers.add(currentHandler);
 				}
 			}
 		}
 		
-		if(!capEndSent && finishedHandlers.containsAll(irc.getConfig().getCapHandlers()))
+		if(!capEndSent && finishedHandlers.containsAll(server.getConfig().getCapHandlers()))
 		{
 			capEndSent = true;
-			irc.cmdCAP("END", "");
+			server.cmdCAP("END", "");
 		}
 	}
 	
@@ -297,26 +306,26 @@ public class InputParser
 		{
 			//002 RPL_YOURHOST
 			//003 RPL_CREATED
-			irc.getEventListenerManager().dispatchEvent(new ServerResponseEvent(parsedLine.get(1)));
+			server.getEventListenerManager().dispatchEvent(new ServerResponseEvent(server.getName(), parsedLine.get(1)));
 		}
 		else if(code.equals("004"))
 		{
 			//004 RPL_MYINFO
-			irc.getServerInfo().setServer(parsedLine.get(1));
-			irc.getServerInfo().setServerVersion(parsedLine.get(2));
+			server.getServerInfo().setServer(parsedLine.get(1));
+			server.getServerInfo().setServerVersion(parsedLine.get(2));
 			
-			irc.getServerInfo().getUserModes().clear();
+			server.getServerInfo().getUserModes().clear();
 			for(int i = 0; i < parsedLine.get(3).length(); i++)
 			{
-				irc.getServerInfo().getUserModes().add(Character.toString(parsedLine.get(3).charAt(i)));
+				server.getServerInfo().getUserModes().add(Character.toString(parsedLine.get(3).charAt(i)));
 			}
 			
-			if(irc.getServerInfo().getUserModes().contains("B"))
+			if(server.getServerInfo().getUserModes().contains("B"))
 			{
-				irc.cmdMODE(irc.getNickname(), "+B");
+				server.cmdMODE(server.getNickname(), "+B");
 			}
 			
-			irc.getEventListenerManager().dispatchEvent(new ServerResponseEvent(rawResponse.split(irc.getNickname() + " ")[1]));
+			server.getEventListenerManager().dispatchEvent(new ServerResponseEvent(server.getName(), rawResponse.split(server.getNickname() + " ")[1]));
 		}
 		else if (code.equals("005"))
 		{
@@ -326,14 +335,14 @@ public class InputParser
 			{
 				String prefixes = rawResponse.split("PREFIX=")[1];
 				prefixes = prefixes.substring(0, prefixes.indexOf(" "));
-				irc.getServerInfo().setUserPrefixes(this.getUserPrefixes(prefixes));
-				irc.getServerInfo().setReverseUserPrefixes(this.getReverseUserPrefixes(prefixes));
+				server.getServerInfo().setUserPrefixes(this.getUserPrefixes(prefixes));
+				server.getServerInfo().setReverseUserPrefixes(this.getReverseUserPrefixes(prefixes));
 			}
 			if(rawResponse.contains("CHANTYPES="))
 			{
 				String chantypes = rawResponse.split("CHANTYPES=")[1];
 				chantypes = chantypes.substring(0, chantypes.indexOf(" "));
-				irc.getServerInfo().setChantypes(chantypes);
+				server.getServerInfo().setChantypes(chantypes);
 			}
 			if(rawResponse.contains("CHANMODES="))
 			{
@@ -341,45 +350,45 @@ public class InputParser
 				rawChanmodes = rawChanmodes.substring(0, rawChanmodes.indexOf(" "));
 				String[] chanmodes = rawChanmodes.split(",");
 				
-				irc.getServerInfo().getChannelListModes().clear();
-				irc.getServerInfo().getChannelNoArgsModes().clear();
-				irc.getServerInfo().getChannelSetArgsModes().clear();
-				irc.getServerInfo().getChannelSetUnsetArgsModes().clear();
+				server.getServerInfo().getChannelListModes().clear();
+				server.getServerInfo().getChannelNoArgsModes().clear();
+				server.getServerInfo().getChannelSetArgsModes().clear();
+				server.getServerInfo().getChannelSetUnsetArgsModes().clear();
 				
 				for(int i = 0; i < chanmodes[0].length(); i++)
 				{
-					irc.getServerInfo().getChannelListModes().add(Character.toString(chanmodes[0].charAt(i)));
+					server.getServerInfo().getChannelListModes().add(Character.toString(chanmodes[0].charAt(i)));
 				}
 				
 				for(int i = 0; i < chanmodes[1].length(); i++)
 				{
-					irc.getServerInfo().getChannelSetUnsetArgsModes().add(Character.toString(chanmodes[1].charAt(i)));
+					server.getServerInfo().getChannelSetUnsetArgsModes().add(Character.toString(chanmodes[1].charAt(i)));
 				}
 				
 				for(int i = 0; i < chanmodes[2].length(); i++)
 				{
-					irc.getServerInfo().getChannelSetArgsModes().add(Character.toString(chanmodes[2].charAt(i)));
+					server.getServerInfo().getChannelSetArgsModes().add(Character.toString(chanmodes[2].charAt(i)));
 				}
 				
 				for(int i = 0; i < chanmodes[3].length(); i++)
 				{
-					irc.getServerInfo().getChannelNoArgsModes().add(Character.toString(chanmodes[3].charAt(i)));
+					server.getServerInfo().getChannelNoArgsModes().add(Character.toString(chanmodes[3].charAt(i)));
 				}
 			}
 			if(rawResponse.contains("NETWORK="))
 			{
 				String network = rawResponse.split("NETWORK=")[1];
 				network = network.substring(0, network.indexOf(" "));
-				irc.getServerInfo().setNetwork(network);
+				server.getServerInfo().setNetwork(network);
 			}
 			
-			irc.getEventListenerManager().dispatchEvent(new ServerResponseEvent(rawResponse.split(irc.getNickname() + " ")[1]));
+			server.getEventListenerManager().dispatchEvent(new ServerResponseEvent(server.getName(), rawResponse.split(server.getNickname() + " ")[1]));
 		}
 		else if(code.equals("042"))
 		{
 			//042 RPL_YOURID
 			//UUID, might do something with it later. Just log it for now.
-			irc.getEventListenerManager().dispatchEvent(new ServerResponseEvent(parsedLine.get(1) + " " + parsedLine.get(2)));
+			server.getEventListenerManager().dispatchEvent(new ServerResponseEvent(server.getName(), parsedLine.get(1) + " " + parsedLine.get(2)));
 		}
 		else if(code.equals("251") || code.equals("255") || code.equals("265") || code.equals("266"))
 		{
@@ -387,14 +396,14 @@ public class InputParser
 			//255 RPL_LUSERME
 			//265 RPL_LOCALUSERS
 			//266 RPL_GLOBALUSERS
-			irc.getEventListenerManager().dispatchEvent(new ServerResponseEvent(parsedLine.get(1)));
+			server.getEventListenerManager().dispatchEvent(new ServerResponseEvent(server.getName(), parsedLine.get(1)));
 		}
 		else if(code.equals("252") || code.equals("254") || code.equals("396"))
 		{
 			//252 RPL_LUSEROP
 			//254 RPL_LUSERCHANNELS 
 			//396 RPL_HOSTHIDDEN
-			irc.getEventListenerManager().dispatchEvent(new ServerResponseEvent(parsedLine.get(1) + " " + parsedLine.get(2)));
+			server.getEventListenerManager().dispatchEvent(new ServerResponseEvent(server.getName(), parsedLine.get(1) + " " + parsedLine.get(2)));
 		}
 		else if(code.equals("311"))
 		{
@@ -431,7 +440,7 @@ public class InputParser
 		else if(code.equals("318"))
 		{
 			//318 RPL_ENDOFWHOIS
-			irc.getEventListenerManager().dispatchEvent(new WhoisEvent(whoisBuilder));
+			server.getEventListenerManager().dispatchEvent(new WhoisEvent(server.getName(), whoisBuilder));
 			whoisBuilder = new WhoisBuilder();
 		}
 		else if(code.equals("319"))
@@ -442,39 +451,39 @@ public class InputParser
 		else if(code.equals("324"))
 		{
 			//324 RPL_CHANNELMODEIS 
-			Channel channel = irc.getChannel(parsedLine.get(1));
+			IRCChannel channel = server.getChannel(parsedLine.get(1));
 			handleMode("", channel.getName(), parsedLine.get(2));
-			irc.getEventListenerManager().dispatchEvent(new ServerResponseChannelEvent(channel, "Channel modes currently set: " + parsedLine.get(2)));
+			server.getEventListenerManager().dispatchEvent(new ServerResponseChannelEvent(server.getName(), channel, "Channel modes currently set: " + parsedLine.get(2)));
 		}
 		else if(code.equals("329"))
 		{
 			//329 RPL_CREATIONTIME
-			Channel channel = irc.getChannel(parsedLine.get(1));
-			irc.getEventListenerManager().dispatchEvent(new ServerResponseChannelEvent(channel, "Channel was created on " + new Date(StringUtils.tryParseLong(parsedLine.get(2)) * 1000)));
+			IRCChannel channel = server.getChannel(parsedLine.get(1));
+			server.getEventListenerManager().dispatchEvent(new ServerResponseChannelEvent(server.getName(), channel, "Channel was created on " + new Date(StringUtils.tryParseLong(parsedLine.get(2)) * 1000)));
 		}
 		else if(code.equals("332"))
 		{
 			//332 RPL_TOPIC
-			Channel channel = irc.getChannel(parsedLine.get(1));
+			IRCChannel channel = server.getChannel(parsedLine.get(1));
 			channel.setTopic(parsedLine.get(2));
-			irc.getEventListenerManager().dispatchEvent(new ServerResponseChannelEvent(channel, "Topic is \'" + parsedLine.get(2) + "\'"));
+			server.getEventListenerManager().dispatchEvent(new ServerResponseChannelEvent(server.getName(), channel, "Topic is \'" + parsedLine.get(2) + "\'"));
 		}
 		else if(code.equals("333"))
 		{
 			//333 RPL_TOPICWHOTIME
-			Channel channel = irc.getChannel(parsedLine.get(1));
+			IRCChannel channel = server.getChannel(parsedLine.get(1));
 			channel.setTopicSetter(parsedLine.get(2));
 			
 			long topicTimestamp = StringUtils.tryParseLong(parsedLine.get(3));
 			
 			channel.setTopicSetTimestamp(topicTimestamp);
-			irc.getEventListenerManager().dispatchEvent(new ServerResponseChannelEvent(channel, "Set by " + parsedLine.get(2) + " on " + new Date(topicTimestamp * 1000)));
+			server.getEventListenerManager().dispatchEvent(new ServerResponseChannelEvent(server.getName(), channel, "Set by " + parsedLine.get(2) + " on " + new Date(topicTimestamp * 1000)));
 		}
 		else if(code.equals("352"))
 		{
 			//352 RPL_WHOREPLY			
-			Channel channel = irc.getChannel(parsedLine.get(1));
-			User user = irc.getUser(parsedLine.get(5));
+			IRCChannel channel = server.getChannel(parsedLine.get(1));
+			IRCUser user = server.getUser(parsedLine.get(5));
 
 			user.setLogin(parsedLine.get(2));
 			user.setHostname(parsedLine.get(3));
@@ -501,7 +510,7 @@ public class InputParser
 			
 			for(int i = 0; i < modes.length(); i++)
 			{
-				String mode = irc.getServerInfo().getReverseUserPrefixes().get(Character.toString(modes.charAt(i)));
+				String mode = server.getServerInfo().getReverseUserPrefixes().get(Character.toString(modes.charAt(i)));
 				channel.parseModeChangeOnUser(user, "+" + mode);
 			}
 			
@@ -512,14 +521,14 @@ public class InputParser
 		else if(code.equals("353"))
 		{
 			//353 RPL_NAMREPLY
-			Channel channel = irc.getChannel(parsedLine.get(2));
+			IRCChannel channel = server.getChannel(parsedLine.get(2));
 			String[] users = parsedLine.get(3).split(" ");
 			
 			for(int i = 0; i < users.length; i++)
 			{
 				String prefixes = "";
 				String nickname = users[i];
-				LinkedHashMap<String, String> reverseUserPrefixes = irc.getServerInfo().getReverseUserPrefixes();
+				LinkedHashMap<String, String> reverseUserPrefixes = server.getServerInfo().getReverseUserPrefixes();
 				for(int j = 0; j < reverseUserPrefixes.size(); j++)
 				{
 					String firstCharString = "" + nickname.charAt(0);
@@ -530,7 +539,7 @@ public class InputParser
 					}
 				}
 				
-				User user = irc.getUser(nickname);
+				IRCUser user = server.getUser(nickname);
 				if(channel.getUser(user.getNickname()) == null)
 				{
 					channel.addUser(user);
@@ -546,31 +555,31 @@ public class InputParser
 		else if(code.equals("372"))
 		{
 			//372 RPL_MOTD
-			irc.getServerInfo().appendMotd(parsedLine.get(1) + "\n");
-			irc.getEventListenerManager().dispatchEvent(new ServerResponseEvent(parsedLine.get(1)));
+			server.getServerInfo().appendMotd(parsedLine.get(1) + "\n");
+			server.getEventListenerManager().dispatchEvent(new ServerResponseEvent(server.getName(), parsedLine.get(1)));
 		}
 		else if(code.equals("375"))
 		{
 			//375 RPL_MOTDSTART 
-			irc.getServerInfo().setMotd("");
-			irc.getEventListenerManager().dispatchEvent(new ServerResponseEvent(parsedLine.get(1)));
+			server.getServerInfo().setMotd("");
+			server.getEventListenerManager().dispatchEvent(new ServerResponseEvent(server.getName(), parsedLine.get(1)));
 		}
 		else if(code.equals("376"))
 		{
 			//376 RPL_ENDOFMOTD
-			irc.getEventListenerManager().dispatchEvent(new ServerResponseEvent(parsedLine.get(1)));
+			server.getEventListenerManager().dispatchEvent(new ServerResponseEvent(server.getName(), parsedLine.get(1)));
 		}
 		else
 		{
 			//Not parsed (yet)
-			irc.getEventListenerManager().dispatchEvent(new ServerResponseEvent("(" + code + ") " + rawResponse.substring(rawResponse.indexOf(irc.getNickname() + " ") + irc.getNickname().length() + 1)));
+			server.getEventListenerManager().dispatchEvent(new ServerResponseEvent(server.getName(), "(" + code + ") " + rawResponse.substring(rawResponse.indexOf(server.getNickname() + " ") + server.getNickname().length() + 1)));
 		}
 	}
 	
 	private void handleCommand(String line, List<String> parsedLine, String sourceNick, String sourceLogin, String sourceHostname, String command, String target)
 	{
-		User source = irc.getUser(sourceNick);
-		Channel channel = irc.getChannel(target);
+		IRCUser source = server.getUser(sourceNick);
+		IRCChannel channel = server.getChannel(target);
 		String message = parsedLine.size() >= 2 ? parsedLine.get(1) : "";
 		
 		if (command.equals("PRIVMSG") && message.startsWith("\u0001") && message.endsWith("\u0001"))
@@ -580,40 +589,40 @@ public class InputParser
 			if (request.toUpperCase().startsWith("ACTION ") && channel != null) 
 			{
 				// ACTION request
-				irc.getEventListenerManager().dispatchEvent(new ActionEvent(source, channel, request.substring(7)));
+				server.getEventListenerManager().dispatchEvent(new ActionEvent(server.getName(), source, channel, request.substring(7)));
 			}
 			else if(request.toUpperCase().startsWith("ACTION "))
 			{
 				// ACTION request in a PM
 				//We don't this user yet, so send a WHOIS
-				irc.cmdWHOIS(sourceNick);
-				irc.getEventListenerManager().dispatchEvent(new PMActionEvent(source, request.substring(7)));
+				server.cmdWHOIS(sourceNick);
+				server.getEventListenerManager().dispatchEvent(new PMActionEvent(server.getName(), source, request.substring(7)));
 			}
 			else if(request.toUpperCase().startsWith("PING "))
 			{
-				irc.ctcpReply(sourceNick, "PING", request.substring(5));
-				irc.getEventListenerManager().dispatchEvent(new CTCPRequestEvent(source, "PING"));
+				server.ctcpReply(sourceNick, "PING", request.substring(5));
+				server.getEventListenerManager().dispatchEvent(new CTCPRequestEvent(server.getName(), source, "PING"));
 			}
 			else if(request.toUpperCase().equals("VERSION"))
 			{
-				irc.ctcpReply(sourceNick, "VERSION", "RE_HeufyBot V" + HeufyBot.VERSION + ", OS: " + System.getProperty("os.name") + " ("+ System.getProperty("os.version") + ")," + System.getProperty("os.arch"));
-				irc.getEventListenerManager().dispatchEvent(new CTCPRequestEvent(source, "VERSION"));
+				server.ctcpReply(sourceNick, "VERSION", "RE_HeufyBot V" + HeufyBot.VERSION + ", OS: " + System.getProperty("os.name") + " ("+ System.getProperty("os.version") + ")," + System.getProperty("os.arch"));
+				server.getEventListenerManager().dispatchEvent(new CTCPRequestEvent(server.getName(), source, "VERSION"));
 			}
 			else if(request.toUpperCase().equals("TIME"))
 			{
-				irc.ctcpReply(sourceNick, "TIME", new Date().toString());
-				irc.getEventListenerManager().dispatchEvent(new CTCPRequestEvent(source, "TIME"));
+				server.ctcpReply(sourceNick, "TIME", new Date().toString());
+				server.getEventListenerManager().dispatchEvent(new CTCPRequestEvent(server.getName(), source, "TIME"));
 			}
 			else if(request.toUpperCase().equals("FINGER"))
 			{
-				irc.ctcpReply(sourceNick, "FINGER", "Why would you finger a bot?!");
-				irc.getEventListenerManager().dispatchEvent(new CTCPRequestEvent(source, "FINGER"));
+				server.ctcpReply(sourceNick, "FINGER", "Why would you finger a bot?!");
+				server.getEventListenerManager().dispatchEvent(new CTCPRequestEvent(server.getName(), source, "FINGER"));
 			}
 		}
 		else if(command.equals("PRIVMSG") && channel != null)
 		{
 			//Message to the channel
-			irc.getEventListenerManager().dispatchEvent(new MessageEvent(source, channel, message));
+			server.getEventListenerManager().dispatchEvent(new MessageEvent(server.getName(), source, channel, message));
 		}
 		else if(command.equals("PRIVMSG"))
 		{
@@ -621,23 +630,23 @@ public class InputParser
 			if(source.getHostname().equals(""))
 			{
 				//We don't this user yet, so send a WHOIS
-				irc.cmdWHOIS(sourceNick);
+				server.cmdWHOIS(sourceNick);
 			}
-			irc.getEventListenerManager().dispatchEvent(new PMMessageEvent(source, message));
+			server.getEventListenerManager().dispatchEvent(new PMMessageEvent(server.getName(), source, message));
 		}
 		else if(command.equals("JOIN"))
 		{
 			//Someone joins the channel
-			if(sourceNick.equalsIgnoreCase(irc.getNickname()))
+			if(sourceNick.equalsIgnoreCase(server.getNickname()))
 			{
 				//The bot is joining the channel, do setup
-				channel = new Channel(target);
-				irc.getChannels().add(channel);
+				channel = new IRCChannel(target);
+				server.getChannels().add(channel);
 				
-				irc.cmdWHO(channel.getName());
-				irc.cmdMODE(channel.getName(), "");
+				server.cmdWHO(channel.getName());
+				server.cmdMODE(channel.getName(), "");
 				
-				source = new User(sourceNick, sourceLogin, sourceHostname);
+				source = new IRCUser(sourceNick, sourceLogin, sourceHostname);
 			}
 			else
 			{
@@ -647,23 +656,23 @@ public class InputParser
 
 				channel.addUser(source);
 			}
-			irc.getEventListenerManager().dispatchEvent(new JoinEvent(source, channel));
+			server.getEventListenerManager().dispatchEvent(new JoinEvent(server.getName(), source, channel));
 		}
 		else if(command.equals("PART"))
 		{
-			if(sourceNick.equalsIgnoreCase(irc.getNickname()))
+			if(sourceNick.equalsIgnoreCase(server.getNickname()))
 			{
 				//The bot is leaving the channel		
-				irc.getChannels().remove(channel);
+				server.getChannels().remove(channel);
 			}
 			else
 			{
 				//Someone else is leaving the channel
-				irc.getChannel(target).removeUser(source);
+				server.getChannel(target).removeUser(source);
 			}
 			
 			boolean noCommonChannels = true;
-			for(Channel channel2 : irc.getChannels())
+			for(IRCChannel channel2 : server.getChannels())
 			{
 				if(channel2.getUser(sourceNick) != null)
 				{
@@ -673,51 +682,51 @@ public class InputParser
 			
 			if(noCommonChannels)
 			{
-				irc.getUsers().remove(source);
+				server.getUsers().remove(source);
 			}
 			
-			irc.getEventListenerManager().dispatchEvent(new PartEvent(source, channel, message));
+			server.getEventListenerManager().dispatchEvent(new PartEvent(server.getName(), source, channel, message));
 		}
 		else if(command.equals("NICK"))
 		{
 			//Someone is changing their nick
 			String newNick = target;
 			
-			for(Channel channel2 : irc.getChannels())
+			for(IRCChannel channel2 : server.getChannels())
 			{
-				User user = channel2.getUser(sourceNick);
+				IRCUser user = channel2.getUser(sourceNick);
 				if(user != null)
 				{
 					user.setNickname(newNick);
 				}
 			}
-			if(sourceNick.equalsIgnoreCase(irc.getNickname()))
+			if(sourceNick.equalsIgnoreCase(server.getNickname()))
 			{
 				//The bot's nick is changed
-				irc.setLoggedInNick(newNick);
+				server.setLoggedInNick(newNick);
 			}
 			
-			irc.getEventListenerManager().dispatchEvent(new NickChangeEvent(source, newNick, sourceNick));
+			server.getEventListenerManager().dispatchEvent(new NickChangeEvent(server.getName(), source, newNick, sourceNick));
 		}
 		else if(command.equals("NOTICE"))
 		{
 			//Someone sent a notice
 			if (channel == null) 
 			{
-				irc.getEventListenerManager().dispatchEvent(new NoticeEvent(sourceNick, message));
+				server.getEventListenerManager().dispatchEvent(new NoticeEvent(server.getName(), sourceNick, message));
 			}
 			else
 			{
-				irc.getEventListenerManager().dispatchEvent(new ChannelNoticeEvent(sourceNick, channel, message));
+				server.getEventListenerManager().dispatchEvent(new ChannelNoticeEvent(server.getName(), sourceNick, channel, message));
 			}
 		}
 		else if(command.equals("QUIT"))
 		{
 			//Someone quit the server
-			if(!sourceNick.equalsIgnoreCase(irc.getNickname()))
+			if(!sourceNick.equalsIgnoreCase(server.getNickname()))
 			{
-				irc.getEventListenerManager().dispatchEvent(new QuitEvent(source, target));
-				for(Channel channel2 : irc.getChannels())
+				server.getEventListenerManager().dispatchEvent(new QuitEvent(server.getName(), source, target));
+				for(IRCChannel channel2 : server.getChannels())
 				{
 					if(channel2.getUser(sourceNick) != null)
 					{
@@ -726,29 +735,29 @@ public class InputParser
 				}
 				
 				//Remove the user who quit from the users list
-				irc.getUsers().remove(source);
+				server.getUsers().remove(source);
 			}
 			else
 			{
 				//The bot disconnected
-				irc.disconnect(false);
+				server.disconnect(false);
 			}
 		}
 		else if(command.equals("KICK"))
 		{
 			//Someone is being kicked
-			User recipient = irc.getUser(message);
-			if(message.equalsIgnoreCase(irc.getNickname()))
+			IRCUser recipient = server.getUser(message);
+			if(message.equalsIgnoreCase(server.getNickname()))
 			{
 				//The bot just got kicked
-				irc.getChannels().remove(channel);
+				server.getChannels().remove(channel);
 			}
 			else
 			{
 				//Someone else got kicked
 				channel.removeUser(recipient);
 			}
-			irc.getEventListenerManager().dispatchEvent(new KickEvent(recipient, source, channel, parsedLine.get(2)));
+			server.getEventListenerManager().dispatchEvent(new KickEvent(server.getName(), recipient, source, channel, parsedLine.get(2)));
 		}
 		else if(command.equals("MODE"))
 		{
@@ -765,7 +774,7 @@ public class InputParser
 				mode = modeToParse.get(modeToParse.size() - 1);
 			}
 			
-			irc.getEventListenerManager().dispatchEvent(new ModeEvent(sourceNick, channel, mode));
+			server.getEventListenerManager().dispatchEvent(new ModeEvent(server.getName(), sourceNick, channel, mode));
 			handleMode(sourceNick, target, mode);
 		}
 		else if(command.equals("TOPIC"))
@@ -776,18 +785,18 @@ public class InputParser
 			channel.setTopicSetter(sourceNick);
 			channel.setTopicSetTimestamp(currentTime);
 			
-			irc.getEventListenerManager().dispatchEvent(new TopicEvent(sourceNick, channel, message));
+			server.getEventListenerManager().dispatchEvent(new TopicEvent(server.getName(), sourceNick, channel, message));
 		}
 		else if(command.equals("INVITE"))
 		{
 			//Someone is inviting someone into the channel
-			if(target.equalsIgnoreCase(irc.getNickname()))
+			if(target.equalsIgnoreCase(server.getNickname()))
 			{
 				//The bot is being invited. Join the channel.
-				irc.cmdJOIN(message, "");
+				server.cmdJOIN(message, "");
 			}
 			
-			irc.getEventListenerManager().dispatchEvent(new InviteEvent(source, target, message));
+			server.getEventListenerManager().dispatchEvent(new InviteEvent(server.getName(), source, target, message));
 		}
 	}
 	
@@ -796,12 +805,12 @@ public class InputParser
 		if(source.equals(target))
 		{
 			//This is a user mode.
-			irc.parseUserModesChange(mode);
+			server.parseUserModesChange(mode);
 			return;
 		}
 		else
 		{
-			Channel channel = irc.getChannel(target);
+			IRCChannel channel = server.getChannel(target);
 			if(!mode.contains(" "))
 			{
 				//This mode change does not contain any arguments
@@ -822,19 +831,19 @@ public class InputParser
 					{
 						modeOperator = atPosition;
 					}
-					else if(irc.getServerInfo().getUserPrefixes().containsKey(Character.toString(atPosition)))
+					else if(server.getServerInfo().getUserPrefixes().containsKey(Character.toString(atPosition)))
 					{
 						//This mode is changing a user's access level in the channel
-						User user = channel.getUser(params.get(paramNumber));
+						IRCUser user = channel.getUser(params.get(paramNumber));
 						channel.parseModeChangeOnUser(user, "" + modeOperator + atPosition);
 						paramNumber++;
 					}
-					else if(irc.getServerInfo().getChannelListModes().contains(Character.toString(atPosition)))
+					else if(server.getServerInfo().getChannelListModes().contains(Character.toString(atPosition)))
 					{
 						//This mode is a list mode. It's not important to us. Skip to the next argument.
 						paramNumber++;
 					}
-					else if(irc.getServerInfo().getChannelSetArgsModes().contains(Character.toString(atPosition)))
+					else if(server.getServerInfo().getChannelSetArgsModes().contains(Character.toString(atPosition)))
 					{
 						//This mode needs an argument to be set. Handle it in the channel.
 						if(modeOperator == '+')
@@ -847,7 +856,7 @@ public class InputParser
 						}
 						paramNumber++;
 					}
-					else if(irc.getServerInfo().getChannelSetUnsetArgsModes().contains(Character.toString(atPosition)))
+					else if(server.getServerInfo().getChannelSetUnsetArgsModes().contains(Character.toString(atPosition)))
 					{
 						//This mode needs an argument to be set AND to be unset. Handle it in the channel.
 						if(modeOperator == '+')
@@ -860,7 +869,7 @@ public class InputParser
 						}
 						paramNumber++;
 					}
-					else if(irc.getServerInfo().getChannelNoArgsModes().contains(Character.toString(atPosition)))
+					else if(server.getServerInfo().getChannelNoArgsModes().contains(Character.toString(atPosition)))
 					{
 						//This mode doesn't take arguments. Parse it normally.
 						channel.parseModeChange("" + modeOperator + atPosition);

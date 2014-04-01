@@ -1,18 +1,23 @@
 package heufybot.core.events.types;
 
-import heufybot.core.User;
+import heufybot.core.IRCUser;
 
 public class NickChangeEvent implements BotEvent
 {
-	private User user;
-	private String newNick;
-	private String oldNick;
+	private IRCUser user;
+	private String serverName, newNick, oldNick;
 	
-	public NickChangeEvent(User user, String newNick, String oldNick)
+	public NickChangeEvent(String serverName, IRCUser user, String newNick, String oldNick)
 	{
+		this.serverName = serverName;
 		this.user = user;
 		this.newNick = newNick;
 		this.oldNick = oldNick;
+	}
+	
+	public String getServerName()
+	{
+		return serverName;
 	}
 	
 	public String getNewNick()
@@ -20,7 +25,7 @@ public class NickChangeEvent implements BotEvent
 		return newNick;
 	}
 	
-	public User getUser()
+	public IRCUser getUser()
 	{
 		return user;
 	}

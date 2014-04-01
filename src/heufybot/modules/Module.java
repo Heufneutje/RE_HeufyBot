@@ -32,11 +32,6 @@ public abstract class Module
 	 */
 	protected String trigger;
 	/**
-	 * This is set by the abstract constructor, and must be used in the trigger.
-	 * It is what users will input before a command in order for the bot to recognize it as a command.
-	 */
-	protected String commandPrefix;
-	/**
 	 * This determines whether or not the module should be triggered on every message.
 	 * This is useful for automatic commands, like checking when a certain person talks.
 	 */
@@ -52,6 +47,9 @@ public abstract class Module
 	 */
 	protected AuthType authType;
 	
+	protected String commandPrefix;
+	protected String server;
+	
 	/**
 	 * What types of events trigger the module.
 	 * Possible triggers are: Message and Action
@@ -62,12 +60,13 @@ public abstract class Module
 	 * The module API version this module is using.
 	 * This must match up with the bot's module API version for the module to be loadable.
 	 */
-	protected String apiVersion = "0.0.0";
+	protected int apiVersion = 0;
 	
-	public Module()
+	public Module(String server)
 	{
-		bot = HeufyBot.getInstance();
-		commandPrefix = bot.getConfig().getCommandPrefix();
+		this.bot = HeufyBot.getInstance();
+		this.server = server;
+		this.commandPrefix = bot.getServer(server).getConfig().getSettingWithDefault("commandPrefix", "~");
 	}
 	
 	/**
@@ -82,7 +81,7 @@ public abstract class Module
 	/**
 	 * @return The module API version this module is using
 	 */
-	public String getAPIVersion()
+	public int getAPIVersion()
 	{
 		return apiVersion;
 	}

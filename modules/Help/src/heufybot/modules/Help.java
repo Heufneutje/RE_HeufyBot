@@ -8,10 +8,12 @@ import java.util.List;
 
 public class Help extends Module
 {
-	public Help()
+	public Help(String server)
 	{
+		super(server);
+		
 		this.authType = AuthType.Anyone;
-		this.apiVersion = "0.5.0";
+		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(help)($| .*)";
 	}
@@ -21,27 +23,27 @@ public class Help extends Module
 		if (params.size() == 1)
 		{
 			ArrayList<String> moduleNames = new ArrayList<String>();
-			for(Module module : bot.getModuleInterface().getModuleList())
+			for(Module module : bot.getServer(server).getModuleInterface().getModuleList())
 			{
 				moduleNames.add(module.toString());
 			}
 
 			Collections.sort(moduleNames);
 			String response = "Modules loaded: " + StringUtils.join(moduleNames, ", ");
-			bot.getIRC().cmdPRIVMSG(source, response);
+			bot.getServer(server).cmdPRIVMSG(source, response);
 		}
 		else
 		{
 			params.remove(0);
 			String helpParams = StringUtils.join(params, " ");
-			String help = bot.getModuleInterface().getModuleHelp(helpParams);
+			String help = bot.getServer(server).getModuleInterface().getModuleHelp(helpParams);
 			if(help != null)
 			{
-				bot.getIRC().cmdPRIVMSG(source, help);
+				bot.getServer(server).cmdPRIVMSG(source, help);
 			}
 			else
 			{
-				bot.getIRC().cmdPRIVMSG(source, "Module or command matching \"" + helpParams + "\" is not loaded or does not exist!");
+				bot.getServer(server).cmdPRIVMSG(source, "Module or command matching \"" + helpParams + "\" is not loaded or does not exist!");
 			}
 		}
 	}
