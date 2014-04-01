@@ -22,7 +22,7 @@ public class Ignore extends Module
 	}
 	
 	@Override
-	public void processEvent(String server, String source, String message, String triggerUser, List<String> params) 
+	public void processEvent(String source, String message, String triggerUser, List<String> params) 
 	{
 		if(message.toLowerCase().matches("^" + commandPrefix + "ignore.*"))
 		{

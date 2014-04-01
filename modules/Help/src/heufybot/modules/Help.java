@@ -18,7 +18,7 @@ public class Help extends Module
 		this.trigger = "^" + commandPrefix + "(help)($| .*)";
 	}
 	
-	public void processEvent(String server, String source, String message, String triggerUser, List<String> params)
+	public void processEvent(String source, String message, String triggerUser, List<String> params)
 	{
 		if (params.size() == 1)
 		{
