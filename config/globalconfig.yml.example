@@ -1,0 +1,95 @@
+#==============#
+#=Bot Settings=#
+#==============#
+
+# -nickname-
+# The nickname the bot will have in chat.
+nickname: "RE_HeufyBot"
+
+# -username-
+# The username the bot will log into the server with.
+username: "RE_HeufyBot"
+
+# -realname-
+# The bot's real name.
+realname: "RE_HeufyBot IRC Bot"
+
+# -autoNickChange-
+# Whether or not the bot should try connecting with a different nickname if the
+# current nickname is taken.
+autoNickChange: true
+
+# -autoReconnect-
+# Whether or not the bot should try to reconnect should it lose connection.
+autoReconnect: false
+
+# -reconnectAttempts-
+# The number of times the bot should try to reconnect if autoReconnect is
+# enabled.
+reconnectAttempts: 3
+
+# -reconnectInteval-
+# The number of seconds the bot should wait between reconnection attempts.
+reconnectInterval: 600
+
+# -logPath-
+# The path where logs will be saved.
+# Default is "logs", which will be created next to the main JAR file.
+logPath: "logs"
+
+# -logPMs-
+# Whether or not PMs should be logged. This defaults to false for privacy reasons.
+logPMs: false
+
+#=================#
+#=Server Settings=#
+#=================#
+
+# -server-
+# Address of the server the bot is connecting to.
+server: "irc.foo.bar"
+
+# -port-
+# The port on the server the bot is connecting to.
+port: 6667
+
+# -ssl-
+# Whether or not the bot should use SSL when connecting.
+ssl: false
+
+#password: Password to login with if needed
+password: 
+
+# -passwordType-
+# The kind of password we're using. Possible values are None, ServerPass, 
+# NickServPass or SASL.
+passwordType: None 
+
+# -autoJoin-
+# Whether or not the bot should join any channels after connecting.
+autoJoin: false
+
+# -autoJoinChannels-
+# The channels the bot should join if autojoin is enabled.
+autoJoinChannels: 
+
+# -messageDelay-
+# Unless the bot is having trouble sending messages, leave this alone.
+messageDelay: 500
+
+#=================#
+#=Module Settings=#
+#=================#
+
+# -commandPrefix-
+# The prefix that should be used when a user wants to execute a bot command.
+commandPrefix: "~"
+
+# -modulesToLoad- 
+# The modules that should be loaded at startup. These modules need to be in the
+# "modules" folder. Loading at least ModuleLoader is recommended.
+modules: 
+  
+# -botAdmins-
+# Users that are authorized to use modules that have access level "ops".
+botAdmins: 
