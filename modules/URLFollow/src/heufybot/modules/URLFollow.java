@@ -21,10 +21,12 @@ public class URLFollow extends Module
 {
 	private final String imgurClientIDPath = "data/imgurclientid.txt";
 	
-	public URLFollow()
+	public URLFollow(String server)
 	{
+		super(server);
+		
 		this.authType = AuthType.Anyone;
-		this.apiVersion = "0.5.0";
+		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message, TriggerType.Action };
 		this.trigger = ".*https?://.*";
 	}
@@ -53,7 +55,7 @@ public class URLFollow extends Module
 			{
 				if(FileUtils.readFile(imgurClientIDPath).equals(""))
 				{
-					bot.getIRC().cmdPRIVMSG(source, followNormalURL(urlstring));
+					bot.getServer(server).cmdPRIVMSG(source, followNormalURL(urlstring));
 					return;
 				}
 				else
@@ -62,7 +64,7 @@ public class URLFollow extends Module
 					Matcher m = p.matcher(urlstring);
 					if(m.find())
 					{
-						bot.getIRC().cmdPRIVMSG(source, followImgur(m.group(1)));
+						bot.getServer(server).cmdPRIVMSG(source, followImgur(m.group(1)));
 					}
 				}
 			}
@@ -75,10 +77,10 @@ public class URLFollow extends Module
 					
 					if(m.find())
 					{
-						bot.getIRC().cmdPRIVMSG(source, followYouTubeURL(m.group(1)));
+						bot.getServer(server).cmdPRIVMSG(source, followYouTubeURL(m.group(1)));
 						return;
 					}
-					bot.getIRC().cmdPRIVMSG(source, followNormalURL(urlstring));
+					bot.getServer(server).cmdPRIVMSG(source, followNormalURL(urlstring));
 				}
 			}
 		}

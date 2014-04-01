@@ -4,10 +4,12 @@ import java.util.List;
 
 public class Restart extends Module
 {
-	public Restart()
+	public Restart(String server)
 	{
+		super(server);
+		
 		this.authType = AuthType.BotAdmins;
-		this.apiVersion = "0.5.0";
+		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(restart)$";
 	}

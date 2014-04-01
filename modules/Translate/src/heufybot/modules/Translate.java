@@ -10,10 +10,12 @@ import heufybot.utils.StringUtils;
 
 public class Translate extends Module
 {
-	public Translate() 
+	public Translate(String server) 
 	{
+		super(server);
+		
 		this.authType = AuthType.Anyone;
-		this.apiVersion = "0.5.0";
+		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(translate)($| .*)";
 	}
@@ -29,7 +31,7 @@ public class Translate extends Module
 	{
 		if(params.size() == 1)
 		{
-			this.bot.getIRC().cmdPRIVMSG(source, "Translate what?");
+			this.bot.getServer(server).cmdPRIVMSG(source, "Translate what?");
 		}
 		else
 		{
@@ -43,7 +45,7 @@ public class Translate extends Module
 			}
 			catch (IndexOutOfBoundsException e)
 			{
-				this.bot.getIRC().cmdPRIVMSG(source, "No text to translate.");
+				this.bot.getServer(server).cmdPRIVMSG(source, "No text to translate.");
 				return;
 			}
 			
@@ -64,7 +66,7 @@ public class Translate extends Module
 			}
 			else
 			{
-				this.bot.getIRC().cmdPRIVMSG(source, "Error: No MS Azure login credentials were provided.");
+				this.bot.getServer(server).cmdPRIVMSG(source, "Error: No MS Azure login credentials were provided.");
 				return;
 			}
 			
@@ -75,18 +77,18 @@ public class Translate extends Module
 					String fromLanguage = languageParam.substring(0, 2);
 					String toLanguage = languageParam.substring(3, 5);
 					String translatedText = com.memetix.mst.translate.Translate.execute(textToTranslate, Language.fromString(fromLanguage), Language.fromString(toLanguage));
-					bot.getIRC().cmdPRIVMSG(source, translatedText + " | Source Language: " + fromLanguage);
+					bot.getServer(server).cmdPRIVMSG(source, translatedText + " | Source Language: " + fromLanguage);
 				}
 				else
 				{
 					Language sourceLanguage = Detect.execute(textToTranslate);
 					String translatedText = com.memetix.mst.translate.Translate.execute(textToTranslate, Language.fromString(languageParam));
-					bot.getIRC().cmdPRIVMSG(source, translatedText +  " | Source Language: Auto-Detect (" + sourceLanguage.toString() + ")");
+					bot.getServer(server).cmdPRIVMSG(source, translatedText +  " | Source Language: Auto-Detect (" + sourceLanguage.toString() + ")");
 				}			
 			} 
 			catch (Exception e)
 			{
-				bot.getIRC().cmdPRIVMSG(source, "Text could not be translated. Make sure the language code is corrent.");
+				bot.getServer(server).cmdPRIVMSG(source, "Text could not be translated. Make sure the language code is corrent.");
 			}
 		}
 	}

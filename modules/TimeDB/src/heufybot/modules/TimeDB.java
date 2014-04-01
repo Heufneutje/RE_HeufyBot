@@ -9,10 +9,12 @@ import org.json.simple.parser.ParseException;
 
 public class TimeDB extends Module 
 {
-	public TimeDB()
+	public TimeDB(String server)
 	{
+		super(server);
+		
 		this.authType = AuthType.Anyone;
-		this.apiVersion = "0.5.0";
+		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(time)($| .*)";
 	}
@@ -22,7 +24,7 @@ public class TimeDB extends Module
 	{
 		if(FileUtils.readFile("data/worldweatheronlineapikey.txt").equals(""))
 		{
-			bot.getIRC().cmdPRIVMSG(source, "No WorldWeatherOnline API key found");
+			bot.getServer(server).cmdPRIVMSG(source, "No WorldWeatherOnline API key found");
 			return;
 		}	
 		
@@ -32,12 +34,12 @@ public class TimeDB extends Module
 			
 			if(chatmapResult == null)
 			{
-				bot.getIRC().cmdPRIVMSG(source, "Chatmap seems to be down right now. Try again later.");
+				bot.getServer(server).cmdPRIVMSG(source, "Chatmap seems to be down right now. Try again later.");
 				return;
 			}
 			else if(chatmapResult.equals(", "))
 			{
-				bot.getIRC().cmdPRIVMSG(source, "You are not registered on the chatmap.");
+				bot.getServer(server).cmdPRIVMSG(source, "You are not registered on the chatmap.");
 				return;
 			}			
 			params.add(triggerUser);
@@ -57,12 +59,12 @@ public class TimeDB extends Module
 				String time = getTimeFromGeolocation(location);
 				String prefix = location.success ? "Location: " + location.locality : "City: " + latitude + "," + longitude;
 
-				bot.getIRC().cmdPRIVMSG(source, String.format("%s | %s", prefix, time));
+				bot.getServer(server).cmdPRIVMSG(source, String.format("%s | %s", prefix, time));
 				return;
 			} 
 			catch (ParseException e)
 			{
-				bot.getIRC().cmdPRIVMSG(source, "I don't think that's even a location in this multiverse...");
+				bot.getServer(server).cmdPRIVMSG(source, "I don't think that's even a location in this multiverse...");
 				return;
 			}
 		} 
@@ -82,13 +84,13 @@ public class TimeDB extends Module
 			{
 				String weather = getTimeFromGeolocation(location);
 
-				bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s | %s", location.locality, weather));
+				bot.getServer(server).cmdPRIVMSG(source, String.format("Location: %s | %s", location.locality, weather));
 				return;
 			}
 		} 
 		catch (ParseException e) 
 		{
-			bot.getIRC().cmdPRIVMSG(source, "I don't think that's even a user in this multiverse...");
+			bot.getServer(server).cmdPRIVMSG(source, "I don't think that's even a user in this multiverse...");
 			return;
 		}
 
@@ -97,16 +99,16 @@ public class TimeDB extends Module
 			Geolocation location = geo.getGeolocationForPlace(message.substring(message.indexOf(' ') + 1));
 			if (!location.success)
 			{
-				bot.getIRC().cmdPRIVMSG(source, "I don't think that's even a location in this multiverse...");
+				bot.getServer(server).cmdPRIVMSG(source, "I don't think that's even a location in this multiverse...");
 				return;
 			}
 			String weather = getTimeFromGeolocation(location);
-			bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s | %s", location.locality, weather));
+			bot.getServer(server).cmdPRIVMSG(source, String.format("Location: %s | %s", location.locality, weather));
 			return;
 		} 
 		catch (ParseException e)
 		{
-			bot.getIRC().cmdPRIVMSG(source, "I don't think that's even a location in this multiverse...");
+			bot.getServer(server).cmdPRIVMSG(source, "I don't think that's even a location in this multiverse...");
 			return;
 		}
 	}

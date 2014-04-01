@@ -6,10 +6,12 @@ import java.util.List;
 
 public class Shorten extends Module
 {
-	public Shorten()
+	public Shorten(String server)
 	{
+		super(server);
+		
 		this.authType = AuthType.Anyone;
-		this.apiVersion = "0.5.0";
+		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(shorten)($| .*)";
 	}
@@ -19,18 +21,18 @@ public class Shorten extends Module
 	{
 		if (params.size() == 1)
 		{
-			bot.getIRC().cmdPRIVMSG(source, "Shorten what?");
+			bot.getServer(server).cmdPRIVMSG(source, "Shorten what?");
 		}
 		else
 		{
 			String shortenedURL = URLUtils.shortenURL(params.get(1));
 			if(shortenedURL == null)
 			{
-				bot.getIRC().cmdPRIVMSG(source, "Error: URL could not be shortned");
+				bot.getServer(server).cmdPRIVMSG(source, "Error: URL could not be shortned");
 			}
 			else
 			{
-				bot.getIRC().cmdPRIVMSG(source, shortenedURL);
+				bot.getServer(server).cmdPRIVMSG(source, shortenedURL);
 			}
 		}
 	}

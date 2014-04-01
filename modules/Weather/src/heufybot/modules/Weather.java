@@ -9,14 +9,18 @@ import org.json.simple.parser.ParseException;
 
 public class Weather extends Module 
 {
-	private final String locationsPath = "data/userlocations.txt";
+	private String locationsPath;
 	
-	public Weather()
+	public Weather(String server)
 	{
+		super(server);
+		
 		this.authType = AuthType.Anyone;
-		this.apiVersion = "0.5.0";
+		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(weather|forecast)($| .*)";
+		
+		this.locationsPath = "data/" + bot.getServer(server).getServerInfo().getNetwork() + "/userlocations.txt";
 	}
 
 	@Override
@@ -24,7 +28,7 @@ public class Weather extends Module
 	{
 		if(FileUtils.readFile("data/worldweatheronlineapikey.txt").equals(""))
 		{
-			bot.getIRC().cmdPRIVMSG(source, "No WorldWeatherOnline API key found");
+			bot.getServer(server).cmdPRIVMSG(source, "No WorldWeatherOnline API key found");
 			return;
 		}
 
@@ -32,13 +36,13 @@ public class Weather extends Module
 		{
 			if(!readLocations().containsKey(triggerUser.toLowerCase()))
 			{
-				if(bot.getModuleInterface().isModuleLoaded("UserLocation"))
+				if(bot.getServer(server).getModuleInterface().isModuleLoaded("UserLocation"))
 				{
-					bot.getIRC().cmdPRIVMSG(source, "You are not registered. Use \"" + commandPrefix + "registerloc <location>\" to register your location.");
+					bot.getServer(server).cmdPRIVMSG(source, "You are not registered. Use \"" + commandPrefix + "registerloc <location>\" to register your location.");
 				}
 				else
 				{
-					bot.getIRC().cmdPRIVMSG(source, "You are not registered. The module \"UserLocation\" is required for registration, but is currently not loaded.");
+					bot.getServer(server).cmdPRIVMSG(source, "You are not registered. The module \"UserLocation\" is required for registration, but is currently not loaded.");
 				}
 				return;
 			}
@@ -61,18 +65,18 @@ public class Weather extends Module
 				if(message.toLowerCase().matches("^" + commandPrefix + "weather.*"))
 				{
 					String weather = getWeatherFromGeolocation(location);
-					bot.getIRC().cmdPRIVMSG(source, String.format("%s | %s", prefix, weather));
+					bot.getServer(server).cmdPRIVMSG(source, String.format("%s | %s", prefix, weather));
 				}
 				else if(message.toLowerCase().matches("^" + commandPrefix + "forecast.*"))
 				{
 					String forecast = getForecastFromGeolocation(location);
-					bot.getIRC().cmdPRIVMSG(source, String.format("%s | %s", prefix, forecast));
+					bot.getServer(server).cmdPRIVMSG(source, String.format("%s | %s", prefix, forecast));
 				}
 				return;
 			} 
 			catch (ParseException e)
 			{
-				bot.getIRC().cmdPRIVMSG(source, "I don't think that's even a location in this multiverse...");
+				bot.getServer(server).cmdPRIVMSG(source, "I don't think that's even a location in this multiverse...");
 				return;
 			}
 		} 
@@ -112,24 +116,24 @@ public class Weather extends Module
 					{
 						weather = "Weather for this location could not be retrieved.";
 					}
-					bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s | %s", loc, weather));
+					bot.getServer(server).cmdPRIVMSG(source, String.format("Location: %s | %s", loc, weather));
 				}
 				else if(message.toLowerCase().matches("^" + commandPrefix + "forecast.*"))
 				{
 					String forecast = getForecastFromGeolocation(location);
 					if(forecast == null)
 					{
-						bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s | %s", location.locality, "Forecast for this location could not be retrieved."));
+						bot.getServer(server).cmdPRIVMSG(source, String.format("Location: %s | %s", location.locality, "Forecast for this location could not be retrieved."));
 						return;
 					}
-					bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s", loc + " | " + forecast));
+					bot.getServer(server).cmdPRIVMSG(source, String.format("Location: %s", loc + " | " + forecast));
 				}
 				return;
 			}
 		} 
 		catch (ParseException e) 
 		{
-			bot.getIRC().cmdPRIVMSG(source, "I don't think that's even a user in this multiverse...");
+			bot.getServer(server).cmdPRIVMSG(source, "I don't think that's even a user in this multiverse...");
 			return;
 		}
 	}

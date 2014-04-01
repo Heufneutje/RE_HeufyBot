@@ -6,10 +6,12 @@ import java.util.List;
 
 public class Quit extends Module
 {
-	public Quit()
+	public Quit(String server)
 	{
+		super(server);
+		
 		this.authType = AuthType.BotAdmins;
-		this.apiVersion = "0.5.0";
+		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(quit)($| .*)";
 	}

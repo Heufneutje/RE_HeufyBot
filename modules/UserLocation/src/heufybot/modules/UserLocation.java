@@ -9,16 +9,19 @@ import java.util.List;
 public class UserLocation extends Module
 {
 	private HashMap<String, String> userLocations;
-	private final String locationsPath = "data/userlocations.txt";
+	private String locationsPath;
 	
-	public UserLocation()
+	public UserLocation(String server)
 	{
+		super(server);
+		
 		this.authType = AuthType.Anyone;
-		this.apiVersion = "0.5.0";
+		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(registerloc)($| .*)";
 		
 		this.userLocations = new HashMap<String, String>();
+		this.locationsPath = "data/" + bot.getServer(server).getServerInfo().getNetwork() + "/userlocations.txt";
 	}
 	
 	@Override
@@ -26,7 +29,7 @@ public class UserLocation extends Module
 	{
 		if(params.size() == 1)
 		{
-			bot.getIRC().cmdPRIVMSG(source, "You didn't give a location to register.");
+			bot.getServer(server).cmdPRIVMSG(source, "You didn't give a location to register.");
 			return;
 		}
 		else
@@ -45,11 +48,11 @@ public class UserLocation extends Module
 			
 			if(alreadyRegistered)
 			{
-				bot.getIRC().cmdPRIVMSG(source, "Your location has been updated.");
+				bot.getServer(server).cmdPRIVMSG(source, "Your location has been updated.");
 			}
 			else
 			{
-				bot.getIRC().cmdPRIVMSG(source, "Your location is now registered.");
+				bot.getServer(server).cmdPRIVMSG(source, "Your location is now registered.");
 			}
 			return;
 		}

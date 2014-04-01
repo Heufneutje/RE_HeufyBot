@@ -11,10 +11,12 @@ public class Time extends Module
 {
 	private final String locationsPath = "data/userlocations.txt";
 	
-	public Time()
+	public Time(String server)
 	{
+		super(server);
+		
 		this.authType = AuthType.Anyone;
-		this.apiVersion = "0.5.0";
+		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(time)($| .*)";
 	}
@@ -24,7 +26,7 @@ public class Time extends Module
 	{
 		if(FileUtils.readFile("data/worldweatheronlineapikey.txt").equals(""))
 		{
-			bot.getIRC().cmdPRIVMSG(source, "No WorldWeatherOnline API key found");
+			bot.getServer(server).cmdPRIVMSG(source, "No WorldWeatherOnline API key found");
 			return;
 		}
 		
@@ -32,13 +34,13 @@ public class Time extends Module
 		{
 			if(!readLocations().containsKey(triggerUser.toLowerCase()))
 			{
-				if(bot.getModuleInterface().isModuleLoaded("UserLocation"))
+				if(bot.getServer(server).getModuleInterface().isModuleLoaded("UserLocation"))
 				{
-					bot.getIRC().cmdPRIVMSG(source, "You are not registered. Use \"" + commandPrefix + "registerloc <location>\" to register your location.");
+					bot.getServer(server).cmdPRIVMSG(source, "You are not registered. Use \"" + commandPrefix + "registerloc <location>\" to register your location.");
 				}
 				else
 				{
-					bot.getIRC().cmdPRIVMSG(source, "You are not registered. The module \"UserLocation\" is required for registration, but is currently not loaded.");
+					bot.getServer(server).cmdPRIVMSG(source, "You are not registered. The module \"UserLocation\" is required for registration, but is currently not loaded.");
 				}
 				return;
 			}
@@ -59,12 +61,12 @@ public class Time extends Module
 				String time = getTimeFromGeolocation(location);
 				String prefix = location.success ? "Location: " + location.locality : "City: " + latitude + "," + longitude;
 
-				bot.getIRC().cmdPRIVMSG(source, String.format("%s | %s", prefix, time));
+				bot.getServer(server).cmdPRIVMSG(source, String.format("%s | %s", prefix, time));
 				return;
 			} 
 			catch (ParseException e)
 			{
-				bot.getIRC().cmdPRIVMSG(source, "I don't think that's even a location in this multiverse...");
+				bot.getServer(server).cmdPRIVMSG(source, "I don't think that's even a location in this multiverse...");
 				return;
 			}
 		} 
@@ -93,13 +95,13 @@ public class Time extends Module
 			{
 				String weather = getTimeFromGeolocation(location);
 
-				bot.getIRC().cmdPRIVMSG(source, String.format("Location: %s | %s", location.locality, weather));
+				bot.getServer(server).cmdPRIVMSG(source, String.format("Location: %s | %s", location.locality, weather));
 				return;
 			}
 		} 
 		catch (ParseException e) 
 		{
-			bot.getIRC().cmdPRIVMSG(source, "I don't think that's even a user in this multiverse...");
+			bot.getServer(server).cmdPRIVMSG(source, "I don't think that's even a user in this multiverse...");
 			return;
 		}
 	}

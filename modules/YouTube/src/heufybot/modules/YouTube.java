@@ -13,10 +13,12 @@ import org.json.simple.parser.ParseException;
 
 public class YouTube extends Module
 {
-	public YouTube()
+	public YouTube(String server)
 	{
+		super(server);
+		
 		this.authType = AuthType.Anyone;
-		this.apiVersion = "0.5.0";
+		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(youtube)($| .*)";
 	}
@@ -26,7 +28,7 @@ public class YouTube extends Module
 	{
 		if (params.size() == 1)
 		{
-			bot.getIRC().cmdPRIVMSG(source, "What video do you want me to look up?");
+			bot.getServer(server).cmdPRIVMSG(source, "What video do you want me to look up?");
 		}
 		else
 		{
@@ -47,7 +49,7 @@ public class YouTube extends Module
 				
 				if(totalResults == 0)
 				{
-					bot.getIRC().cmdPRIVMSG(source, "No results found for \"" + searchTerms + "\".");
+					bot.getServer(server).cmdPRIVMSG(source, "No results found for \"" + searchTerms + "\".");
 					return;
 				}
 				
@@ -82,7 +84,7 @@ public class YouTube extends Module
 	    					( durationSeconds % 60 < 10 ? "0": "") + durationSeconds % 60;
 	    		}
 				
-	    		bot.getIRC().cmdPRIVMSG(source, "Results: " + totalResults + " || Top Result: http://www.youtube.com/watch?v=" + videoID + " | Video Title: " + title + " | " + duration + " | " + description);
+	    		bot.getServer(server).cmdPRIVMSG(source, "Results: " + totalResults + " || Top Result: http://www.youtube.com/watch?v=" + videoID + " | Video Title: " + title + " | " + duration + " | " + description);
 			} 
 			catch (ParseException e)
 			{

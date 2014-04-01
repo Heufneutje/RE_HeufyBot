@@ -6,10 +6,12 @@ import java.util.List;
 
 public class Say extends Module
 {
-	public Say()
+	public Say(String server)
 	{
+		super(server);
+		
 		this.authType = AuthType.Anyone;
-		this.apiVersion = "0.5.0";
+		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(say)($| .*)";
 	}
@@ -19,12 +21,12 @@ public class Say extends Module
 	{
 		if (params.size() == 1)
 		{
-			bot.getIRC().cmdPRIVMSG(source, "Say what?");
+			bot.getServer(server).cmdPRIVMSG(source, "Say what?");
 		}
 		else
 		{
 			params.remove(0);
-			bot.getIRC().cmdPRIVMSG(source, StringUtils.join(params, " "));
+			bot.getServer(server).cmdPRIVMSG(source, StringUtils.join(params, " "));
 		}
 	}
 

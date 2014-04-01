@@ -12,10 +12,12 @@ public class TranslationParty extends Module
 {
 	private String textToTranslate;
 
-	public TranslationParty() 
+	public TranslationParty(String server) 
 	{
+		super(server);
+		
 		this.authType = AuthType.Anyone;
-		this.apiVersion = "0.5.0";
+		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(tp)($| .*)";
 	}
@@ -31,7 +33,7 @@ public class TranslationParty extends Module
 	{
 		if(params.size() == 1)
 		{
-			bot.getIRC().cmdPRIVMSG(source, "Translate what?");
+			bot.getServer(server).cmdPRIVMSG(source, "Translate what?");
 		}
 		else
 		{
@@ -50,7 +52,7 @@ public class TranslationParty extends Module
 			}
 			catch(IndexOutOfBoundsException e)
 			{
-				bot.getIRC().cmdPRIVMSG(source, "Error: No MS Azure login credentials were provided.");
+				bot.getServer(server).cmdPRIVMSG(source, "Error: No MS Azure login credentials were provided.");
 				return;
 			}
 			try
@@ -71,7 +73,7 @@ public class TranslationParty extends Module
 					newText = Translate.execute(newText, Language.JAPANESE, Language.ENGLISH);
 					if(newText.equals(lastEnglishEntry))
 					{
-						bot.getIRC().cmdPRIVMSG(source, newText + " | Steps: " + tries);
+						bot.getServer(server).cmdPRIVMSG(source, newText + " | Steps: " + tries);
 						return;
 					}
 					else
@@ -79,11 +81,11 @@ public class TranslationParty extends Module
 						lastEnglishEntry = newText;
 					}
 				}
-				bot.getIRC().cmdPRIVMSG(source, newText + " | Steps: 20+");
+				bot.getServer(server).cmdPRIVMSG(source, newText + " | Steps: 20+");
 			}
 			catch (Exception e)
 			{
-				bot.getIRC().cmdPRIVMSG(source, "Error: Text could not be translated.");
+				bot.getServer(server).cmdPRIVMSG(source, "Error: Text could not be translated.");
 			}
 		} 
 	}

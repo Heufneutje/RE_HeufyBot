@@ -22,19 +22,21 @@ public class Tell extends Module
 {
 	private LinkedHashMap<String, ArrayList<Message>> tellsMap;
 	private HashMap<String, Date> tellers;
+	private String databasePath;
 	
-	private String databasePath = "data/tells.json";
-	
-	public Tell()
+	public Tell(String server)
 	{
+		super(server);
+		
 		this.authType = AuthType.Anyone;
-		this.apiVersion = "0.5.0";
+		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message, TriggerType.Action };
 		this.trigger = "^" + commandPrefix + "(tell|r(emove)?tell|s(ent)?tells)($| .*)";
 		this.triggerOnEveryMessage = true;
 		
 		this.tellsMap = new LinkedHashMap<String, ArrayList<Message>>();
 		this.tellers = new HashMap<String, Date>();
+		this.databasePath = "data/" + bot.getServer(server).getServerInfo().getNetwork() + "/tells.json";
 	}
 
 	@Override
@@ -50,13 +52,13 @@ public class Tell extends Module
 		{
 			if(params.size() == 1)
 			{
-				bot.getIRC().cmdPRIVMSG(source, "Tell what?");
+				bot.getServer(server).cmdPRIVMSG(source, "Tell what?");
 				return;
 			}
 			params.remove(0);
 			if(params.size() == 1)
 			{
-				bot.getIRC().cmdPRIVMSG(source, "What do you want me to tell them?");
+				bot.getServer(server).cmdPRIVMSG(source, "What do you want me to tell them?");
 				return;
 			}
 			
@@ -67,7 +69,7 @@ public class Tell extends Module
 				System.out.println(timeStampDifference);
 				if(timeStampDifference < 60)
 				{
-					bot.getIRC().cmdPRIVMSG(source, "Calm down, " + triggerUser + "! You just sent a message " + timeStampDifference + " seconds ago! You have to wait " + (60 - timeStampDifference) + " more seconds.");
+					bot.getServer(server).cmdPRIVMSG(source, "Calm down, " + triggerUser + "! You just sent a message " + timeStampDifference + " seconds ago! You have to wait " + (60 - timeStampDifference) + " more seconds.");
 					return;
 				}
 			}
@@ -87,12 +89,12 @@ public class Tell extends Module
 				String recepient = fixRegex(recepients[i]);
 				if(triggerUser.toLowerCase().matches(recepient.toLowerCase()))
 				{
-					bot.getIRC().cmdPRIVMSG(source, "Why are you telling yourself that?");
+					bot.getServer(server).cmdPRIVMSG(source, "Why are you telling yourself that?");
 					return;
 				}
-				else if(recepients[i].equalsIgnoreCase(bot.getIRC().getNickname()))
+				else if(recepients[i].equalsIgnoreCase(bot.getServer(server).getNickname()))
 				{
-					bot.getIRC().cmdPRIVMSG(source, "Thanks for telling me that, " + triggerUser + ".");
+					bot.getServer(server).cmdPRIVMSG(source, "Thanks for telling me that, " + triggerUser + ".");
 					return;
 				}
 
@@ -121,14 +123,14 @@ public class Tell extends Module
 				tellers.put(triggerUser, new Date());
 				
 				writeMessages();
-				bot.getIRC().cmdPRIVMSG(source, "Okay, I'll tell " + recepients[i] + " that next time they speak.");
+				bot.getServer(server).cmdPRIVMSG(source, "Okay, I'll tell " + recepients[i] + " that next time they speak.");
 			}
 		}
 		else if(message.toLowerCase().matches("^" + commandPrefix + "r(emove)?tell.*"))
 		{
 			if(params.size() == 1)
 			{
-				bot.getIRC().cmdPRIVMSG(source, "Remove what?");
+				bot.getServer(server).cmdPRIVMSG(source, "Remove what?");
 				return;
 			}
 			
@@ -147,11 +149,11 @@ public class Tell extends Module
 						String messageString = "Message \"" + sentMessage.getText() + "\" sent to " + user + " on " + sentMessage.getDateSent() + " was removed from the message database!";
 						if(sentMessage.getMessageSource().equals("PM"))
 						{
-							bot.getIRC().cmdNOTICE(triggerUser, messageString);
+							bot.getServer(server).cmdNOTICE(triggerUser, messageString);
 						}
 						else
 						{
-							bot.getIRC().cmdPRIVMSG(source, messageString);
+							bot.getServer(server).cmdPRIVMSG(source, messageString);
 						}
 						iter2.remove();
 						writeMessages();
@@ -165,7 +167,7 @@ public class Tell extends Module
 			}
 			if(!matchFound)
 			{
-				bot.getIRC().cmdPRIVMSG(source, "No message matching \"" + searchString + "\" was found.");
+				bot.getServer(server).cmdPRIVMSG(source, "No message matching \"" + searchString + "\" was found.");
 			}
 		}
 		else if(message.toLowerCase().matches("^" + commandPrefix + "s(ent)?tells.*"))
@@ -191,13 +193,13 @@ public class Tell extends Module
 				
 				if(foundMessages.size() == 0)
 				{
-					bot.getIRC().cmdNOTICE(triggerUser, "There are no messages sent by you that have not been received yet.");
+					bot.getServer(server).cmdNOTICE(triggerUser, "There are no messages sent by you that have not been received yet.");
 				}
 				else
 				{
 					for(Message sentMessage : foundMessages)
 					{
-						bot.getIRC().cmdNOTICE(source, sentMessage.getText() + " < Sent to " + user + " on " + sentMessage.getDateSent());
+						bot.getServer(server).cmdNOTICE(source, sentMessage.getText() + " < Sent to " + user + " on " + sentMessage.getDateSent());
 					}
 				}
 			}
@@ -217,11 +219,11 @@ public class Tell extends Module
 					String messageString = triggerUser + ": " + sentMessage.getText() + " < From " + sentMessage.getFrom() + " on " + sentMessage.getDateSent();
 					if(sentMessage.getMessageSource().equals("PM"))
 					{
-						bot.getIRC().cmdPRIVMSG(triggerUser, messageString);
+						bot.getServer(server).cmdPRIVMSG(triggerUser, messageString);
 					}
 					else
 					{
-						bot.getIRC().cmdPRIVMSG(source, messageString);
+						bot.getServer(server).cmdPRIVMSG(source, messageString);
 					}
 					iter2.remove();
 				}

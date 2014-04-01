@@ -10,10 +10,12 @@ public class Uptime extends Module
 {
 	private Date dateStarted;
 	
-	public Uptime()
+	public Uptime(String server)
 	{
+		super(server);
+		
 		this.authType = AuthType.Anyone;
-		this.apiVersion = "0.5.0";
+		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(uptime)$";
 	}
@@ -36,7 +38,7 @@ public class Uptime extends Module
 		elapsed[2] = (int) (end.getTimeInMillis() - clone.getTimeInMillis()) / 60000;
 		clone.add(Calendar.MINUTE, elapsed[2]);
 		
-		bot.getIRC().cmdPRIVMSG(source, "Bot has been running since " + format.format(dateStarted) + " (" + elapsed[0] + " day(s), " + elapsed[1] + " hour(s) and " + elapsed[2] + " minute(s))");
+		bot.getServer(server).cmdPRIVMSG(source, "Bot has been running since " + format.format(dateStarted) + " (" + elapsed[0] + " day(s), " + elapsed[1] + " hour(s) and " + elapsed[2] + " minute(s))");
 	}
 
 	@Override
