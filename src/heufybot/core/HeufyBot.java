@@ -101,6 +101,7 @@ public class HeufyBot
 			
 			ModuleInterface moduleInterface = new ModuleInterface(this, sConfig);
 			server.getEventListenerManager().addListener(moduleInterface);
+			server.setModuleInterface(moduleInterface);
 			this.loadModules(server);
 			
 			if(server.connect(sConfig.getSettingWithDefault("server", "irc.foo.bar"), sConfig.getSettingWithDefault("port", 6667)))

@@ -483,6 +483,11 @@ public class IRCServer
 		return moduleInterface;
 	}
 	
+	public void setModuleInterface(ModuleInterface moduleInterface)
+	{
+		this.moduleInterface = moduleInterface;
+	}
+	
 	public ConnectionState getConnectionState() 
 	{
 		return connectionState;
