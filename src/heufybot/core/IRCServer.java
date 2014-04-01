@@ -22,8 +22,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.net.SocketFactory;
 
-import config.GlobalConfig.PasswordType;
-import config.ServerConfig;
+import heufybot.config.GlobalConfig.PasswordType;
+import heufybot.config.ServerConfig;
 
 public class IRCServer 
 {

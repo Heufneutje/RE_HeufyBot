@@ -1,4 +1,4 @@
-package config;
+package heufybot.config;
 
 import java.util.ArrayList;
 import java.util.HashMap;

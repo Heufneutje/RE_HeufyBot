@@ -1,4 +1,4 @@
-package config;
+package heufybot.config;
 
 import heufybot.core.Logger;
 import heufybot.utils.FileUtils;

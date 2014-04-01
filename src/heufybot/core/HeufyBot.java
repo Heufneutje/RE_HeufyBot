@@ -5,9 +5,9 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import config.GlobalConfig;
-import config.GlobalConfig.PasswordType;
-import config.ServerConfig;
+import heufybot.config.GlobalConfig;
+import heufybot.config.GlobalConfig.PasswordType;
+import heufybot.config.ServerConfig;
 import heufybot.core.cap.SASLCapHandler;
 import heufybot.core.events.LoggingInterface;
 import heufybot.modules.Module;
