@@ -9,7 +9,7 @@ import java.util.List;
 public class Ignore extends Module
 {
 	private List<String> ignoreList;
-	private final String ignoreListPath = "data/ignorelist.txt";
+	private String ignoreListPath;
 	
 	public Ignore(String server)
 	{
@@ -19,6 +19,8 @@ public class Ignore extends Module
 		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(ignore|unignore)($| .*)";
+		
+		this.ignoreListPath = "data/" + bot.getServer(server).getServerInfo().getNetwork() + "/ignorelist.txt";
 	}
 	
 	@Override
