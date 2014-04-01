@@ -8,11 +8,13 @@
 *.project
 *.classpath
 
+# Folders #
 /bin
 /logs
 /data
 /doc
 /config
+!/config/globalconfig.yml.example
 
 *.log
 *.gitignore
