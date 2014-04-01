@@ -47,6 +47,8 @@ public abstract class Module
 	 */
 	protected AuthType authType;
 	
+	protected String commandPrefix;
+	
 	/**
 	 * What types of events trigger the module.
 	 * Possible triggers are: Message and Action
@@ -61,7 +63,8 @@ public abstract class Module
 	
 	public Module()
 	{
-		bot = HeufyBot.getInstance();
+		this.bot = HeufyBot.getInstance();
+		this.commandPrefix = bot.getGlobalConfig().getSettingWithDefault("commandPrefix", "~");
 	}
 	
 	/**
