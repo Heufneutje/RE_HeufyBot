@@ -8,8 +8,10 @@ import java.util.List;
 
 public class Help extends Module
 {
-	public Help()
+	public Help(String server)
 	{
+		super(server);
+		
 		this.authType = AuthType.Anyone;
 		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
