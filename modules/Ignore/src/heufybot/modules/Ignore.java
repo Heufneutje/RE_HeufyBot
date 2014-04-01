@@ -20,7 +20,7 @@ public class Ignore extends Module
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
 		this.trigger = "^" + commandPrefix + "(ignore|unignore)($| .*)";
 		
-		this.ignoreListPath = "data/" + bot.getServer(server).getServerInfo().getNetwork() + "/ignorelist.txt";
+		this.ignoreListPath = "data/" + server + "/ignorelist.txt";
 	}
 	
 	@Override
