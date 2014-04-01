@@ -71,7 +71,7 @@ autoJoin: false
 
 # -autoJoinChannels-
 # The channels the bot should join if autojoin is enabled.
-autoJoinChannels: 
+autoJoinChannels: []
 
 # -messageDelay-
 # Unless the bot is having trouble sending messages, leave this alone.
@@ -88,8 +88,8 @@ commandPrefix: "~"
 # -modulesToLoad- 
 # The modules that should be loaded at startup. These modules need to be in the
 # "modules" folder. Loading at least ModuleLoader is recommended.
-modules: 
+modules: []
   
 # -botAdmins-
 # Users that are authorized to use modules that have access level "ops".
-botAdmins: 
+botAdmins: []
