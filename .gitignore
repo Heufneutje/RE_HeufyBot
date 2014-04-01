@@ -14,7 +14,7 @@
 /data
 /doc
 /config
-!/config/globalconfig.yml.example
+!config/globalconfig.yml.example
 
 *.log
 *.gitignore
