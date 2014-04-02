@@ -2,6 +2,7 @@ package heufybot.config;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.yaml.snakeyaml.Yaml;
@@ -39,7 +40,8 @@ public class GlobalConfig
 		{
 			Logger.error("Config", "Config file \"" + fileName + "\" could not be found. Generating default config...");
 			
-			settings = new HashMap<String, Object>();
+			HashMap<String, Object> settings = new LinkedHashMap<String, Object>();
+			
 			settings.put("nickname", "RE_HeufyBot");
 			settings.put("username", "RE_HeufyBot");
 			settings.put("realname", "RE_HeufyBot IRC Bot");
@@ -62,6 +64,7 @@ public class GlobalConfig
 			settings.put("botAdmins", new ArrayList<String>());
 			
 			String settingsYaml = yaml.dump(settings);
+			this.settings = settings;
 			FileUtils.writeFile(fileName, settingsYaml);
 		}
 	}
