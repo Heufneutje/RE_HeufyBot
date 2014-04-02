@@ -123,9 +123,12 @@ public class ModuleInterface extends EventListenerAdapter
 	
 	private void handleMessage(final String serverName, final IRCUser user, final IRCChannel channel, final String message, TriggerType triggerType)
 	{
-		if(ignores.contains(user.getNickname()))
+		for(String ignore : ignores)
 		{
-			return;
+			if(user.getFullHost().matches(ignore))
+			{
+				return;
+			}
 		}
 		
 		Module[] listCopy = new Module[modules.size()];
@@ -145,7 +148,7 @@ public class ModuleInterface extends EventListenerAdapter
 					target = channel.getName();
 				}
 				
-				if(isAuthorized(module, channel, user))
+				if(isAuthorized(module, user))
 				{
 					if(module.getTriggerOnEveryMessage())
 					{
@@ -176,9 +179,24 @@ public class ModuleInterface extends EventListenerAdapter
 		}
 	}
 	
-	public boolean isAuthorized(Module module, IRCChannel channel, IRCUser user)
+	public boolean isAuthorized(Module module, IRCUser user)
 	{
-		return module.authType == Module.AuthType.Anyone || bot.getServer(server).getConfig().getSettingWithDefault("botAdmins", new ArrayList<String>()).contains(user.getNickname());
+		if( module.authType == Module.AuthType.Anyone)
+		{
+			return true;
+		}
+		else
+		{
+			ArrayList<String> botAdmins = bot.getServer(server).getConfig().getSettingWithDefault("botAdmins", new ArrayList<String>());
+			for(String admin : botAdmins)
+			{
+				if(user.getFullHost().matches(admin))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	public boolean isModuleLoaded(String moduleName)

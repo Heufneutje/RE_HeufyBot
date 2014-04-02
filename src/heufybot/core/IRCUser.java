@@ -38,6 +38,11 @@ public class IRCUser
 		return hostname;
 	}
 	
+	public String getFullHost()
+	{
+		return nickname + "!" + login + "@" + hostname;
+	}
+	
 	public void setNickname(String nickname)
 	{
 		this.nickname = nickname;
