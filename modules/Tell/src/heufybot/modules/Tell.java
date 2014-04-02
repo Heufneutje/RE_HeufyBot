@@ -208,7 +208,7 @@ public class Tell extends Module
 		
 		//Automatic stuff
 		int messageCount = 0;
-		for(Iterator<String> iter = tellsMap.keySet().iterator(); iter.hasNext();)
+		for(Iterator<String> iter = tellsMap.keySet().iterator(); iter.hasNext() && messageCount < 3;)
 		{
 			String user = iter.next();
 			if(triggerUser.toLowerCase().matches(user.toLowerCase()))
