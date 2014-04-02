@@ -230,7 +230,7 @@ public class Tell extends Module
 				}
 				if(sentMessages.size() == 0)
 				{
-					tellsMap.remove(user);
+					iter.remove();
 				}
 			}
 		}
