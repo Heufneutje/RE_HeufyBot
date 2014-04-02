@@ -23,6 +23,7 @@ public class Tell extends Module
 	private LinkedHashMap<String, ArrayList<Message>> tellsMap;
 	private HashMap<String, Date> tellers;
 	private String databasePath;
+	private final int MESSAGE_COOLDOWN = 30;
 	
 	public Tell(String server)
 	{
@@ -67,9 +68,9 @@ public class Tell extends Module
 			{
 				long timeStampDifference = (new Date().getTime() - timestamp.getTime()) / 1000;
 				System.out.println(timeStampDifference);
-				if(timeStampDifference < 60)
+				if(timeStampDifference < MESSAGE_COOLDOWN)
 				{
-					bot.getServer(server).cmdPRIVMSG(source, "Calm down, " + triggerUser + "! You just sent a message " + timeStampDifference + " seconds ago! You have to wait " + (60 - timeStampDifference) + " more seconds.");
+					bot.getServer(server).cmdPRIVMSG(source, "Calm down, " + triggerUser + "! You just sent a message " + timeStampDifference + " seconds ago! You have to wait " + (MESSAGE_COOLDOWN - timeStampDifference) + " more seconds.");
 					return;
 				}
 			}
