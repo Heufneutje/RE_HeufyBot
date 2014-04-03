@@ -85,7 +85,7 @@ messageDelay: 500
 # The prefix that should be used when a user wants to execute a bot command.
 commandPrefix: "~"
 
-# -modulesToLoad- 
+# -modules- 
 # The modules that should be loaded at startup. These modules need to be in the
 # "modules" folder. Loading at least ModuleLoader is recommended.
 modules: []
