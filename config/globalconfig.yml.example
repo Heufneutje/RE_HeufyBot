@@ -88,8 +88,13 @@ commandPrefix: "~"
 # -modules- 
 # The modules that should be loaded at startup. These modules need to be in the
 # "modules" folder. Loading at least ModuleLoader is recommended.
-modules: []
+modules: 
+- "ModuleLoader"
+- "Help"
+- "Ignore"
   
 # -botAdmins-
-# Users that are authorized to use modules that have access level "ops".
+# Users that are authorized to use modules that have access level "Admins".
+# Admins must be spicified in a "nickname!username@hostname" format. They can
+# be used a regex, meaning that ".*" will act as a wildcard.
 botAdmins: []
