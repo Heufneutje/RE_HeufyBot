@@ -95,6 +95,6 @@ modules:
   
 # -botAdmins-
 # Users that are authorized to use modules that have access level "Admins".
-# Admins must be spicified in a "nickname!username@hostname" format. They can
+# Admins must be specified in a "nickname!username@hostname" format. They can
 # be used a regex, meaning that ".*" will act as a wildcard.
 botAdmins: []
