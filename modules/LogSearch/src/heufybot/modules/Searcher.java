@@ -62,7 +62,7 @@ public class Searcher
 		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		String todayString = formatter.format(today);
 		
-		for(int i = logsFolder.length - 1; i >= 1; i--)
+		for(int i = logsFolder.length - 1; i >= 0; i--)
 		{
 			File file = logsFolder[i];
 			
@@ -75,8 +75,9 @@ public class Searcher
 				Pattern normalPattern = Pattern.compile(".*<(.?" + searchTerms + ")> .*", Pattern.CASE_INSENSITIVE);
 				Pattern actionPattern = Pattern.compile(".*\\* (" + searchTerms + ") .*", Pattern.CASE_INSENSITIVE);
 				
-				for(String line : lines)
+				for(int j = lines.length - 1; j >= 0; j--)
 				{
+					String line = lines[j];
 					Matcher matcher = normalPattern.matcher(line);
 					if(matcher.find())
 					{
