@@ -101,7 +101,7 @@ public class Searcher
 	{
 		File[] logsFolder = new File(rootLogPath).listFiles();
 		Arrays.sort(logsFolder);
-
+		
 		for(File file : logsFolder)
 		{
 			int dateStart = file.getPath().lastIndexOf(File.separator) + 1;
@@ -127,6 +127,10 @@ public class Searcher
 		File[] logsFolder = new File(rootLogPath).listFiles();
 		Arrays.sort(logsFolder);
 
+		Date today = new Date();
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String todayString = formatter.format(today);
+		
 		for(int i = logsFolder.length - 1; i >= 0; i--)
 		{
 			File file = logsFolder[i];
@@ -137,7 +141,13 @@ public class Searcher
 			String[] lines = FileUtils.readFile(file.getPath()).split("\n");
 			Pattern normalPattern = Pattern.compile(".*<.*> .*(" + searchTerms + ").*", Pattern.CASE_INSENSITIVE);
 			
-			for(int j = lines.length - 1; j >= 0; j--)
+			int startLine = lines.length;
+			if(date.equals(todayString) && lines.length > 5)
+			{
+				startLine = startLine - 5;
+			}
+			
+			for(int j = startLine - 1; j >= 0; j--)
 			{
 				String line = lines[j];
 				Matcher matcher = normalPattern.matcher(line);
