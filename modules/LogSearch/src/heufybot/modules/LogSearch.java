@@ -15,7 +15,7 @@ public class LogSearch extends Module
 		this.authType = AuthType.Anyone;
 		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
-		this.trigger = "^" + commandPrefix + "(lastseen)($| .*)";
+		this.trigger = "^" + commandPrefix + "(firsteen|lastseen|lastsaw|firstsaid|lastsaid)($| .*)";
 		
 		String rootLogPath = bot.getServer(server).getConfig().getSettingWithDefault("logPath", "logs");
 		String network = bot.getServer(server).getServerInfo().getNetwork();
