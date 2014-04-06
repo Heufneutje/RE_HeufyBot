@@ -62,8 +62,10 @@ public class Searcher
 		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		String todayString = formatter.format(today);
 		
-		for(File file : logsFolder)
+		for(int i = logsFolder.length - 1; i >= 1; i--)
 		{
+			File file = logsFolder[i];
+			
 			int dateStart = file.getPath().lastIndexOf(File.separator) + 1;
 			String date = "[" + file.getPath().substring(dateStart, dateStart + 10) + "] ";
 			
