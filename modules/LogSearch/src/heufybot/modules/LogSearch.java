@@ -36,6 +36,14 @@ public class LogSearch extends Module
 			{
 				bot.getServer(server).cmdPRIVMSG(source, searcher.firstSeen(source, searchTerms));
 			}
+			else if(message.matches(commandPrefix + "lastseen.*"))
+			{
+				bot.getServer(server).cmdPRIVMSG(source, searcher.lastSeen(source, searchTerms, true));
+			}
+			else if(message.matches(commandPrefix + "lastsaw.*"))
+			{
+				bot.getServer(server).cmdPRIVMSG(source, searcher.lastSeen(source, searchTerms, false));
+			}
 		}
 	}
 

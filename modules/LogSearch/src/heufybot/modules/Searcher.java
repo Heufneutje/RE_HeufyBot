@@ -3,7 +3,10 @@ package heufybot.modules;
 import heufybot.utils.FileUtils;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,6 +46,47 @@ public class Searcher
 					if(matcher.find())
 					{
 						return date + line;
+					}
+				}
+			}
+		}
+		return "No user matching \"" + searchTerms + "\" was found in the logs.";
+	}
+	
+	public String lastSeen(String source, String searchTerms, boolean includeToday)
+	{
+		File[] logsFolder = new File(rootLogPath).listFiles();
+		Arrays.sort(logsFolder);
+		
+		Date today = new Date();
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String todayString = formatter.format(today);
+		
+		for(File file : logsFolder)
+		{
+			int dateStart = file.getPath().lastIndexOf(File.separator) + 1;
+			String date = "[" + file.getPath().substring(dateStart, dateStart + 10) + "] ";
+			
+			if(!(includeToday && date.equals(todayString)))
+			{
+				String[] lines = FileUtils.readFile(file.getPath()).split("\n");
+				Pattern normalPattern = Pattern.compile(".*<(.?" + searchTerms + ")> .*", Pattern.CASE_INSENSITIVE);
+				Pattern actionPattern = Pattern.compile(".*\\* (" + searchTerms + ") .*", Pattern.CASE_INSENSITIVE);
+				
+				for(String line : lines)
+				{
+					Matcher matcher = normalPattern.matcher(line);
+					if(matcher.find())
+					{
+						return date + line;
+					}
+					else
+					{
+						matcher = actionPattern.matcher(line);
+						if(matcher.find())
+						{
+							return date + line;
+						}
 					}
 				}
 			}
