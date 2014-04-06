@@ -67,7 +67,7 @@ public class Searcher
 			File file = logsFolder[i];
 			
 			int dateStart = file.getPath().lastIndexOf(File.separator) + 1;
-			String date = "[" + file.getPath().substring(dateStart, dateStart + 10) + "] ";
+			String date = file.getPath().substring(dateStart, dateStart + 10);
 			
 			if(!(includeToday && date.equals(todayString)))
 			{
@@ -81,14 +81,14 @@ public class Searcher
 					Matcher matcher = normalPattern.matcher(line);
 					if(matcher.find())
 					{
-						return date + line;
+						return "[" + date + "] " + line;
 					}
 					else
 					{
 						matcher = actionPattern.matcher(line);
 						if(matcher.find())
 						{
-							return date + line;
+							return "[" + date + "] " + line;
 						}
 					}
 				}
