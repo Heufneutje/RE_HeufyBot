@@ -6,8 +6,6 @@ import java.util.List;
 
 public class LogSearch extends Module
 {
-	private Searcher searcher;
-	
 	public LogSearch(String server)
 	{
 		super(server);
@@ -15,12 +13,7 @@ public class LogSearch extends Module
 		this.authType = AuthType.Anyone;
 		this.apiVersion = 60;
 		this.triggerTypes = new TriggerType[] { TriggerType.Message };
-		this.trigger = "^" + commandPrefix + "(firsteen|lastseen|lastsaw|firstsaid|lastsaid)($| .*)";
-		
-		String rootLogPath = bot.getServer(server).getConfig().getSettingWithDefault("logPath", "logs");
-		String network = bot.getServer(server).getServerInfo().getNetwork();
-		
-		this.searcher = new Searcher(rootLogPath + "/" + network + "/");
+		this.trigger = "^" + commandPrefix + "(firstseen|lastseen|lastsaw|firstsaid|lastsaid)($| .*)";
 	}
 	
 	@Override
@@ -35,7 +28,14 @@ public class LogSearch extends Module
 			params.remove(0);
 			String searchTerms = StringUtils.join(params, " ");
 			
-			bot.getServer(server).cmdPRIVMSG(source, searcher.firstSeen(source, searchTerms, true));
+			String rootLogPath = bot.getServer(server).getConfig().getSettingWithDefault("logPath", "logs");
+			String network = bot.getServer(server).getServerInfo().getNetwork();
+			Searcher searcher = new Searcher(rootLogPath + "/" + network + "/" + source + "/");
+			
+			if(message.matches(commandPrefix + "firstseen.*"))
+			{
+				bot.getServer(server).cmdPRIVMSG(source, searcher.firstSeen(source, searchTerms));
+			}
 		}
 	}
 

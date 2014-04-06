@@ -3,6 +3,7 @@ package heufybot.modules;
 import heufybot.utils.FileUtils;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,13 +16,13 @@ public class Searcher
 		this.rootLogPath = rootLogPath;
 	}
 	
-	public String firstSeen(String source, String searchTerms, boolean includeToday)
+	public String firstSeen(String source, String searchTerms)
 	{
-		File[] logsFolder = new File(rootLogPath + "/" + source + "/").listFiles();
-		for(int i = 0; i < logsFolder.length; i++)
+		File[] logsFolder = new File(rootLogPath).listFiles();
+		Arrays.sort(logsFolder);
+
+		for(File file : logsFolder)
 		{
-			File file = logsFolder[i];
-			
 			int dateStart = file.getPath().lastIndexOf(File.separator) + 1;
 			String date = "[" + file.getPath().substring(dateStart, dateStart + 10) + "] ";
 			
@@ -29,19 +30,19 @@ public class Searcher
 			Pattern normalPattern = Pattern.compile(".*<(.?" + searchTerms + ")> .*", Pattern.CASE_INSENSITIVE);
 			Pattern actionPattern = Pattern.compile(".*\\* (" + searchTerms + ") .*", Pattern.CASE_INSENSITIVE);
 			
-			for(int j = 0; j < lines.length; j++)
+			for(String line : lines)
 			{
-				Matcher matcher = normalPattern.matcher(lines[j]);
+				Matcher matcher = normalPattern.matcher(line);
 				if(matcher.find())
 				{
-					return date + lines[j];
+					return date + line;
 				}
 				else
 				{
-					matcher = actionPattern.matcher(lines[j]);
+					matcher = actionPattern.matcher(line);
 					if(matcher.find())
 					{
-						return date + lines[j];
+						return date + line;
 					}
 				}
 			}
