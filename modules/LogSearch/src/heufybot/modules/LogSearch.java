@@ -44,12 +44,47 @@ public class LogSearch extends Module
 			{
 				bot.getServer(server).cmdPRIVMSG(source, searcher.lastSeen(source, searchTerms, false));
 			}
+			else if(message.matches(commandPrefix + "firstsaid.*"))
+			{
+				bot.getServer(server).cmdPRIVMSG(source, searcher.firstSaid(source, searchTerms));
+			}
+			else if(message.matches(commandPrefix + "lastsaid.*"))
+			{
+				bot.getServer(server).cmdPRIVMSG(source, searcher.lastSaid(source, searchTerms));
+			}
 		}
 	}
 
 	public String getHelp(String message)
 	{
-		return "";
+		if(message.matches("firstseen"))
+		{
+			return "Commands: " + commandPrefix + "firstseen <nickname> | Finds the first message of the given user.";
+		}
+		else if(message.matches("lastseen"))
+		{
+			return "Commands: " + commandPrefix + "lastseen <nickname> | Finds the last message of the given user. This includes today.";
+		}
+		else if(message.matches("lastsaw"))
+		{
+			return "Commands: " + commandPrefix + "lastsaw <nickname> | Finds the last message of the given user. This does not include today.";
+		}
+		else if(message.matches("firstsaid"))
+		{
+			return "Commands: " + commandPrefix + "firstsaid <text> | Checks the log for the first time someone mentioned a given word or phrase.";
+		}
+		else if(message.matches("lastsaid"))
+		{
+			return "Commands: " + commandPrefix + "lastsaid <text> | Checks the log for the last time someone mentioned a given word or phrase.";
+		}
+		else
+		{
+			return "Commands: " + commandPrefix + "firstseen <nickname>, "
+					+ commandPrefix + "lastseen <nickname>, "
+					+ commandPrefix + "lastsaw <nickname>, "
+					+ commandPrefix + "firstsaid <text>, "
+					+ commandPrefix + "lastsaid <text> | Searches the logs for a certain name or phrase.";
+		}
 	}
 
 	@Override

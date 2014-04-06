@@ -68,8 +68,8 @@ public class Searcher
 			
 			int dateStart = file.getPath().lastIndexOf(File.separator) + 1;
 			String date = file.getPath().substring(dateStart, dateStart + 10);
-			
-			if(!(includeToday && date.equals(todayString)))
+
+			if(includeToday || !date.equals(todayString))
 			{
 				String[] lines = FileUtils.readFile(file.getPath()).split("\n");
 				Pattern normalPattern = Pattern.compile(".*<(.?" + searchTerms + ")> .*", Pattern.CASE_INSENSITIVE);
@@ -95,5 +95,58 @@ public class Searcher
 			}
 		}
 		return "No user matching \"" + searchTerms + "\" was found in the logs.";
+	}
+	
+	public String firstSaid(String source, String searchTerms)
+	{
+		File[] logsFolder = new File(rootLogPath).listFiles();
+		Arrays.sort(logsFolder);
+
+		for(File file : logsFolder)
+		{
+			int dateStart = file.getPath().lastIndexOf(File.separator) + 1;
+			String date = "[" + file.getPath().substring(dateStart, dateStart + 10) + "] ";
+			
+			String[] lines = FileUtils.readFile(file.getPath()).split("\n");
+			Pattern normalPattern = Pattern.compile(".*<.*> .*(" + searchTerms + ").*", Pattern.CASE_INSENSITIVE);
+			
+			for(String line : lines)
+			{
+				Matcher matcher = normalPattern.matcher(line);
+				if(matcher.find())
+				{
+					return date + line;
+				}
+			}
+		}
+		return "No message matching \"" + searchTerms + "\" was found in the logs.";
+	}
+	
+	public String lastSaid(String source, String searchTerms)
+	{
+		File[] logsFolder = new File(rootLogPath).listFiles();
+		Arrays.sort(logsFolder);
+
+		for(int i = logsFolder.length - 1; i >= 0; i--)
+		{
+			File file = logsFolder[i];
+			
+			int dateStart = file.getPath().lastIndexOf(File.separator) + 1;
+			String date = file.getPath().substring(dateStart, dateStart + 10);
+
+			String[] lines = FileUtils.readFile(file.getPath()).split("\n");
+			Pattern normalPattern = Pattern.compile(".*<.*> .*(" + searchTerms + ").*", Pattern.CASE_INSENSITIVE);
+			
+			for(int j = lines.length - 1; j >= 0; j--)
+			{
+				String line = lines[j];
+				Matcher matcher = normalPattern.matcher(line);
+				if(matcher.find())
+				{
+					return "[" + date + "] " + line;
+				}
+			}
+		}
+		return "No message matching \"" + searchTerms + "\" was found in the logs.";
 	}
 }
