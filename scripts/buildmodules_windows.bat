@@ -12,6 +12,8 @@ cd ..\..\Log\bin
 jar cvf ..\..\Log.jar *
 cd ..\..\LogEC2\bin
 jar cvf ..\..\LogEC2.jar *
+cd ..\..\LogSearch\bin
+jar cvf ..\..\LogSearch.jar *
 cd ..\..\Nick\bin
 jar cvf ..\..\Nick.jar *
 cd ..\..\NowPlaying\bin
