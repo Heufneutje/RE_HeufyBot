@@ -27,4 +27,4 @@ To use the bot, copy the "settings.yml.example" file into "settings.yml" and edi
 Support
 =======
 
-Support can be gotten in the IRC channel #heufybot on ChatSpike. Click [here](irc://irc.chatspike.net/#heufneutje) to connect using your IRC client (if your browser supports the IRC protocol).
+Support can be gotten in the IRC channel #heufybot on irc.chatspike.net.
