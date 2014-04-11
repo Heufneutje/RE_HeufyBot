@@ -136,8 +136,9 @@ public class Tell extends Module
 			}
 			
 			params.remove(0);
-			String searchString = fixRegex(StringUtils.join(params, " "));
+			String searchString = ".*" + StringUtils.join(params, " ") + ".*";
 			boolean matchFound = false;
+			
 			for(Iterator<String> iter = tellsMap.keySet().iterator(); iter.hasNext() && !matchFound;)
 			{
 				String user = iter.next();
@@ -145,7 +146,7 @@ public class Tell extends Module
 				for(Iterator<Message> iter2 = sentMessages.iterator(); iter2.hasNext() && !matchFound;)
 				{
 					Message sentMessage = iter2.next();
-					if(sentMessage.getFrom().equalsIgnoreCase(triggerUser) && sentMessage.getText().matches(".*" + searchString + ".*"))
+					if(sentMessage.getFrom().equalsIgnoreCase(triggerUser) && sentMessage.getText().toLowerCase().matches(searchString.toLowerCase()))
 					{
 						String messageString = "Message \"" + sentMessage.getText() + "\" sent to " + user + " on " + sentMessage.getDateSent() + " was removed from the message database!";
 						if(sentMessage.getMessageSource().equals("PM"))
