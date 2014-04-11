@@ -190,7 +190,15 @@ public class ModuleInterface extends EventListenerAdapter
 			ArrayList<String> botAdmins = bot.getServer(server).getConfig().getSettingWithDefault("botAdmins", new ArrayList<String>());
 			for(String admin : botAdmins)
 			{
-				if(user.getFullHost().matches(admin))
+				String regex = "^" + StringUtils.escapeRegex(admin).
+						replaceAll("\\*", ".*").
+						replaceAll("\\?", ".").
+						replaceAll("\\(", "(").
+		                replaceAll("\\)", ")").
+		                replaceAll(",", "|").
+		                replaceAll("/", "|") + "$";
+				
+				if(user.getFullHost().matches(regex))
 				{
 					return true;
 				}
