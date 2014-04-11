@@ -195,6 +195,11 @@ public class HeufyBot
 		return servers.get(name);
 	}
 	
+	public HashMap<String, IRCServer> getServers()
+	{
+		return servers;
+	}
+	
 	public static HeufyBot getInstance()
 	{
 		return instance;
