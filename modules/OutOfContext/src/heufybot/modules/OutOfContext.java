@@ -104,7 +104,7 @@ public class OutOfContext extends Module
 				    
 				    for(String quote : quoteLog)
 				    {
-				    	if(quote.substring(21).equalsIgnoreCase(newQuote.substring(21)))
+				    	if(quote.length() > 21 && quote.substring(21).equalsIgnoreCase(newQuote.substring(21)))
 				    	{
 				    		bot.getServer(server).cmdPRIVMSG(source, "This quote is already in the log.");
 				    		return;
