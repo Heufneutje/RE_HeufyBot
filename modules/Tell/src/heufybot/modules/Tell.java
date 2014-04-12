@@ -179,7 +179,7 @@ public class Tell extends Module
 				return;
 			}
 			
-			ArrayList<Message> foundMessages = new ArrayList<Message>();
+			boolean foundMessage = false;
 			for(Iterator<String> iter = tellsMap.keySet().iterator(); iter.hasNext();)
 			{
 				String user = iter.next();
@@ -189,21 +189,15 @@ public class Tell extends Module
 					Message sentMessage = iter2.next();
 					if(sentMessage.getFrom().equalsIgnoreCase(triggerUser))
 					{
-						foundMessages.add(sentMessage);
-					}
-				}
-				
-				if(foundMessages.size() == 0)
-				{
-					bot.getServer(server).cmdNOTICE(triggerUser, "There are no messages sent by you that have not been received yet.");
-				}
-				else
-				{
-					for(Message sentMessage : foundMessages)
-					{
+						foundMessage = true;
 						bot.getServer(server).cmdNOTICE(source, sentMessage.getText() + " < Sent to " + user + " on " + sentMessage.getDateSent());
 					}
 				}
+			}
+			
+			if(foundMessage)
+			{
+				bot.getServer(server).cmdNOTICE(triggerUser, "There are no messages sent by you that have not been received yet.");
 			}
 		}
 		
