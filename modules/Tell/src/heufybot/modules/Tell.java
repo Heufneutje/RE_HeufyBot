@@ -190,7 +190,7 @@ public class Tell extends Module
 					if(sentMessage.getFrom().equalsIgnoreCase(triggerUser))
 					{
 						foundMessage = true;
-						bot.getServer(server).cmdNOTICE(source, sentMessage.getText() + " < Sent to " + user + " on " + sentMessage.getDateSent());
+						bot.getServer(server).cmdNOTICE(triggerUser, sentMessage.getText() + " < Sent to " + user + " on " + sentMessage.getDateSent());
 					}
 				}
 			}
