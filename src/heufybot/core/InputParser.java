@@ -173,7 +173,7 @@ public class InputParser
 				server.nickservIdentify(password);
 			}
 			
-			if(autoJoin && autoJoinChannels.size() > 0)
+			if(autoJoinChannels.size() > 0)
 			{
 				for(String channelName : autoJoinChannels)
 				{
