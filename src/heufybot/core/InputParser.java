@@ -148,7 +148,6 @@ public class InputParser
 		String nickname = server.getConfig().getSettingWithDefault("nickname", "RE_HeufyBot");
 		String password = server.getConfig().getSettingWithDefault("password", "");
 		PasswordType passwordType = server.getConfig().getSettingWithDefault("passwordType", PasswordType.None);
-		boolean autoJoin = server.getConfig().getSettingWithDefault("autoJoin", false);
 		boolean autoNickChange = server.getConfig().getSettingWithDefault("autoNickChange", true);
 		ArrayList<String> autoJoinChannels = server.getConfig().getSettingWithDefault("autoJoinChannels", new ArrayList<String>());
 		
