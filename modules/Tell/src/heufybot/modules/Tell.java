@@ -195,7 +195,7 @@ public class Tell extends Module
 				}
 			}
 			
-			if(foundMessage)
+			if(!foundMessage)
 			{
 				bot.getServer(server).cmdNOTICE(triggerUser, "There are no messages sent by you that have not been received yet.");
 			}
