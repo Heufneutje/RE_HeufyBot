@@ -97,7 +97,7 @@ public class Event extends Module
 		{
 			if(params.size() == 1)
 			{
-				bot.getServer(server).cmdPRIVMSG(source, "You didn't specify an event.");
+				bot.getServer(server).cmdPRIVMSG(source, "You didn't specify an event."); 
 				return;
 			}
 			
@@ -179,7 +179,8 @@ public class Event extends Module
 			{
 				Calendar end = Calendar.getInstance();
 				end.setTime(event.getDate());
-				if(elapsed(start, end, Calendar.DATE) <= numberOfDays)
+				int daysTill = elapsed(start, end, Calendar.DATE);
+				if(daysTill > 0 && daysTill <= numberOfDays)
 				{
 					occurringEvents.add(event.getEventString());
 				}
