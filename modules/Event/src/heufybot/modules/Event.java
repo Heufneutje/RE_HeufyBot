@@ -167,9 +167,13 @@ public class Event extends Module
 			{
 				numberOfDays = StringUtils.tryParseInt(params.get(1));
 			}
-			if(numberOfDays < 1 || numberOfDays > 100)
+			if(numberOfDays < 1)
 			{
 				numberOfDays = 7;
+			}
+			else if(numberOfDays > 365)
+			{
+				numberOfDays = 365;
 			}
 			
 			List<String> occurringEvents = new ArrayList<String>();
