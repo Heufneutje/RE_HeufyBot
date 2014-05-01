@@ -23,8 +23,3 @@ Running
 =======
 
 To use the bot, copy the "settings.yml.example" file into "settings.yml" and edit it. Then open a terminal and run `java -jar RE_HeufyBot.jar`
-
-Support
-=======
-
-Support can be gotten in the IRC channel #heufybot on irc.chatspike.net.
