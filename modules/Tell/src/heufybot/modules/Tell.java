@@ -23,7 +23,7 @@ public class Tell extends Module
 	private LinkedHashMap<String, ArrayList<Message>> tellsMap;
 	private HashMap<String, Date> tellers;
 	private String databasePath;
-	private final int MESSAGE_COOLDOWN = 30;
+	private final int MESSAGE_COOLDOWN = 20;
 	
 	public Tell(String server)
 	{
@@ -87,7 +87,7 @@ public class Tell extends Module
 			params.remove(0);
 			for(int i = 0; i < recepients.length; i++)
 			{
-				String recepient = fixRegex(recepients[i]);
+				String recepient = fixRegex(recepients[i].replaceAll(":", ""));
 				if(triggerUser.toLowerCase().matches(recepient.toLowerCase()))
 				{
 					bot.getServer(server).cmdPRIVMSG(source, "Why are you telling yourself that?");
