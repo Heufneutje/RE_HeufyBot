@@ -5,40 +5,41 @@ import heufybot.core.IRCUser;
 
 public class MessageEvent implements BotEvent
 {
-	private IRCUser user;
-	private IRCChannel channel;
-	private String serverName, message;
-	
-	public MessageEvent(String serverName, IRCUser user, IRCChannel channel, String message)
-	{
-		this.serverName = serverName;
-		this.user = user;
-		this.channel = channel;
-		this.message = message;
-	}
-	
-	public String getServerName()
-	{
-		return serverName;
-	}
-	
-	public String getMessage()
-	{
-		return message;
-	}
-	
-	public IRCUser getUser()
-	{
-		return user;
-	}
-	
-	public IRCChannel getChannel()
-	{
-		return channel;
-	}
-	
-	public String toString()
-	{
-		return "MessageEvent";
-	}
+    private IRCUser user;
+    private IRCChannel channel;
+    private String serverName, message;
+
+    public MessageEvent(String serverName, IRCUser user, IRCChannel channel, String message)
+    {
+        this.serverName = serverName;
+        this.user = user;
+        this.channel = channel;
+        this.message = message;
+    }
+
+    public String getServerName()
+    {
+        return this.serverName;
+    }
+
+    public String getMessage()
+    {
+        return this.message;
+    }
+
+    public IRCUser getUser()
+    {
+        return this.user;
+    }
+
+    public IRCChannel getChannel()
+    {
+        return this.channel;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "MessageEvent";
+    }
 }
