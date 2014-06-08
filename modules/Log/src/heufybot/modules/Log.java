@@ -14,114 +14,125 @@ import java.util.List;
 
 public class Log extends Module
 {
-	private String source;
-	private String dateString;
+    private String source;
+    private String dateString;
 
-	public Log(String server)
-	{
-		super(server);
-		
-		this.authType = AuthType.Anyone;
-		this.apiVersion = 60;
-		this.triggerTypes = new TriggerType[] { TriggerType.Message };
-		this.trigger = "^" + commandPrefix + "(log)($| .*)";
-	}
+    public Log(String server)
+    {
+        super(server);
 
-	public void processEvent(String source, String mesage, String triggerUser, List<String> params)
-	{
-		if(params.size() == 1)
-		{
-			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			Date date = new Date();
-			this.dateString = dateFormat.format(date);
+        this.authType = AuthType.Anyone;
+        this.apiVersion = 60;
+        this.triggerTypes = new TriggerType[] { TriggerType.Message };
+        this.trigger = "^" + this.commandPrefix + "(log)($| .*)";
+    }
 
-			this.source = source;
-			post(bot);
-		}
-		else
-		{
-			this.source = source;
-			
-			if(params.get(1).startsWith("-"))
-			{
-				try
-				{
-					int numberdays = Integer.parseInt(params.get(1));
-					Calendar cal = Calendar.getInstance();
-					cal.add(Calendar.DATE, numberdays);
-					
-					DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-					this.dateString = dateFormat.format(cal.getTime());
-					
-					post(bot);
-				}
-				catch (Exception e)
-				{
-					bot.getServer(server).cmdPRIVMSG(source, "Parser Error: Make sure the format is: log -<numberofdays>");
-				}
-			}
-			else
-			{
-				try
-				{
-					List<String> dateParams = StringUtils.parseStringtoList(params.get(1), "-");
-					
-					int year = Integer.parseInt(dateParams.get(0));
-					int month = Integer.parseInt(dateParams.get(1));
-					int day = Integer.parseInt(dateParams.get(2));
-	    		
-					Calendar calendar = new GregorianCalendar(year, month, day);
-					calendar.clear();
-	    		
-					this.dateString = params.get(1);
-	    		
-					post(bot);
-		    	}
-				catch (Exception e)
-				{
-					bot.getServer(server).cmdPRIVMSG(source, "Parser Error: Make sure the date format for the log is: yyyy-mm-dd");
-				}
-			}
-		}
-	}
-  
-	public void post(final HeufyBot bot)
-	{
-		String targetLog = source;
-		String logsPath = bot.getServer(server).getConfig().getSettingWithDefault("logPath", "logs");
-		String network = bot.getServer(server).getServerInfo().getNetwork();
-		String filePath = logsPath + "/" + network + "/" + targetLog + "/" + dateString + ".log";
-		
-		if(FileUtils.readFile(filePath) == null)
-		{
-			bot.getServer(server).cmdPRIVMSG(source, "I do not have that log");
-			return;
-		}
-		
-		String result = PasteUtils.post(FileUtils.readFile(filePath), "Log for " + source + " on " + dateString, "hour");
-		if(result != null)
-		{
-			bot.getServer(server).cmdPRIVMSG(source, "Log for " + source + " on " + dateString + " posted: " + result + " (Link expires in 60 minutes)");
-		}
-		else
-		{
-			bot.getServer(server).cmdPRIVMSG(source, "Error: Log could not be posted");
-		}
-	}
+    @Override
+    public void processEvent(String source, String mesage, String triggerUser, List<String> params)
+    {
+        if (params.size() == 1)
+        {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = new Date();
+            this.dateString = dateFormat.format(date);
 
-	@Override
-	public void onLoad()
-	{
-	}
+            this.source = source;
+            this.post(this.bot);
+        }
+        else
+        {
+            this.source = source;
 
-	@Override
-	public String getHelp(String message)
-	{
-		return "Commands: " + commandPrefix + "log (<YYYY-MM-DD>/-<numberofdays>) | Provides a log of the current channel for today, or another date if specified.";
-	}
+            if (params.get(1).startsWith("-"))
+            {
+                try
+                {
+                    int numberdays = Integer.parseInt(params.get(1));
+                    Calendar cal = Calendar.getInstance();
+                    cal.add(Calendar.DATE, numberdays);
 
-	@Override
-	public void onUnload()
-	{
-	}
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    this.dateString = dateFormat.format(cal.getTime());
+
+                    this.post(this.bot);
+                }
+                catch (Exception e)
+                {
+                    this.bot.getServer(this.server).cmdPRIVMSG(source,
+                            "Parser Error: Make sure the format is: log -<numberofdays>");
+                }
+            }
+            else
+            {
+                try
+                {
+                    List<String> dateParams = StringUtils.parseStringtoList(params.get(1), "-");
+
+                    int year = Integer.parseInt(dateParams.get(0));
+                    int month = Integer.parseInt(dateParams.get(1));
+                    int day = Integer.parseInt(dateParams.get(2));
+
+                    Calendar calendar = new GregorianCalendar(year, month, day);
+                    calendar.clear();
+
+                    this.dateString = params.get(1);
+
+                    this.post(this.bot);
+                }
+                catch (Exception e)
+                {
+                    this.bot.getServer(this.server).cmdPRIVMSG(source,
+                            "Parser Error: Make sure the date format for the log is: yyyy-mm-dd");
+                }
+            }
+        }
+    }
+
+    public void post(final HeufyBot bot)
+    {
+        String targetLog = this.source;
+        String logsPath = bot.getServer(this.server).getConfig()
+                .getSettingWithDefault("logPath", "logs");
+        String network = bot.getServer(this.server).getServerInfo().getNetwork();
+        String filePath = logsPath + "/" + network + "/" + targetLog + "/" + this.dateString
+                + ".log";
+
+        if (FileUtils.readFile(filePath) == null)
+        {
+            bot.getServer(this.server).cmdPRIVMSG(this.source, "I do not have that log");
+            return;
+        }
+
+        String result = PasteUtils.post(FileUtils.readFile(filePath), "Log for " + this.source
+                + " on " + this.dateString, "hour");
+        if (result != null)
+        {
+            bot.getServer(this.server).cmdPRIVMSG(
+                    this.source,
+                    "Log for " + this.source + " on " + this.dateString + " posted: " + result
+                            + " (Link expires in 60 minutes)");
+        }
+        else
+        {
+            bot.getServer(this.server).cmdPRIVMSG(this.source, "Error: Log could not be posted");
+        }
+    }
+
+    @Override
+    public void onLoad()
+    {
+    }
+
+    @Override
+    public String getHelp(String message)
+    {
+        return "Commands: "
+                + this.commandPrefix
+                + "log (<YYYY-MM-DD>/-<numberofdays>) | Provides a log of the current channel for today, or another date if specified.";
+    }
+
+    @Override
+    public void onUnload()
+    {
+    }
 }

@@ -8,64 +8,72 @@ import java.util.List;
 
 public class Uptime extends Module
 {
-	private Date dateStarted;
-	
-	public Uptime(String server)
-	{
-		super(server);
-		
-		this.authType = AuthType.Anyone;
-		this.apiVersion = 60;
-		this.triggerTypes = new TriggerType[] { TriggerType.Message };
-		this.trigger = "^" + commandPrefix + "(uptime)$";
-	}
+    private Date dateStarted;
 
-	public void processEvent(String source, String message, String triggerUser, List<String> params)
-	{
-		DateFormat format = new SimpleDateFormat("MM-dd-yyyy HH:mm (zz)");
-			
-		Calendar start = Calendar.getInstance();
-		start.setTime(dateStarted);
-		Calendar end = Calendar.getInstance();
-		end.setTime(new Date());
-		
-		Integer[] elapsed = new Integer[3];
-		Calendar clone = (Calendar) start.clone(); // Otherwise changes are been reflected.
-		elapsed[0] = elapsed(clone, end, Calendar.DATE);
-		clone.add(Calendar.DATE, elapsed[0]);
-		elapsed[1] = (int) (end.getTimeInMillis() - clone.getTimeInMillis()) / 3600000;
-		clone.add(Calendar.HOUR, elapsed[1]);
-		elapsed[2] = (int) (end.getTimeInMillis() - clone.getTimeInMillis()) / 60000;
-		clone.add(Calendar.MINUTE, elapsed[2]);
-		
-		bot.getServer(server).cmdPRIVMSG(source, "I have been running since " + format.format(dateStarted) + " (" + elapsed[0] + " day(s), " + elapsed[1] + " hour(s) and " + elapsed[2] + " minute(s))");
-	}
+    public Uptime(String server)
+    {
+        super(server);
 
-	@Override
-	public String getHelp(String message) 
-	{
-		return "Commands: " + commandPrefix + "uptime | Shows how long the bot has been running.";
-	}
-	
-	@Override
-	public void onLoad()
-	{
-		dateStarted = new Date();
-	}
+        this.authType = AuthType.Anyone;
+        this.apiVersion = 60;
+        this.triggerTypes = new TriggerType[] { TriggerType.Message };
+        this.trigger = "^" + this.commandPrefix + "(uptime)$";
+    }
 
-	@Override
-	public void onUnload()
-	{
-	}
-	
-	private int elapsed(Calendar before, Calendar after, int field) 
-	{
-	    Calendar clone = (Calendar) before.clone(); // Otherwise changes are been reflected.
-	    int elapsed = -1;
-	    while (!clone.after(after)) {
-	        clone.add(field, 1);
-	        elapsed++;
-	    }
-	    return elapsed;
-	}
+    @Override
+    public void processEvent(String source, String message, String triggerUser, List<String> params)
+    {
+        DateFormat format = new SimpleDateFormat("MM-dd-yyyy HH:mm (zz)");
+
+        Calendar start = Calendar.getInstance();
+        start.setTime(this.dateStarted);
+        Calendar end = Calendar.getInstance();
+        end.setTime(new Date());
+
+        Integer[] elapsed = new Integer[3];
+        Calendar clone = (Calendar) start.clone(); // Otherwise changes are been
+                                                   // reflected.
+        elapsed[0] = this.elapsed(clone, end, Calendar.DATE);
+        clone.add(Calendar.DATE, elapsed[0]);
+        elapsed[1] = (int) (end.getTimeInMillis() - clone.getTimeInMillis()) / 3600000;
+        clone.add(Calendar.HOUR, elapsed[1]);
+        elapsed[2] = (int) (end.getTimeInMillis() - clone.getTimeInMillis()) / 60000;
+        clone.add(Calendar.MINUTE, elapsed[2]);
+
+        this.bot.getServer(this.server).cmdPRIVMSG(
+                source,
+                "I have been running since " + format.format(this.dateStarted) + " (" + elapsed[0]
+                        + " day(s), " + elapsed[1] + " hour(s) and " + elapsed[2] + " minute(s))");
+    }
+
+    @Override
+    public String getHelp(String message)
+    {
+        return "Commands: " + this.commandPrefix
+                + "uptime | Shows how long the bot has been running.";
+    }
+
+    @Override
+    public void onLoad()
+    {
+        this.dateStarted = new Date();
+    }
+
+    @Override
+    public void onUnload()
+    {
+    }
+
+    private int elapsed(Calendar before, Calendar after, int field)
+    {
+        Calendar clone = (Calendar) before.clone(); // Otherwise changes are
+                                                    // been reflected.
+        int elapsed = -1;
+        while (!clone.after(after))
+        {
+            clone.add(field, 1);
+            elapsed++;
+        }
+        return elapsed;
+    }
 }
