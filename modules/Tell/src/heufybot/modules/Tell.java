@@ -244,12 +244,13 @@ public class Tell extends Module
                     if (sentMessage.getMessageSource().equals("PM"))
                     {
                         this.bot.getServer(this.server).cmdPRIVMSG(triggerUser, messageString);
+                        iter2.remove();
                     }
-                    else
+                    else if(source.startsWith("#"))
                     {
                         this.bot.getServer(this.server).cmdPRIVMSG(source, messageString);
+                        iter2.remove();
                     }
-                    iter2.remove();
                 }
                 if (sentMessages.size() == 0)
                 {
