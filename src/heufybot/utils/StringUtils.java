@@ -190,4 +190,16 @@ public class StringUtils
             return -1;
         }
     }
+    
+    public static double tryParseDouble(String doubleString)
+    {
+    	try
+    	{
+    		return Double.parseDouble(doubleString);
+    	}
+    	catch (NumberFormatException e)
+    	{
+    		return -1;
+    	}
+    }
 }
