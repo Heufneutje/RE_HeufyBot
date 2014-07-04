@@ -1,9 +1,10 @@
 package heufybot.modules;
 
-import heufybot.utils.FileUtils;
 import heufybot.utils.StringUtils;
 import heufybot.utils.URLUtils;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,22 +16,20 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.apache.commons.lang3.text.WordUtils;
 
 public class WeatherInterface
 {
-    private final static String APIkey = FileUtils.readFile("data/worldweatheronlineapikey.txt")
-            .replaceAll("\n", "");
-    private final static String APIAddress = "http://api.worldweatheronline.com/free/v1/weather.ashx?";
-    private final static String web = "http://www.worldweatheronline.com/v2/weather.aspx?q=";
+    private final static String WEATHER_ADDRESS = "http://api.openweathermap.org/data/2.5/weather?";
+    private final static String FORECAST_ADDRESS = "http://api.openweathermap.org/data/2.5/forecast/daily?";
 
     public String getWeather(float latitude, float longitude) throws ParseException
     {
         StringBuilder builder = new StringBuilder();
-        builder.append(APIAddress);
-        builder.append("q=" + latitude + "," + longitude);
-        builder.append("&key=" + APIkey);
-        builder.append("&fx=no");
-        builder.append("&format=json");
+        builder.append(WEATHER_ADDRESS);
+        builder.append("lat=" + latitude);
+        builder.append("&lon=" + longitude);
+        
         JSONObject object = this.getJSON(builder.toString());
 
         String parsedJSON = this.parseJSONForWeather(object);
@@ -38,19 +37,16 @@ public class WeatherInterface
         {
             return null;
         }
-        return parsedJSON + " | More info: "
-                + URLUtils.shortenURL(web + latitude + "," + longitude);
+        return parsedJSON;
     }
 
     public String getForecast(float latitude, float longitude) throws ParseException
     {
         StringBuilder builder = new StringBuilder();
-        builder.append(APIAddress);
-        builder.append("q=" + latitude + "," + longitude);
-        builder.append("&key=" + APIkey);
-        builder.append("&num_of_days=4");
-        builder.append("&cc=no");
-        builder.append("&format=json");
+        builder.append(FORECAST_ADDRESS);
+        builder.append("lat=" + latitude);
+        builder.append("&lon=" + longitude);
+        builder.append("&cnt=4");
         JSONObject object = this.getJSON(builder.toString());
 
         String parsedJSON = this.parseJSONForForecast(object);
@@ -63,66 +59,65 @@ public class WeatherInterface
 
     private String parseJSONForWeather(JSONObject object)
     {
-        JSONObject data = (JSONObject) object.get("data");
-
-        if ((JSONArray) data.get("current_condition") == null)
+        if (!object.get("cod").toString().equals("200"))
         {
             return null;
         }
+        
+        JSONObject main = (JSONObject) object.get("main");
+        JSONObject wind = (JSONObject) object.get("wind");
+        JSONObject weather = (JSONObject) ((JSONArray) object.get("weather")).get(0);
 
-        JSONObject currentCondition = (JSONObject) ((JSONArray) data.get("current_condition"))
-                .get(0);
-
-        String tempC = currentCondition.get("temp_C").toString();
-        String tempF = currentCondition.get("temp_F").toString();
-        String windspeedMiles = currentCondition.get("windspeedMiles").toString();
-        String windspeedKmph = currentCondition.get("windspeedKmph").toString();
-        String windDir = currentCondition.get("winddir16Point").toString();
-        String desc = ((JSONObject) ((JSONArray) currentCondition.get("weatherDesc")).get(0)).get(
-                "value").toString();
-        String humidity = currentCondition.get("humidity").toString();
+        double tempK = StringUtils.tryParseDouble(main.get("temp").toString());
+        double tempC = round((tempK - 273.15), 1);
+        double tempF = round((tempK - 273.15) * 9 / 5 + 32, 1);
+        int humidity = StringUtils.tryParseInt(main.get("humidity").toString());
+        
+        double windspeed = StringUtils.tryParseDouble(wind.get("speed").toString());
+        double windspeedMiles = round(windspeed, 1);
+        double windspeedKmph = round(windspeed * 3.6, 1);
+        String windDir = convertWindDirToCardinal(StringUtils.tryParseDouble(wind.get("deg").toString()));
+        
+        String description = WordUtils.capitalizeFully(weather.get("description").toString());
+        long unixTime = System.currentTimeMillis() / 1000L;
+        long latestUpdate = (unixTime - StringUtils.tryParseLong(object.get("dt").toString())) / 60;
 
         return String
-                .format("Temp: %s°C / %s°F | Weather: %s | Humidity: %s%c | Wind Speed: %s kmph / %s mph | Wind Direction: %s",
-                        tempC, tempF, desc, humidity, '%', windspeedKmph, windspeedMiles, windDir);
+                .format("Temp: %s°C / %s°F | Weather: %s | Humidity: %s%c | Wind Speed: %s kmph / %s mph | Wind Direction: %s | Latest Update: %s minute(s) ago.",
+                        tempC, tempF, description, humidity, '%', windspeedKmph, windspeedMiles, windDir, latestUpdate);
     }
 
     private String parseJSONForForecast(JSONObject object)
     {
-        JSONObject data = (JSONObject) object.get("data");
-        if ((JSONArray) data.get("weather") == null)
+        if (!object.get("cod").toString().equals("200"))
         {
             return null;
         }
-
-        JSONArray weather = (JSONArray) data.get("weather");
-        DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+        
+        JSONArray list = (JSONArray) object.get("list");
         DateFormat format2 = new SimpleDateFormat("EEEEEEEE", Locale.US);
 
         List<String> days = new ArrayList<String>();
 
-        for (int i = 0; i < weather.size(); i++)
+        for (int i = 0; i < list.size(); i++)
         {
-            JSONObject day = (JSONObject) weather.get(i);
-            Date date;
-            try
-            {
-                date = format1.parse(day.get("date").toString());
-            }
-            catch (java.text.ParseException e)
-            {
-                date = new Date();
-            }
+            JSONObject day = (JSONObject) list.get(i);
+            JSONObject temp = (JSONObject) day.get("temp");
+            JSONObject weather = (JSONObject) ((JSONArray) day.get("weather")).get(0);
+            Date date = new Date(StringUtils.tryParseLong(day.get("dt").toString()) * 1000);
+            
             String dayOfWeek = format2.format(date);
-            String minC = day.get("tempMinC").toString();
-            String maxC = day.get("tempMaxC").toString();
-            String minF = day.get("tempMinF").toString();
-            String maxF = day.get("tempMaxF").toString();
-            String weatherDescription = ((JSONObject) ((JSONArray) day.get("weatherDesc")).get(0))
-                    .get("value").toString();
+            double minK = StringUtils.tryParseDouble(temp.get("min").toString());
+            double maxK = StringUtils.tryParseDouble(temp.get("max").toString());
+            double minC = round((minK - 273.15), 1);
+            double minF = round((minK - 273.15) * 9 / 5 + 32, 1);
+            double maxC = round((maxK - 273.15), 1);
+            double maxF = round((maxK - 273.15) * 9 / 5 + 32, 1);
+            
+            String description = WordUtils.capitalizeFully(weather.get("description").toString());
 
             days.add(String.format("%s: %s - %s°C, %s - %s°F, %s", dayOfWeek, minC, maxC, minF,
-                    maxF, weatherDescription));
+                    maxF, description));
         }
         return StringUtils.join(days, " | ");
     }
@@ -130,5 +125,23 @@ public class WeatherInterface
     private JSONObject getJSON(String urlString) throws ParseException
     {
         return (JSONObject) new JSONParser().parse(URLUtils.grab(urlString));
+    }
+    
+    private String convertWindDirToCardinal(double degrees)
+    {
+    	String directions[] = {"N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"};
+    	return directions[ (int)Math.round((((double) degrees % 360) / 22.5)) ];
+    }
+    
+    private double round(double value, int places) 
+    {
+        if (places < 0)
+        {
+        	return 0.0;
+        }
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 }

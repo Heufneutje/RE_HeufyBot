@@ -22,13 +22,6 @@ public class WeatherDB extends Module
     @Override
     public void processEvent(String source, String message, String triggerUser, List<String> params)
     {
-        if (FileUtils.readFile("data/worldweatheronlineapikey.txt").equals(""))
-        {
-            this.bot.getServer(this.server).cmdPRIVMSG(source,
-                    "No WorldWeatherOnline API key found");
-            return;
-        }
-
         if (params.size() == 1)
         {
             String chatmapResult = URLUtils
@@ -214,7 +207,7 @@ public class WeatherDB extends Module
                 + this.commandPrefix
                 + "weather (<place>/<latitude longitude>/<ircuser>), "
                 + this.commandPrefix
-                + "forecast (<place>/<latitude longitude>/<ircuser>) | Makes the bot get the current weather conditions at the location specified or at the location of the ircuser. Current weather conditions update every 4 hours.";
+                + "forecast (<place>/<latitude longitude>/<ircuser>) | Makes the bot get the current weather conditions at the location specified or at the location of the IRC user.";
     }
 
     @Override
