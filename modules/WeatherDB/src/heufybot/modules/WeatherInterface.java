@@ -75,7 +75,7 @@ public class WeatherInterface
         
         double windspeed = StringUtils.tryParseDouble(wind.get("speed").toString());
         double windspeedMiles = round(windspeed, 1);
-        double windspeedKmph = round(windspeed * 3.6, 1);
+        double windspeedKmph = round(windspeed * 1.60934, 1);
         String windDir = convertWindDirToCardinal(StringUtils.tryParseDouble(wind.get("deg").toString()));
         
         String description = WordUtils.capitalizeFully(weather.get("description").toString());
