@@ -100,7 +100,7 @@ public class Translate extends Module
             catch (Exception e)
             {
                 this.bot.getServer(this.server).cmdPRIVMSG(source,
-                        "Text could not be translated. Make sure the language code is corrent.");
+                        "Text could not be translated. Make sure the language code is correct.");
             }
         }
     }
