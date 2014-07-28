@@ -130,7 +130,8 @@ public class WeatherInterface
     private String convertWindDirToCardinal(double degrees)
     {
     	String directions[] = {"N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"};
-    	return directions[ (int)Math.round((((double) degrees % 360) / 22.5)) ];
+    	int i = (int) ((degrees + 11.25) / 22.5);
+    	return directions[i % 16];
     }
     
     private double round(double value, int places) 
