@@ -79,12 +79,18 @@ public class WeatherInterface
         String windDir = convertWindDirToCardinal(StringUtils.tryParseDouble(wind.get("deg").toString()));
         
         String description = WordUtils.capitalizeFully(weather.get("description").toString());
+        
         long unixTime = System.currentTimeMillis() / 1000L;
         long latestUpdate = (unixTime - StringUtils.tryParseLong(object.get("dt").toString())) / 60;
+        String latestUpdateString = "just now";
+        if(latestUpdate > 0)
+        {
+            latestUpdateString = String.format("%s minute(s) ago", latestUpdate);
+        }
 
         return String
-                .format("Temp: %s°C / %s°F | Weather: %s | Humidity: %s%c | Wind Speed: %s kmph / %s mph | Wind Direction: %s | Latest Update: %s minute(s) ago.",
-                        tempC, tempF, description, humidity, '%', windspeedKmph, windspeedMiles, windDir, latestUpdate);
+                .format("Temp: %s°C / %s°F | Weather: %s | Humidity: %s%c | Wind Speed: %s kmph / %s mph | Wind Direction: %s | Latest Update: %s.",
+                        tempC, tempF, description, humidity, '%', windspeedKmph, windspeedMiles, windDir, latestUpdateString);
     }
 
     private String parseJSONForForecast(JSONObject object)
