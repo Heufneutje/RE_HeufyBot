@@ -47,7 +47,12 @@ public class WeatherInterface
         builder.append("lat=" + latitude);
         builder.append("&lon=" + longitude);
         builder.append("&cnt=4");
+
         JSONObject object = this.getJSON(builder.toString());
+        if (object == null)
+        {
+            return "OpenWeatherMap seems to be down right now. Try again later.";
+        }
 
         String parsedJSON = this.parseJSONForForecast(object);
         if (parsedJSON == null)
@@ -130,7 +135,12 @@ public class WeatherInterface
 
     private JSONObject getJSON(String urlString) throws ParseException
     {
-        return (JSONObject) new JSONParser().parse(URLUtils.grab(urlString));
+        String weather = URLUtils.grab(urlString);
+        if (weather != null)
+        {
+            return (JSONObject) new JSONParser().parse(weather);
+        }
+        return null;
     }
     
     private String convertWindDirToCardinal(double degrees)
