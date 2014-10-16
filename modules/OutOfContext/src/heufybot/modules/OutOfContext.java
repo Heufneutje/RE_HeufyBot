@@ -239,8 +239,13 @@ public class OutOfContext extends Module
     private String search(String searchString, boolean searchInQuotes, int quoteID)
     {
         ArrayList<String> matches = new ArrayList<String>();
+        Pattern pattern = null;
 
-        Pattern pattern = Pattern.compile(".*" + searchString + ".*", Pattern.CASE_INSENSITIVE);
+        try {
+            pattern = Pattern.compile(".*" + searchString + ".*", Pattern.CASE_INSENSITIVE);
+        } catch (PatternSyntaxException e) {
+            return "Invalid regular expression.";
+        }
 
         if (this.quoteLog.get(0).length() < 21)
         {
