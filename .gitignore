@@ -9,5 +9,6 @@
 
 *.bat
 *.sh
-*.iml
-.idea
+.idea/*
+!.idea/artifacts
+!.idea/modules.xml
