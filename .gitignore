@@ -1,23 +1,13 @@
-*.class
-
 # Package Files #
 *.jar
-*.war
-*.ear
-*.settings
-*.project
-*.classpath
 
 # Folders #
-/bin/*
 /logs/*
 /data/*
-/doc/*
 /config/*
 !config/globalconfig.yml.example
 
-*.gitignore
 *.bat
 *.sh
 *.iml
-/bin
+.idea
