@@ -22,7 +22,6 @@ public class HeufyBot
 
     private GlobalConfig config;
     private HashMap<String, IRCServer> servers;
-    private LoggingInterface loggingInterface;
 
     private static final HeufyBot instance = new HeufyBot();
 
@@ -44,9 +43,8 @@ public class HeufyBot
         File[] folder = new File("config").listFiles();
 
         int foundServerConfigs = 0;
-        for (File element : folder)
+        for (File file : folder)
         {
-            File file = element;
             if (!file.getName().equals("globalconfig.yml") && file.getName().endsWith(".yml"))
             {
                 // We found a config file. Assume it's a server config
@@ -92,11 +90,11 @@ public class HeufyBot
 
     public void start()
     {
-        this.loggingInterface = new LoggingInterface(this);
+        LoggingInterface loggingInterface = new LoggingInterface(this);
 
         for (IRCServer server : this.servers.values())
         {
-            server.getEventListenerManager().addListener(this.loggingInterface);
+            server.getEventListenerManager().addListener(loggingInterface);
 
             ServerConfig sConfig = server.getConfig();
 

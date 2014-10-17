@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 
 public class OutOfContext extends Module
 {
@@ -184,7 +184,7 @@ public class OutOfContext extends Module
             {
                 String search = StringUtils.join(params, " ");
                 ArrayList<String> matches = new ArrayList<String>();
-                Pattern pattern = null;
+                Pattern pattern;
                 
                 try
                 {
@@ -249,7 +249,7 @@ public class OutOfContext extends Module
     private String search(String searchString, boolean searchInQuotes, int quoteID)
     {
         ArrayList<String> matches = new ArrayList<String>();
-        Pattern pattern = null;
+        Pattern pattern;
 
         try
         {
