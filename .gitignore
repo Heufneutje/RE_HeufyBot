@@ -16,8 +16,8 @@
 /config/*
 !config/globalconfig.yml.example
 
-*.log
 *.gitignore
 *.bat
 *.sh
+*.iml
 /bin

@@ -19,6 +19,33 @@ The following recommended modules come with the bot:
 
 Other modules can be found in the [RE_HeufyBot-AdditionalModules](https://github.com/Heufneutje/RE_HeufyBot-AdditionalModules) repository. Details on how to write your own module can be found in the [documention](http://www.heufneutje.net/reheufybotdocs/) (I should add more documentation).
 
+The following modules are also included, but are fully optional:
+
+- Choose
+- Do
+- Join
+- Log
+- LogDB (DesertBus)
+- Nick
+- OutOfContext
+- Part
+- Quit
+- RandomCuteness
+- Say
+- Shorten
+- Source
+- Tell
+- Time
+- TimeDB (DesertBus)
+- Translate
+- TranslationParty
+- URLFollow
+- Uptime
+- UserLocation
+- Weather
+- WeatherDB (DesertBus)
+- YouTube
+
 Running
 =======
 
