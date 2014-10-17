@@ -7,11 +7,8 @@ import heufybot.core.events.types.BotMessageEvent;
 import heufybot.modules.ModuleInterface;
 import heufybot.utils.SSLSocketUtils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.InterruptedIOException;
-import java.io.OutputStreamWriter;
+import javax.net.SocketFactory;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -22,23 +19,17 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
-import javax.net.SocketFactory;
-
 public class IRCServer
 {
     // Not sure what to do with this one since the RFC doesn't specify it.
     // Assume 512 until documentation states otherwise.
     private final int MAX_LINE_LENGTH = 512;
-
-    public enum ConnectionState
-    {
-        Initializing, Connected, Disconnected
-    }
-
+    // Locking stuff for the output to server
+    private final ReentrantLock writeLock = new ReentrantLock(true);
+    private final Condition writeNowCondition = this.writeLock.newCondition();
     private String name;
     private ServerConfig config;
     private ModuleInterface moduleInterface;
-
     private Socket socket;
     private BufferedReader inputReader;
     private OutputStreamWriter outputWriter;
@@ -51,12 +42,7 @@ public class IRCServer
     private List<String> userModes;
     private List<String> enabledCapabilities;
     private EventListenerManager eventListenerManager;
-
-    // Locking stuff for the output to server
-    private final ReentrantLock writeLock = new ReentrantLock(true);
-    private final Condition writeNowCondition = this.writeLock.newCondition();
     private long lastSentLine = 0;
-
     private String nickname;
 
     public IRCServer(String name, ServerConfig config)
@@ -584,5 +570,10 @@ public class IRCServer
                 }
             }
         }
+    }
+
+    public enum ConnectionState
+    {
+        Initializing, Connected, Disconnected
     }
 }

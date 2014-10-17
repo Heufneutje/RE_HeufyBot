@@ -1,13 +1,12 @@
 package heufybot.modules;
 
+import com.memetix.mst.MicrosoftTranslatorAPI;
+import com.memetix.mst.detect.Detect;
+import com.memetix.mst.language.Language;
 import heufybot.utils.FileUtils;
 import heufybot.utils.StringUtils;
 
 import java.util.List;
-
-import com.memetix.mst.MicrosoftTranslatorAPI;
-import com.memetix.mst.detect.Detect;
-import com.memetix.mst.language.Language;
 
 public class Translate extends Module
 {
@@ -26,7 +25,8 @@ public class Translate extends Module
     {
         return "Commands: "
                 + this.commandPrefix
-                + "translate (<fromlanguage/)<tolanguage> <sentence> | Translates a sentence to a different language through Bing Translate. Language codes: http://msdn.microsoft.com/en-us/library/hh456380.aspx";
+                + "translate (<fromlanguage/)<tolanguage> <sentence> | Translates a sentence to a different language " +
+                "through Bing Translate. Language codes: http://msdn.microsoft.com/en-us/library/hh456380.aspx";
     }
 
     @Override

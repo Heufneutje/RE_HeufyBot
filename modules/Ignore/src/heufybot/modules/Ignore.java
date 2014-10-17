@@ -71,7 +71,7 @@ public class Ignore extends Module
                 String nick = params.get(1);
                 boolean match = false;
 
-                for (Iterator<String> iter = this.ignoreList.iterator(); iter.hasNext();)
+                for (Iterator<String> iter = this.ignoreList.iterator(); iter.hasNext(); )
                 {
                     String ignore = iter.next();
                     if (ignore.equalsIgnoreCase(nick))

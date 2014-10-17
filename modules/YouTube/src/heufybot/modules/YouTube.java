@@ -3,13 +3,12 @@ package heufybot.modules;
 import heufybot.core.Logger;
 import heufybot.utils.StringUtils;
 import heufybot.utils.URLUtils;
-
-import java.util.List;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import java.util.List;
 
 public class YouTube extends Module
 {

@@ -2,10 +2,9 @@ package heufybot.modules;
 
 import heufybot.utils.FileUtils;
 import heufybot.utils.URLUtils;
+import org.json.simple.parser.ParseException;
 
 import java.util.List;
-
-import org.json.simple.parser.ParseException;
 
 public class TimeDB extends Module
 {
@@ -140,7 +139,8 @@ public class TimeDB extends Module
     {
         return "Commands: "
                 + this.commandPrefix
-                + "time (<place>/<latitude longitude>/<ircuser>) | Makes the bot get the current time at the location specified or at the location of the ircuser.";
+                + "time (<place>/<latitude longitude>/<ircuser>) | Makes the bot get the current time at the location" +
+                " specified or at the location of the ircuser.";
     }
 
     @Override

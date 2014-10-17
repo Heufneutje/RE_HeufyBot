@@ -4,26 +4,7 @@ import heufybot.core.HeufyBot;
 import heufybot.core.IRCChannel;
 import heufybot.core.IRCUser;
 import heufybot.core.Logger;
-import heufybot.core.events.types.ActionEvent;
-import heufybot.core.events.types.BotMessageEvent;
-import heufybot.core.events.types.CTCPRequestEvent;
-import heufybot.core.events.types.ChannelNoticeEvent;
-import heufybot.core.events.types.ErrorEvent;
-import heufybot.core.events.types.InviteEvent;
-import heufybot.core.events.types.JoinEvent;
-import heufybot.core.events.types.KickEvent;
-import heufybot.core.events.types.MessageEvent;
-import heufybot.core.events.types.ModeEvent;
-import heufybot.core.events.types.NickChangeEvent;
-import heufybot.core.events.types.NoticeEvent;
-import heufybot.core.events.types.PMActionEvent;
-import heufybot.core.events.types.PMMessageEvent;
-import heufybot.core.events.types.PartEvent;
-import heufybot.core.events.types.QuitEvent;
-import heufybot.core.events.types.ServerResponseChannelEvent;
-import heufybot.core.events.types.ServerResponseEvent;
-import heufybot.core.events.types.TopicEvent;
-import heufybot.core.events.types.WhoisEvent;
+import heufybot.core.events.types.*;
 import heufybot.utils.StringUtils;
 import heufybot.utils.WhoisBuilder;
 
@@ -73,11 +54,11 @@ public class LoggingInterface extends EventListenerAdapter
             Logger.log(
                     "<"
                             + this.bot
-                                    .getServer(event.getServerName())
-                                    .getServerInfo()
-                                    .getUserPrefixes()
-                                    .get(this.bot.getServer(event.getServerName())
-                                            .getAccessLevelOnUser(channel, user))
+                            .getServer(event.getServerName())
+                            .getServerInfo()
+                            .getUserPrefixes()
+                            .get(this.bot.getServer(event.getServerName())
+                                    .getAccessLevelOnUser(channel, user))
                             + user.getNickname() + "> " + event.getMessage(), channel.getName(),
                     this.bot.getServer(event.getServerName()).getServerInfo().getNetwork());
         }
@@ -92,7 +73,7 @@ public class LoggingInterface extends EventListenerAdapter
     public void onChannelNotice(ChannelNoticeEvent event)
     {
         Logger.log("[Notice] --" + event.getSource() + "-- [" + event.getChannel().getName() + "] "
-                + event.getMessage(), event.getChannel().getName(),
+                        + event.getMessage(), event.getChannel().getName(),
                 this.bot.getServer(event.getServerName()).getServerInfo().getNetwork());
     }
 
@@ -122,7 +103,7 @@ public class LoggingInterface extends EventListenerAdapter
     {
         IRCUser user = event.getUser();
         Logger.log(">> " + user.getNickname() + " (" + user.getLogin() + "@" + user.getHostname()
-                + ") has joined " + event.getChannel().getName(), event.getChannel().getName(),
+                        + ") has joined " + event.getChannel().getName(), event.getChannel().getName(),
                 this.bot.getServer(event.getServerName()).getServerInfo().getNetwork());
     }
 
@@ -130,8 +111,8 @@ public class LoggingInterface extends EventListenerAdapter
     public void onKick(KickEvent event)
     {
         Logger.log("-- " + event.getRecipient().getNickname() + " was kicked from "
-                + event.getChannel().getName() + " by " + event.getKicker().getNickname() + " ("
-                + event.getMessage() + ")", event.getChannel().getName(),
+                        + event.getChannel().getName() + " by " + event.getKicker().getNickname() + " ("
+                        + event.getMessage() + ")", event.getChannel().getName(),
                 this.bot.getServer(event.getServerName()).getServerInfo().getNetwork());
     }
 
@@ -147,11 +128,11 @@ public class LoggingInterface extends EventListenerAdapter
             Logger.log(
                     "<"
                             + this.bot
-                                    .getServer(event.getServerName())
-                                    .getServerInfo()
-                                    .getUserPrefixes()
-                                    .get(this.bot.getServer(event.getServerName())
-                                            .getAccessLevelOnUser(channel, user))
+                            .getServer(event.getServerName())
+                            .getServerInfo()
+                            .getUserPrefixes()
+                            .get(this.bot.getServer(event.getServerName())
+                                    .getAccessLevelOnUser(channel, user))
                             + user.getNickname() + "> " + event.getMessage(), channel.getName(),
                     this.bot.getServer(event.getServerName()).getServerInfo().getNetwork());
         }

@@ -18,6 +18,19 @@ public class MyEvent
         this.eventString = eventString;
     }
 
+    public static Date formatDate(String dateString)
+    {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        try
+        {
+            return dateFormat.parse(dateString);
+        }
+        catch (ParseException e)
+        {
+            return null;
+        }
+    }
+
     public String getUser()
     {
         return this.user;
@@ -33,15 +46,15 @@ public class MyEvent
         return this.date;
     }
 
+    public void setDate(Date date)
+    {
+        this.date = date;
+    }
+
     public String getFormattedDate()
     {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         return dateFormat.format(this.date);
-    }
-
-    public void setDate(Date date)
-    {
-        this.date = date;
     }
 
     public String getEventString()
@@ -52,18 +65,5 @@ public class MyEvent
     public void setEventString(String eventString)
     {
         this.eventString = eventString;
-    }
-
-    public static Date formatDate(String dateString)
-    {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        try
-        {
-            return dateFormat.parse(dateString);
-        }
-        catch (ParseException e)
-        {
-            return null;
-        }
     }
 }

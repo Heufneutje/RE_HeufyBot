@@ -2,6 +2,7 @@ package heufybot.utils;
 
 import heufybot.core.Logger;
 
+import javax.net.ssl.*;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -11,13 +12,6 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.LinkedList;
 import java.util.List;
-
-import javax.net.ssl.KeyManager;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 public class SSLSocketUtils extends SSLSocketFactory
 {
@@ -103,7 +97,7 @@ public class SSLSocketUtils extends SSLSocketFactory
 
     @Override
     public Socket createSocket(InetAddress address, int port, InetAddress localAddress,
-            int localPort) throws IOException
+                               int localPort) throws IOException
     {
         return this.prepare(this.wrappedFactory
                 .createSocket(address, port, localAddress, localPort));
@@ -114,42 +108,6 @@ public class SSLSocketUtils extends SSLSocketFactory
             throws IOException
     {
         return this.prepare(this.wrappedFactory.createSocket(s, host, port, autoClose));
-    }
-
-    public static class TrustingX509TrustManager implements X509TrustManager
-    {
-        @Override
-        public void checkClientTrusted(X509Certificate[] cert, String authType)
-                throws CertificateException
-        {
-        }
-
-        @Override
-        public void checkServerTrusted(X509Certificate[] cert, String authType)
-                throws CertificateException
-        {
-        }
-
-        @Override
-        public X509Certificate[] getAcceptedIssuers()
-        {
-            return null;
-        }
-    }
-
-    protected interface SSLSocketFactoryDelegateExclude
-    {
-        Socket createSocket(String host, int port) throws IOException, UnknownHostException;
-
-        Socket createSocket(String host, int port, InetAddress localHost, int localPort)
-                throws IOException, UnknownHostException;
-
-        Socket createSocket(InetAddress address, int port) throws IOException;
-
-        Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort)
-                throws IOException;
-
-        Socket createSocket(Socket s, String host, int port, boolean autoClose) throws IOException;
     }
 
     public boolean isTrustingAllCertificates()
@@ -178,5 +136,41 @@ public class SSLSocketUtils extends SSLSocketFactory
     public java.net.Socket createSocket() throws java.io.IOException
     {
         return this.wrappedFactory.createSocket();
+    }
+
+    protected interface SSLSocketFactoryDelegateExclude
+    {
+        Socket createSocket(String host, int port) throws IOException, UnknownHostException;
+
+        Socket createSocket(String host, int port, InetAddress localHost, int localPort)
+                throws IOException, UnknownHostException;
+
+        Socket createSocket(InetAddress address, int port) throws IOException;
+
+        Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort)
+                throws IOException;
+
+        Socket createSocket(Socket s, String host, int port, boolean autoClose) throws IOException;
+    }
+
+    public static class TrustingX509TrustManager implements X509TrustManager
+    {
+        @Override
+        public void checkClientTrusted(X509Certificate[] cert, String authType)
+                throws CertificateException
+        {
+        }
+
+        @Override
+        public void checkServerTrusted(X509Certificate[] cert, String authType)
+                throws CertificateException
+        {
+        }
+
+        @Override
+        public X509Certificate[] getAcceptedIssuers()
+        {
+            return null;
+        }
     }
 }

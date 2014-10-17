@@ -2,10 +2,9 @@ package heufybot.modules;
 
 import heufybot.utils.FileUtils;
 import heufybot.utils.URLUtils;
+import org.json.simple.parser.ParseException;
 
 import java.util.List;
-
-import org.json.simple.parser.ParseException;
 
 public class WeatherDB extends Module
 {
@@ -207,7 +206,8 @@ public class WeatherDB extends Module
                 + this.commandPrefix
                 + "weather (<place>/<latitude longitude>/<ircuser>), "
                 + this.commandPrefix
-                + "forecast (<place>/<latitude longitude>/<ircuser>) | Makes the bot get the current weather conditions at the location specified or at the location of the IRC user.";
+                + "forecast (<place>/<latitude longitude>/<ircuser>) | Makes the bot get the current weather " +
+                "conditions at the location specified or at the location of the IRC user.";
     }
 
     @Override

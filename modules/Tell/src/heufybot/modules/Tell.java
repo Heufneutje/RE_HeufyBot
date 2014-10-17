@@ -3,27 +3,21 @@ package heufybot.modules;
 import heufybot.core.Logger;
 import heufybot.utils.FileUtils;
 import heufybot.utils.StringUtils;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
 public class Tell extends Module
 {
+    private final int MESSAGE_COOLDOWN = 20;
     private LinkedHashMap<String, ArrayList<Message>> tellsMap;
     private HashMap<String, Date> tellers;
     private String databasePath;
-    private final int MESSAGE_COOLDOWN = 20;
 
     public Tell(String server)
     {
@@ -49,7 +43,8 @@ public class Tell extends Module
                 + this.commandPrefix
                 + "rtell <message>, "
                 + this.commandPrefix
-                + "senttells | Tells the specified user a message the next time they speak, removes a message sent by you from the database or lists your pending messages.";
+                + "senttells | Tells the specified user a message the next time they speak, " +
+                "removes a message sent by you from the database or lists your pending messages.";
     }
 
     @Override
@@ -156,17 +151,17 @@ public class Tell extends Module
             boolean matchFound = false;
 
             for (Iterator<String> iter = this.tellsMap.keySet().iterator(); iter.hasNext()
-                    && !matchFound;)
+                    && !matchFound; )
             {
                 String user = iter.next();
                 ArrayList<Message> sentMessages = this.tellsMap.get(user);
                 for (Iterator<Message> iter2 = sentMessages.iterator(); iter2.hasNext()
-                        && !matchFound;)
+                        && !matchFound; )
                 {
                     Message sentMessage = iter2.next();
                     if (sentMessage.getFrom().equalsIgnoreCase(triggerUser)
                             && sentMessage.getText().toLowerCase()
-                                    .matches(searchString.toLowerCase()))
+                            .matches(searchString.toLowerCase()))
                     {
                         String messageString = "Message \"" + sentMessage.getText() + "\" sent to "
                                 + user + " on " + sentMessage.getDateSent()
@@ -229,7 +224,7 @@ public class Tell extends Module
         // Automatic stuff
         int messageCount = 0;
         for (Iterator<String> iter = this.tellsMap.keySet().iterator(); iter.hasNext()
-                && messageCount < 3;)
+                && messageCount < 3; )
         {
             String user = iter.next();
             if (triggerUser.toLowerCase().matches(user.toLowerCase()))
@@ -246,7 +241,7 @@ public class Tell extends Module
                         this.bot.getServer(this.server).cmdPRIVMSG(triggerUser, messageString);
                         iter2.remove();
                     }
-                    else if(source.startsWith("#"))
+                    else if (source.startsWith("#"))
                     {
                         this.bot.getServer(this.server).cmdPRIVMSG(source, messageString);
                         iter2.remove();
@@ -295,7 +290,7 @@ public class Tell extends Module
                     JSONObject messageObject = (JSONObject) messages.get(j);
                     Message message = new Message(messageObject.get("from").toString(),
                             messageObject.get("text").toString(), messageObject.get("dateSent")
-                                    .toString(), messageObject.get("messageSource").toString());
+                            .toString(), messageObject.get("messageSource").toString());
                     messageList.add(message);
                 }
                 this.tellsMap.put(name, messageList);
@@ -338,7 +333,7 @@ public class Tell extends Module
     {
         return "^"
                 + StringUtils.escapeRegex(regex).replaceAll("\\*", ".*").replaceAll("\\?", ".")
-                        .replaceAll("\\(", "(").replaceAll("\\)", ")").replaceAll(",", "|")
-                        .replaceAll("/", "|") + "$";
+                .replaceAll("\\(", "(").replaceAll("\\)", ")").replaceAll(",", "|")
+                .replaceAll("/", "|") + "$";
     }
 }

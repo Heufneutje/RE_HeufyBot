@@ -46,7 +46,7 @@ public class StringUtils
     {
         int length = s.length();
         StringBuilder b = new StringBuilder(length);
-        for (int offset = 0; offset < length;)
+        for (int offset = 0; offset < length; )
         {
             final int codepoint = s.codePointAt(offset);
 
@@ -190,16 +190,16 @@ public class StringUtils
             return -1;
         }
     }
-    
+
     public static double tryParseDouble(String doubleString)
     {
-    	try
-    	{
-    		return Double.parseDouble(doubleString);
-    	}
-    	catch (NumberFormatException e)
-    	{
-    		return -1;
-    	}
+        try
+        {
+            return Double.parseDouble(doubleString);
+        }
+        catch (NumberFormatException e)
+        {
+            return -1;
+        }
     }
 }

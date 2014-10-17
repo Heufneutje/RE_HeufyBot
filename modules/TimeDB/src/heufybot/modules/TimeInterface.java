@@ -4,16 +4,15 @@ import heufybot.core.Logger;
 import heufybot.utils.FileUtils;
 import heufybot.utils.StringUtils;
 import heufybot.utils.URLUtils;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 public class TimeInterface
 {
@@ -47,7 +46,7 @@ public class TimeInterface
             date = dt.parse(localtime);
             SimpleDateFormat dt1 = new SimpleDateFormat("HH:mm (hh:mm aa) 'on' EEEEEEEE, dd'"
                     + this.getSuffix(StringUtils.tryParseInt(new SimpleDateFormat("dd")
-                            .format(date))) + " of' MMMMMMMMMM, yyyy", Locale.US);
+                    .format(date))) + " of' MMMMMMMMMM, yyyy", Locale.US);
             return "Local time is " + dt1.format(date);
         }
         catch (java.text.ParseException e)

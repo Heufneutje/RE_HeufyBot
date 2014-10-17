@@ -7,41 +7,30 @@ import java.util.List;
 /**
  * This abstract class provides an interface for any module used by the bot. All
  * modules must extend this class in order to be loadable.
- * 
+ *
  * @author Stefan "Heufneutje" Frijters
  */
 public abstract class Module
 {
 
-    public enum AuthType
-    {
-        Anyone, BotAdmins
-    }
-
-    public enum TriggerType
-    {
-        Message, Action;
-    }
-
     /**
      * This variable is to be a regex. An example of a trigger set in the
      * constructor of a module would be:<br/>
      * <i>
-     * 
+     * <p/>
      * <pre>
      * this.trigger = &quot;&circ;&quot; + commandPrefix + &quot;(say)($| .*)&quot;;
      * </pre>
-     * 
+     * <p/>
      * </i> The trigger is not case sensitive. The above trigger ignores any
      * suffix after the command. It is possible to trigger on more than one
      * command, as shown here: <i>
-     * 
+     * <p/>
      * <pre>
      * this.trigger = &quot;&circ;&quot; + commandPrefix + &quot;(load|unload|reload)($| .*)&quot;;
      * </pre>
-     * 
+     * <p/>
      * </i>
-     * 
      */
     protected String trigger;
     /**
@@ -60,16 +49,13 @@ public abstract class Module
      * the module.
      */
     protected AuthType authType;
-
     protected String commandPrefix;
     protected String server;
-
     /**
      * What types of events trigger the module. Possible triggers are: Message
      * and Action
      */
     protected TriggerType[] triggerTypes;
-
     /**
      * The module API version this module is using. This must match up with the
      * bot's module API version for the module to be loadable.
@@ -86,20 +72,16 @@ public abstract class Module
 
     /**
      * This method gets called when the module command triggers.
-     * 
-     * @param source
-     *            The name of the channel from which the command originated.
-     * @param message
-     *            The message received, with any command, without username or
-     *            channel information.
-     * @param triggerUser
-     *            The IRC username that entered the command
-     * @param params
-     *            The same as message, split at " ". The first index can be
-     *            checked for the trigger.
+     *
+     * @param source      The name of the channel from which the command originated.
+     * @param message     The message received, with any command, without username or
+     *                    channel information.
+     * @param triggerUser The IRC username that entered the command
+     * @param params      The same as message, split at " ". The first index can be
+     *                    checked for the trigger.
      */
     public abstract void processEvent(String source, String message, String triggerUser,
-            List<String> params);
+                                      List<String> params);
 
     /**
      * @return The module API version this module is using
@@ -142,12 +124,11 @@ public abstract class Module
     /**
      * Every module can be checked for syntax by the help module. This is the
      * method that gets called to facilitate that.
-     * 
-     * @param message
-     *            The message received. It is sent to provide help for possible
-     *            subcommands
+     *
+     * @param message The message received. It is sent to provide help for possible
+     *                subcommands
      * @return The string to be printed by the help module when a user calls
-     *         (commandPrefix)help yourmodule
+     * (commandPrefix)help yourmodule
      */
     public abstract String getHelp(String message);
 
@@ -171,5 +152,15 @@ public abstract class Module
     public boolean getTriggerOnEveryMessage()
     {
         return this.triggerOnEveryMessage;
+    }
+
+    public enum AuthType
+    {
+        Anyone, BotAdmins
+    }
+
+    public enum TriggerType
+    {
+        Message, Action;
     }
 }

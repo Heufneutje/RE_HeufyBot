@@ -10,7 +10,7 @@ public class KickEvent implements BotEvent
     private String serverName, message;
 
     public KickEvent(String serverName, IRCUser recipient, IRCUser kicker, IRCChannel channel,
-            String message)
+                     String message)
     {
         this.serverName = serverName;
         this.kicker = kicker;

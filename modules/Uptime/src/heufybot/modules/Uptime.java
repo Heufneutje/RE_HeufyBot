@@ -32,7 +32,7 @@ public class Uptime extends Module
 
         Integer[] elapsed = new Integer[3];
         Calendar clone = (Calendar) start.clone(); // Otherwise changes are been
-                                                   // reflected.
+        // reflected.
         elapsed[0] = this.elapsed(clone, end, Calendar.DATE);
         clone.add(Calendar.DATE, elapsed[0]);
         elapsed[1] = (int) (end.getTimeInMillis() - clone.getTimeInMillis()) / 3600000;
@@ -67,7 +67,7 @@ public class Uptime extends Module
     private int elapsed(Calendar before, Calendar after, int field)
     {
         Calendar clone = (Calendar) before.clone(); // Otherwise changes are
-                                                    // been reflected.
+        // been reflected.
         int elapsed = -1;
         while (!clone.after(after))
         {

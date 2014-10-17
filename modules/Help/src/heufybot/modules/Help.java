@@ -59,7 +59,8 @@ public class Help extends Module
     {
         return "Commands: "
                 + this.commandPrefix
-                + "help (<module>) | Shows all modules that are currently loaded or shows help for a given module. Command syntax will be as such: command <parameter>. Parameters in brackets are optional.";
+                + "help (<module>) | Shows all modules that are currently loaded or shows help for a given module. " +
+                "Command syntax will be as such: command <parameter>. Parameters in brackets are optional.";
     }
 
     @Override

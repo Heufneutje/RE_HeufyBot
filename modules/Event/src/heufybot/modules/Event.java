@@ -3,19 +3,14 @@ package heufybot.modules;
 import heufybot.core.Logger;
 import heufybot.utils.FileUtils;
 import heufybot.utils.StringUtils;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class Event extends Module
 {
@@ -77,7 +72,8 @@ public class Event extends Module
                 {
                     this.bot.getServer(this.server)
                             .cmdPRIVMSG(source,
-                                    "The date you specified is invalid. Use \"yyyy-MM-dd\" or \"yyyy-MM-dd HH:mm\" as the format.");
+                                    "The date you specified is invalid. Use \"yyyy-MM-dd\" or \"yyyy-MM-dd HH:mm\" as" +
+                                            " the format.");
                     return;
                 }
             }
@@ -113,7 +109,7 @@ public class Event extends Module
 
             params.remove(0);
             String search = StringUtils.join(params, " ");
-            for (Iterator<MyEvent> iter = this.events.iterator(); iter.hasNext();)
+            for (Iterator<MyEvent> iter = this.events.iterator(); iter.hasNext(); )
             {
                 MyEvent event = iter.next();
                 if (event.getEventString().toLowerCase()
@@ -291,7 +287,8 @@ public class Event extends Module
         {
             return "Commands: "
                     + this.commandPrefix
-                    + "events (<numberofdays>) | Tells you all of the events coming up within the specified number of days. Without a parameter this will give you all events that will occur within a week.";
+                    + "events (<numberofdays>) | Tells you all of the events coming up within the specified number of" +
+                    " days. Without a parameter this will give you all events that will occur within a week.";
         }
         else
         {
@@ -319,7 +316,7 @@ public class Event extends Module
     private int elapsed(Calendar before, Calendar after, int field)
     {
         Calendar clone = (Calendar) before.clone(); // Otherwise changes are
-                                                    // been reflected.
+        // been reflected.
         int elapsed = -1;
         while (!clone.after(after))
         {
@@ -338,7 +335,7 @@ public class Event extends Module
 
         Integer[] elapsed = new Integer[3];
         Calendar clone = (Calendar) start.clone(); // Otherwise changes are been
-                                                   // reflected.
+        // reflected.
         elapsed[0] = this.elapsed(clone, end, Calendar.DATE);
         clone.add(Calendar.DATE, elapsed[0]);
         elapsed[1] = (int) (end.getTimeInMillis() - clone.getTimeInMillis()) / 3600000;

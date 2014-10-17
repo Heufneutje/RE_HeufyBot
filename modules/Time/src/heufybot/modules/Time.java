@@ -1,11 +1,10 @@
 package heufybot.modules;
 
 import heufybot.utils.FileUtils;
+import org.json.simple.parser.ParseException;
 
 import java.util.HashMap;
 import java.util.List;
-
-import org.json.simple.parser.ParseException;
 
 public class Time extends Module
 {
@@ -50,7 +49,8 @@ public class Time extends Module
                     this.bot.getServer(this.server)
                             .cmdPRIVMSG(
                                     source,
-                                    "You are not registered. The module \"UserLocation\" is required for registration, but is currently not loaded.");
+                                    "You are not registered. The module \"UserLocation\" is required for " +
+                                            "registration, but is currently not loaded.");
                 }
                 return;
             }
@@ -151,7 +151,8 @@ public class Time extends Module
     {
         return "Commands: "
                 + this.commandPrefix
-                + "time (<place>/<latitude longitude>/<ircuser>) | Makes the bot get the current time at the location specified or at the location of the ircuser.";
+                + "time (<place>/<latitude longitude>/<ircuser>) | Makes the bot get the current time at the location" +
+                " specified or at the location of the ircuser.";
     }
 
     @Override

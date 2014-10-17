@@ -4,34 +4,11 @@ import heufybot.config.GlobalConfig.PasswordType;
 import heufybot.core.IRCServer.ConnectionState;
 import heufybot.core.cap.CAPException;
 import heufybot.core.cap.CapHandler;
-import heufybot.core.events.types.ActionEvent;
-import heufybot.core.events.types.CTCPRequestEvent;
-import heufybot.core.events.types.ChannelNoticeEvent;
-import heufybot.core.events.types.ErrorEvent;
-import heufybot.core.events.types.InviteEvent;
-import heufybot.core.events.types.JoinEvent;
-import heufybot.core.events.types.KickEvent;
-import heufybot.core.events.types.MessageEvent;
-import heufybot.core.events.types.ModeEvent;
-import heufybot.core.events.types.NickChangeEvent;
-import heufybot.core.events.types.NoticeEvent;
-import heufybot.core.events.types.PMActionEvent;
-import heufybot.core.events.types.PMMessageEvent;
-import heufybot.core.events.types.PartEvent;
-import heufybot.core.events.types.PingEvent;
-import heufybot.core.events.types.QuitEvent;
-import heufybot.core.events.types.ServerResponseChannelEvent;
-import heufybot.core.events.types.ServerResponseEvent;
-import heufybot.core.events.types.TopicEvent;
-import heufybot.core.events.types.WhoisEvent;
+import heufybot.core.events.types.*;
 import heufybot.utils.StringUtils;
 import heufybot.utils.WhoisBuilder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 public class InputParser
 {
@@ -515,7 +492,7 @@ public class InputParser
                                     channel,
                                     "Channel was created on "
                                             + new Date(
-                                                    StringUtils.tryParseLong(parsedLine.get(2)) * 1000)));
+                                            StringUtils.tryParseLong(parsedLine.get(2)) * 1000)));
         }
         else if (code.equals("332"))
         {
@@ -642,13 +619,13 @@ public class InputParser
                             + code
                             + ") "
                             + rawResponse.substring(rawResponse.indexOf(this.server.getNickname()
-                                    + " ")
-                                    + this.server.getNickname().length() + 1)));
+                            + " ")
+                            + this.server.getNickname().length() + 1)));
         }
     }
 
     private void handleCommand(String line, List<String> parsedLine, String sourceNick,
-            String sourceLogin, String sourceHostname, String command, String target)
+                               String sourceLogin, String sourceHostname, String command, String target)
     {
         IRCUser source = this.server.getUser(sourceNick);
         IRCChannel channel = this.server.getChannel(target);

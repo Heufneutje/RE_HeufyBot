@@ -128,7 +128,8 @@ public class Log extends Module
     {
         return "Commands: "
                 + this.commandPrefix
-                + "log (<YYYY-MM-DD>/-<numberofdays>) | Provides a log of the current channel for today, or another date if specified.";
+                + "log (<YYYY-MM-DD>/-<numberofdays>) | Provides a log of the current channel for today, " +
+                "or another date if specified.";
     }
 
     @Override

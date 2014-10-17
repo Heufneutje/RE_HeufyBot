@@ -1,28 +1,6 @@
 package heufybot.core.events;
 
-import heufybot.core.events.types.ActionEvent;
-import heufybot.core.events.types.BotEvent;
-import heufybot.core.events.types.BotMessageEvent;
-import heufybot.core.events.types.CTCPRequestEvent;
-import heufybot.core.events.types.ChannelNoticeEvent;
-import heufybot.core.events.types.ErrorEvent;
-import heufybot.core.events.types.InviteEvent;
-import heufybot.core.events.types.JoinEvent;
-import heufybot.core.events.types.KickEvent;
-import heufybot.core.events.types.MessageEvent;
-import heufybot.core.events.types.ModeEvent;
-import heufybot.core.events.types.NickChangeEvent;
-import heufybot.core.events.types.NoticeEvent;
-import heufybot.core.events.types.PMActionEvent;
-import heufybot.core.events.types.PMMessageEvent;
-import heufybot.core.events.types.PartEvent;
-import heufybot.core.events.types.PingEvent;
-import heufybot.core.events.types.QuitEvent;
-import heufybot.core.events.types.ServerResponseChannelEvent;
-import heufybot.core.events.types.ServerResponseEvent;
-import heufybot.core.events.types.TopicEvent;
-import heufybot.core.events.types.WhoisEvent;
-import heufybot.core.events.types.WhowasEvent;
+import heufybot.core.events.types.*;
 
 public abstract class EventListenerAdapter implements EventListener
 {

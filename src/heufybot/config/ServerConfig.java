@@ -2,10 +2,9 @@ package heufybot.config;
 
 import heufybot.core.Logger;
 import heufybot.utils.FileUtils;
+import org.yaml.snakeyaml.Yaml;
 
 import java.util.HashMap;
-
-import org.yaml.snakeyaml.Yaml;
 
 public class ServerConfig extends GlobalConfig
 {

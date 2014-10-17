@@ -4,24 +4,17 @@ import heufybot.core.Logger;
 import heufybot.core.cap.CapHandler;
 import heufybot.core.cap.EnablingCapHandler;
 import heufybot.utils.FileUtils;
+import org.yaml.snakeyaml.Yaml;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.yaml.snakeyaml.Yaml;
-
 public class GlobalConfig
 {
-    public enum PasswordType
-    {
-        None, ServerPass, NickServPass, SASL;
-    }
-
     protected List<CapHandler> capHandlers;
     protected HashMap<String, Object> settings;
-
     public GlobalConfig()
     {
         this.capHandlers = new ArrayList<CapHandler>();
@@ -194,5 +187,10 @@ public class GlobalConfig
     public List<CapHandler> getCapHandlers()
     {
         return this.capHandlers;
+    }
+
+    public enum PasswordType
+    {
+        None, ServerPass, NickServPass, SASL;
     }
 }

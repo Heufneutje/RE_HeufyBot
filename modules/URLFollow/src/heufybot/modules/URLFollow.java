@@ -3,18 +3,17 @@ package heufybot.modules;
 import heufybot.utils.FileUtils;
 import heufybot.utils.StringUtils;
 import heufybot.utils.URLUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 public class URLFollow extends Module
 {

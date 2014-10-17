@@ -19,11 +19,9 @@ public class HeufyBot
 {
     public final static String VERSION = "0.6.0";
     public final static int MODULE_API_VERSION = 60;
-
+    private static final HeufyBot instance = new HeufyBot();
     private GlobalConfig config;
     private HashMap<String, IRCServer> servers;
-
-    private static final HeufyBot instance = new HeufyBot();
 
     private HeufyBot()
     {
@@ -32,6 +30,11 @@ public class HeufyBot
         FileUtils.touchDir("modules");
 
         this.servers = new HashMap<String, IRCServer>();
+    }
+
+    public static HeufyBot getInstance()
+    {
+        return instance;
     }
 
     public void loadConfigs()
@@ -206,11 +209,6 @@ public class HeufyBot
     public HashMap<String, IRCServer> getServers()
     {
         return this.servers;
-    }
-
-    public static HeufyBot getInstance()
-    {
-        return instance;
     }
 
     public GlobalConfig getGlobalConfig()

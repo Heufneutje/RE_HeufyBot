@@ -1,13 +1,12 @@
 package heufybot.modules;
 
+import com.memetix.mst.MicrosoftTranslatorAPI;
+import com.memetix.mst.language.Language;
+import com.memetix.mst.translate.Translate;
 import heufybot.utils.FileUtils;
 import heufybot.utils.StringUtils;
 
 import java.util.List;
-
-import com.memetix.mst.MicrosoftTranslatorAPI;
-import com.memetix.mst.language.Language;
-import com.memetix.mst.translate.Translate;
 
 public class TranslationParty extends Module
 {
@@ -32,7 +31,7 @@ public class TranslationParty extends Module
 
     @Override
     public void processEvent(final String source, String metadata, String triggerUser,
-            List<String> params)
+                             List<String> params)
     {
         if (params.size() == 1)
         {

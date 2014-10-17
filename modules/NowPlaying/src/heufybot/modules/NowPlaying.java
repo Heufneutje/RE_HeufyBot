@@ -31,7 +31,8 @@ public class NowPlaying extends Module
         if (message.matches("np"))
         {
             return this.commandPrefix
-                    + "np (<user>) | Returns your currently playing music (from LastFM). You can also supply a specific username to check.";
+                    + "np (<user>) | Returns your currently playing music (from LastFM). You can also supply a " +
+                    "specific username to check.";
         }
         else if (message.matches("nplink"))
         {
@@ -42,7 +43,8 @@ public class NowPlaying extends Module
         return this.commandPrefix
                 + "np (<user>), "
                 + this.commandPrefix
-                + "nplink <LastFM name> | Returns your or someone else's currently playing music (from LastFM) or link your nickname to a LastFM name.";
+                + "nplink <LastFM name> | Returns your or someone else's currently playing music (from LastFM) or " +
+                "link your nickname to a LastFM name.";
     }
 
     @Override
@@ -106,7 +108,7 @@ public class NowPlaying extends Module
                 String lastEntryTitle = titles[0];
 
                 String lastEntryLink = results.get(lastEntryTitle);
-                String[] splittedTitle = lastEntryTitle.split("–");
+                String[] splittedTitle = lastEntryTitle.split("ï¿½");
 
                 String artist = splittedTitle[0].trim();
                 String song = splittedTitle[1].trim();

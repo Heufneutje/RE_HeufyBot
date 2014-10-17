@@ -28,11 +28,6 @@ public class ModuleInterface extends EventListenerAdapter
     private HeufyBot bot;
     private String server;
 
-    public enum ModuleLoaderResponse
-    {
-        Success, DoesNotExist, AlreadyLoaded, APIVersionDoesNotMatch
-    }
-
     public ModuleInterface(HeufyBot bot, String server)
     {
         this.modules = new ArrayList<Module>();
@@ -77,7 +72,7 @@ public class ModuleInterface extends EventListenerAdapter
                     {
                         return new SimpleEntry<ModuleLoaderResponse, String>(
                                 ModuleLoaderResponse.APIVersionDoesNotMatch, module.getAPIVersion()
-                                        + " " + HeufyBot.MODULE_API_VERSION);
+                                + " " + HeufyBot.MODULE_API_VERSION);
                     }
 
                     this.modules.add(module);
@@ -99,7 +94,7 @@ public class ModuleInterface extends EventListenerAdapter
 
     public SimpleEntry<ModuleLoaderResponse, String> unloadModule(String moduleName)
     {
-        for (Iterator<Module> iter = this.modules.iterator(); iter.hasNext();)
+        for (Iterator<Module> iter = this.modules.iterator(); iter.hasNext(); )
         {
             Module module = iter.next();
             if (module.toString().equalsIgnoreCase(moduleName))
@@ -142,7 +137,7 @@ public class ModuleInterface extends EventListenerAdapter
     }
 
     private void handleMessage(final String serverName, final IRCUser user,
-            final IRCChannel channel, final String message, TriggerType triggerType)
+                               final IRCChannel channel, final String message, TriggerType triggerType)
     {
         for (String ignore : this.ignores)
         {
@@ -223,8 +218,8 @@ public class ModuleInterface extends EventListenerAdapter
             {
                 String regex = "^"
                         + StringUtils.escapeRegex(admin).replaceAll("\\*", ".*")
-                                .replaceAll("\\?", ".").replaceAll("\\(", "(")
-                                .replaceAll("\\)", ")").replaceAll(",", "|").replaceAll("/", "|")
+                        .replaceAll("\\?", ".").replaceAll("\\(", "(")
+                        .replaceAll("\\)", ")").replaceAll(",", "|").replaceAll("/", "|")
                         + "$";
 
                 if (user.getFullHost().matches(regex))
@@ -284,5 +279,10 @@ public class ModuleInterface extends EventListenerAdapter
     public void setIgnores(List<String> ignores)
     {
         this.ignores = ignores;
+    }
+
+    public enum ModuleLoaderResponse
+    {
+        Success, DoesNotExist, AlreadyLoaded, APIVersionDoesNotMatch
     }
 }

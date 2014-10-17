@@ -1,11 +1,10 @@
 package heufybot.modules;
 
 import heufybot.utils.FileUtils;
+import org.json.simple.parser.ParseException;
 
 import java.util.HashMap;
 import java.util.List;
-
-import org.json.simple.parser.ParseException;
 
 public class Weather extends Module
 {
@@ -43,7 +42,8 @@ public class Weather extends Module
                     this.bot.getServer(this.server)
                             .cmdPRIVMSG(
                                     source,
-                                    "You are not registered. The module \"UserLocation\" is required for registration, but is currently not loaded.");
+                                    "You are not registered. The module \"UserLocation\" is required for " +
+                                            "registration, but is currently not loaded.");
                 }
                 return;
             }
@@ -196,7 +196,8 @@ public class Weather extends Module
                 + this.commandPrefix
                 + "weather (<place>/<latitude longitude>/<ircuser>), "
                 + this.commandPrefix
-                + "forecast (<place>/<latitude longitude>/<ircuser>) | Makes the bot get the current weather conditions at the location specified or at the location of the IRC user.";
+                + "forecast (<place>/<latitude longitude>/<ircuser>) | Makes the bot get the current weather " +
+                "conditions at the location specified or at the location of the IRC user.";
     }
 
     @Override

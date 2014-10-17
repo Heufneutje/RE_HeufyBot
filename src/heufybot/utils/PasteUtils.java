@@ -1,6 +1,8 @@
 package heufybot.utils;
 
 import heufybot.core.Logger;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -8,9 +10,6 @@ import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 public class PasteUtils
 {

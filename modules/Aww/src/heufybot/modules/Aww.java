@@ -2,14 +2,13 @@ package heufybot.modules;
 
 import heufybot.utils.FileUtils;
 import heufybot.utils.URLUtils;
-
-import java.util.HashMap;
-import java.util.List;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class Aww extends Module
 {
@@ -49,7 +48,8 @@ public class Aww extends Module
             {
                 this.bot.getServer(this.server)
                         .cmdPRIVMSG(source,
-                                "Something went wrong while trying to get an image. Most likely the Imgur API is down.");
+                                "Something went wrong while trying to get an image. Most likely the Imgur API is down" +
+                                        ".");
                 return;
             }
 

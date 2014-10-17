@@ -384,7 +384,8 @@ public class ModuleLoader extends Module
                 + this.commandPrefix
                 + "unload <module>, "
                 + this.commandPrefix
-                + "reload <module> | Load, unload or reload one or more modules. Seperate module names by spaces if more.";
+                + "reload <module> | Load, unload or reload one or more modules. Seperate module names by spaces if " +
+                "more.";
     }
 
     @Override

@@ -28,24 +28,14 @@ public class IRCUser
         return this.nickname;
     }
 
-    public String getLogin()
-    {
-        return this.login;
-    }
-
-    public String getHostname()
-    {
-        return this.hostname;
-    }
-
-    public String getFullHost()
-    {
-        return this.nickname + "!" + this.login + "@" + this.hostname;
-    }
-
     public void setNickname(String nickname)
     {
         this.nickname = nickname;
+    }
+
+    public String getLogin()
+    {
+        return this.login;
     }
 
     public void setLogin(String login)
@@ -53,9 +43,19 @@ public class IRCUser
         this.login = login;
     }
 
+    public String getHostname()
+    {
+        return this.hostname;
+    }
+
     public void setHostname(String hostname)
     {
         this.hostname = hostname;
+    }
+
+    public String getFullHost()
+    {
+        return this.nickname + "!" + this.login + "@" + this.hostname;
     }
 
     public String getRealname()
@@ -73,14 +73,14 @@ public class IRCUser
         return this.isOper;
     }
 
-    public boolean isAway()
-    {
-        return this.isAway;
-    }
-
     public void setOper(boolean isOper)
     {
         this.isOper = isOper;
+    }
+
+    public boolean isAway()
+    {
+        return this.isAway;
     }
 
     public void setAway(boolean isAway)

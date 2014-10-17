@@ -7,12 +7,9 @@ import heufybot.utils.StringUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-import java.util.regex.*;
+import java.util.*;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 public class OutOfContext extends Module
 {
@@ -33,7 +30,7 @@ public class OutOfContext extends Module
 
     @Override
     public void processEvent(final String source, String message, String triggerUser,
-            List<String> params)
+                             List<String> params)
     {
         final HeufyBot bot = this.bot;
         if (params.size() == 1)
@@ -185,7 +182,7 @@ public class OutOfContext extends Module
                 String search = StringUtils.join(params, " ");
                 ArrayList<String> matches = new ArrayList<String>();
                 Pattern pattern;
-                
+
                 try
                 {
                     pattern = Pattern.compile(".*" + search + ".*", Pattern.CASE_INSENSITIVE);
@@ -223,7 +220,7 @@ public class OutOfContext extends Module
                     }
                     else
                     {
-                        for (Iterator<String> iter = this.quoteLog.iterator(); iter.hasNext();)
+                        for (Iterator<String> iter = this.quoteLog.iterator(); iter.hasNext(); )
                         {
                             String quote = iter.next();
                             if (quote.equalsIgnoreCase(matches.get(0)))
@@ -267,7 +264,7 @@ public class OutOfContext extends Module
         else
         {
             if (searchInQuotes) // Search for a word or words in the quotes
-                                // themselves
+            // themselves
             {
                 for (String quote : this.quoteLog)
                 {
@@ -345,25 +342,29 @@ public class OutOfContext extends Module
         {
             return "Commands: "
                     + this.commandPrefix
-                    + "ooc add <quote> | Add a quote to the Out of Context log. Format is \"<nick> message\" for normal messages and \"* nick message\" for actions.";
+                    + "ooc add <quote> | Add a quote to the Out of Context log. Format is \"<nick> message\" for " +
+                    "normal messages and \"* nick message\" for actions.";
         }
         else if (message.matches("ooc remove"))
         {
             return "Commands: "
                     + this.commandPrefix
-                    + "ooc remove <quote> | Remove a quote from the Out of Context log. Provide words that are in the quote you're trying to remove. Quote will only be removed if there's only one match.";
+                    + "ooc remove <quote> | Remove a quote from the Out of Context log. Provide words that are in the" +
+                    " quote you're trying to remove. Quote will only be removed if there's only one match.";
         }
         else if (message.matches("ooc search"))
         {
             return "Commands: "
                     + this.commandPrefix
-                    + "ooc search <quote> | Search for a quote in the Out of Context log. The results are the ones that have the given words in them";
+                    + "ooc search <quote> | Search for a quote in the Out of Context log. The results are the ones " +
+                    "that have the given words in them";
         }
         else if (message.matches("ooc searchnick"))
         {
             return "Commands: "
                     + this.commandPrefix
-                    + "ooc searchnick <nickname> (<id>) | Search for a quote in the Out of Context log by providing a nickname or part of one. An ID can also be given to get a specific quote.";
+                    + "ooc searchnick <nickname> (<id>) | Search for a quote in the Out of Context log by providing a" +
+                    " nickname or part of one. An ID can also be given to get a specific quote.";
         }
         else if (message.matches("ooc random"))
         {
@@ -379,7 +380,8 @@ public class OutOfContext extends Module
 
         return "Commands: "
                 + this.commandPrefix
-                + "ooc (add/remove/search/searchnick/random/id) | The log of Out of Context quotes! Without a subcommand this will post a link to the log. Type \""
+                + "ooc (add/remove/search/searchnick/random/id) | The log of Out of Context quotes! Without a " +
+                "subcommand this will post a link to the log. Type \""
                 + this.commandPrefix + "help ooc <subcommand>\" for help on a specific subcommand.";
     }
 
