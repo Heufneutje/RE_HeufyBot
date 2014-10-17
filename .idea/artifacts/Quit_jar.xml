@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Quit:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/modules</output-path>
+    <root id="archive" name="Quit.jar">
+      <element id="module-output" name="Quit" />
+    </root>
+  </artifact>
+</component>

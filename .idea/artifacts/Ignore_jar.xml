@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Ignore:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/modules</output-path>
+    <root id="archive" name="Ignore.jar">
+      <element id="module-output" name="Ignore" />
+    </root>
+  </artifact>
+</component>

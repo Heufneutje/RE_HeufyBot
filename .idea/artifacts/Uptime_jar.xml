@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Uptime:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/modules</output-path>
+    <root id="archive" name="Uptime.jar">
+      <element id="module-output" name="Uptime" />
+    </root>
+  </artifact>
+</component>

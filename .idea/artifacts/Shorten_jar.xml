@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Shorten:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/modules</output-path>
+    <root id="archive" name="Shorten.jar">
+      <element id="module-output" name="Shorten" />
+    </root>
+  </artifact>
+</component>

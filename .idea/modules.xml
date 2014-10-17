@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/modules/Aww/Aww.iml" filepath="$PROJECT_DIR$/modules/Aww/Aww.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/Choose/Choose.iml" filepath="$PROJECT_DIR$/modules/Choose/Choose.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/Do/Do.iml" filepath="$PROJECT_DIR$/modules/Do/Do.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/Event/Event.iml" filepath="$PROJECT_DIR$/modules/Event/Event.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/Help/Help.iml" filepath="$PROJECT_DIR$/modules/Help/Help.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/Ignore/Ignore.iml" filepath="$PROJECT_DIR$/modules/Ignore/Ignore.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/Join/Join.iml" filepath="$PROJECT_DIR$/modules/Join/Join.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/Log/Log.iml" filepath="$PROJECT_DIR$/modules/Log/Log.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/LogEC2/LogEC2.iml" filepath="$PROJECT_DIR$/modules/LogEC2/LogEC2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/LogSearch/LogSearch.iml" filepath="$PROJECT_DIR$/modules/LogSearch/LogSearch.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/Moduleloader/Moduleloader.iml" filepath="$PROJECT_DIR$/modules/Moduleloader/Moduleloader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/Nick/Nick.iml" filepath="$PROJECT_DIR$/modules/Nick/Nick.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/NowPlaying/NowPlaying.iml" filepath="$PROJECT_DIR$/modules/NowPlaying/NowPlaying.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/OutOfContext/OutOfContext.iml" filepath="$PROJECT_DIR$/modules/OutOfContext/OutOfContext.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/Part/Part.iml" filepath="$PROJECT_DIR$/modules/Part/Part.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/Quit/Quit.iml" filepath="$PROJECT_DIR$/modules/Quit/Quit.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RE_HeufyBot.iml" filepath="$PROJECT_DIR$/RE_HeufyBot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/Restart/Restart.iml" filepath="$PROJECT_DIR$/modules/Restart/Restart.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/Say/Say.iml" filepath="$PROJECT_DIR$/modules/Say/Say.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/Shorten/Shorten.iml" filepath="$PROJECT_DIR$/modules/Shorten/Shorten.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/Source/Source.iml" filepath="$PROJECT_DIR$/modules/Source/Source.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/Tell/Tell.iml" filepath="$PROJECT_DIR$/modules/Tell/Tell.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/Time/Time.iml" filepath="$PROJECT_DIR$/modules/Time/Time.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/TimeDB/TimeDB.iml" filepath="$PROJECT_DIR$/modules/TimeDB/TimeDB.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/Translate/Translate.iml" filepath="$PROJECT_DIR$/modules/Translate/Translate.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/TranslationParty/TranslationParty.iml" filepath="$PROJECT_DIR$/modules/TranslationParty/TranslationParty.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/URLFollow/URLFollow.iml" filepath="$PROJECT_DIR$/modules/URLFollow/URLFollow.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/Uptime/Uptime.iml" filepath="$PROJECT_DIR$/modules/Uptime/Uptime.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/UserLocation/UserLocation.iml" filepath="$PROJECT_DIR$/modules/UserLocation/UserLocation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/Weather/Weather.iml" filepath="$PROJECT_DIR$/modules/Weather/Weather.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/WeatherDB/WeatherDB.iml" filepath="$PROJECT_DIR$/modules/WeatherDB/WeatherDB.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/YouTube/YouTube.iml" filepath="$PROJECT_DIR$/modules/YouTube/YouTube.iml" />
+    </modules>
+  </component>
+</project>
+

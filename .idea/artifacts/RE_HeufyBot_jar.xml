@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="RE_HeufyBot:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/RE_HeufyBot_jar</output-path>
+    <root id="archive" name="RE_HeufyBot.jar">
+      <element id="module-output" name="RE_HeufyBot" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/json-simple-1.1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/commons-lang3-3.3.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/microsoft-translator-java-api-0.6.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/snakeyaml-1.11.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

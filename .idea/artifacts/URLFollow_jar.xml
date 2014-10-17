@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="URLFollow:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/modules</output-path>
+    <root id="archive" name="URLFollow.jar">
+      <element id="module-output" name="URLFollow" />
+    </root>
+  </artifact>
+</component>
