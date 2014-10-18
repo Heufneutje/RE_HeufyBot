@@ -17,8 +17,7 @@ public class Source extends Module
     @Override
     public void processEvent(String source, String message, String triggerUser, List<String> params)
     {
-        bot.getServer(server).cmdPRIVMSG(source, "https://github.com/Heufneutje/RE_HeufyBot/ | https://github" +
-                ".com/Heufneutje/RE_HeufyBot-AdditionalModules");
+        bot.getServer(server).cmdPRIVMSG(source, "https://github.com/Heufneutje/RE_HeufyBot");
     }
 
     public String getHelp(String message)
