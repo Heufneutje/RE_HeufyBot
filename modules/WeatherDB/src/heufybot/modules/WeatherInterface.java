@@ -93,7 +93,7 @@ public class WeatherInterface
         }
 
         return String
-                .format("Temp: %s�C / %s�F | Weather: %s | Humidity: %s%c | Wind Speed: %s kmph / %s mph | Wind " +
+                .format("Temp: %s°C / %s°F | Weather: %s | Humidity: %s%c | Wind Speed: %s kmph / %s mph | Wind " +
                                 "Direction: %s | Latest Update: %s.",
                         tempC, tempF, description, humidity, '%', windspeedKmph, windspeedMiles, windDir,
                         latestUpdateString);
@@ -128,7 +128,7 @@ public class WeatherInterface
 
             String description = WordUtils.capitalizeFully(weather.get("description").toString());
 
-            days.add(String.format("%s: %s - %s�C, %s - %s�F, %s", dayOfWeek, minC, maxC, minF,
+            days.add(String.format("%s: %s - %s°C, %s - %s°F, %s", dayOfWeek, minC, maxC, minF,
                     maxF, description));
         }
         return StringUtils.join(days, " | ");
