@@ -106,9 +106,8 @@ public class NowPlaying extends Module
                 String[] titles = new String[results.keySet().size()];
                 titles = results.keySet().toArray(titles);
                 String lastEntryTitle = titles[0];
-
                 String lastEntryLink = results.get(lastEntryTitle);
-                String[] splittedTitle = lastEntryTitle.split("�");
+                String[] splittedTitle = lastEntryTitle.split("–");
 
                 String artist = splittedTitle[0].trim();
                 String song = splittedTitle[1].trim();
