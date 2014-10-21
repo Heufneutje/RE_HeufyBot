@@ -12,7 +12,7 @@
       <module fileurl="file://$PROJECT_DIR$/modules/Log/Log.iml" filepath="$PROJECT_DIR$/modules/Log/Log.iml" />
       <module fileurl="file://$PROJECT_DIR$/modules/LogEC2/LogEC2.iml" filepath="$PROJECT_DIR$/modules/LogEC2/LogEC2.iml" />
       <module fileurl="file://$PROJECT_DIR$/modules/LogSearch/LogSearch.iml" filepath="$PROJECT_DIR$/modules/LogSearch/LogSearch.iml" />
-      <module fileurl="file://$PROJECT_DIR$/modules/Moduleloader/Moduleloader.iml" filepath="$PROJECT_DIR$/modules/Moduleloader/Moduleloader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/ModuleLoader/ModuleLoader.iml" filepath="$PROJECT_DIR$/modules/ModuleLoader/ModuleLoader.iml" />
       <module fileurl="file://$PROJECT_DIR$/modules/Nick/Nick.iml" filepath="$PROJECT_DIR$/modules/Nick/Nick.iml" />
       <module fileurl="file://$PROJECT_DIR$/modules/NowPlaying/NowPlaying.iml" filepath="$PROJECT_DIR$/modules/NowPlaying/NowPlaying.iml" />
       <module fileurl="file://$PROJECT_DIR$/modules/OutOfContext/OutOfContext.iml" filepath="$PROJECT_DIR$/modules/OutOfContext/OutOfContext.iml" />

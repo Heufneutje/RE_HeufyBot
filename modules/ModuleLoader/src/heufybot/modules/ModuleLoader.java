@@ -363,19 +363,19 @@ public class ModuleLoader extends Module
         {
             return "Commands: "
                     + this.commandPrefix
-                    + "load <module> | Load one or more modules. Seperate module names by spaces if more.";
+                    + "load <module> | Load one or more modules. Separate module names by spaces if more.";
         }
         else if (message.toLowerCase().matches("unload.*"))
         {
             return "Commands: "
                     + this.commandPrefix
-                    + "unload <module> | Unload one or more modules. Seperate module names by spaces if more.";
+                    + "unload <module> | Unload one or more modules. Separate module names by spaces if more.";
         }
         else if (message.toLowerCase().matches("reload.*"))
         {
             return "Commands: "
                     + this.commandPrefix
-                    + "reload <module> | Reload one or more modules. Seperate module names by spaces if more.";
+                    + "reload <module> | Reload one or more modules. Separate module names by spaces if more.";
         }
 
         return "Commands: "
@@ -384,7 +384,7 @@ public class ModuleLoader extends Module
                 + this.commandPrefix
                 + "unload <module>, "
                 + this.commandPrefix
-                + "reload <module> | Load, unload or reload one or more modules. Seperate module names by spaces if " +
+                + "reload <module> | Load, unload or reload one or more modules. Separate module names by spaces if " +
                 "more.";
     }
 
