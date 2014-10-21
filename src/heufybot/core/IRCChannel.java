@@ -83,6 +83,11 @@ public class IRCChannel
     public void parseModeChangeOnUser(IRCUser user, String modeChange)
     {
         String modesOnUser = this.usersInChannel.get(user);
+        if (modesOnUser == null)
+        {
+            // We've received a mode change for a user we don't know. Just ignore it.
+            return;
+        }
 
         boolean adding = true;
         for (char curChar : modeChange.toCharArray())
