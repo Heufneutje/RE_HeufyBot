@@ -217,7 +217,7 @@ public class InputParser
             // 451 ERR_NOTREGISTERED
             // The server does not support CAP. No action required
         }
-        else if (code.startsWith("4") || code.startsWith("5") && !code.equals("439"))
+        else if ((code.startsWith("4") || code.startsWith("5")) && !code.equals("439") && !code.equals("421"))
         {
             // 439 ERR_TARGETTOOFAST : No action required
             // Couldn't login. Disconnect.
