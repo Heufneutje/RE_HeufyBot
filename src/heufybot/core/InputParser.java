@@ -475,7 +475,7 @@ public class InputParser
         {
             // 324 RPL_CHANNELMODEIS
             IRCChannel channel = this.server.getChannel(parsedLine.get(1));
-            this.handleMode("", channel.getName(), parsedLine.get(2));
+            this.handleMode(channel.getName(), parsedLine.get(2));
             this.server.getEventListenerManager().dispatchEvent(
                     new ServerResponseChannelEvent(this.server.getName(), channel,
                             "Channel modes currently set: " + parsedLine.get(2)));
@@ -850,7 +850,7 @@ public class InputParser
 
             this.server.getEventListenerManager().dispatchEvent(
                     new ModeEvent(this.server.getName(), sourceNick, channel, mode));
-            this.handleMode(sourceNick, target, mode);
+            this.handleMode(target, mode);
         }
         else if (command.equals("TOPIC"))
         {
@@ -877,9 +877,9 @@ public class InputParser
         }
     }
 
-    private void handleMode(String source, String target, String mode)
+    private void handleMode(String target, String mode)
     {
-        if (source.equals(target))
+        if (target.equals(this.server.getNickname()))
         {
             // This is a user mode.
             this.server.parseUserModesChange(mode);
