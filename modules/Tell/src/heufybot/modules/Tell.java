@@ -14,7 +14,7 @@ import java.util.*;
 
 public class Tell extends Module
 {
-    private final int MESSAGE_COOLDOWN = 20;
+    private final int MESSAGE_COOLDOWN = 10;
     private LinkedHashMap<String, ArrayList<Message>> tellsMap;
     private HashMap<String, Date> tellers;
     private String databasePath;
