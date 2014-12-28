@@ -48,7 +48,8 @@ else {
 		echo '<p><span><a href="'.$eventLinkUrl.'">'.($hideEvents?'Show':'Hide').' events</a></span></p>'."\r\n";
 		
 		echo '<table class="log" id="log"><tr class="message"> <th class="time">TIME</th> <th class="user">NICK</th> <th class="text">MESSAGE</th></tr>'."\r\n";
-		$timestampLength = 7;
+		//Get the length of the first section of the first line, which is assumed to be the timestamp
+		$timestampLength = strlen(explode(' ', $lines[0], 2)[0]);
 		$suffixCharactersToRemove = array(')', '.');
 		$linecount = count($lines);
 		for ($i = 0; $i < $linecount; $i++) {
