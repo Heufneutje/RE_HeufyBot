@@ -31,13 +31,11 @@ elseif ($channel === FALSE) echo 'No channel name provided!';
 elseif($date === FALSE) echo 'No date provided!';
 else {
 	$filename = '/home/stefan/logs/'.$network.'/#'.$channel.'/'.$date.'.log';
-	$log = file_get_contents($filename);
-	if ($log === FALSE) echo 'Error while trying to open log file.';
+	$lines = file($filename, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES); 
+	unset($filename);
+	if ($lines === FALSE) echo 'Error while trying to open log file.';
+	elseif (count($lines) === 0) echo 'No lines found in the log file';
 	else {
-		unset($filename);
-		$lines = explode("\n", htmlspecialchars($log));
-		unset($log);
-		
 		$eventLinkUrl = $_SERVER['REQUEST_URI'];
 		//If there's already a hideevents setting, replace that
 		if (strpos($eventLinkUrl, 'hideevents') !== FALSE) {
@@ -52,9 +50,13 @@ else {
 		$timestampLength = strlen(explode(' ', $lines[0], 2)[0]);
 		$suffixCharactersToRemove = array(')', '.');
 		$linecount = count($lines);
+		
+		//Reverse the array so we can pop lines off the end, which is faster than getting them from the start
+		$lines = array_reverse($lines);
 		for ($i = 0; $i < $linecount; $i++) {
-			if (strlen($lines[$i]) > 0) {
-				$lineSections = explode(' ', $lines[$i]);
+			$line = htmlspecialchars(array_pop($lines));
+			if (strlen($line) > 0) {
+				$lineSections = explode(' ', $line);
 				$messageType = 'message';
 				$nickType = 'user';
 				//if there isn't both a < and a >, it's not a nick but an action or join/quit message. Change how that looks
@@ -67,12 +69,12 @@ else {
 				if ($hideEvents and $messageType === 'other') {
 					continue;
 				}
-				$message = substr($lines[$i], $timestampLength + strlen($lineSections[1])+2);
+				$message = substr($line, $timestampLength + strlen($lineSections[1])+2);
 				//Turn URLs into hyperlinks
 				if (strpos($message, 'http') !== FALSE or strpos($message, 'www') !== FALSE) {
 					preg_match_all("/(https?:\/\/\S+|www\.\S+\.\S+)/", $message, $regexResults);
 					foreach ($regexResults[0] as $urlText) {
-						//Remove some trailing characters that can mess up the url, like periods or parentheses						
+						//Remove some trailing characters that can mess up the url, like periods or parentheses
 						while (in_array(mb_substr($urlText, -1, 1), $suffixCharactersToRemove)) {
 							$urlText = mb_substr($urlText, 0, -1);
 						}
